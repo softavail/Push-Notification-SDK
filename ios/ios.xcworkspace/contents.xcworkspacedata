@@ -2,7 +2,7 @@
 <Workspace
    version = "1.0">
    <FileRef
-      location = "group:/Users/lekov/Workspace/scg-push-sdk/ios/sdk/push.xcodeproj">
+      location = "group:sdk/push.xcodeproj">
    </FileRef>
    <FileRef
       location = "group:demo/demo.xcodeproj">

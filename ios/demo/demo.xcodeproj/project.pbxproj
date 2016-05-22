@@ -199,6 +199,12 @@
 				TargetAttributes = {
 					F59BC8241CEA56310043E96E = {
 						CreatedOnToolsVersion = 7.3;
+						DevelopmentTeam = Y2G2D8HFRU;
+						SystemCapabilities = {
+							com.apple.Push = {
+								enabled = 1;
+							};
+						};
 					};
 					F59BC8381CEA56310043E96E = {
 						CreatedOnToolsVersion = 7.3;
@@ -407,11 +413,12 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
-				HEADER_SEARCH_PATHS = "$(WORKSPACE_DIR)/sdk/**";
+				CODE_SIGN_IDENTITY = "iPhone Developer";
+				HEADER_SEARCH_PATHS = "";
 				INFOPLIST_FILE = demo/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
-				LIBRARY_SEARCH_PATHS = "$(WORKSPACE_DIR)/sdk/**";
-				PRODUCT_BUNDLE_IDENTIFIER = com.softavail.push.demo;
+				LIBRARY_SEARCH_PATHS = "";
+				PRODUCT_BUNDLE_IDENTIFIER = com.spiritinvoker.scgpush;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_OBJC_BRIDGING_HEADER = Bridge.h;
 			};
@@ -421,11 +428,12 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
-				HEADER_SEARCH_PATHS = "$(WORKSPACE_DIR)/sdk/**";
+				CODE_SIGN_IDENTITY = "iPhone Developer";
+				HEADER_SEARCH_PATHS = "";
 				INFOPLIST_FILE = demo/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
-				LIBRARY_SEARCH_PATHS = "$(WORKSPACE_DIR)/sdk/**";
-				PRODUCT_BUNDLE_IDENTIFIER = com.softavail.push.demo;
+				LIBRARY_SEARCH_PATHS = "";
+				PRODUCT_BUNDLE_IDENTIFIER = com.spiritinvoker.scgpush;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_OBJC_BRIDGING_HEADER = Bridge.h;
 			};
@@ -496,6 +504,7 @@
 				F59BC84F1CEA56320043E96E /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
 		};
 		F59BC8501CEA56320043E96E /* Build configuration list for PBXNativeTarget "demoTests" */ = {
 			isa = XCConfigurationList;
@@ -504,6 +513,7 @@
 				F59BC8521CEA56320043E96E /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
 		};
 		F59BC8531CEA56320043E96E /* Build configuration list for PBXNativeTarget "demoUITests" */ = {
 			isa = XCConfigurationList;
@@ -512,6 +522,7 @@
 				F59BC8551CEA56320043E96E /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
 	};
