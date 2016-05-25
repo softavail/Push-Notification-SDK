@@ -1,0 +1,35 @@
+{
+  "project_info": {
+    "project_number": "343875524685",
+    "project_id": "scg-push-sample"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:343875524685:android:baa1d28c1da39c9d",
+        "android_client_info": {
+          "package_name": "com.softavail.scg.push.demo"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCyOykijoNPvNra3MbyviCj1PIskwWh1B4"
+        }
+      ],
+      "services": {
+        "analytics_service": {
+          "status": 1
+        },
+        "appinvite_service": {
+          "status": 1,
+          "other_platform_oauth_client": []
+        },
+        "ads_service": {
+          "status": 1
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
