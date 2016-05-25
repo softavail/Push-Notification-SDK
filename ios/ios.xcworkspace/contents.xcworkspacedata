@@ -2,7 +2,7 @@
 <Workspace
    version = "1.0">
    <FileRef
-      location = "group:sdk/push.xcodeproj">
+      location = "group:push/push.xcodeproj">
    </FileRef>
    <FileRef
       location = "group:demo/demo.xcodeproj">

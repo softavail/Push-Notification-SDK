@@ -14,7 +14,6 @@
 		F59BC8331CEA56310043E96E /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = F59BC8311CEA56310043E96E /* LaunchScreen.storyboard */; };
 		F59BC83E1CEA56310043E96E /* demoTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = F59BC83D1CEA56310043E96E /* demoTests.swift */; };
 		F59BC8491CEA56320043E96E /* demoUITests.swift in Sources */ = {isa = PBXBuildFile; fileRef = F59BC8481CEA56320043E96E /* demoUITests.swift */; };
-		F59BC86E1CEA57700043E96E /* libpush.a in Frameworks */ = {isa = PBXBuildFile; fileRef = F59BC86D1CEA57700043E96E /* libpush.a */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -48,7 +47,6 @@
 		F59BC8441CEA56310043E96E /* demoUITests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = demoUITests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		F59BC8481CEA56320043E96E /* demoUITests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = demoUITests.swift; sourceTree = "<group>"; };
 		F59BC84A1CEA56320043E96E /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
-		F59BC86D1CEA57700043E96E /* libpush.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libpush.a; path = "../sdk/build/Debug-iphoneos/libpush.a"; sourceTree = "<group>"; };
 		F59BC86F1CEA5B530043E96E /* Bridge.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = Bridge.h; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
@@ -57,7 +55,6 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				F59BC86E1CEA57700043E96E /* libpush.a in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -82,7 +79,6 @@
 			isa = PBXGroup;
 			children = (
 				F59BC86F1CEA5B530043E96E /* Bridge.h */,
-				F59BC86D1CEA57700043E96E /* libpush.a */,
 				F59BC8271CEA56310043E96E /* demo */,
 				F59BC83C1CEA56310043E96E /* demoTests */,
 				F59BC8471CEA56320043E96E /* demoUITests */,

@@ -56,12 +56,16 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     func application(application: UIApplication, didRegisterForRemoteNotificationsWithDeviceToken deviceToken: NSData) {
         let tokenChars = UnsafePointer<CChar>(deviceToken.bytes)
         var tokenString = ""
+        let tokenPureString = "\(deviceToken)"
         
         for i in 0..<deviceToken.length {
             tokenString += String(format: "%02.2hhx", arguments: [tokenChars[i]])
+            
         }
         
-        print("Device Token:", tokenString, deviceToken)
+        (window?.rootViewController!.view.viewWithTag(8) as! UILabel).text = tokenPureString
+        (window?.rootViewController!.view.viewWithTag(9) as! UILabel).text = tokenString
+        print("Device Token:", tokenString, tokenPureString)
     }
     
     func application(application: UIApplication, didFailToRegisterForRemoteNotificationsWithError error: NSError) {

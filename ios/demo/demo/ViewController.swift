@@ -20,6 +20,15 @@ class ViewController: UIViewController {
         // Dispose of any resources that can be recreated.
     }
 
-
+    
+    
+    @IBAction func clipboard(sender: AnyObject) {
+        if (sender.tag == 11) {
+            UIPasteboard.generalPasteboard().string = (view.viewWithTag(8) as! UILabel).text
+        }
+        if (sender.tag == 12) {
+            UIPasteboard.generalPasteboard().string = (view.viewWithTag(9) as! UILabel).text
+        }
+    }
 }
 
