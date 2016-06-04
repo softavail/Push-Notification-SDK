@@ -1,16 +1,44 @@
 package com.softavail.scg.push.demo;
 
+import android.app.ProgressDialog;
+import android.content.DialogInterface;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
+import android.support.design.widget.Snackbar;
+import android.support.v4.text.TextUtilsCompat;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
+import android.text.TextUtils;
+import android.util.Log;
 import android.view.View;
+import android.widget.EditText;
 import android.widget.TextView;
 
 import com.google.firebase.iid.FirebaseInstanceId;
+import com.softavail.scg.push.sdk.SCGRestManager;
+import com.softavail.scg.push.sdk.SCGRestService;
+
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
+
+import java.io.IOException;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+
+import okhttp3.ResponseBody;
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
 
 public class MainActivity extends AppCompatActivity {
 
+    private static final String TAG = "MainActivity";
+    private EditText accessToken;
+    private TextView pushToken;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -19,14 +47,134 @@ public class MainActivity extends AppCompatActivity {
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
-        final TextView token = (TextView) findViewById(R.id.token);
+        accessToken = (EditText) findViewById(R.id.access);
+        pushToken = (TextView) findViewById(R.id.token);
 
-        FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
-        fab.setOnClickListener(new View.OnClickListener() {
+        final SCGRestService manager = SCGRestManager.getService(null, SCGRestManager.API);
+
+        manager.listContacts().enqueue(new Callback<ResponseBody>() {
             @Override
-            public void onClick(View view) {
-                token.setText(FirebaseInstanceId.getInstance().getToken());
+            public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
+                if (response.code() == 200) {
+                    final List<String> tokens = new ArrayList<>();
+                    try {
+                        JSONArray raw = new JSONObject(response.body().string()).getJSONArray("list");
+                        for (int i = 0; i < raw.length(); i++) {
+                            JSONObject contact = raw.getJSONObject(i);
+                            tokens.add(contact.getString("id"));
+                        }
+
+                        AlertDialog.Builder builder = new AlertDialog.Builder(MainActivity.this);
+                        builder.setTitle("Obtain token for user id");
+                        builder.setItems(tokens.toArray(new String[tokens.size()]), new DialogInterface.OnClickListener() {
+                            public void onClick(DialogInterface dialog, int item) {
+                                dialog.dismiss();
+                                final ProgressDialog waiting = ProgressDialog.show(MainActivity.this, "Access Token", "Getting access token...", true, false);
+                                manager.generateAccessToken(tokens.get(item), new SCGRestService.GenerateRequest(1440)).enqueue(new Callback<ResponseBody>() {
+                                    @Override
+                                    public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
+                                        if (waiting != null && waiting.isShowing()) {
+                                            waiting.dismiss();
+                                        }
+                                        if (response.code() == 200) {
+                                            try {
+                                                JSONObject data = new JSONObject(response.body().string());
+                                                accessToken.setText(data.getString("id"));
+                                            } catch (JSONException e) {
+                                                e.printStackTrace();
+                                            } catch (IOException e) {
+                                                e.printStackTrace();
+                                            }
+                                        } else {
+                                            System.out.println(String.format("%s %s", response.code(), response.message()));
+                                        }
+                                    }
+
+                                    @Override
+                                    public void onFailure(Call<ResponseBody> call, Throwable t) {
+                                        if (waiting != null && waiting.isShowing()) {
+                                            waiting.dismiss();
+                                        }
+                                    }
+                                });
+                            }
+                        });
+                        AlertDialog alert = builder.create();
+                        alert.show();
+                    } catch (JSONException e) {
+                        e.printStackTrace();
+                    } catch (IOException e) {
+                        e.printStackTrace();
+                    }
+                } else {
+                    System.out.println(String.format("%s %s", response.code(), response.message()));
+                }
+            }
+
+            @Override
+            public void onFailure(Call<ResponseBody> call, Throwable t) {
+                Log.d(TAG, t.getMessage());
             }
         });
+    }
+
+    @Override
+    protected void onStart() {
+        super.onStart();
+        pushToken.setText(FirebaseInstanceId.getInstance().getToken());
+    }
+
+    public void onTokenRegister(final View view) {
+        final String token = FirebaseInstanceId.getInstance().getToken();
+
+        if (!TextUtils.isEmpty(token)) {
+            final String access = accessToken.getText().toString();
+            if (!TextUtils.isEmpty(access)) {
+                SCGRestService service = SCGRestManager.getService(access, SCGRestManager.PROXY);
+                service.registerPushToken(new SCGRestService.RegisterRequest("com.softavail.sch.push.demo", "APN", token)).enqueue(new Callback<ResponseBody>() {
+                    @Override
+                    public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
+                        Snackbar.make(view, String.format("%s: %s", response.code(), response.message()), Snackbar.LENGTH_LONG).show();
+                    }
+
+                    @Override
+                    public void onFailure(Call<ResponseBody> call, Throwable t) {
+                        Snackbar.make(view, "Failed: " + t.getMessage(), Snackbar.LENGTH_LONG).show();
+                    }
+                });
+            } else {
+                Snackbar.make(view, "Access token is null or invalid", Snackbar.LENGTH_INDEFINITE).show();
+            }
+
+        } else {
+            Snackbar.make(view, "Firebase token is null or invalid", Snackbar.LENGTH_INDEFINITE).show();
+        }
+    }
+
+    public void onTokenUnregister(final View view) {
+        final String token = pushToken.getText().toString();
+
+        if (!TextUtils.isEmpty(token)) {
+            final String access = accessToken.getText().toString();
+            if (!TextUtils.isEmpty(access)) {
+                SCGRestService service = SCGRestManager.getService(access, SCGRestManager.PROXY);
+                service.unregisterPushToken(new SCGRestService.UnregisterRequest(token)).enqueue(new Callback<ResponseBody>() {
+                    @Override
+                    public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
+                        Snackbar.make(view, String.format("%s: %s", response.code(), response.message()), Snackbar.LENGTH_LONG).show();
+                    }
+
+                    @Override
+                    public void onFailure(Call<ResponseBody> call, Throwable t) {
+                        Snackbar.make(view, "Failed: " + t.getMessage(), Snackbar.LENGTH_LONG).show();
+                    }
+                });
+            } else {
+                Snackbar.make(view, "Access token is null or invalid", Snackbar.LENGTH_INDEFINITE).show();
+            }
+
+        } else {
+            Snackbar.make(view, "Firebase token is null or invalid", Snackbar.LENGTH_INDEFINITE).show();
+        }
     }
 }
