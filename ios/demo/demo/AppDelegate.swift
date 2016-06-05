@@ -79,7 +79,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         application.applicationIconBadgeNumber =  notificationNumber;
         
         if let aps = userInfo["aps"] as? NSDictionary {
-            
+            print (userInfo);
             print("my messages : \(aps["alert"])")
             (window?.rootViewController!.view.viewWithTag(10) as! UILabel).text = aps["alert"] as? String
         }

@@ -148,6 +148,7 @@
 				TargetAttributes = {
 					F72542A11CF435C7008423AB = {
 						CreatedOnToolsVersion = 7.3.1;
+						DevelopmentTeam = Y2G2D8HFRU;
 					};
 					F72542AB1CF435CF008423AB = {
 						CreatedOnToolsVersion = 7.3.1;
@@ -310,6 +311,7 @@
 		F72542B71CF435CF008423AB /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
+				CODE_SIGN_IDENTITY = "iPhone Developer";
 				DEFINES_MODULE = YES;
 				DYLIB_COMPATIBILITY_VERSION = 1;
 				DYLIB_CURRENT_VERSION = 1;
@@ -326,6 +328,7 @@
 		F72542B81CF435CF008423AB /* Release */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
+				CODE_SIGN_IDENTITY = "iPhone Developer";
 				DEFINES_MODULE = YES;
 				DYLIB_COMPATIBILITY_VERSION = 1;
 				DYLIB_CURRENT_VERSION = 1;
@@ -378,6 +381,7 @@
 				F72542B81CF435CF008423AB /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
 		};
 		F72542B91CF435CF008423AB /* Build configuration list for PBXNativeTarget "pushTests" */ = {
 			isa = XCConfigurationList;
@@ -386,6 +390,7 @@
 				F72542BB1CF435CF008423AB /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
 	};
