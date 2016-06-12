@@ -9,9 +9,7 @@ import retrofit2.http.Path;
 /**
  * Created by lekov on 6/4/16.
  */
-public interface ScgRestService {
-
-    String API = " http://95.158.130.102:8080/scg-dra/proxy/";
+interface ScgRestService {
 
     class RegisterRequest {
         final String app_id;

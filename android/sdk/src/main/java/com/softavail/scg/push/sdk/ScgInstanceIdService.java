@@ -6,13 +6,18 @@ import com.google.firebase.iid.FirebaseInstanceIdService;
 /**
  * Created by lekov on 6/12/16.
  */
-public class ScgInstanceIdService extends FirebaseInstanceIdService {
+public final class ScgInstanceIdService extends FirebaseInstanceIdService {
 
     private static final String TAG = "ScgInstanceIdService";
 
     @Override
     public void onTokenRefresh() {
-        String refreshedToken = FirebaseInstanceId.getInstance().getToken();
-        ScgClient.getInstance().registerPushToken(refreshedToken);
+
+        final String refreshedToken = FirebaseInstanceId.getInstance().getToken();
+        final ScgClient.PushTokenListener listener = ScgClient.getInstance().getListener();
+
+        if (listener != null) {
+            listener.onPushTokenRefreshed(refreshedToken);
+        }
     }
 }

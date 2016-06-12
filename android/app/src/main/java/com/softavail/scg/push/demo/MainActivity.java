@@ -13,8 +13,7 @@ import android.view.View;
 import android.widget.EditText;
 import android.widget.TextView;
 
-import com.google.firebase.iid.FirebaseInstanceId;
-import com.softavail.scg.push.sdk.ScgRestService;
+import com.softavail.scg.push.sdk.ScgClient;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -29,11 +28,14 @@ import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
 
-public class MainActivity extends AppCompatActivity {
+
+public class MainActivity extends AppCompatActivity implements ScgClient.PushTokenListener, ScgClient.Result {
 
     private static final String TAG = "MainActivity";
     private EditText accessToken;
     private TextView pushToken;
+
+    final AuthService manager = AuthService.retrofit.create(AuthService.class);
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -44,8 +46,6 @@ public class MainActivity extends AppCompatActivity {
 
         accessToken = (EditText) findViewById(R.id.access);
         pushToken = (TextView) findViewById(R.id.token);
-
-        final AuthService manager = AuthService.retrofit.create(AuthService.class);
 
         manager.listContacts().enqueue(new Callback<ResponseBody>() {
             @Override
@@ -116,33 +116,24 @@ public class MainActivity extends AppCompatActivity {
     @Override
     protected void onStart() {
         super.onStart();
-        pushToken.setText(FirebaseInstanceId.getInstance().getToken());
+        pushToken.setText(ScgClient.getInstance().getToken());
+        ScgClient.getInstance().setListener(this);
     }
 
     public void onTokenRegister(final View view) {
-        final String token = FirebaseInstanceId.getInstance().getToken();
+        final String token = pushToken.getText().toString();
 
         if (!TextUtils.isEmpty(token)) {
             final String access = accessToken.getText().toString();
             if (!TextUtils.isEmpty(access)) {
-                ScgRestService service = ScgRestManager.getService(access, ScgRestService.API);
-                service.registerPushToken(new ScgRestService.RegisterRequest("com.softavail.sch.push.demo", token)).enqueue(new Callback<ResponseBody>() {
-                    @Override
-                    public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
-                        Snackbar.make(view, String.format("%s: %s", response.code(), response.message()), Snackbar.LENGTH_LONG).show();
-                    }
-
-                    @Override
-                    public void onFailure(Call<ResponseBody> call, Throwable t) {
-                        Snackbar.make(view, "Failed: " + t.getMessage(), Snackbar.LENGTH_LONG).show();
-                    }
-                });
+                ScgClient.getInstance().auth(access);
+                ScgClient.getInstance().registerPushToken(token, this);
             } else {
                 Snackbar.make(view, "Access token is null or invalid", Snackbar.LENGTH_INDEFINITE).show();
             }
 
         } else {
-            Snackbar.make(view, "Firebase token is null or invalid", Snackbar.LENGTH_INDEFINITE).show();
+            Snackbar.make(view, "Push token is null or invalid", Snackbar.LENGTH_INDEFINITE).show();
         }
     }
 
@@ -152,24 +143,38 @@ public class MainActivity extends AppCompatActivity {
         if (!TextUtils.isEmpty(token)) {
             final String access = accessToken.getText().toString();
             if (!TextUtils.isEmpty(access)) {
-                ScgRestService service = ScgRestManager.getService(access, ScgRestService.API);
-                service.unregisterPushToken(new ScgRestService.UnregisterRequest(token)).enqueue(new Callback<ResponseBody>() {
-                    @Override
-                    public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
-                        Snackbar.make(view, String.format("%s: %s", response.code(), response.message()), Snackbar.LENGTH_LONG).show();
-                    }
-
-                    @Override
-                    public void onFailure(Call<ResponseBody> call, Throwable t) {
-                        Snackbar.make(view, "Failed: " + t.getMessage(), Snackbar.LENGTH_LONG).show();
-                    }
-                });
+                ScgClient.getInstance().auth(access);
+                ScgClient.getInstance().unregisterPushToken(token, this);
             } else {
                 Snackbar.make(view, "Access token is null or invalid", Snackbar.LENGTH_INDEFINITE).show();
             }
-
         } else {
-            Snackbar.make(view, "Firebase token is null or invalid", Snackbar.LENGTH_INDEFINITE).show();
+            Snackbar.make(view, "Push token is null or invalid", Snackbar.LENGTH_INDEFINITE).show();
         }
+    }
+
+    @Override
+    public void onPushTokenRefreshed(final String token) {
+        runOnUiThread(new Runnable() {
+            @Override
+            public void run() {
+                pushToken.setText(token);
+                Snackbar.make(pushToken, "Push token refreshed", Snackbar.LENGTH_LONG).show();
+            }
+        });
+    }
+
+    @Override
+    public void success(int code, String message) {
+        Snackbar.make(pushToken, String.format("Success (%s): %s", code, message), Snackbar.LENGTH_LONG).show();
+    }
+
+    @Override
+    public void failed(int code, String message) {
+        Snackbar.make(pushToken, String.format("Failed (%s): %s", code, message), Snackbar.LENGTH_LONG).show();
+    }
+
+    public void onGetToken(View view) {
+        pushToken.setText(ScgClient.getInstance().getToken());
     }
 }

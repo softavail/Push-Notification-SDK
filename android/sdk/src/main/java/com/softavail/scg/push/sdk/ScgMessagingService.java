@@ -8,7 +8,7 @@ import com.google.firebase.messaging.RemoteMessage;
 /**
  * Created by lekov on 6/12/16.
  */
-public class ScgMessagingService extends FirebaseMessagingService {
+public final class ScgMessagingService extends FirebaseMessagingService {
     private static final String TAG = "SCGMessagingService";
 
     @Override

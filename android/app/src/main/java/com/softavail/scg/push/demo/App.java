@@ -12,6 +12,6 @@ public class App extends Application {
     @Override
     public void onCreate() {
         super.onCreate();
-        ScgClient.initialize(this, "com.softavail.scg.push.demo");
+        ScgClient.initialize(this, "http://95.158.130.102:8080/scg-dra/proxy/", "com.softavail.scg.push.demo");
     }
 }
