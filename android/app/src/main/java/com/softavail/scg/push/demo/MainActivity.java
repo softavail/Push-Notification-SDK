@@ -3,9 +3,7 @@ package com.softavail.scg.push.demo;
 import android.app.ProgressDialog;
 import android.content.DialogInterface;
 import android.os.Bundle;
-import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
-import android.support.v4.text.TextUtilsCompat;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
@@ -16,8 +14,7 @@ import android.widget.EditText;
 import android.widget.TextView;
 
 import com.google.firebase.iid.FirebaseInstanceId;
-import com.softavail.scg.push.sdk.SCGRestManager;
-import com.softavail.scg.push.sdk.SCGRestService;
+import com.softavail.scg.push.sdk.ScgRestService;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -25,9 +22,7 @@ import org.json.JSONObject;
 
 import java.io.IOException;
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
 import okhttp3.ResponseBody;
 import retrofit2.Call;
@@ -50,7 +45,7 @@ public class MainActivity extends AppCompatActivity {
         accessToken = (EditText) findViewById(R.id.access);
         pushToken = (TextView) findViewById(R.id.token);
 
-        final SCGRestService manager = SCGRestManager.getService(null, SCGRestManager.API);
+        final AuthService manager = AuthService.retrofit.create(AuthService.class);
 
         manager.listContacts().enqueue(new Callback<ResponseBody>() {
             @Override
@@ -70,7 +65,7 @@ public class MainActivity extends AppCompatActivity {
                             public void onClick(DialogInterface dialog, int item) {
                                 dialog.dismiss();
                                 final ProgressDialog waiting = ProgressDialog.show(MainActivity.this, "Access Token", "Getting access token...", true, false);
-                                manager.generateAccessToken(tokens.get(item), new SCGRestService.GenerateRequest(1440)).enqueue(new Callback<ResponseBody>() {
+                                manager.generateAccessToken(tokens.get(item), new AuthService.GenerateRequest(1440)).enqueue(new Callback<ResponseBody>() {
                                     @Override
                                     public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
                                         if (waiting != null && waiting.isShowing()) {
@@ -130,8 +125,8 @@ public class MainActivity extends AppCompatActivity {
         if (!TextUtils.isEmpty(token)) {
             final String access = accessToken.getText().toString();
             if (!TextUtils.isEmpty(access)) {
-                SCGRestService service = SCGRestManager.getService(access, SCGRestManager.PROXY);
-                service.registerPushToken(new SCGRestService.RegisterRequest("com.softavail.sch.push.demo", "APN", token)).enqueue(new Callback<ResponseBody>() {
+                ScgRestService service = ScgRestManager.getService(access, ScgRestService.API);
+                service.registerPushToken(new ScgRestService.RegisterRequest("com.softavail.sch.push.demo", token)).enqueue(new Callback<ResponseBody>() {
                     @Override
                     public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
                         Snackbar.make(view, String.format("%s: %s", response.code(), response.message()), Snackbar.LENGTH_LONG).show();
@@ -157,8 +152,8 @@ public class MainActivity extends AppCompatActivity {
         if (!TextUtils.isEmpty(token)) {
             final String access = accessToken.getText().toString();
             if (!TextUtils.isEmpty(access)) {
-                SCGRestService service = SCGRestManager.getService(access, SCGRestManager.PROXY);
-                service.unregisterPushToken(new SCGRestService.UnregisterRequest(token)).enqueue(new Callback<ResponseBody>() {
+                ScgRestService service = ScgRestManager.getService(access, ScgRestService.API);
+                service.unregisterPushToken(new ScgRestService.UnregisterRequest(token)).enqueue(new Callback<ResponseBody>() {
                     @Override
                     public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
                         Snackbar.make(view, String.format("%s: %s", response.code(), response.message()), Snackbar.LENGTH_LONG).show();

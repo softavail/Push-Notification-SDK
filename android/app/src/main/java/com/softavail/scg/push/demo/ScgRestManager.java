@@ -1,4 +1,6 @@
-package com.softavail.scg.push.sdk;
+package com.softavail.scg.push.demo;
+
+import com.softavail.scg.push.sdk.ScgRestService;
 
 import java.io.IOException;
 
@@ -12,12 +14,8 @@ import retrofit2.converter.gson.GsonConverterFactory;
 /**
  * Created by lekov on 6/4/16.
  */
-public class SCGRestManager {
-
-    public static final String API = "http://95.158.130.102:8080/scg-external-api/api/v1/";
-    public static final String PROXY = " http://95.158.130.102:8080/scg-dra/proxy/";
-
-    public static SCGRestService getService(final String accessToken, final String uri) {
+public class ScgRestManager {
+    public static ScgRestService getService(final String accessToken, final String uri) {
 
         Retrofit.Builder retrofit = new Retrofit.Builder()
                 .baseUrl(uri)
@@ -44,7 +42,6 @@ public class SCGRestManager {
         OkHttpClient client = httpClient.build();
         retrofit.client(client);
 
-        return retrofit.build().create(SCGRestService.class);
+        return retrofit.build().create(ScgRestService.class);
     }
-
 }
