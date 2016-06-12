@@ -17,7 +17,11 @@ public class ScgMessagingService extends FirebaseMessagingService {
         Log.d(TAG, "From: " + remoteMessage.getFrom());
         Log.d(TAG, "Notification Message Body: " + remoteMessage.getNotification().getBody());
 
-        final String delivery = remoteMessage.getData().get("message_id");
-        ScgClient.getInstance().deliveryConfirmation(delivery);
+        if (remoteMessage.getData().containsKey("message_id")) {
+            final String delivery = remoteMessage.getData().get("message_id");
+            ScgClient.getInstance().deliveryConfirmation(delivery);
+        } else {
+            // TODO: Log receiving push that cannot contains message id for delivery confirmation
+        }
     }
 }

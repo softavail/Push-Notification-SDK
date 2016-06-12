@@ -31,7 +31,7 @@ public interface ScgRestService {
 
         public UnregisterRequest(String token) {
             this.token = token;
-            type = "GCM";
+            this.type = "GCM";
         }
     }
 
