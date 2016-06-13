@@ -29,7 +29,7 @@ import retrofit2.Callback;
 import retrofit2.Response;
 
 
-public class MainActivity extends AppCompatActivity implements ScgClient.PushTokenListener, ScgClient.Result {
+public class MainActivity extends AppCompatActivity implements ScgClient.PushTokenListener, ScgClient.Result, ScgClient.PushNotificationListener {
 
     private static final String TAG = "MainActivity";
     private EditText accessToken;
@@ -117,7 +117,9 @@ public class MainActivity extends AppCompatActivity implements ScgClient.PushTok
     protected void onStart() {
         super.onStart();
         pushToken.setText(ScgClient.getInstance().getToken());
-        ScgClient.getInstance().setListener(this);
+
+        ScgClient.getInstance().setNotificationListener(this);
+        ScgClient.getInstance().setTokenListener(this);
     }
 
     public void onTokenRegister(final View view) {
@@ -172,6 +174,11 @@ public class MainActivity extends AppCompatActivity implements ScgClient.PushTok
     @Override
     public void failed(int code, String message) {
         Snackbar.make(pushToken, String.format("Failed (%s): %s", code, message), Snackbar.LENGTH_LONG).show();
+    }
+
+    @Override
+    public void onNotificationReceived(String notificationId) {
+        ScgClient.getInstance().deliveryConfirmation(notificationId);
     }
 
     public void onGetToken(View view) {

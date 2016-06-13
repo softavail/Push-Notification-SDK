@@ -29,14 +29,12 @@ public class ScgClient {
      */
     public interface Result {
         /**
-         *
          * @param code
          * @param message
          */
         void success(int code, String message);
 
         /**
-         *
          * @param code
          * @param message
          */
@@ -48,10 +46,13 @@ public class ScgClient {
      */
     public interface PushTokenListener {
         /**
-         *
          * @param token
          */
         void onPushTokenRefreshed(String token);
+    }
+
+    public interface PushNotificationListener {
+        void onNotificationReceived(String notificationId);
     }
 
     private final Context fApplication;
@@ -59,6 +60,7 @@ public class ScgClient {
     private final String fApiUrl;
 
     PushTokenListener mPushTokenListener;
+    PushNotificationListener mPushNotificationListener;
     private ScgRestService mService;
 
     private static ScgClient sInstance;
@@ -72,7 +74,6 @@ public class ScgClient {
     }
 
     /**
-     *
      * @param context
      * @param rootUrl
      * @param appId
@@ -86,7 +87,6 @@ public class ScgClient {
     }
 
     /**
-     *
      * @param accessToken
      */
     public void auth(String accessToken) {
@@ -94,7 +94,6 @@ public class ScgClient {
     }
 
     /**
-     *
      * @return
      */
     public static ScgClient getInstance() {
@@ -105,7 +104,6 @@ public class ScgClient {
     }
 
     /**
-     *
      * @param level
      */
     public static void setLogLevel(Level level) {
@@ -141,12 +139,12 @@ public class ScgClient {
         return retrofit.build().create(ScgRestService.class);
     }
 
-    void deliveryConfirmation(String messageId) {
+    public void deliveryConfirmation(String messageId) {
+        if (messageId == null) return;
         mService.deliveryConfirmation(messageId);
     }
 
     /**
-     *
      * @param pushToken
      * @param result
      */
@@ -173,7 +171,6 @@ public class ScgClient {
     }
 
     /**
-     *
      * @param pushToken
      * @param result
      */
@@ -199,7 +196,6 @@ public class ScgClient {
     }
 
     /**
-     *
      * @return
      */
     public String getToken() {
@@ -207,14 +203,21 @@ public class ScgClient {
     }
 
     /**
-     *
      * @param listener
      */
-    public void setListener(PushTokenListener listener) {
+    public void setTokenListener(PushTokenListener listener) {
         mPushTokenListener = listener;
     }
 
-    PushTokenListener getListener() {
+    PushTokenListener getPushTokenListener() {
         return mPushTokenListener;
+    }
+
+    public void setNotificationListener(PushNotificationListener listener) {
+        mPushNotificationListener = listener;
+    }
+
+    PushNotificationListener getPushNotificationListener() {
+        return mPushNotificationListener;
     }
 }
