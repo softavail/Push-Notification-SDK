@@ -139,9 +139,23 @@ public class ScgClient {
         return retrofit.build().create(ScgRestService.class);
     }
 
-    public void deliveryConfirmation(String messageId) {
+    public void deliveryConfirmation(String messageId, final Result result) {
         if (messageId == null) return;
-        mService.deliveryConfirmation(messageId);
+        mService.deliveryConfirmation(messageId).enqueue(new Callback<ResponseBody>() {
+            @Override
+            public void onResponse(Call<ResponseBody> call, retrofit2.Response<ResponseBody> response) {
+                if (response.code() > 400) {
+                    if (result != null) result.failed(response.code(), response.message());
+                } else {
+                    if (result != null) result.success(response.code(), response.message());
+                }
+            }
+
+            @Override
+            public void onFailure(Call<ResponseBody> call, Throwable t) {
+                result.failed(-1, t.getMessage());
+            }
+        });
     }
 
     /**

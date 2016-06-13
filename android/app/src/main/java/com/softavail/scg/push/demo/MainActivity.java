@@ -161,24 +161,31 @@ public class MainActivity extends AppCompatActivity implements ScgClient.PushTok
             @Override
             public void run() {
                 pushToken.setText(token);
-                Snackbar.make(pushToken, "Push token refreshed", Snackbar.LENGTH_LONG).show();
+                Snackbar.make(pushToken, "Push token refreshed", Snackbar.LENGTH_INDEFINITE).show();
             }
         });
     }
 
     @Override
     public void success(int code, String message) {
-        Snackbar.make(pushToken, String.format("Success (%s): %s", code, message), Snackbar.LENGTH_LONG).show();
+        Snackbar.make(pushToken, String.format("Success (%s): %s", code, message), Snackbar.LENGTH_INDEFINITE).show();
     }
 
     @Override
     public void failed(int code, String message) {
-        Snackbar.make(pushToken, String.format("Failed (%s): %s", code, message), Snackbar.LENGTH_LONG).show();
+        Snackbar.make(pushToken, String.format("Failed (%s): %s", code, message), Snackbar.LENGTH_INDEFINITE).show();
     }
 
     @Override
-    public void onNotificationReceived(String notificationId) {
-        ScgClient.getInstance().deliveryConfirmation(notificationId);
+    public void onNotificationReceived(final String notificationId) {
+        Snackbar.make(pushToken, String.format("Notification received: %s", notificationId), Snackbar.LENGTH_INDEFINITE)
+                .setAction("Delivery confirmation", new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        ScgClient.getInstance().deliveryConfirmation(notificationId, MainActivity.this);
+                    }
+                })
+                .show();
     }
 
     public void onGetToken(View view) {
