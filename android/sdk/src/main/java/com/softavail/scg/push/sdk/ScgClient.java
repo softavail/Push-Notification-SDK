@@ -24,43 +24,11 @@ import retrofit2.converter.gson.GsonConverterFactory;
  */
 public class ScgClient {
 
-    /**
-     *
-     */
-    public interface Result {
-        /**
-         * @param code
-         * @param message
-         */
-        void success(int code, String message);
-
-        /**
-         * @param code
-         * @param message
-         */
-        void failed(int code, String message);
-    }
-
-    /**
-     *
-     */
-    public interface PushTokenListener {
-        /**
-         * @param token
-         */
-        void onPushTokenRefreshed(String token);
-    }
-
-    public interface PushNotificationListener {
-        void onNotificationReceived(String notificationId);
-    }
-
     private final Context fApplication;
     private final String fAppId;
     private final String fApiUrl;
 
-    PushTokenListener mPushTokenListener;
-    PushNotificationListener mPushNotificationListener;
+    ScgListener mListener;
     private ScgRestService mService;
 
     private static ScgClient sInstance;
@@ -139,21 +107,21 @@ public class ScgClient {
         return retrofit.build().create(ScgRestService.class);
     }
 
-    public void deliveryConfirmation(String messageId, final Result result) {
+    public void deliveryConfirmation(String messageId, final ScgCallback result) {
         if (messageId == null) return;
         mService.deliveryConfirmation(messageId).enqueue(new Callback<ResponseBody>() {
             @Override
             public void onResponse(Call<ResponseBody> call, retrofit2.Response<ResponseBody> response) {
                 if (response.code() > 400) {
-                    if (result != null) result.failed(response.code(), response.message());
+                    if (result != null) result.onFailed(response.code(), response.message());
                 } else {
-                    if (result != null) result.success(response.code(), response.message());
+                    if (result != null) result.onSuccess(response.code(), response.message());
                 }
             }
 
             @Override
             public void onFailure(Call<ResponseBody> call, Throwable t) {
-                result.failed(-1, t.getMessage());
+                result.onFailed(-1, t.getMessage());
             }
         });
     }
@@ -162,7 +130,7 @@ public class ScgClient {
      * @param pushToken
      * @param result
      */
-    public void registerPushToken(final String pushToken, final Result result) {
+    public void registerPushToken(final String pushToken, final ScgCallback result) {
         if (pushToken == null) return;
 
         final RegisterRequest request = new RegisterRequest(fAppId, pushToken);
@@ -171,15 +139,15 @@ public class ScgClient {
             @Override
             public void onResponse(Call<ResponseBody> call, retrofit2.Response<ResponseBody> response) {
                 if (response.code() > 400) {
-                    if (result != null) result.failed(response.code(), response.message());
+                    if (result != null) result.onFailed(response.code(), response.message());
                 } else {
-                    if (result != null) result.success(response.code(), response.message());
+                    if (result != null) result.onSuccess(response.code(), response.message());
                 }
             }
 
             @Override
             public void onFailure(Call<ResponseBody> call, Throwable t) {
-                result.failed(-1, t.getMessage());
+                result.onFailed(-1, t.getMessage());
             }
         });
     }
@@ -188,7 +156,7 @@ public class ScgClient {
      * @param pushToken
      * @param result
      */
-    public void unregisterPushToken(final String pushToken, final Result result) {
+    public void unregisterPushToken(final String pushToken, final ScgCallback result) {
         if (pushToken == null) return;
         final UnregisterRequest request = new UnregisterRequest(pushToken);
 
@@ -196,15 +164,15 @@ public class ScgClient {
             @Override
             public void onResponse(Call<ResponseBody> call, retrofit2.Response<ResponseBody> response) {
                 if (response.code() > 400) {
-                    if (result != null) result.failed(response.code(), response.message());
+                    if (result != null) result.onFailed(response.code(), response.message());
                 } else {
-                    if (result != null) result.success(response.code(), response.message());
+                    if (result != null) result.onSuccess(response.code(), response.message());
                 }
             }
 
             @Override
             public void onFailure(Call<ResponseBody> call, Throwable t) {
-                result.failed(-1, t.getMessage());
+                result.onFailed(-1, t.getMessage());
             }
         });
     }
@@ -216,22 +184,11 @@ public class ScgClient {
         return FirebaseInstanceId.getInstance().getToken();
     }
 
-    /**
-     * @param listener
-     */
-    public void setTokenListener(PushTokenListener listener) {
-        mPushTokenListener = listener;
+    ScgListener getListener() {
+        return mListener;
     }
 
-    PushTokenListener getPushTokenListener() {
-        return mPushTokenListener;
-    }
-
-    public void setNotificationListener(PushNotificationListener listener) {
-        mPushNotificationListener = listener;
-    }
-
-    PushNotificationListener getPushNotificationListener() {
-        return mPushNotificationListener;
+    public void setListener(ScgListener listener) {
+        mListener = listener;
     }
 }

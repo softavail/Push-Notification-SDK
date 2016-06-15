@@ -1,9 +1,16 @@
 package com.softavail.scg.push.demo;
 
+import android.app.NotificationManager;
+import android.app.PendingIntent;
 import android.app.ProgressDialog;
+import android.content.Context;
 import android.content.DialogInterface;
+import android.content.Intent;
+import android.media.RingtoneManager;
+import android.net.Uri;
 import android.os.Bundle;
 import android.support.design.widget.Snackbar;
+import android.support.v4.app.NotificationCompat;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
@@ -13,7 +20,10 @@ import android.view.View;
 import android.widget.EditText;
 import android.widget.TextView;
 
+import com.google.firebase.messaging.RemoteMessage;
+import com.softavail.scg.push.sdk.ScgCallback;
 import com.softavail.scg.push.sdk.ScgClient;
+import com.softavail.scg.push.sdk.ScgListener;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -29,7 +39,7 @@ import retrofit2.Callback;
 import retrofit2.Response;
 
 
-public class MainActivity extends AppCompatActivity implements ScgClient.PushTokenListener, ScgClient.Result, ScgClient.PushNotificationListener {
+public class MainActivity extends AppCompatActivity implements ScgListener, ScgCallback {
 
     private static final String TAG = "MainActivity";
     private EditText accessToken;
@@ -118,8 +128,7 @@ public class MainActivity extends AppCompatActivity implements ScgClient.PushTok
         super.onStart();
         pushToken.setText(ScgClient.getInstance().getToken());
 
-        ScgClient.getInstance().setNotificationListener(this);
-        ScgClient.getInstance().setTokenListener(this);
+        ScgClient.getInstance().setListener(this);
     }
 
     public void onTokenRegister(final View view) {
@@ -156,7 +165,51 @@ public class MainActivity extends AppCompatActivity implements ScgClient.PushTok
     }
 
     @Override
-    public void onPushTokenRefreshed(final String token) {
+    public void onSuccess(int code, String message) {
+        Snackbar.make(pushToken, String.format("Success (%s): %s", code, message), Snackbar.LENGTH_INDEFINITE).show();
+    }
+
+    @Override
+    public void onFailed(int code, String message) {
+        Snackbar.make(pushToken, String.format("Failed (%s): %s", code, message), Snackbar.LENGTH_INDEFINITE).show();
+    }
+
+    public void onGetToken(View view) {
+        pushToken.setText(ScgClient.getInstance().getToken());
+    }
+
+    private void sendNotification(RemoteMessage remoteMessage) {
+
+        final String message = remoteMessage.getNotification() == null ? remoteMessage.getData().get("message") : remoteMessage.getNotification().getBody();
+        final String title = remoteMessage.getNotification() == null ? remoteMessage.getData().get("title") : remoteMessage.getNotification().getTitle();
+
+        if (message == null || title == null)
+            return;
+
+
+        Intent intent = new Intent(this, MainActivity.class);
+        intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+        PendingIntent pendingIntent = PendingIntent.getActivity(this, 0 /* Request code */, intent,
+                PendingIntent.FLAG_ONE_SHOT);
+
+        Uri defaultSoundUri = RingtoneManager.getDefaultUri(RingtoneManager.TYPE_NOTIFICATION);
+
+        NotificationCompat.Builder notificationBuilder = new NotificationCompat.Builder(this)
+                .setSmallIcon(R.mipmap.ic_launcher)
+                .setContentTitle(title)
+                .setContentText(message)
+                .setAutoCancel(true)
+                .setSound(defaultSoundUri)
+                .setContentIntent(pendingIntent);
+
+        NotificationManager notificationManager =
+                (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
+
+        notificationManager.notify(0 /* ID of notification */, notificationBuilder.build());
+    }
+
+    @Override
+    public void onPushTokenReceived(final String token) {
         runOnUiThread(new Runnable() {
             @Override
             public void run() {
@@ -167,28 +220,26 @@ public class MainActivity extends AppCompatActivity implements ScgClient.PushTok
     }
 
     @Override
-    public void success(int code, String message) {
-        Snackbar.make(pushToken, String.format("Success (%s): %s", code, message), Snackbar.LENGTH_INDEFINITE).show();
-    }
-
-    @Override
-    public void failed(int code, String message) {
-        Snackbar.make(pushToken, String.format("Failed (%s): %s", code, message), Snackbar.LENGTH_INDEFINITE).show();
-    }
-
-    @Override
-    public void onNotificationReceived(final String notificationId) {
-        Snackbar.make(pushToken, String.format("Notification received: %s", notificationId), Snackbar.LENGTH_INDEFINITE)
+    public void onMessageReceived(final String messageId, RemoteMessage message) {
+        sendNotification(message);
+        Snackbar.make(pushToken, String.format("Notification received: %s", messageId), Snackbar.LENGTH_INDEFINITE)
                 .setAction("Delivery confirmation", new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
-                        ScgClient.getInstance().deliveryConfirmation(notificationId, MainActivity.this);
+                        final String access = accessToken.getText().toString();
+                        if (!TextUtils.isEmpty(access)) {
+                            ScgClient.getInstance().auth(access);
+                            ScgClient.getInstance().deliveryConfirmation(messageId, MainActivity.this);
+                        } else {
+                            Snackbar.make(pushToken, "Access token is null or invalid", Snackbar.LENGTH_INDEFINITE).show();
+                        }
                     }
                 })
                 .show();
     }
 
-    public void onGetToken(View view) {
-        pushToken.setText(ScgClient.getInstance().getToken());
+    @Override
+    public void onPlayServiceError() {
+
     }
 }
