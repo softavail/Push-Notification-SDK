@@ -7,6 +7,7 @@
 //
 
 import UIKit
+import SCGPush
 
 @UIApplicationMain
 class AppDelegate: UIResponder, UIApplicationDelegate {
@@ -21,6 +22,10 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         
         application.registerUserNotificationSettings(settings)
         application.registerForRemoteNotifications()
+        
+        SCGPush.instance.accessToken = "saFgvAco23YEkXKFhRX8Q-"
+        SCGPush.instance.appID = "com.syniverse.push_demo"
+        SCGPush.instance.callbackURI = "http://localhost:8912/scg-dra/proxy"
         
         return true
     }
@@ -62,10 +67,15 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
             tokenString += String(format: "%02.2hhx", arguments: [tokenChars[i]])
             
         }
-        
+        print (tokenString)
         (window?.rootViewController!.view.viewWithTag(8) as! UILabel).text = tokenPureString
         (window?.rootViewController!.view.viewWithTag(9) as! UILabel).text = tokenString
-        print("Device Token:", tokenString, tokenPureString)
+        
+        SCGPush.instance.registerPushToken(deviceTokeData: deviceToken, completionBlock: {
+            print ("ura");
+            }) { (error) in
+                print (error)
+        }
     }
     
     func application(application: UIApplication, didFailToRegisterForRemoteNotificationsWithError error: NSError) {
@@ -78,8 +88,9 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         notificationNumber += 1
         application.applicationIconBadgeNumber =  notificationNumber;
         
+        print ("userInfo: ",userInfo)
+        
         if let aps = userInfo["aps"] as? NSDictionary {
-            print (userInfo);
             print("my messages : \(aps["alert"])")
             (window?.rootViewController!.view.viewWithTag(10) as! UILabel).text = aps["alert"] as? String
         }

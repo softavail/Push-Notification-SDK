@@ -14,6 +14,8 @@
 		F59BC8331CEA56310043E96E /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = F59BC8311CEA56310043E96E /* LaunchScreen.storyboard */; };
 		F59BC83E1CEA56310043E96E /* demoTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = F59BC83D1CEA56310043E96E /* demoTests.swift */; };
 		F59BC8491CEA56320043E96E /* demoUITests.swift in Sources */ = {isa = PBXBuildFile; fileRef = F59BC8481CEA56320043E96E /* demoUITests.swift */; };
+		F7EFFC6E1D0DD82D0057A2B6 /* SCGPush.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = F7EFFC6D1D0DD82D0057A2B6 /* SCGPush.framework */; };
+		F7EFFC6F1D0DD82D0057A2B6 /* SCGPush.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = F7EFFC6D1D0DD82D0057A2B6 /* SCGPush.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -33,6 +35,20 @@
 		};
 /* End PBXContainerItemProxy section */
 
+/* Begin PBXCopyFilesBuildPhase section */
+		F7EFFC6C1D0DD57B0057A2B6 /* Embed Frameworks */ = {
+			isa = PBXCopyFilesBuildPhase;
+			buildActionMask = 2147483647;
+			dstPath = "";
+			dstSubfolderSpec = 10;
+			files = (
+				F7EFFC6F1D0DD82D0057A2B6 /* SCGPush.framework in Embed Frameworks */,
+			);
+			name = "Embed Frameworks";
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXCopyFilesBuildPhase section */
+
 /* Begin PBXFileReference section */
 		F59BC8251CEA56310043E96E /* demo.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = demo.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		F59BC8281CEA56310043E96E /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
@@ -48,6 +64,7 @@
 		F59BC8481CEA56320043E96E /* demoUITests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = demoUITests.swift; sourceTree = "<group>"; };
 		F59BC84A1CEA56320043E96E /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		F59BC86F1CEA5B530043E96E /* Bridge.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = Bridge.h; sourceTree = "<group>"; };
+		F7EFFC6D1D0DD82D0057A2B6 /* SCGPush.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; name = SCGPush.framework; path = "/Users/SlavSarafski/Library/Developer/Xcode/DerivedData/ios-ajvksnxmppjubhaydjfdddmcvexf/Build/Products/Debug-iphoneos/SCGPush.framework"; sourceTree = "<absolute>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -55,6 +72,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				F7EFFC6E1D0DD82D0057A2B6 /* SCGPush.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -78,6 +96,7 @@
 		F59BC81C1CEA56310043E96E = {
 			isa = PBXGroup;
 			children = (
+				F7EFFC6D1D0DD82D0057A2B6 /* SCGPush.framework */,
 				F59BC86F1CEA5B530043E96E /* Bridge.h */,
 				F59BC8271CEA56310043E96E /* demo */,
 				F59BC83C1CEA56310043E96E /* demoTests */,
@@ -137,6 +156,7 @@
 				F59BC8211CEA56310043E96E /* Sources */,
 				F59BC8221CEA56310043E96E /* Frameworks */,
 				F59BC8231CEA56310043E96E /* Resources */,
+				F7EFFC6C1D0DD57B0057A2B6 /* Embed Frameworks */,
 			);
 			buildRules = (
 			);
@@ -195,7 +215,7 @@
 				TargetAttributes = {
 					F59BC8241CEA56310043E96E = {
 						CreatedOnToolsVersion = 7.3;
-						DevelopmentTeam = Y2G2D8HFRU;
+						DevelopmentTeam = 6D6V2A9HWX;
 						SystemCapabilities = {
 							com.apple.Push = {
 								enabled = 1;
@@ -410,11 +430,15 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CODE_SIGN_IDENTITY = "iPhone Developer";
+				FRAMEWORK_SEARCH_PATHS = (
+					"$(inherited)",
+					"$(PROJECT_DIR)/demo",
+				);
 				HEADER_SEARCH_PATHS = "";
 				INFOPLIST_FILE = demo/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				LIBRARY_SEARCH_PATHS = "";
-				PRODUCT_BUNDLE_IDENTIFIER = com.spiritinvoker.scgpush;
+				PRODUCT_BUNDLE_IDENTIFIER = com.softavail.scg.push.demo;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_OBJC_BRIDGING_HEADER = Bridge.h;
 			};
@@ -425,11 +449,15 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CODE_SIGN_IDENTITY = "iPhone Developer";
+				FRAMEWORK_SEARCH_PATHS = (
+					"$(inherited)",
+					"$(PROJECT_DIR)/demo",
+				);
 				HEADER_SEARCH_PATHS = "";
 				INFOPLIST_FILE = demo/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				LIBRARY_SEARCH_PATHS = "";
-				PRODUCT_BUNDLE_IDENTIFIER = com.spiritinvoker.scgpush;
+				PRODUCT_BUNDLE_IDENTIFIER = com.softavail.scg.push.demo;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_OBJC_BRIDGING_HEADER = Bridge.h;
 			};

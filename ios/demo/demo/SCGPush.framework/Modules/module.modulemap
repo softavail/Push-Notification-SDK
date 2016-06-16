@@ -1,0 +1,10 @@
+framework module SCGPush {
+  umbrella header "SCGPush.h"
+
+  export *
+  module * { export * }
+}
+
+module SCGPush.Swift {
+    header "SCGPush-Swift.h"
+}

@@ -7,6 +7,7 @@
 //
 
 import UIKit
+import SCGPush
 
 class ViewController: UIViewController {
 
@@ -22,10 +23,14 @@ class ViewController: UIViewController {
         // Do any additional setup after loading the view, typically from a nib.
         
 //        accessTokenField.text = "ELK2c5Lwzx9JI5l4iLA0F4"
-        //purePushTokenLabel.text = "87d0e8f7cf0db78b90naf3e994ca057b8e91c2d25ffdf801ef85a312c5e3354"
+        purePushTokenLabel.text = "38ac1c3a36e9294ccca278f81798ecf872a33c0012c0af1c27fdf7ac207411ff"
         
         baseURL = "http://localhost:8912"
-        baseURL = "192.168.1.197:8080"
+//        baseURL = "192.168.1.197:8080"
+        
+        
+        accessTokenField.text = "Lo1Ehs9XD1GVtowKvc9B1"
+        
     }
 
     override func didReceiveMemoryWarning() {
@@ -36,6 +41,13 @@ class ViewController: UIViewController {
     
     
     @IBAction func clipboard(sender: AnyObject) {
+        print (rawPushTokenLabel.text)
+        SCGPush.instance.deliveryConfirmation("fmvClNNQCibrok0rm88GM", completionBlock: {
+            print ("del ura")
+            }) { (error) in
+                print (error)
+        }
+        
         if (sender.tag == 11) {
             UIPasteboard.generalPasteboard().string = rawPushTokenLabel.text
         }
@@ -45,8 +57,19 @@ class ViewController: UIViewController {
     }
     
     
-    
     @IBAction func registerToken(sender: AnyObject) {
+        SCGPush.instance.registerPushToken(purePushTokenLabel.text!, completionBlock: {
+            print ("ura")
+            }) { (error) in
+                print (error)
+        }
+    }
+    
+    @IBAction func unregisterToken(sender: AnyObject) {
+        SCGPush.instance.unregisterPushToken();
+    }
+    
+    @IBAction func registerToken2(sender: AnyObject) {
         if (purePushTokenLabel!.text == "") {
             self.warningLabel.textColor = UIColor.yellowColor()
             warningLabel!.text = "Please enter an access token"
@@ -119,7 +142,7 @@ class ViewController: UIViewController {
         dataTask.resume()
     }
     
-    @IBAction func unregisterToken(sender: AnyObject) {
+    @IBAction func unregisterToken2(sender: AnyObject) {
         if (purePushTokenLabel!.text == "") {
             self.warningLabel.textColor = UIColor.yellowColor()
             warningLabel!.text = "Please enter an access token"
@@ -130,7 +153,7 @@ class ViewController: UIViewController {
         let accessToken:String = accessTokenField.text!
         let pushToken:String = purePushTokenLabel.text!
         
-        let params = ["token":pushToken] as Dictionary<String, AnyObject>
+        let params = ["token":pushToken, "type":"APN"] as Dictionary<String, AnyObject>
         
         let configuration = NSURLSessionConfiguration .defaultSessionConfiguration()
         let session = NSURLSession(configuration: configuration)
