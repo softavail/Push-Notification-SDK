@@ -158,7 +158,7 @@ public class ScgClient {
      */
     public void unregisterPushToken(final String pushToken, final ScgCallback result) {
         if (pushToken == null) return;
-        final UnregisterRequest request = new UnregisterRequest(pushToken);
+        final UnregisterRequest request = new UnregisterRequest(fAppId, pushToken);
 
         mService.unregisterPushToken(request).enqueue(new Callback<ResponseBody>() {
             @Override

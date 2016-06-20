@@ -24,10 +24,12 @@ interface ScgRestService {
     }
 
     class UnregisterRequest {
+        final String app_id;
         final String token;
         final String type;
 
-        public UnregisterRequest(String token) {
+        public UnregisterRequest(String app_id, String token) {
+            this.app_id = app_id;
             this.token = token;
             this.type = "GCM";
         }
