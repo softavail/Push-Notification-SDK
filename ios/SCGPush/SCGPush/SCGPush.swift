@@ -107,7 +107,8 @@ public class SCGPush: NSObject {
         let defaults = NSUserDefaults.standardUserDefaults()
         let pushToken:String = defaults.stringForKey("scg-push-token-dont-replace-this-default")! as String
         
-        let params = ["type":tokenType,
+        let params = ["app_id":appID,
+                      "type":tokenType,
                       "token": pushToken] as Dictionary<String, String>
         
         let configuration = NSURLSessionConfiguration .defaultSessionConfiguration()
