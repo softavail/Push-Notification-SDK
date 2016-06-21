@@ -70,15 +70,17 @@ public class SCGPush: NSObject {
         request.addValue("application/json", forHTTPHeaderField: "Content-Type")
         request.addValue("Bearer \(accessToken)", forHTTPHeaderField: "Authorization")
         request.HTTPBody  = try! NSJSONSerialization.dataWithJSONObject(params, options: [])
-        print ("start registration", "Bearer \(accessToken)", urlString)
+        
         let dataTask = session.dataTaskWithRequest(request)
         {
             (let data: NSData?, let response: NSURLResponse?, let error: NSError?) -> Void in
             
-            print(response)
             guard let httpResponse = response as? NSHTTPURLResponse, _ = data
                 else {
-                    print("error: not a valid http response")
+                    //print("error: not a valid http response")
+                    if (failureBlock != nil) {
+                        failureBlock! (error)
+                    }
                     return
             }
             
@@ -125,15 +127,16 @@ public class SCGPush: NSObject {
         request.addValue("Bearer \(accessToken)", forHTTPHeaderField: "Authorization")
         request.HTTPBody  = try! NSJSONSerialization.dataWithJSONObject(params, options: [])
         
-        print (urlString, ":\(pushToken):")
         let dataTask = session.dataTaskWithRequest(request)
         {
             (let data: NSData?, let response: NSURLResponse?, let error: NSError?) -> Void in
             
-            
             guard let httpResponse = response as? NSHTTPURLResponse, _ = data
                 else {
-                    print("error: not a valid http response")
+                    //print("error: not a valid http response")
+                    if (failureBlock != nil) {
+                        failureBlock! (error)
+                    }
                     return
             }
             
@@ -180,15 +183,16 @@ public class SCGPush: NSObject {
         
         request.addValue("application/json", forHTTPHeaderField: "Content-Type")
         request.addValue("Bearer \(accessToken)", forHTTPHeaderField: "Authorization")
-        print ("start deliveryConfirmation")
+        
         let dataTask = session.dataTaskWithRequest(request)
         {
             (let data: NSData?, let response: NSURLResponse?, let error: NSError?) -> Void in
             
-            print("data \(data), response:\(response), error \(error)")
             guard let httpResponse = response as? NSHTTPURLResponse, _ = data
                 else {
-                    print("error: not a valid http response")
+                    if (failureBlock != nil) {
+                        failureBlock! (error)
+                    }
                     return
             }
             

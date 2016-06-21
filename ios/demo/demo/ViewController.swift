@@ -32,6 +32,9 @@ class ViewController: UIViewController {
         baseURIField.text = "http://192.168.1.197:8080/scg-dra/proxy"
         appIDField.text = "com.syniverse.push_demo"
         
+//        SCGPush.instance.accessToken = "saFgvAco23YEkXKFhRX8Q-"
+        SCGPush.instance.appID = "com.syniverse.push_demo"
+        SCGPush.instance.callbackURI = "http://192.168.1.197:8080/scg-dra/proxy"
     }
 
     override func didReceiveMemoryWarning() {
@@ -80,6 +83,7 @@ class ViewController: UIViewController {
     
     func showAlert(title:String, mess:String){
         let alert = UIAlertController(title: title, message: mess, preferredStyle: UIAlertControllerStyle.Alert)
+        alert.addAction(UIAlertAction(title: "Ok", style: .Default, handler:nil))
         self.presentViewController(alert, animated: true, completion: nil)
     }
 }

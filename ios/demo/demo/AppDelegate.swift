@@ -23,9 +23,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         application.registerUserNotificationSettings(settings)
         application.registerForRemoteNotifications()
         
-        SCGPush.instance.accessToken = "saFgvAco23YEkXKFhRX8Q-"
-        SCGPush.instance.appID = "com.syniverse.push_demo"
-        SCGPush.instance.callbackURI = "http://localhost:8912/scg-dra/proxy"
+        
         
         return true
     }
