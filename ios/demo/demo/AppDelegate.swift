@@ -71,11 +71,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         (window?.rootViewController!.view.viewWithTag(8) as! UILabel).text = tokenPureString
         (window?.rootViewController!.view.viewWithTag(9) as! UILabel).text = tokenString
         
-        SCGPush.instance.registerPushToken(deviceTokeData: deviceToken, completionBlock: {
-            print ("ura");
-            }) { (error) in
-                print (error)
-        }
+        SCGPush.instance.saveDeviceToken(deviceTokenData: deviceToken)
     }
     
     func application(application: UIApplication, didFailToRegisterForRemoteNotificationsWithError error: NSError) {
@@ -85,15 +81,17 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     var notificationNumber:Int = 0
     func application(application: UIApplication, didReceiveRemoteNotification userInfo: [NSObject : AnyObject]){
         
-        notificationNumber += 1
-        application.applicationIconBadgeNumber =  notificationNumber;
+//        notificationNumber += 1
+//        application.applicationIconBadgeNumber =  notificationNumber;
         
-        print ("userInfo: ",userInfo)
+        
+        SCGPush.instance.deliveryConfirmation(userInfo: userInfo)
         
         if let aps = userInfo["aps"] as? NSDictionary {
             print("my messages : \(aps["alert"])")
             (window?.rootViewController!.view.viewWithTag(10) as! UILabel).text = aps["alert"] as? String
         }
     }
+    
 }
 
