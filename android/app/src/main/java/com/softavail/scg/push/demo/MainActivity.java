@@ -2,7 +2,6 @@ package com.softavail.scg.push.demo;
 
 import android.app.NotificationManager;
 import android.app.PendingIntent;
-import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
@@ -15,28 +14,16 @@ import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.text.TextUtils;
-import android.util.Log;
+import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.EditText;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.google.firebase.messaging.RemoteMessage;
 import com.softavail.scg.push.sdk.ScgCallback;
 import com.softavail.scg.push.sdk.ScgClient;
 import com.softavail.scg.push.sdk.ScgListener;
-
-import org.json.JSONArray;
-import org.json.JSONException;
-import org.json.JSONObject;
-
-import java.io.IOException;
-import java.util.ArrayList;
-import java.util.List;
-
-import okhttp3.ResponseBody;
-import retrofit2.Call;
-import retrofit2.Callback;
-import retrofit2.Response;
 
 
 public class MainActivity extends AppCompatActivity implements ScgListener, ScgCallback {
@@ -44,8 +31,6 @@ public class MainActivity extends AppCompatActivity implements ScgListener, ScgC
     private static final String TAG = "MainActivity";
     private EditText accessToken;
     private TextView pushToken;
-
-    final AuthService manager = AuthService.retrofit.create(AuthService.class);
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -57,78 +42,34 @@ public class MainActivity extends AppCompatActivity implements ScgListener, ScgC
         accessToken = (EditText) findViewById(R.id.access);
         pushToken = (TextView) findViewById(R.id.token);
 
-        manager.listContacts().enqueue(new Callback<ResponseBody>() {
-            @Override
-            public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
-                if (response.code() == 200) {
-                    final List<String> tokens = new ArrayList<>();
-                    try {
-                        JSONArray raw = new JSONObject(response.body().string()).getJSONArray("list");
-                        for (int i = 0; i < raw.length(); i++) {
-                            JSONObject contact = raw.getJSONObject(i);
-                            tokens.add(contact.getString("id"));
+        final View initView = LayoutInflater.from(this).inflate(R.layout.dialog_initialization, null, false);
+
+        final AlertDialog.Builder init = new AlertDialog.Builder(this);
+        init.setTitle("Setup SCG library")
+                .setView(initView)
+                .setPositiveButton("Finish", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        final String uri = ((EditText) initView.findViewById(R.id.apiUrl)).getText().toString();
+                        final String appid = ((EditText) initView.findViewById(R.id.appId)).getText().toString();
+
+                        if (TextUtils.isEmpty(uri) || TextUtils.isEmpty(appid)) {
+                            Toast.makeText(MainActivity.this, "Library must be initialised properly!", Toast.LENGTH_LONG).show();
+                            finish();
+                            return;
                         }
 
-                        AlertDialog.Builder builder = new AlertDialog.Builder(MainActivity.this);
-                        builder.setTitle("Obtain token for user id");
-                        builder.setItems(tokens.toArray(new String[tokens.size()]), new DialogInterface.OnClickListener() {
-                            public void onClick(DialogInterface dialog, int item) {
-                                dialog.dismiss();
-                                final ProgressDialog waiting = ProgressDialog.show(MainActivity.this, "Access Token", "Getting access token...", true, false);
-                                manager.generateAccessToken(tokens.get(item), new AuthService.GenerateRequest(1440)).enqueue(new Callback<ResponseBody>() {
-                                    @Override
-                                    public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
-                                        if (waiting != null && waiting.isShowing()) {
-                                            waiting.dismiss();
-                                        }
-                                        if (response.code() == 200) {
-                                            try {
-                                                JSONObject data = new JSONObject(response.body().string());
-                                                accessToken.setText(data.getString("id"));
-                                            } catch (JSONException e) {
-                                                e.printStackTrace();
-                                            } catch (IOException e) {
-                                                e.printStackTrace();
-                                            }
-                                        } else {
-                                            System.out.println(String.format("%s %s", response.code(), response.message()));
-                                        }
-                                    }
-
-                                    @Override
-                                    public void onFailure(Call<ResponseBody> call, Throwable t) {
-                                        if (waiting != null && waiting.isShowing()) {
-                                            waiting.dismiss();
-                                        }
-                                    }
-                                });
-                            }
-                        });
-                        AlertDialog alert = builder.create();
-                        alert.show();
-                    } catch (JSONException e) {
-                        e.printStackTrace();
-                    } catch (IOException e) {
-                        e.printStackTrace();
+                        ScgClient.initialize(MainActivity.this, uri, appid);
+                        ScgClient.getInstance().setListener(MainActivity.this);
+                        pushToken.setText(ScgClient.getInstance().getToken());
                     }
-                } else {
-                    System.out.println(String.format("%s %s", response.code(), response.message()));
-                }
-            }
-
+                }).setOnCancelListener(new DialogInterface.OnCancelListener() {
             @Override
-            public void onFailure(Call<ResponseBody> call, Throwable t) {
-                Log.d(TAG, t.getMessage());
+            public void onCancel(DialogInterface dialog) {
+                Toast.makeText(MainActivity.this, "Library must be initialised!", Toast.LENGTH_LONG).show();
+                finish();
             }
-        });
-    }
-
-    @Override
-    protected void onStart() {
-        super.onStart();
-        pushToken.setText(ScgClient.getInstance().getToken());
-
-        ScgClient.getInstance().setListener(this);
+        }).show();
     }
 
     public void onTokenRegister(final View view) {
