@@ -54,6 +54,11 @@ public class ScgClient {
         }
     }
 
+    public static boolean isInitialized()
+    {
+        return sInstance != null;
+    }
+
     /**
      * @param accessToken
      */

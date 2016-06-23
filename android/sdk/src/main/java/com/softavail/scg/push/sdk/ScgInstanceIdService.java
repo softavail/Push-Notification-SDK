@@ -12,8 +12,9 @@ public final class ScgInstanceIdService extends FirebaseInstanceIdService {
 
     @Override
     public void onTokenRefresh() {
-        final String refreshedToken = FirebaseInstanceId.getInstance().getToken();
-        final ScgListener listener = ScgClient.getInstance().getListener();
+        if (!ScgClient.isInitialized()) return;
+        String refreshedToken = FirebaseInstanceId.getInstance().getToken();
+        ScgListener listener = ScgClient.getInstance().getListener();
 
         if (listener != null) {
             listener.onPushTokenReceived(refreshedToken);
