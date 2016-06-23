@@ -1,5 +1,7 @@
 package com.softavail.scg.push.sdk;
 
+import android.util.Log;
+
 import com.google.firebase.messaging.FirebaseMessagingService;
 import com.google.firebase.messaging.RemoteMessage;
 
@@ -13,15 +15,15 @@ public final class ScgMessagingService extends FirebaseMessagingService {
     public void onMessageReceived(RemoteMessage remoteMessage) {
         super.onMessageReceived(remoteMessage);
 
-        if (remoteMessage.getData().containsKey("scg-message-id")) {
-            final String delivery = remoteMessage.getData().get("scg-message-id");
-            final ScgListener listener = ScgClient.getInstance().getListener();
+        Log.i(TAG, "Notification received");
 
-            if (listener != null) {
-                listener.onMessageReceived(delivery, remoteMessage);
-            }
+        final String delivery = remoteMessage.getData().get("scg-message-id");
+        final ScgListener listener = ScgClient.getInstance().getListener();
+
+        if (listener != null) {
+            listener.onMessageReceived(delivery, remoteMessage);
         } else {
-            // TODO: Log receiving push that cannot contains message id for delivery confirmation
+            Log.w(TAG, "Cannot notify listener, maybe application is in background or SCG client not initialised?");
         }
     }
 }
