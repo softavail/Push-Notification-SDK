@@ -113,7 +113,6 @@
 				F7EFFC3F1D0DCEB10057A2B6 /* Frameworks */,
 				F7EFFC401D0DCEB10057A2B6 /* Headers */,
 				F7EFFC411D0DCEB10057A2B6 /* Resources */,
-				F73C6C221D1BCA8D00D3773B /* ShellScript */,
 			);
 			buildRules = (
 			);
@@ -194,22 +193,6 @@
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 /* End PBXResourcesBuildPhase section */
-
-/* Begin PBXShellScriptBuildPhase section */
-		F73C6C221D1BCA8D00D3773B /* ShellScript */ = {
-			isa = PBXShellScriptBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-			);
-			inputPaths = (
-			);
-			outputPaths = (
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-			shellPath = /bin/sh;
-			shellScript = "/${PROJECT_DIR}/SCGPush/ios-build-framework-script.sh";
-		};
-/* End PBXShellScriptBuildPhase section */
 
 /* Begin PBXSourcesBuildPhase section */
 		F7EFFC3E1D0DCEB10057A2B6 /* Sources */ = {
@@ -341,7 +324,7 @@
 				INFOPLIST_FILE = SCGPush/Info.plist;
 				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Frameworks";
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
-				PRODUCT_BUNDLE_IDENTIFIER = com.spiritinvoker.SCGPush;
+				PRODUCT_BUNDLE_IDENTIFIER = com.softavail.scg.push;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SKIP_INSTALL = YES;
 				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
@@ -359,7 +342,7 @@
 				INFOPLIST_FILE = SCGPush/Info.plist;
 				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Frameworks";
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
-				PRODUCT_BUNDLE_IDENTIFIER = com.spiritinvoker.SCGPush;
+				PRODUCT_BUNDLE_IDENTIFIER = com.softavail.scg.push;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SKIP_INSTALL = YES;
 			};
