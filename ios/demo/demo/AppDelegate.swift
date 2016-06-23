@@ -83,7 +83,11 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 //        application.applicationIconBadgeNumber =  notificationNumber;
         
         
-        SCGPush.instance.deliveryConfirmation(userInfo: userInfo)
+        SCGPush.instance.deliveryConfirmation(userInfo: userInfo, completionBlock: {
+            self.showAlert ("Success", mess: "You successfully send deliveryConfirmation.")
+            }) { (error) in
+                self.showAlert ("Error", mess: error.description)
+        }
         
         if let aps = userInfo["aps"] as? NSDictionary {
             print("my messages : \(aps["alert"])")
@@ -91,5 +95,10 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         }
     }
     
+    func showAlert(title:String, mess:String){
+        let alert = UIAlertController(title: title, message: mess, preferredStyle: UIAlertControllerStyle.Alert)
+        alert.addAction(UIAlertAction(title: "Ok", style: .Default, handler:nil))
+        window?.rootViewController!.presentViewController(alert, animated: true, completion: nil)
+    }
 }
 

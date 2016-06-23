@@ -64,7 +64,7 @@
 		F59BC8481CEA56320043E96E /* demoUITests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = demoUITests.swift; sourceTree = "<group>"; };
 		F59BC84A1CEA56320043E96E /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		F59BC86F1CEA5B530043E96E /* Bridge.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = Bridge.h; sourceTree = "<group>"; };
-		F7EFFC6D1D0DD82D0057A2B6 /* SCGPush.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; name = SCGPush.framework; path = "/Users/SlavSarafski/Library/Developer/Xcode/DerivedData/ios-ajvksnxmppjubhaydjfdddmcvexf/Build/Products/Debug-iphoneos/SCGPush.framework"; sourceTree = "<absolute>"; };
+		F7EFFC6D1D0DD82D0057A2B6 /* SCGPush.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; name = SCGPush.framework; path = "../../../../ios-ajvksnxmppjubhaydjfdddmcvexf/Build/Products/Debug-iphoneos/SCGPush.framework"; sourceTree = BUILT_PRODUCTS_DIR; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */

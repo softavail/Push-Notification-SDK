@@ -52,7 +52,6 @@ class ViewController: UIViewController {
         if (sender.tag == 9) {
             SCGPush.instance.callbackURI = baseURIField.text!
         }
-        print(sender.tag)
     }
     
     @IBAction func clipboard(sender: AnyObject) {
@@ -66,6 +65,10 @@ class ViewController: UIViewController {
     
     
     @IBAction func registerToken(sender: AnyObject) {
+        accessTokenField.resignFirstResponder()
+        baseURIField.resignFirstResponder()
+        appIDField.resignFirstResponder()
+        
         SCGPush.instance.registerPushToken(purePushTokenLabel.text!, completionBlock: {
             self.showAlert ("Success", mess: "You successfully register the token.")
             }) { (error) in
@@ -74,6 +77,10 @@ class ViewController: UIViewController {
     }
     
     @IBAction func unregisterToken(sender: AnyObject) {
+        accessTokenField.resignFirstResponder()
+        baseURIField.resignFirstResponder()
+        appIDField.resignFirstResponder()
+        
         SCGPush.instance.unregisterPushToken({
             self.showAlert ("Success", mess: "You successfully unregister the token.")
             }) { (error) in
@@ -82,9 +89,11 @@ class ViewController: UIViewController {
     }
     
     func showAlert(title:String, mess:String){
-        let alert = UIAlertController(title: title, message: mess, preferredStyle: UIAlertControllerStyle.Alert)
-        alert.addAction(UIAlertAction(title: "Ok", style: .Default, handler:nil))
-        self.presentViewController(alert, animated: true, completion: nil)
+        NSOperationQueue.mainQueue().addOperationWithBlock {
+            let alert = UIAlertController(title: title, message: mess, preferredStyle: UIAlertControllerStyle.Alert)
+            alert.addAction(UIAlertAction(title: "Ok", style: .Default, handler:nil))
+            self.presentViewController(alert, animated: true, completion: nil)
+        }
     }
 }
 
