@@ -1,0 +1,5 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="rootUrl">http://95.158.130.102:8080/scg-dra/proxy/</string>
+    <string name="appId">343875524685</string>
+</resources>
