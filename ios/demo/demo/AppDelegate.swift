@@ -82,11 +82,12 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 //        notificationNumber += 1
 //        application.applicationIconBadgeNumber =  notificationNumber;
         
-        
+        if ((window?.rootViewController!.view.viewWithTag(24) as! UISwitch).on) {
         SCGPush.instance.deliveryConfirmation(userInfo: userInfo, completionBlock: {
             self.showAlert ("Success", mess: "You successfully send deliveryConfirmation.")
             }) { (error) in
                 self.showAlert ("Error", mess: error.description)
+        }
         }
         
         if let aps = userInfo["aps"] as? NSDictionary {
