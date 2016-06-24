@@ -28,7 +28,8 @@ import retrofit2.converter.gson.GsonConverterFactory;
  */
 public class ScgClient {
 
-    private final Context fApplication;
+    public static final String TAG = "ScgClient";
+
     private final String fAppId;
     private final String fApiUrl;
 
@@ -36,11 +37,9 @@ public class ScgClient {
     private ScgRestService mService;
 
     private static ScgClient sInstance;
-    private static Level sLevel;
-    public static final String TAG = "ScgClient";
+
 
     private ScgClient(Context application, String rootUrl, String appId) {
-        fApplication = application;
         fAppId = appId;
         fApiUrl = rootUrl;
         mService = getService(null);
@@ -80,12 +79,6 @@ public class ScgClient {
         return sInstance;
     }
 
-    /**
-     * @param level
-     */
-    public static void setLogLevel(Level level) {
-        sLevel = level;
-    }
 
     private ScgRestService getService(final String accessToken) {
         Retrofit.Builder retrofit = new Retrofit.Builder()
