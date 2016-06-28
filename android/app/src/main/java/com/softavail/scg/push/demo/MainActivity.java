@@ -74,6 +74,8 @@ public class MainActivity extends AppCompatActivity implements ScgListener, ScgC
     private void showDialog() {
         final View initView = LayoutInflater.from(this).inflate(R.layout.dialog_initialization, null, false);
         ((SwitchCompat) initView.findViewById(R.id.delivery)).setChecked(pref.getBoolean(PREF_AUTO_DELIVERY, true));
+        ((EditText) initView.findViewById(R.id.apiUrl)).setText(pref.getString(PREF_URL, getString(R.string.rootUrl)));
+        ((EditText) initView.findViewById(R.id.appId)).setText(pref.getString(PREF_APP_ID, getString(R.string.appId)));
 
         final AlertDialog.Builder init = new AlertDialog.Builder(this);
         init.setTitle("Setup SCG library")
@@ -100,7 +102,7 @@ public class MainActivity extends AppCompatActivity implements ScgListener, ScgC
                         if (ScgClient.isInitialized()) {
                             recreate();
                         } else {
-                            init(uri, appid, null);
+                            init(uri, appid, pref.getString(PREF_AUTH, null));
                         }
                     }
                 }).setOnCancelListener(new DialogInterface.OnCancelListener() {
@@ -115,14 +117,9 @@ public class MainActivity extends AppCompatActivity implements ScgListener, ScgC
     private void init(String url, String appId, String auth) {
         ScgClient.initialize(MainActivity.this, url, appId);
         ScgClient.getInstance().setListener(MainActivity.this);
+        ScgClient.getInstance().auth(auth);
         pushToken.setText(ScgClient.getInstance().getToken());
-
-        if (auth != null) {
-            authPanel.setVisibility(View.GONE);
-            ScgClient.getInstance().auth(auth);
-        } else {
-            authPanel.setVisibility(View.VISIBLE);
-        }
+        accessToken.setText(auth);
     }
 
 
@@ -177,12 +174,6 @@ public class MainActivity extends AppCompatActivity implements ScgListener, ScgC
     @Override
     public void onFailed(int code, String message) {
         Snackbar.make(pushToken, String.format("Failed (%s): %s", code, message), Snackbar.LENGTH_INDEFINITE).show();
-
-        if (code == 401) {
-            pref.edit().remove(PREF_URL).commit();
-            authPanel.setVisibility(View.VISIBLE);
-            accessToken.getText().clear();
-        }
     }
 
     @Override
@@ -226,7 +217,7 @@ public class MainActivity extends AppCompatActivity implements ScgListener, ScgC
         if (ScgClient.isInitialized()) {
             pref.edit().putString(PREF_AUTH, accessToken.getText().toString()).commit();
             ScgClient.getInstance().auth(accessToken.getText().toString());
-            authPanel.setVisibility(View.GONE);
+            Snackbar.make(pushToken, "Saved", Snackbar.LENGTH_INDEFINITE).show();
         }
     }
 }
