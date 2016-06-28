@@ -9,6 +9,11 @@
 import UIKit
 import SCGPush
 
+#if WITH_CRASHLYTICS
+    import Fabric
+    import Crashlytics
+#endif
+
 @UIApplicationMain
 class AppDelegate: UIResponder, UIApplicationDelegate {
 
@@ -17,7 +22,10 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 
     func application(application: UIApplication, didFinishLaunchingWithOptions launchOptions: [NSObject: AnyObject]?) -> Bool {
         // Override point for customization after application launch.
-        
+        #if WITH_CRASHLYTICS
+        Fabric.with([Crashlytics.self])
+        #endif
+
         let settings = UIUserNotificationSettings(forTypes: [.Alert, .Badge, .Sound], categories: nil)
         
         application.registerUserNotificationSettings(settings)

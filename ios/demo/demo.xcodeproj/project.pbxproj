@@ -9,6 +9,8 @@
 /* Begin PBXBuildFile section */
 		5B97E9A31D2253780091617F /* SCGPush.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 5B97E99E1D2252C40091617F /* SCGPush.framework */; };
 		5B97E9A41D2253890091617F /* SCGPush.framework in CopyFiles */ = {isa = PBXBuildFile; fileRef = 5B97E99E1D2252C40091617F /* SCGPush.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
+		5BC0FE971D229BB6007A9637 /* Fabric.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 5BC0FE951D229BB6007A9637 /* Fabric.framework */; };
+		5BC0FE981D229BB6007A9637 /* Crashlytics.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 5BC0FE961D229BB6007A9637 /* Crashlytics.framework */; };
 		F59BC8291CEA56310043E96E /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = F59BC8281CEA56310043E96E /* AppDelegate.swift */; };
 		F59BC82B1CEA56310043E96E /* ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = F59BC82A1CEA56310043E96E /* ViewController.swift */; };
 		F59BC82E1CEA56310043E96E /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = F59BC82C1CEA56310043E96E /* Main.storyboard */; };
@@ -71,6 +73,10 @@
 
 /* Begin PBXFileReference section */
 		5B97E9981D2252C40091617F /* SCGPush.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = SCGPush.xcodeproj; path = ../SCGPush/SCGPush.xcodeproj; sourceTree = "<group>"; };
+		5BC0FE931D22996A007A9637 /* deploy.sh */ = {isa = PBXFileReference; lastKnownFileType = text.script.sh; path = deploy.sh; sourceTree = "<group>"; };
+		5BC0FE941D22996A007A9637 /* prepare.sh */ = {isa = PBXFileReference; lastKnownFileType = text.script.sh; path = prepare.sh; sourceTree = "<group>"; };
+		5BC0FE951D229BB6007A9637 /* Fabric.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Fabric.framework; path = depends/fabric_ios/Fabric.framework; sourceTree = "<group>"; };
+		5BC0FE961D229BB6007A9637 /* Crashlytics.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Crashlytics.framework; path = depends/fabric_ios/Crashlytics.framework; sourceTree = "<group>"; };
 		F59BC8251CEA56310043E96E /* demo.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = demo.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		F59BC8281CEA56310043E96E /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		F59BC82A1CEA56310043E96E /* ViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ViewController.swift; sourceTree = "<group>"; };
@@ -92,6 +98,8 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				5BC0FE971D229BB6007A9637 /* Fabric.framework in Frameworks */,
+				5BC0FE981D229BB6007A9637 /* Crashlytics.framework in Frameworks */,
 				5B97E9A31D2253780091617F /* SCGPush.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -122,15 +130,27 @@
 			name = Products;
 			sourceTree = "<group>";
 		};
+		5BC0FE991D229BC3007A9637 /* Frameworks */ = {
+			isa = PBXGroup;
+			children = (
+				5BC0FE951D229BB6007A9637 /* Fabric.framework */,
+				5BC0FE961D229BB6007A9637 /* Crashlytics.framework */,
+			);
+			name = Frameworks;
+			sourceTree = "<group>";
+		};
 		F59BC81C1CEA56310043E96E = {
 			isa = PBXGroup;
 			children = (
+				5BC0FE991D229BC3007A9637 /* Frameworks */,
 				5B97E9981D2252C40091617F /* SCGPush.xcodeproj */,
 				F59BC86F1CEA5B530043E96E /* Bridge.h */,
 				F59BC8271CEA56310043E96E /* demo */,
 				F59BC83C1CEA56310043E96E /* demoTests */,
 				F59BC8471CEA56320043E96E /* demoUITests */,
 				F59BC8261CEA56310043E96E /* Products */,
+				5BC0FE931D22996A007A9637 /* deploy.sh */,
+				5BC0FE941D22996A007A9637 /* prepare.sh */,
 			);
 			sourceTree = "<group>";
 		};
@@ -182,10 +202,13 @@
 			isa = PBXNativeTarget;
 			buildConfigurationList = F59BC84D1CEA56320043E96E /* Build configuration list for PBXNativeTarget "demo" */;
 			buildPhases = (
+				5BC0FE9A1D229C0E007A9637 /* Prepare */,
 				F59BC8211CEA56310043E96E /* Sources */,
 				F59BC8221CEA56310043E96E /* Frameworks */,
 				F59BC8231CEA56310043E96E /* Resources */,
 				5B97E9931D22497F0091617F /* CopyFiles */,
+				5BC0FE9B1D229E03007A9637 /* BuildNumber */,
+				5BC0FE8D1D229188007A9637 /* Fabric */,
 			);
 			buildRules = (
 			);
@@ -331,6 +354,51 @@
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 /* End PBXResourcesBuildPhase section */
+
+/* Begin PBXShellScriptBuildPhase section */
+		5BC0FE8D1D229188007A9637 /* Fabric */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputPaths = (
+			);
+			name = Fabric;
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "echo \"GCC_PREPROCESSOR_DEFINITIONS=${GCC_PREPROCESSOR_DEFINITIONS}\"\n\nWITH_CRASHLYTICS_STRING=\"WITH_CRASHLYTICS=1\"\n\nif echo \"$GCC_PREPROCESSOR_DEFINITIONS\" | grep -q \"$WITH_CRASHLYTICS_STRING\"; then\necho \"!!! Running Fabric !!!\"\n./depends/fabric_ios/Fabric.framework/run 04514ea659042cc5c7368ba808304e40ff726e7c 6aa5626991f10e90acf79f617ebb09f78e554a17a95fb850682e1dd251a9e740\nfi\n";
+		};
+		5BC0FE9A1D229C0E007A9637 /* Prepare */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputPaths = (
+			);
+			name = Prepare;
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "echo \"Prepare dependencies ..\"\n\n./prepare.sh";
+		};
+		5BC0FE9B1D229E03007A9637 /* BuildNumber */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputPaths = (
+			);
+			name = BuildNumber;
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "# xcode-build-bump.sh\n# @desc Auto-increment the build number every time the project is run.\n# @usage\n# 1. Select: your Target in Xcode\n# 2. Select: Build Phases Tab\n# 3. Select: Add Build Phase -> Add Run Script\n# 4. Paste code below in to new \"Run Script\" section\n# 5. Drag the \"Run Script\" below \"Link Binaries With Libraries\"\n# 6. Insure that your starting build number is set to a whole integer and not a float (e.g. 1, not 1.0)\n\nREVENV=${REVISION_NUMBER}\nbuildNumber=$(git rev-list HEAD | wc -l | tr -d ' ')\n\nif [ X\"${REVENV}\" != X\"\" ]; then\nbuildNumber=\"${REVENV}\"\nfi\n\nINFOPLIST=\"${BUILT_PRODUCTS_DIR}/${WRAPPER_NAME}/Info.plist\"\n/usr/libexec/PlistBuddy -c \"Set :CFBundleVersion $buildNumber\" \"${INFOPLIST}\"\necho \"CFBundleVersion: \" $buildNumber";
+		};
+/* End PBXShellScriptBuildPhase section */
 
 /* Begin PBXSourcesBuildPhase section */
 		F59BC8211CEA56310043E96E /* Sources */ = {
@@ -489,7 +557,11 @@
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CODE_SIGN_IDENTITY = "iPhone Developer";
 				COPY_PHASE_STRIP = YES;
-				FRAMEWORK_SEARCH_PATHS = "$(PROJECT_DIR)/../Frameworks";
+				FRAMEWORK_SEARCH_PATHS = (
+					"$(PROJECT_DIR)/../Frameworks",
+					"$(PROJECT_DIR)",
+					"$(PROJECT_DIR)/depends/fabric_ios",
+				);
 				HEADER_SEARCH_PATHS = "$(PROJECT_DIR)/../Frameworks";
 				INFOPLIST_FILE = demo/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
@@ -506,7 +578,12 @@
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CODE_SIGN_IDENTITY = "";
 				COPY_PHASE_STRIP = YES;
-				FRAMEWORK_SEARCH_PATHS = "$(PROJECT_DIR)/../Frameworks";
+				FRAMEWORK_SEARCH_PATHS = (
+					"$(PROJECT_DIR)/../Frameworks",
+					"$(PROJECT_DIR)",
+					"$(PROJECT_DIR)/depends/fabric_ios",
+				);
+				GCC_PREPROCESSOR_DEFINITIONS = "WITH_CRASHLYTICS=1";
 				HEADER_SEARCH_PATHS = "$(PROJECT_DIR)/../Frameworks";
 				INFOPLIST_FILE = demo/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
