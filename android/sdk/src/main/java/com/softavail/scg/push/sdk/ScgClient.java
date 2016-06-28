@@ -1,10 +1,14 @@
 package com.softavail.scg.push.sdk;
 
 import android.content.Context;
+import android.util.Log;
 
 import com.google.firebase.iid.FirebaseInstanceId;
 import com.softavail.scg.push.sdk.ScgRestService.RegisterRequest;
 import com.softavail.scg.push.sdk.ScgRestService.UnregisterRequest;
+
+import org.json.JSONException;
+import org.json.JSONObject;
 
 import java.io.IOException;
 import java.util.logging.Level;
@@ -24,7 +28,8 @@ import retrofit2.converter.gson.GsonConverterFactory;
  */
 public class ScgClient {
 
-    private final Context fApplication;
+    public static final String TAG = "ScgClient";
+
     private final String fAppId;
     private final String fApiUrl;
 
@@ -32,10 +37,9 @@ public class ScgClient {
     private ScgRestService mService;
 
     private static ScgClient sInstance;
-    private static Level sLevel;
+
 
     private ScgClient(Context application, String rootUrl, String appId) {
-        fApplication = application;
         fAppId = appId;
         fApiUrl = rootUrl;
         mService = getService(null);
@@ -54,8 +58,7 @@ public class ScgClient {
         }
     }
 
-    public static boolean isInitialized()
-    {
+    public static boolean isInitialized() {
         return sInstance != null;
     }
 
@@ -76,12 +79,6 @@ public class ScgClient {
         return sInstance;
     }
 
-    /**
-     * @param level
-     */
-    public static void setLogLevel(Level level) {
-        sLevel = level;
-    }
 
     private ScgRestService getService(final String accessToken) {
         Retrofit.Builder retrofit = new Retrofit.Builder()
@@ -143,11 +140,7 @@ public class ScgClient {
         mService.registerPushToken(request).enqueue(new Callback<ResponseBody>() {
             @Override
             public void onResponse(Call<ResponseBody> call, retrofit2.Response<ResponseBody> response) {
-                if (response.code() > 400) {
-                    if (result != null) result.onFailed(response.code(), response.message());
-                } else {
-                    if (result != null) result.onSuccess(response.code(), response.message());
-                }
+                sendResult(response, result);
             }
 
             @Override
@@ -168,11 +161,7 @@ public class ScgClient {
         mService.unregisterPushToken(request).enqueue(new Callback<ResponseBody>() {
             @Override
             public void onResponse(Call<ResponseBody> call, retrofit2.Response<ResponseBody> response) {
-                if (response.code() > 400) {
-                    if (result != null) result.onFailed(response.code(), response.message());
-                } else {
-                    if (result != null) result.onSuccess(response.code(), response.message());
-                }
+                sendResult(response, result);
             }
 
             @Override
@@ -180,6 +169,21 @@ public class ScgClient {
                 result.onFailed(-1, t.getMessage());
             }
         });
+    }
+
+    private void sendResult(retrofit2.Response<ResponseBody> response, ScgCallback result) {
+        if (response.code() > 400) {
+            if (result == null) return;
+
+            try {
+                JSONObject obg = new JSONObject(response.errorBody().string());
+                result.onFailed(obg.getInt("code"), obg.getString("description"));
+            } catch (Exception ignored) {
+                result.onFailed(response.code(), response.message());
+            }
+        } else {
+            if (result != null) result.onSuccess(response.code(), response.message());
+        }
     }
 
     /**

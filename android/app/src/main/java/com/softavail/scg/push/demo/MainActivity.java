@@ -25,11 +25,16 @@ import com.softavail.scg.push.sdk.ScgListener;
 public class MainActivity extends AppCompatActivity implements ScgListener, ScgCallback {
 
     private static final String TAG = "MainActivity";
+
     private static final String PREF_URL = "PREF_URL";
     private static final String PREF_APP_ID = "PREF_APP_ID";
     private static final String PREF_AUTO_DELIVERY = "PREF_AUTO_DELIVERY";
+    private static final String PREF_AUTH = "PREF_TOKEN";
+
     private EditText accessToken;
     private TextView pushToken;
+    private View authPanel;
+
     protected SharedPreferences pref;
 
     @Override
@@ -41,8 +46,9 @@ public class MainActivity extends AppCompatActivity implements ScgListener, ScgC
 
         accessToken = (EditText) findViewById(R.id.access);
         pushToken = (TextView) findViewById(R.id.token);
+        authPanel = findViewById(R.id.authpanel);
 
-        View setup = findViewById(R.id.btnSetup);
+        View setup = findViewById(R.id.fab);
         setup.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -53,16 +59,23 @@ public class MainActivity extends AppCompatActivity implements ScgListener, ScgC
         pref = PreferenceManager.getDefaultSharedPreferences(this);
         String url = pref.getString(PREF_URL, null);
         String appId = pref.getString(PREF_APP_ID, null);
+        String auth = pref.getString(PREF_AUTH, null);
+
         if (url == null || appId == null) {
             showDialog();
         } else {
-            init(url, appId);
+            init(url, appId, auth);
         }
+
+        if (getIntent().hasExtra("scg-message-id"))
+            onMessageReceived(getIntent().getStringExtra("scg-message-id"), null);
     }
 
     private void showDialog() {
         final View initView = LayoutInflater.from(this).inflate(R.layout.dialog_initialization, null, false);
-        ((SwitchCompat)initView.findViewById(R.id.delivery)).setChecked(pref.getBoolean(PREF_AUTO_DELIVERY, true));
+        ((SwitchCompat) initView.findViewById(R.id.delivery)).setChecked(pref.getBoolean(PREF_AUTO_DELIVERY, true));
+        ((EditText) initView.findViewById(R.id.apiUrl)).setText(pref.getString(PREF_URL, getString(R.string.rootUrl)));
+        ((EditText) initView.findViewById(R.id.appId)).setText(pref.getString(PREF_APP_ID, getString(R.string.appId)));
 
         final AlertDialog.Builder init = new AlertDialog.Builder(this);
         init.setTitle("Setup SCG library")
@@ -83,12 +96,13 @@ public class MainActivity extends AppCompatActivity implements ScgListener, ScgC
                         pref.edit()
                                 .putString(PREF_URL, uri)
                                 .putString(PREF_APP_ID, appid)
-                                .putBoolean(PREF_AUTO_DELIVERY, autoDelivery).commit();
+                                .putBoolean(PREF_AUTO_DELIVERY, autoDelivery)
+                                .commit();
 
                         if (ScgClient.isInitialized()) {
                             recreate();
                         } else {
-                            init(uri, appid);
+                            init(uri, appid, pref.getString(PREF_AUTH, null));
                         }
                     }
                 }).setOnCancelListener(new DialogInterface.OnCancelListener() {
@@ -100,17 +114,20 @@ public class MainActivity extends AppCompatActivity implements ScgListener, ScgC
         }).show();
     }
 
-    private void init(String url, String appId) {
+    private void init(String url, String appId, String auth) {
         ScgClient.initialize(MainActivity.this, url, appId);
         ScgClient.getInstance().setListener(MainActivity.this);
+        ScgClient.getInstance().auth(auth);
         pushToken.setText(ScgClient.getInstance().getToken());
+        accessToken.setText(auth);
     }
+
 
     public void onTokenRegister(final View view) {
         final String token = pushToken.getText().toString();
 
         if (!TextUtils.isEmpty(token)) {
-            final String access = accessToken.getText().toString();
+            final String access = pref.getString(PREF_AUTH, null);
             if (!TextUtils.isEmpty(access)) {
                 ScgClient.getInstance().auth(access);
                 ScgClient.getInstance().registerPushToken(token, this);
@@ -127,7 +144,7 @@ public class MainActivity extends AppCompatActivity implements ScgListener, ScgC
         final String token = pushToken.getText().toString();
 
         if (!TextUtils.isEmpty(token)) {
-            final String access = accessToken.getText().toString();
+            final String access = pref.getString(PREF_AUTH, null);
             if (!TextUtils.isEmpty(access)) {
                 ScgClient.getInstance().auth(access);
                 ScgClient.getInstance().unregisterPushToken(token, this);
@@ -139,6 +156,16 @@ public class MainActivity extends AppCompatActivity implements ScgListener, ScgC
         }
     }
 
+    private void reportDelivery(String messageId) {
+        final String access = pref.getString(PREF_AUTH, null);
+        if (!TextUtils.isEmpty(access)) {
+            ScgClient.getInstance().auth(access);
+            ScgClient.getInstance().deliveryConfirmation(messageId, MainActivity.this);
+        } else {
+            Snackbar.make(pushToken, "Access token is null or invalid", Snackbar.LENGTH_INDEFINITE).show();
+        }
+    }
+
     @Override
     public void onSuccess(int code, String message) {
         Snackbar.make(pushToken, String.format("Success (%s): %s", code, message), Snackbar.LENGTH_INDEFINITE).show();
@@ -147,10 +174,6 @@ public class MainActivity extends AppCompatActivity implements ScgListener, ScgC
     @Override
     public void onFailed(int code, String message) {
         Snackbar.make(pushToken, String.format("Failed (%s): %s", code, message), Snackbar.LENGTH_INDEFINITE).show();
-    }
-
-    public void onGetToken(View view) {
-        pushToken.setText(ScgClient.getInstance().getToken());
     }
 
     @Override
@@ -183,19 +206,18 @@ public class MainActivity extends AppCompatActivity implements ScgListener, ScgC
         }
     }
 
-
-    private void reportDelivery(String messageId) {
-        final String access = accessToken.getText().toString();
-        if (!TextUtils.isEmpty(access)) {
-            ScgClient.getInstance().auth(access);
-            ScgClient.getInstance().deliveryConfirmation(messageId, MainActivity.this);
-        } else {
-            Snackbar.make(pushToken, "Access token is null or invalid", Snackbar.LENGTH_INDEFINITE).show();
-        }
-    }
-
     @Override
     public void onPlayServiceError() {
 
+    }
+
+    public void saveAccessToken(View view) {
+        if (TextUtils.isEmpty(accessToken.getText().toString())) return;
+
+        if (ScgClient.isInitialized()) {
+            pref.edit().putString(PREF_AUTH, accessToken.getText().toString()).commit();
+            ScgClient.getInstance().auth(accessToken.getText().toString());
+            Snackbar.make(pushToken, "Saved", Snackbar.LENGTH_INDEFINITE).show();
+        }
     }
 }
