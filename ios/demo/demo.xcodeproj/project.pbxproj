@@ -589,7 +589,7 @@
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = com.softavail.scg.push.demo;
 				PRODUCT_NAME = "$(TARGET_NAME)";
-				PROVISIONING_PROFILE = "32fab24b-61e5-4c20-87e0-3a4fc60bd443";
+				PROVISIONING_PROFILE = "05ea59c7-f537-4a53-a63e-3d1e1f50c678";
 				SWIFT_OBJC_BRIDGING_HEADER = Bridge.h;
 			};
 			name = Release;
