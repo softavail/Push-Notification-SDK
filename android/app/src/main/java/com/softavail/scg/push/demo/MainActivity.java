@@ -194,7 +194,7 @@ public class MainActivity extends AppCompatActivity implements ScgListener, ScgC
             reportDelivery(messageId);
         } else {
 
-            Snackbar.make(pushToken, String.format("Notification received: %s", messageId), Snackbar.LENGTH_INDEFINITE)
+            Snackbar.make(pushToken, String.format("Notification received: %s \nMessage: %s", messageId, message.getData().get("body")), Snackbar.LENGTH_INDEFINITE)
                     .setAction("Delivery confirmation", new View.OnClickListener() {
                         @Override
                         public void onClick(View v) {
