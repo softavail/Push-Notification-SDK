@@ -1,6 +1,7 @@
 package com.softavail.scg.push.demo;
 
 import android.content.DialogInterface;
+import android.content.Intent;
 import android.content.IntentFilter;
 import android.content.SharedPreferences;
 import android.os.Bundle;
@@ -133,10 +134,11 @@ public class MainActivity extends AppCompatActivity implements ScgCallback {
                                 .putString(PREF_URL, uri)
                                 .putString(PREF_APP_ID, appid)
                                 .putBoolean(PREF_AUTO_DELIVERY, autoDelivery)
-                                .commit();
+                                .apply();
 
                         if (ScgClient.isInitialized()) {
-                            recreate();
+                            Toast.makeText(MainActivity.this, "Clear and restart application to take effect new settings", Toast.LENGTH_LONG).show();
+                            finish();
                         } else {
                             init(uri, appid, pref.getString(PREF_AUTH, null));
                         }
