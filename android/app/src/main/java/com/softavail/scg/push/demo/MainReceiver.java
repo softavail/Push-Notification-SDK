@@ -18,6 +18,9 @@ import com.softavail.scg.push.sdk.ScgPushReceiver;
  */
 public class MainReceiver extends ScgPushReceiver {
 
+    public static final String MESSAGE_ID = "com.softavail.scg.push.demo.extra.ID";
+    public static final String MESSAGE = "com.softavail.scg.push.demo.extra.MESSAGE";
+
     @Override
     protected void onPushTokenReceived(String token) {
         ScgClient.getInstance().registerPushToken(token, new ScgCallback() {
@@ -35,16 +38,16 @@ public class MainReceiver extends ScgPushReceiver {
 
     @Override
     protected void onMessageReceived(String messageId, RemoteMessage message) {
-        sendNotification(messageId, message.getData().get("body"));
-    }
+        final String msg = message.getData().get(MESSAGE_BODY);
 
-    private void sendNotification(String messageId, String msg) {
         Intent intent = new Intent(context, MainActivity.class);
-        intent.putExtra("scg-message-id", messageId);
+        intent.putExtra(MESSAGE_ID, messageId);
+        intent.putExtra(MESSAGE, message);
         intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
         PendingIntent pendingIntent = PendingIntent.getActivity(context, 0, intent, PendingIntent.FLAG_ONE_SHOT);
 
         Uri defaultSoundUri = RingtoneManager.getDefaultUri(RingtoneManager.TYPE_NOTIFICATION);
+
         NotificationCompat.Builder notificationBuilder = new NotificationCompat.Builder(context)
                 .setSmallIcon(R.mipmap.ic_launcher)
                 .setContentTitle("SCG Message")
@@ -56,6 +59,5 @@ public class MainReceiver extends ScgPushReceiver {
 
         NotificationManager notificationManager = (NotificationManager) context.getSystemService(Context.NOTIFICATION_SERVICE);
         notificationManager.notify(messageId.hashCode(), notificationBuilder.build());
-
     }
 }

@@ -88,8 +88,8 @@ public class MainActivity extends AppCompatActivity implements ScgCallback {
             init(url, appId, auth);
         }
 
-        if (getIntent().hasExtra("scg-message-id"))
-            handleMessageReceive(getIntent().getStringExtra("scg-message-id"), null);
+        if (getIntent().hasExtra(MainReceiver.MESSAGE_ID))
+            handleMessageReceive(getIntent().getStringExtra(MainReceiver.MESSAGE_ID), (RemoteMessage) getIntent().getParcelableExtra(MainReceiver.MESSAGE));
     }
 
     @Override
@@ -198,7 +198,7 @@ public class MainActivity extends AppCompatActivity implements ScgCallback {
             reportDelivery(messageId);
         } else {
 
-            Snackbar.make(pushToken, String.format("%s: %s", messageId, message.getData().get("body")), Snackbar.LENGTH_INDEFINITE)
+            Snackbar.make(pushToken, String.format("%s: %s", messageId, message.getData().get(MainReceiver.MESSAGE_BODY)), Snackbar.LENGTH_INDEFINITE)
                     .setAction("Delivery confirmation", new View.OnClickListener() {
                         @Override
                         public void onClick(View v) {
