@@ -137,8 +137,7 @@ public class MainActivity extends AppCompatActivity implements ScgCallback {
                                 .apply();
 
                         if (ScgClient.isInitialized()) {
-                            Toast.makeText(MainActivity.this, "Clear and restart application to take effect new settings", Toast.LENGTH_LONG).show();
-                            finish();
+                            recreate();
                         } else {
                             init(uri, appid, pref.getString(PREF_AUTH, null));
                         }

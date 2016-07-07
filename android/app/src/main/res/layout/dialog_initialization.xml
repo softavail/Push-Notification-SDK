@@ -11,12 +11,12 @@
 
         <EditText
             android:id="@+id/apiUrl"
-            android:hint="API Root url"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_gravity="center_horizontal"
-            android:text="@string/rootUrl"
-            android:inputType="textUri" />
+            android:hint="API Root url"
+            android:inputType="textUri"
+            android:text="@string/rootUrl" />
     </android.support.design.widget.TextInputLayout>
 
     <android.support.design.widget.TextInputLayout
@@ -25,12 +25,12 @@
 
         <EditText
             android:id="@+id/appId"
-            android:hint="Application Id"
             android:layout_width="match_parent"
-            android:text="@string/appId"
             android:layout_height="wrap_content"
             android:layout_gravity="center_horizontal"
-            android:inputType="textNoSuggestions" />
+            android:hint="Application Id"
+            android:inputType="textNoSuggestions"
+            android:text="@string/appId" />
 
     </android.support.design.widget.TextInputLayout>
 
@@ -38,7 +38,19 @@
         android:id="@+id/delivery"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Auto delivery"
-        android:checked="true"/>
+        android:checked="true"
+        android:text="Auto delivery" />
+
+    <TextView
+        android:layout_marginTop="16dp"
+        android:id="@+id/textView"
+        style="@style/TextAppearance.AppCompat.Subhead"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center_horizontal"
+        android:gravity="center"
+        android:text="Settings will take effect after application restart"
+        android:textColor="@color/colorPrimaryDark"
+        android:textStyle="bold" />
 
 </LinearLayout>
