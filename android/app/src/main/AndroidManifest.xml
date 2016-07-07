@@ -40,6 +40,15 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
+
+        <receiver android:name=".MainReceiver"
+            android:exported="false"
+            android:enabled="true">
+            <intent-filter>
+                <action android:name="com.softavail.scg.push.sdk.action.PUSH_TOKEN_RECEIVED"/>
+                <action android:name="com.softavail.scg.push.sdk.action.MESSAGE_RECEIVED"/>
+            </intent-filter>
+        </receiver>
     </application>
 
 </manifest>

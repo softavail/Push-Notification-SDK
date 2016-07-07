@@ -33,16 +33,16 @@ public class ScgClient {
     private final String fAppId;
     private final String fApiUrl;
 
-    ScgListener mListener;
     private ScgRestService mService;
 
     private static ScgClient sInstance;
+    private String mAuthToken;
 
 
     private ScgClient(Context application, String rootUrl, String appId) {
         fAppId = appId;
         fApiUrl = rootUrl;
-        mService = getService(null);
+        mService = getService();
     }
 
     /**
@@ -66,7 +66,17 @@ public class ScgClient {
      * @param accessToken
      */
     public void auth(String accessToken) {
-        mService = getInstance().getService(accessToken);
+
+        if (mAuthToken != null && mAuthToken.equals(accessToken)) {
+            return;
+        }
+
+        mAuthToken = accessToken;
+    }
+
+
+    public String getAuthToken() {
+        return mAuthToken;
     }
 
     /**
@@ -80,7 +90,8 @@ public class ScgClient {
     }
 
 
-    private ScgRestService getService(final String accessToken) {
+    private ScgRestService getService() {
+
         Retrofit.Builder retrofit = new Retrofit.Builder()
                 .baseUrl(fApiUrl)
                 .addConverterFactory(GsonConverterFactory.create());
@@ -95,8 +106,8 @@ public class ScgClient {
                         .header("Content-Type", "application/json")
                         .method(original.method(), original.body());
 
-                if (accessToken != null) {
-                    request.header("Authorization", "Bearer " + accessToken);
+                if (mAuthToken != null) {
+                    request.header("Authorization", "Bearer " + mAuthToken);
                 }
 
                 return chain.proceed(request.build());
@@ -109,7 +120,7 @@ public class ScgClient {
         return retrofit.build().create(ScgRestService.class);
     }
 
-    public void deliveryConfirmation(String messageId, final ScgCallback result) {
+    public synchronized void deliveryConfirmation(String messageId, final ScgCallback result) {
         if (messageId == null) return;
         mService.deliveryConfirmation(messageId).enqueue(new Callback<ResponseBody>() {
             @Override
@@ -132,7 +143,7 @@ public class ScgClient {
      * @param pushToken
      * @param result
      */
-    public void registerPushToken(final String pushToken, final ScgCallback result) {
+    public synchronized void registerPushToken(final String pushToken, final ScgCallback result) {
         if (pushToken == null) return;
 
         final RegisterRequest request = new RegisterRequest(fAppId, pushToken);
@@ -154,8 +165,9 @@ public class ScgClient {
      * @param pushToken
      * @param result
      */
-    public void unregisterPushToken(final String pushToken, final ScgCallback result) {
+    public synchronized void unregisterPushToken(final String pushToken, final ScgCallback result) {
         if (pushToken == null) return;
+
         final UnregisterRequest request = new UnregisterRequest(fAppId, pushToken);
 
         mService.unregisterPushToken(request).enqueue(new Callback<ResponseBody>() {
@@ -191,13 +203,5 @@ public class ScgClient {
      */
     public String getToken() {
         return FirebaseInstanceId.getInstance().getToken();
-    }
-
-    ScgListener getListener() {
-        return mListener;
-    }
-
-    public void setListener(ScgListener listener) {
-        mListener = listener;
     }
 }

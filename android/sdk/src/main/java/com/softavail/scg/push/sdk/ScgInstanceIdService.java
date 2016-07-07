@@ -1,5 +1,7 @@
 package com.softavail.scg.push.sdk;
 
+import android.content.Intent;
+
 import com.google.firebase.iid.FirebaseInstanceId;
 import com.google.firebase.iid.FirebaseInstanceIdService;
 
@@ -12,12 +14,11 @@ public final class ScgInstanceIdService extends FirebaseInstanceIdService {
 
     @Override
     public void onTokenRefresh() {
-        if (!ScgClient.isInitialized()) return;
         String refreshedToken = FirebaseInstanceId.getInstance().getToken();
-        ScgListener listener = ScgClient.getInstance().getListener();
 
-        if (listener != null) {
-            listener.onPushTokenReceived(refreshedToken);
-        }
+        Intent tokenIntent = new Intent(ScgPushReceiver.ACTION_PUSH_TOKEN_RECEIVED);
+        tokenIntent.putExtra(ScgPushReceiver.EXTRA_TOKEN, refreshedToken);
+
+        getApplicationContext().sendOrderedBroadcast(tokenIntent, null);
     }
 }

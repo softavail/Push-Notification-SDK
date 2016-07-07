@@ -1,6 +1,7 @@
 package com.softavail.scg.push.demo;
 
 import android.content.DialogInterface;
+import android.content.IntentFilter;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
@@ -19,10 +20,10 @@ import android.widget.Toast;
 import com.google.firebase.messaging.RemoteMessage;
 import com.softavail.scg.push.sdk.ScgCallback;
 import com.softavail.scg.push.sdk.ScgClient;
-import com.softavail.scg.push.sdk.ScgListener;
+import com.softavail.scg.push.sdk.ScgPushReceiver;
 
 
-public class MainActivity extends AppCompatActivity implements ScgListener, ScgCallback {
+public class MainActivity extends AppCompatActivity implements ScgCallback {
 
     private static final String TAG = "MainActivity";
 
@@ -33,9 +34,30 @@ public class MainActivity extends AppCompatActivity implements ScgListener, ScgC
 
     private EditText accessToken;
     private TextView pushToken;
-    private View authPanel;
 
     protected SharedPreferences pref;
+
+    private final ScgPushReceiver receiver = new ScgPushReceiver() {
+        @Override
+        protected void onPushTokenReceived(final String token) {
+
+            runOnUiThread(new Runnable() {
+                @Override
+                public void run() {
+                    pushToken.setText(token);
+                    Snackbar.make(pushToken, "Push token refreshed", Snackbar.LENGTH_INDEFINITE).show();
+                }
+            });
+
+            abortBroadcast(); // Block passing the broadcast to the receiver in the manifest
+        }
+
+        @Override
+        protected void onMessageReceived(String messageId, RemoteMessage message) {
+            handleMessageReceive(messageId, message);
+            abortBroadcast(); // Block passing the broadcast to the receiver in the manifest
+        }
+    };
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -46,7 +68,6 @@ public class MainActivity extends AppCompatActivity implements ScgListener, ScgC
 
         accessToken = (EditText) findViewById(R.id.access);
         pushToken = (TextView) findViewById(R.id.token);
-        authPanel = findViewById(R.id.authpanel);
 
         View setup = findViewById(R.id.fab);
         setup.setOnClickListener(new View.OnClickListener() {
@@ -68,7 +89,22 @@ public class MainActivity extends AppCompatActivity implements ScgListener, ScgC
         }
 
         if (getIntent().hasExtra("scg-message-id"))
-            onMessageReceived(getIntent().getStringExtra("scg-message-id"), null);
+            handleMessageReceive(getIntent().getStringExtra("scg-message-id"), null);
+    }
+
+    @Override
+    protected void onStart() {
+        super.onStart();
+        final IntentFilter filter = new IntentFilter(ScgPushReceiver.ACTION_MESSAGE_RECEIVED);
+        filter.addAction(ScgPushReceiver.ACTION_PUSH_TOKEN_RECEIVED);
+        filter.setPriority(1);
+        registerReceiver(receiver, filter);
+    }
+
+    @Override
+    protected void onStop() {
+        super.onStop();
+        unregisterReceiver(receiver);
     }
 
     private void showDialog() {
@@ -116,7 +152,6 @@ public class MainActivity extends AppCompatActivity implements ScgListener, ScgC
 
     private void init(String url, String appId, String auth) {
         ScgClient.initialize(MainActivity.this, url, appId);
-        ScgClient.getInstance().setListener(MainActivity.this);
         ScgClient.getInstance().auth(auth);
         pushToken.setText(ScgClient.getInstance().getToken());
         accessToken.setText(auth);
@@ -127,14 +162,7 @@ public class MainActivity extends AppCompatActivity implements ScgListener, ScgC
         final String token = pushToken.getText().toString();
 
         if (!TextUtils.isEmpty(token)) {
-            final String access = pref.getString(PREF_AUTH, null);
-            if (!TextUtils.isEmpty(access)) {
-                ScgClient.getInstance().auth(access);
-                ScgClient.getInstance().registerPushToken(token, this);
-            } else {
-                Snackbar.make(view, "Access token is null or invalid", Snackbar.LENGTH_INDEFINITE).show();
-            }
-
+            ScgClient.getInstance().registerPushToken(token, this);
         } else {
             Snackbar.make(view, "Push token is null or invalid", Snackbar.LENGTH_INDEFINITE).show();
         }
@@ -144,26 +172,14 @@ public class MainActivity extends AppCompatActivity implements ScgListener, ScgC
         final String token = pushToken.getText().toString();
 
         if (!TextUtils.isEmpty(token)) {
-            final String access = pref.getString(PREF_AUTH, null);
-            if (!TextUtils.isEmpty(access)) {
-                ScgClient.getInstance().auth(access);
-                ScgClient.getInstance().unregisterPushToken(token, this);
-            } else {
-                Snackbar.make(view, "Access token is null or invalid", Snackbar.LENGTH_INDEFINITE).show();
-            }
+            ScgClient.getInstance().unregisterPushToken(token, this);
         } else {
             Snackbar.make(view, "Push token is null or invalid", Snackbar.LENGTH_INDEFINITE).show();
         }
     }
 
     private void reportDelivery(String messageId) {
-        final String access = pref.getString(PREF_AUTH, null);
-        if (!TextUtils.isEmpty(access)) {
-            ScgClient.getInstance().auth(access);
-            ScgClient.getInstance().deliveryConfirmation(messageId, MainActivity.this);
-        } else {
-            Snackbar.make(pushToken, "Access token is null or invalid", Snackbar.LENGTH_INDEFINITE).show();
-        }
+        ScgClient.getInstance().deliveryConfirmation(messageId, MainActivity.this);
     }
 
     @Override
@@ -176,19 +192,7 @@ public class MainActivity extends AppCompatActivity implements ScgListener, ScgC
         Snackbar.make(pushToken, String.format("Failed (%s): %s", code, message), Snackbar.LENGTH_INDEFINITE).show();
     }
 
-    @Override
-    public void onPushTokenReceived(final String token) {
-        runOnUiThread(new Runnable() {
-            @Override
-            public void run() {
-                pushToken.setText(token);
-                Snackbar.make(pushToken, "Push token refreshed", Snackbar.LENGTH_INDEFINITE).show();
-            }
-        });
-    }
-
-    @Override
-    public void onMessageReceived(final String messageId, RemoteMessage message) {
+    private void handleMessageReceive(final String messageId, RemoteMessage message) {
 
         if (pref.getBoolean(PREF_AUTO_DELIVERY, true)) {
             reportDelivery(messageId);
@@ -204,11 +208,6 @@ public class MainActivity extends AppCompatActivity implements ScgListener, ScgC
                     })
                     .show();
         }
-    }
-
-    @Override
-    public void onPlayServiceError() {
-
     }
 
     public void saveAccessToken(View view) {
