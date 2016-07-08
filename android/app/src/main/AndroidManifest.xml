@@ -51,6 +51,9 @@
                 <action android:name="com.softavail.scg.push.sdk.action.MESSAGE_RECEIVED"/>
             </intent-filter>
         </receiver>
+        <meta-data
+            android:name="io.fabric.ApiKey"
+            android:value="04514ea659042cc5c7368ba808304e40ff726e7c" />
     </application>
 
 </manifest>
