@@ -9,6 +9,8 @@ import android.preference.PreferenceManager;
 import android.support.design.widget.Snackbar;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.SwitchCompat;
 import android.support.v7.widget.Toolbar;
 import android.text.TextUtils;
@@ -25,6 +27,8 @@ import com.softavail.scg.push.sdk.ScgClient;
 import com.softavail.scg.push.sdk.ScgPushReceiver;
 import io.fabric.sdk.android.Fabric;
 
+import java.util.Calendar;
+
 
 public class MainActivity extends AppCompatActivity implements ScgCallback {
 
@@ -37,6 +41,7 @@ public class MainActivity extends AppCompatActivity implements ScgCallback {
 
     private EditText accessToken;
     private TextView pushToken;
+    private MessageAdapter adapter;
 
     protected SharedPreferences pref;
 
@@ -70,8 +75,14 @@ public class MainActivity extends AppCompatActivity implements ScgCallback {
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
+        adapter = new MessageAdapter(this);
+
         accessToken = (EditText) findViewById(R.id.access);
         pushToken = (TextView) findViewById(R.id.token);
+
+        RecyclerView messages = (RecyclerView) findViewById(R.id.messages);
+        messages.setLayoutManager(new LinearLayoutManager(this));
+        messages.setAdapter(adapter);
 
         View setup = findViewById(R.id.fab);
         setup.setOnClickListener(new View.OnClickListener() {
@@ -91,6 +102,14 @@ public class MainActivity extends AppCompatActivity implements ScgCallback {
         } else {
             init(url, appId, auth);
         }
+
+        onNewIntent(getIntent());
+    }
+
+    @Override
+    protected void onNewIntent(Intent intent) {
+        super.onNewIntent(intent);
+        setIntent(intent);
 
         if (getIntent().hasExtra(MainReceiver.MESSAGE_ID))
             handleMessageReceive(getIntent().getStringExtra(MainReceiver.MESSAGE_ID), (RemoteMessage) getIntent().getParcelableExtra(MainReceiver.MESSAGE));
@@ -200,18 +219,12 @@ public class MainActivity extends AppCompatActivity implements ScgCallback {
 
         if (pref.getBoolean(PREF_AUTO_DELIVERY, true)) {
             reportDelivery(messageId);
-        } else {
-
-            Snackbar.make(pushToken, String.format("%s: %s", messageId, message.getData().get(MainReceiver.MESSAGE_BODY)), Snackbar.LENGTH_INDEFINITE)
-                    .setAction("Delivery confirmation", new View.OnClickListener() {
-                        @Override
-                        public void onClick(View v) {
-                            reportDelivery(messageId);
-                        }
-
-                    })
-                    .show();
         }
+
+        Calendar c = Calendar.getInstance();
+        c.setTimeInMillis(message.getSentTime());
+
+        adapter.addMessage(new MessageAdapter.MessageData(c.getTime().toString(), messageId, message.getData().get(MainReceiver.MESSAGE_BODY)));
     }
 
     public void saveAccessToken(View view) {

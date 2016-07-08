@@ -43,8 +43,9 @@ public class MainReceiver extends ScgPushReceiver {
         Intent intent = new Intent(context, MainActivity.class);
         intent.putExtra(MESSAGE_ID, messageId);
         intent.putExtra(MESSAGE, message);
-        intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
-        PendingIntent pendingIntent = PendingIntent.getActivity(context, 0, intent, PendingIntent.FLAG_ONE_SHOT);
+        intent.setAction(Long.toString(System.currentTimeMillis()));
+        intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_SINGLE_TOP | Intent.FLAG_ACTIVITY_NEW_TASK);
+        PendingIntent pendingIntent = PendingIntent.getActivity(context, 0, intent, PendingIntent.FLAG_UPDATE_CURRENT);
 
         Uri defaultSoundUri = RingtoneManager.getDefaultUri(RingtoneManager.TYPE_NOTIFICATION);
 
@@ -58,6 +59,9 @@ public class MainReceiver extends ScgPushReceiver {
                 .setContentIntent(pendingIntent);
 
         NotificationManager notificationManager = (NotificationManager) context.getSystemService(Context.NOTIFICATION_SERVICE);
-        notificationManager.notify(messageId.hashCode(), notificationBuilder.build());
+        notificationManager.notify((int) System.currentTimeMillis(), notificationBuilder.build());
+
+
+        abortBroadcast();
     }
 }
