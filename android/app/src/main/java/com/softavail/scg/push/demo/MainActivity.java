@@ -13,6 +13,7 @@ import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.SwitchCompat;
 import android.support.v7.widget.Toolbar;
+import android.text.Html;
 import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -25,6 +26,7 @@ import com.google.firebase.messaging.RemoteMessage;
 import com.softavail.scg.push.sdk.ScgCallback;
 import com.softavail.scg.push.sdk.ScgClient;
 import com.softavail.scg.push.sdk.ScgPushReceiver;
+
 import io.fabric.sdk.android.Fabric;
 
 import java.util.Calendar;
@@ -53,7 +55,7 @@ public class MainActivity extends AppCompatActivity implements ScgCallback {
                 @Override
                 public void run() {
                     pushToken.setText(token);
-                    Snackbar.make(pushToken, "Push token refreshed", Snackbar.LENGTH_INDEFINITE).show();
+                    Snackbar.make(pushToken, "Push token refreshed", Snackbar.LENGTH_LONG).show();
                 }
             });
 
@@ -221,10 +223,7 @@ public class MainActivity extends AppCompatActivity implements ScgCallback {
             reportDelivery(messageId);
         }
 
-        Calendar c = Calendar.getInstance();
-        c.setTimeInMillis(message.getSentTime());
-
-        adapter.addMessage(new MessageAdapter.MessageData(c.getTime().toString(), messageId, message.getData().get(MainReceiver.MESSAGE_BODY)));
+        adapter.addMessage(new MessageAdapter.MessageData(message.getData().toString(), messageId, message.getData().get(MainReceiver.MESSAGE_BODY)));
     }
 
     public void saveAccessToken(View view) {
@@ -233,7 +232,7 @@ public class MainActivity extends AppCompatActivity implements ScgCallback {
         if (ScgClient.isInitialized()) {
             pref.edit().putString(PREF_AUTH, accessToken.getText().toString()).commit();
             ScgClient.getInstance().auth(accessToken.getText().toString());
-            Snackbar.make(pushToken, "Saved", Snackbar.LENGTH_INDEFINITE).show();
+            Snackbar.make(pushToken, "Saved", Snackbar.LENGTH_SHORT).show();
         }
     }
 }

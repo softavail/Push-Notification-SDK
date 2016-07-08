@@ -15,11 +15,8 @@ public final class ScgMessagingService extends FirebaseMessagingService {
     @Override
     public void onMessageReceived(RemoteMessage remoteMessage) {
         super.onMessageReceived(remoteMessage);
-
-        if (BuildConfig.DEBUG) {
-            Log.i(TAG, "Notification received");
-            Log.d(TAG, remoteMessage.getData().toString());
-        }
+        Log.i(TAG, "Notification received");
+        Log.d(TAG, remoteMessage.getData().toString());
 
         Intent tokenIntent = new Intent(ScgPushReceiver.ACTION_MESSAGE_RECEIVED);
         tokenIntent.putExtra(ScgPushReceiver.EXTRA_MESSAGE, remoteMessage);
