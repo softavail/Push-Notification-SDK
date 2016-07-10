@@ -38,8 +38,9 @@ public class MainActivity extends AppCompatActivity implements ScgCallback {
 
     private static final String PREF_URL = "PREF_URL";
     private static final String PREF_APP_ID = "PREF_APP_ID";
-    private static final String PREF_AUTO_DELIVERY = "PREF_AUTO_DELIVERY";
     private static final String PREF_AUTH = "PREF_TOKEN";
+
+    public static final String PREF_AUTO_DELIVERY = "PREF_AUTO_DELIVERY";
 
     private EditText accessToken;
     private TextView pushToken;

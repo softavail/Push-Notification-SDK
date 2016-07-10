@@ -4,8 +4,10 @@ import android.app.NotificationManager;
 import android.app.PendingIntent;
 import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.media.RingtoneManager;
 import android.net.Uri;
+import android.preference.PreferenceManager;
 import android.support.v4.app.NotificationCompat;
 
 import com.google.firebase.messaging.RemoteMessage;
@@ -20,6 +22,7 @@ public class MainReceiver extends ScgPushReceiver {
 
     public static final String MESSAGE_ID = "com.softavail.scg.push.demo.extra.ID";
     public static final String MESSAGE = "com.softavail.scg.push.demo.extra.MESSAGE";
+    SharedPreferences mPrefs;
 
     @Override
     protected void onPushTokenReceived(String token) {
@@ -38,6 +41,9 @@ public class MainReceiver extends ScgPushReceiver {
 
     @Override
     protected void onMessageReceived(String messageId, RemoteMessage message) {
+
+        deliveryReport(messageId);
+
         final String msg = message.getData().get(MESSAGE_BODY);
 
         Intent intent = new Intent(context, MainActivity.class);
@@ -63,5 +69,30 @@ public class MainReceiver extends ScgPushReceiver {
 
 
         abortBroadcast();
+    }
+
+    private void deliveryReport(String messageId) {
+
+        final boolean autoDelivery;
+
+        if (mPrefs == null) {
+            mPrefs = PreferenceManager.getDefaultSharedPreferences(context);
+        }
+
+        autoDelivery = mPrefs.getBoolean(MainActivity.PREF_AUTO_DELIVERY, false);
+
+        if (autoDelivery) {
+            ScgClient.getInstance().deliveryConfirmation(messageId, new ScgCallback() {
+                @Override
+                public void onSuccess(int code, String message) {
+
+                }
+
+                @Override
+                public void onFailed(int code, String message) {
+
+                }
+            });
+        }
     }
 }
