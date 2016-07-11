@@ -10,8 +10,23 @@ import UIKit
 
 public class SCGPush: NSObject {
     
+    // PRIVATE VARIABLES
+    private var _accessToken:String = ""
+    
     // PUBLIC VARIABLES
-    public var accessToken:String = ""
+    public var accessToken:String
+    {
+        set {
+            let defaults = NSUserDefaults.standardUserDefaults()
+            defaults.setObject(newValue, forKey: ("scg-access-token-dont-replace-this-default"))
+            _accessToken = newValue
+        }
+        get {
+            let defaults = NSUserDefaults.standardUserDefaults()
+            _accessToken = defaults.stringForKey("scg-access-token-dont-replace-this-default")!
+            return _accessToken
+        }
+    }
     
     public var appID:String = ""
     

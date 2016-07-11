@@ -78,6 +78,11 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         (window?.rootViewController!.view.viewWithTag(9) as! UILabel).text = tokenString
         
         SCGPush.instance.saveDeviceToken(deviceTokenData: deviceToken)
+        SCGPush.instance.registerPushToken(deviceTokeData: deviceToken, completionBlock: {
+            
+            }) { (error) in
+                
+        }
     }
     
     func application(application: UIApplication, didFailToRegisterForRemoteNotificationsWithError error: NSError) {

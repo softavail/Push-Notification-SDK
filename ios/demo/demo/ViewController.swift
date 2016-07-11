@@ -21,13 +21,7 @@ class ViewController: UIViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        // Do any additional setup after loading the view, typically from a nib.
         
-//        accessTokenField.text = "ELK2c5Lwzx9JI5l4iLA0F4"
-//        purePushTokenLabel.text = "38ac1c3a36e9294ccca278f81798ecf872a33c0012c0af1c27fdf7ac207411ff"
-        
-//        baseURL = "http://localhost:8912"
-//        baseURL = "192.168.1.197:8080"
         
         baseURIField.text = "http://192.168.1.197:8080/scg-dra/proxy"
         appIDField.text = "com.syniverse.push_demo"
