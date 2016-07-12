@@ -1,0 +1,28 @@
+{
+  'version': 0,
+  'case-sensitive': 'false',
+  'roots': [
+    {
+      'type': 'directory',
+      'name': "/Users/SlavSarafski/Library/Developer/Xcode/DerivedData/ios-cucmgcgjoaaxxzcxryegivdlcjec/Build/Products/Release-iphoneos/SCGPush.framework/Headers",
+      'contents': [
+        {
+          'type': 'file',
+          'name': "SCGPush-Swift.h",
+          'external-contents': "/Users/SlavSarafski/Library/Developer/Xcode/DerivedData/ios-cucmgcgjoaaxxzcxryegivdlcjec/Build/Products/Release-iphoneos/SCGPush.framework/Headers/SCGPush-Swift.h"
+        }
+      ]
+    },
+    {
+      'type': 'directory',
+      'name': "/Users/SlavSarafski/Library/Developer/Xcode/DerivedData/ios-cucmgcgjoaaxxzcxryegivdlcjec/Build/Products/Release-iphoneos/SCGPush.framework/Modules",
+      'contents': [
+        {
+          'type': 'file',
+          'name': "module.modulemap",
+          'external-contents': "/Users/SlavSarafski/Documents/SCGPush/scg-push-sdk/ios/SCGPush/build/SCGPush.build/Release-iphoneos/SCGPush.build/module.modulemap"
+        }
+      ]
+    }
+  ]
+}

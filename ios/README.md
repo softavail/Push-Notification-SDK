@@ -14,6 +14,25 @@ Configured project used Xcode
 > TODO: way to distribute the SDK
 Drag the SCGPush.framework file to the project in Xcode
 
+Than:
+
+> Import library
+
+> Swift
+```swift
+import SSCGPush
+```
+
+For Objective-C project
+1. Under Build Settings, in Packaging, make sure the Defines Module setting for that framework target is set to “Yes".
+
+2. Import library
+> Objective-C
+```objective-c
+#import <SCGPush/SCGPush-Swift.h>
+```
+
+
 ## Initialize with root URL and App ID
 SDK Push library must be used as a singleton object. Before start using it,
 you must initialize it with `callbackURI` and `appID`
@@ -22,11 +41,13 @@ You can initialize the library from every entry point, but `AppDelegate` class i
 
 > Initialize in AppDelegate class:
 
+> Swift
 ```swift
 SSCGPush.instance.appID = "your app id"
 SCGPush.instance.callbackURI = "http://example.com"
 ```
 
+> Objective-C
 ```objective-c
 [[SSCGPush instance] setAppID:@"your app id"];
 [[SSCGPush instance] setCallbackURI:@"http://example.com"];
@@ -36,10 +57,14 @@ SCGPush.instance.callbackURI = "http://example.com"
 
 Before you can use SDK functionality (for example `register`/`unregister` push token or `delivery` report) you must authenticate using:
 
+> Set authentication token
+
+> Swift
 ```swift
 SCGPush.instance.accessToken = "your access token"
 ```
 
+> Objective-C
 ```objective-c
 [[SCGPush instance] setAccessToken:@"your access token"];
 ```
@@ -52,6 +77,7 @@ Device push token must registered before you can receive notifications. For both
 
 To register given `token` you must call `registerPushToken`:
 
+> Swift
 ```swift
 SCGPush.instance.registerPushToken("your device token",
             completionBlock: {
@@ -62,6 +88,7 @@ SCGPush.instance.registerPushToken("your device token",
         }
 ```
 
+> Objective-C
 ```objective-c
 [[SCGPush instance] registerPushToken:@"your device token"
                           completionBlock:^{
@@ -76,6 +103,7 @@ You can register token in `didRegisterForRemoteNotificationsWithDeviceToken` met
 
 *For example:*
 
+> Swift
 ```swift
 func application(application: UIApplication, didRegisterForRemoteNotificationsWithDeviceToken deviceToken: NSData) {
     ...
@@ -91,6 +119,7 @@ func application(application: UIApplication, didRegisterForRemoteNotificationsWi
 
 If you are working on Objective-C project You can register token in `- (void)application:(UIApplication *)application didRegisterForRemoteNotificationsWithDeviceToken:(NSData *)deviceToken` method in `AppDelegate.m` class.
 
+> Objective-C
 ```objective-c
 - (void)application:(UIApplication *)application didRegisterForRemoteNotificationsWithDeviceToken:(NSData *)deviceToken {
   ...
@@ -107,6 +136,7 @@ If you are working on Objective-C project You can register token in `- (void)app
 
 If you want to register `token` somewhere else, you can save token with `saveDeviceToken` method.
 
+> Swift
 ```swift
 func application(application: UIApplication, didRegisterForRemoteNotificationsWithDeviceToken deviceToken: NSData) {
     ...
@@ -115,6 +145,7 @@ func application(application: UIApplication, didRegisterForRemoteNotificationsWi
 }
 ```
 
+> Objective-C
 ```objective-c
 - (void)application:(UIApplication *)application didRegisterForRemoteNotificationsWithDeviceToken:(NSData *)deviceToken {
   ...
@@ -125,6 +156,7 @@ func application(application: UIApplication, didRegisterForRemoteNotificationsWi
 
 And call `registerPushToken(completionBlock, failureBlock: failureBlock)`:
 
+> Swift
 ```swift
 SCGPush.instance.registerPushToken(completionBlock: {
             //handle when successful register the push
@@ -134,6 +166,7 @@ SCGPush.instance.registerPushToken(completionBlock: {
        }
 ```
 
+> Objective-C
 ```objective-c
 [[SCGPush instance] registerPushToken:^{
         //handle when successful register the push token
@@ -147,6 +180,7 @@ SCGPush.instance.registerPushToken(completionBlock: {
 
 To unregister given `token` you must call `unregisterPushToken`:
 
+> Swift
 ```swift
 SCGPush.instance.unregisterPushToken({
             //handle when successful register the push
@@ -156,6 +190,7 @@ SCGPush.instance.unregisterPushToken({
         }
 ```
 
+> Objective-C
 ```objective-c
 [[SCGPush instance] unregisterPushToken:^{
         //handle when successful register the push token
@@ -170,6 +205,7 @@ SCGPush.instance.unregisterPushToken({
 
 Once message is arrived you can perform optionally delivery report by calling ` deliveryConfirmation`:
 
+> Swift
 ```swift
 func application(application: UIApplication, didReceiveRemoteNotification userInfo: [NSObject : AnyObject]){
        ...
@@ -183,6 +219,7 @@ func application(application: UIApplication, didReceiveRemoteNotification userIn
 }
 ```
 
+> Objective-C
 ```objective-c
 - (void)application:(UIApplication *)application didReceiveRemoteNotification:(NSDictionary *)userInfo {
   ...
