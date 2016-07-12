@@ -21,7 +21,6 @@ import java.util.ArrayList;
  */
 public class MessageAdapter extends RecyclerView.Adapter<MessageAdapter.MessageViewHolder> implements View.OnClickListener {
 
-    private final Context mContext;
     private final ArrayList<MessageData> dataset = new ArrayList<>();
 
     @Override
@@ -49,26 +48,12 @@ public class MessageAdapter extends RecyclerView.Adapter<MessageAdapter.MessageV
         final String id;
         final String body;
         final String when;
-        private boolean delivered;
 
         public MessageData(String when, String id, String body) {
             this.when = when;
             this.id = id;
             this.body = body;
-            delivered = false;
         }
-
-        public boolean isDelivered() {
-            return delivered;
-        }
-
-        public void delivered() {
-            delivered = true;
-        }
-    }
-
-    public MessageAdapter(Context context) {
-        mContext = context;
     }
 
     public void addMessage(MessageData msg) {

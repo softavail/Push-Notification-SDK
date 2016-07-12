@@ -78,7 +78,7 @@ public class MainActivity extends AppCompatActivity implements ScgCallback {
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
-        adapter = new MessageAdapter(this);
+        adapter = new MessageAdapter();
 
         accessToken = (EditText) findViewById(R.id.access);
         pushToken = (TextView) findViewById(R.id.token);
