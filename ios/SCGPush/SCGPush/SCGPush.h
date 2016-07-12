@@ -15,5 +15,4 @@ FOUNDATION_EXPORT double SCGPushVersionNumber;
 FOUNDATION_EXPORT const unsigned char SCGPushVersionString[];
 
 // In this header, you should import all the public headers of your framework using statements like #import <SCGPush/PublicHeader.h>
-//#import "SCGPush-Swift.h"
-
+#import <SCGPush/SCGPush-Swift.h>

@@ -177,8 +177,8 @@ public class SCGPush: NSObject {
         }
         dataTask.resume()
     }
-    
-    public func deliveryConfirmation(userInfo userInfo:[NSObject : AnyObject] ,completionBlock: (() -> Void)? = nil, failureBlock : (NSError! -> ())? = nil) {
+    //[NSObject : AnyObject]
+    public func deliveryConfirmation(userInfo userInfo:NSDictionary ,completionBlock: (() -> Void)? = nil, failureBlock : (NSError! -> ())? = nil) {
         if let messageID = userInfo["scg-message-id"] {
             deliveryConfirmation(messageID as! String, completionBlock: completionBlock, failureBlock: failureBlock)
         }

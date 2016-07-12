@@ -40,6 +40,10 @@ Before you can use SDK functionality (for example `register`/`unregister` push t
 SCGPush.instance.accessToken = "your access token"
 ```
 
+```objective-c
+[[SCGPush instance] setAccessToken:@"your access token"];
+```
+
 # Register/Unregister push token
 
 Device push token must registered before you can receive notifications. For both methods you must have properly initialized and authenticated library.
@@ -49,12 +53,23 @@ Device push token must registered before you can receive notifications. For both
 To register given `token` you must call `registerPushToken`:
 
 ```swift
-SCGPush.instance.registerPushToken("your device token", completionBlock: {
+SCGPush.instance.registerPushToken("your device token",
+            completionBlock: {
                 //handle when successful register the push token
             }) { (error) in
                 //handle when some error occurred
-                //use err.description for more details
+                //use error.description for more details
         }
+```
+
+```objective-c
+[[SCGPush instance] registerPushToken:@"your device token"
+                          completionBlock:^{
+                              //handle when successful register the push token
+                          } failureBlock:^(NSError * error) {
+                              //handle when some error occurred
+                              //use error.description for more details
+                          }];
 ```
 
 You can register token in `didRegisterForRemoteNotificationsWithDeviceToken` method in `AppDelegate` class.
@@ -68,9 +83,25 @@ func application(application: UIApplication, didRegisterForRemoteNotificationsWi
             //handle when successful register the push token
         }) { (error) in
             //handle when some error occurred
-            //use err.description for more details
+            //use error.description for more details
     }
     ...
+}
+```
+
+If you are working on Objective-C project You can register token in `- (void)application:(UIApplication *)application didRegisterForRemoteNotificationsWithDeviceToken:(NSData *)deviceToken` method in `AppDelegate.m` class.
+
+```objective-c
+- (void)application:(UIApplication *)application didRegisterForRemoteNotificationsWithDeviceToken:(NSData *)deviceToken {
+  ...
+  [[SCGPush instance] registerPushTokenWithDeviceTokeData:deviceToken
+                          completionBlock:^{
+                              //handle when successful register the push token
+                          } failureBlock:^(NSError * error) {
+                              //handle when some error occurred
+                              //use error.description for more details
+                          }];
+  ...
 }
 ```
 
@@ -84,6 +115,14 @@ func application(application: UIApplication, didRegisterForRemoteNotificationsWi
 }
 ```
 
+```objective-c
+- (void)application:(UIApplication *)application didRegisterForRemoteNotificationsWithDeviceToken:(NSData *)deviceToken {
+  ...
+  [[SCGPush instance] saveDeviceTokenWithDeviceTokenData:deviceToken];
+  ...
+}
+```
+
 And call `registerPushToken(completionBlock, failureBlock: failureBlock)`:
 
 ```swift
@@ -91,10 +130,18 @@ SCGPush.instance.registerPushToken(completionBlock: {
             //handle when successful register the push
            }) { (error) in
             //handle when some error occurred
-            //use err.description for more details
+            //use error.description for more details
        }
 ```
 
+```objective-c
+[[SCGPush instance] registerPushToken:^{
+        //handle when successful register the push token
+    } failureBlock:^(NSError * error) {
+        //handle when some error occurred
+        //use error.description for more details
+    }];
+```
 
 ## Unregister
 
@@ -105,11 +152,19 @@ SCGPush.instance.unregisterPushToken({
             //handle when successful register the push
             }) { (error) in
             //handle when some error occurred
-            //use err.description for more details
+            //use error.description for more details
         }
 ```
 
-*Example: 401 will be returned if you are not authenticated in front of service.*
+```objective-c
+[[SCGPush instance] unregisterPushToken:^{
+        //handle when successful register the push token
+    } failureBlock:^(NSError * error) {
+        //handle when some error occurred
+        //use error.description for more details
+    }];
+```
+
 
 # Delivery report
 
@@ -122,10 +177,22 @@ func application(application: UIApplication, didReceiveRemoteNotification userIn
              //handle when successful register the push
              }) { (error) in
              //handle when some error occurred
-             //use err.description for more details
+             //use error.description for more details
         }
         ...
 }
 ```
 
-*Example: 401 will be returned if you are not authenticated in front of service.*
+```objective-c
+- (void)application:(UIApplication *)application didReceiveRemoteNotification:(NSDictionary *)userInfo {
+  ...
+  [[SCGPush instance] deliveryConfirmationWithUserInfo:userInfo
+  completionBlock:^{
+        //handle when successful register the push token
+    } failureBlock:^(NSError * error) {
+        //handle when some error occurred
+        //use error.description for more details
+    }
+  ...
+}
+```
