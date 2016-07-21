@@ -22,8 +22,11 @@ public class SCGPush: NSObject {
             _accessToken = newValue
         }
         get {
+            _accessToken = ""
             let defaults = NSUserDefaults.standardUserDefaults()
-            _accessToken = defaults.stringForKey("scg-access-token-dont-replace-this-default")!
+            if (defaults.stringForKey("scg-access-token-dont-replace-this-default") != nil) {
+                _accessToken = defaults.stringForKey("scg-access-token-dont-replace-this-default")!
+            }
             return _accessToken
         }
     }
