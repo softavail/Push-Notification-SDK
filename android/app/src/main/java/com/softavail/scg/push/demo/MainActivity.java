@@ -1,14 +1,19 @@
 package com.softavail.scg.push.demo;
 
 import android.content.DialogInterface;
+import android.content.Intent;
+import android.content.IntentFilter;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
 import android.support.design.widget.Snackbar;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.SwitchCompat;
 import android.support.v7.widget.Toolbar;
+import android.text.Html;
 import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -16,37 +21,71 @@ import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.crashlytics.android.Crashlytics;
 import com.google.firebase.messaging.RemoteMessage;
 import com.softavail.scg.push.sdk.ScgCallback;
 import com.softavail.scg.push.sdk.ScgClient;
-import com.softavail.scg.push.sdk.ScgListener;
+import com.softavail.scg.push.sdk.ScgPushReceiver;
+
+import io.fabric.sdk.android.Fabric;
+
+import java.util.Calendar;
 
 
-public class MainActivity extends AppCompatActivity implements ScgListener, ScgCallback {
+public class MainActivity extends AppCompatActivity implements ScgCallback {
 
     private static final String TAG = "MainActivity";
 
     private static final String PREF_URL = "PREF_URL";
     private static final String PREF_APP_ID = "PREF_APP_ID";
-    private static final String PREF_AUTO_DELIVERY = "PREF_AUTO_DELIVERY";
     private static final String PREF_AUTH = "PREF_TOKEN";
+
+    public static final String PREF_AUTO_DELIVERY = "PREF_AUTO_DELIVERY";
 
     private EditText accessToken;
     private TextView pushToken;
-    private View authPanel;
+    private MessageAdapter adapter;
 
     protected SharedPreferences pref;
+
+    private final ScgPushReceiver receiver = new ScgPushReceiver() {
+        @Override
+        protected void onPushTokenReceived(final String token) {
+
+            runOnUiThread(new Runnable() {
+                @Override
+                public void run() {
+                    pushToken.setText(token);
+                    Snackbar.make(pushToken, "Push token refreshed", Snackbar.LENGTH_LONG).show();
+                }
+            });
+
+            abortBroadcast(); // Block passing the broadcast to the receiver in the manifest
+        }
+
+        @Override
+        protected void onMessageReceived(String messageId, RemoteMessage message) {
+            handleMessageReceive(messageId, message);
+            abortBroadcast(); // Block passing the broadcast to the receiver in the manifest
+        }
+    };
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        Fabric.with(this, new Crashlytics());
         setContentView(R.layout.activity_main);
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
+        adapter = new MessageAdapter();
+
         accessToken = (EditText) findViewById(R.id.access);
         pushToken = (TextView) findViewById(R.id.token);
-        authPanel = findViewById(R.id.authpanel);
+
+        RecyclerView messages = (RecyclerView) findViewById(R.id.messages);
+        messages.setLayoutManager(new LinearLayoutManager(this));
+        messages.setAdapter(adapter);
 
         View setup = findViewById(R.id.fab);
         setup.setOnClickListener(new View.OnClickListener() {
@@ -67,8 +106,31 @@ public class MainActivity extends AppCompatActivity implements ScgListener, ScgC
             init(url, appId, auth);
         }
 
-        if (getIntent().hasExtra("scg-message-id"))
-            onMessageReceived(getIntent().getStringExtra("scg-message-id"), null);
+        onNewIntent(getIntent());
+    }
+
+    @Override
+    protected void onNewIntent(Intent intent) {
+        super.onNewIntent(intent);
+        setIntent(intent);
+
+        if (getIntent().hasExtra(MainReceiver.MESSAGE_ID))
+            handleMessageReceive(getIntent().getStringExtra(MainReceiver.MESSAGE_ID), (RemoteMessage) getIntent().getParcelableExtra(MainReceiver.MESSAGE));
+    }
+
+    @Override
+    protected void onStart() {
+        super.onStart();
+        final IntentFilter filter = new IntentFilter(ScgPushReceiver.ACTION_MESSAGE_RECEIVED);
+        filter.addAction(ScgPushReceiver.ACTION_PUSH_TOKEN_RECEIVED);
+        filter.setPriority(1);
+        registerReceiver(receiver, filter);
+    }
+
+    @Override
+    protected void onStop() {
+        super.onStop();
+        unregisterReceiver(receiver);
     }
 
     private void showDialog() {
@@ -97,7 +159,7 @@ public class MainActivity extends AppCompatActivity implements ScgListener, ScgC
                                 .putString(PREF_URL, uri)
                                 .putString(PREF_APP_ID, appid)
                                 .putBoolean(PREF_AUTO_DELIVERY, autoDelivery)
-                                .commit();
+                                .apply();
 
                         if (ScgClient.isInitialized()) {
                             recreate();
@@ -116,7 +178,6 @@ public class MainActivity extends AppCompatActivity implements ScgListener, ScgC
 
     private void init(String url, String appId, String auth) {
         ScgClient.initialize(MainActivity.this, url, appId);
-        ScgClient.getInstance().setListener(MainActivity.this);
         ScgClient.getInstance().auth(auth);
         pushToken.setText(ScgClient.getInstance().getToken());
         accessToken.setText(auth);
@@ -127,14 +188,7 @@ public class MainActivity extends AppCompatActivity implements ScgListener, ScgC
         final String token = pushToken.getText().toString();
 
         if (!TextUtils.isEmpty(token)) {
-            final String access = pref.getString(PREF_AUTH, null);
-            if (!TextUtils.isEmpty(access)) {
-                ScgClient.getInstance().auth(access);
-                ScgClient.getInstance().registerPushToken(token, this);
-            } else {
-                Snackbar.make(view, "Access token is null or invalid", Snackbar.LENGTH_INDEFINITE).show();
-            }
-
+            ScgClient.getInstance().registerPushToken(token, this);
         } else {
             Snackbar.make(view, "Push token is null or invalid", Snackbar.LENGTH_INDEFINITE).show();
         }
@@ -144,26 +198,14 @@ public class MainActivity extends AppCompatActivity implements ScgListener, ScgC
         final String token = pushToken.getText().toString();
 
         if (!TextUtils.isEmpty(token)) {
-            final String access = pref.getString(PREF_AUTH, null);
-            if (!TextUtils.isEmpty(access)) {
-                ScgClient.getInstance().auth(access);
-                ScgClient.getInstance().unregisterPushToken(token, this);
-            } else {
-                Snackbar.make(view, "Access token is null or invalid", Snackbar.LENGTH_INDEFINITE).show();
-            }
+            ScgClient.getInstance().unregisterPushToken(token, this);
         } else {
             Snackbar.make(view, "Push token is null or invalid", Snackbar.LENGTH_INDEFINITE).show();
         }
     }
 
     private void reportDelivery(String messageId) {
-        final String access = pref.getString(PREF_AUTH, null);
-        if (!TextUtils.isEmpty(access)) {
-            ScgClient.getInstance().auth(access);
-            ScgClient.getInstance().deliveryConfirmation(messageId, MainActivity.this);
-        } else {
-            Snackbar.make(pushToken, "Access token is null or invalid", Snackbar.LENGTH_INDEFINITE).show();
-        }
+        ScgClient.getInstance().deliveryConfirmation(messageId, MainActivity.this);
     }
 
     @Override
@@ -176,39 +218,13 @@ public class MainActivity extends AppCompatActivity implements ScgListener, ScgC
         Snackbar.make(pushToken, String.format("Failed (%s): %s", code, message), Snackbar.LENGTH_INDEFINITE).show();
     }
 
-    @Override
-    public void onPushTokenReceived(final String token) {
-        runOnUiThread(new Runnable() {
-            @Override
-            public void run() {
-                pushToken.setText(token);
-                Snackbar.make(pushToken, "Push token refreshed", Snackbar.LENGTH_INDEFINITE).show();
-            }
-        });
-    }
-
-    @Override
-    public void onMessageReceived(final String messageId, RemoteMessage message) {
+    private void handleMessageReceive(final String messageId, RemoteMessage message) {
 
         if (pref.getBoolean(PREF_AUTO_DELIVERY, true)) {
             reportDelivery(messageId);
-        } else {
-
-            Snackbar.make(pushToken, String.format("%s: %s", messageId, message.getData().get("body")), Snackbar.LENGTH_INDEFINITE)
-                    .setAction("Delivery confirmation", new View.OnClickListener() {
-                        @Override
-                        public void onClick(View v) {
-                            reportDelivery(messageId);
-                        }
-
-                    })
-                    .show();
         }
-    }
 
-    @Override
-    public void onPlayServiceError() {
-
+        adapter.addMessage(new MessageAdapter.MessageData(message.getData().toString(), messageId, message.getData().get(MainReceiver.MESSAGE_BODY)));
     }
 
     public void saveAccessToken(View view) {
@@ -217,7 +233,7 @@ public class MainActivity extends AppCompatActivity implements ScgListener, ScgC
         if (ScgClient.isInitialized()) {
             pref.edit().putString(PREF_AUTH, accessToken.getText().toString()).commit();
             ScgClient.getInstance().auth(accessToken.getText().toString());
-            Snackbar.make(pushToken, "Saved", Snackbar.LENGTH_INDEFINITE).show();
+            Snackbar.make(pushToken, "Saved", Snackbar.LENGTH_SHORT).show();
         }
     }
 }

@@ -4,14 +4,34 @@
 <dict>
 	<key>SchemeUserState</key>
 	<dict>
+		<key>SCGPush-Universal.xcscheme_^#shared#^_</key>
+		<dict>
+			<key>orderHint</key>
+			<integer>4</integer>
+		</dict>
 		<key>SCGPush.xcscheme</key>
 		<dict>
 			<key>orderHint</key>
-			<integer>0</integer>
+			<integer>1</integer>
+		</dict>
+		<key>SCGPush.xcscheme_^#shared#^_</key>
+		<dict>
+			<key>orderHint</key>
+			<integer>3</integer>
 		</dict>
 	</dict>
 	<key>SuppressBuildableAutocreation</key>
 	<dict>
+		<key>F7837A601D3501F700E724E7</key>
+		<dict>
+			<key>primary</key>
+			<true/>
+		</dict>
+		<key>F7837A661D3516C200E724E7</key>
+		<dict>
+			<key>primary</key>
+			<true/>
+		</dict>
 		<key>F7EFFC421D0DCEB10057A2B6</key>
 		<dict>
 			<key>primary</key>

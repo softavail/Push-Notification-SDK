@@ -1,5 +1,6 @@
 package com.softavail.scg.push.sdk;
 
+import android.content.Intent;
 import android.util.Log;
 
 import com.google.firebase.messaging.FirebaseMessagingService;
@@ -14,16 +15,12 @@ public final class ScgMessagingService extends FirebaseMessagingService {
     @Override
     public void onMessageReceived(RemoteMessage remoteMessage) {
         super.onMessageReceived(remoteMessage);
-
         Log.i(TAG, "Notification received");
+        Log.d(TAG, remoteMessage.getData().toString());
 
-        final String delivery = remoteMessage.getData().get("scg-message-id");
-        final ScgListener listener = ScgClient.getInstance().getListener();
+        Intent tokenIntent = new Intent(ScgPushReceiver.ACTION_MESSAGE_RECEIVED);
+        tokenIntent.putExtra(ScgPushReceiver.EXTRA_MESSAGE, remoteMessage);
 
-        if (listener != null) {
-            listener.onMessageReceived(delivery, remoteMessage);
-        } else {
-            Log.w(TAG, "Cannot notify listener, maybe application is in background or SCG client not initialised?");
-        }
+        getApplicationContext().sendOrderedBroadcast(tokenIntent, null);
     }
 }
