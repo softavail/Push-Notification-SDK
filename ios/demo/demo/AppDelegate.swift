@@ -8,6 +8,7 @@
 
 import UIKit
 import SCGPush
+import UserNotifications
 
 #if WITH_CRASHLYTICS
     import Fabric
@@ -60,6 +61,10 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 
     func application(_ application: UIApplication, didRegister notificationSettings: UIUserNotificationSettings) {
         if notificationSettings.types != UIUserNotificationType() {
+            if #available(iOS 10.0, *) {
+                UNUserNotificationCenter.current().requestAuthorization(options:[.badge, .alert, .sound]){ (granted, error) in }
+            }
+            
             application.registerForRemoteNotifications()
         }
     }
