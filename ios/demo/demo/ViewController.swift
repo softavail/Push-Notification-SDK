@@ -36,7 +36,7 @@ class ViewController: UIViewController {
         // Dispose of any resources that can be recreated.
     }
 
-    @IBAction func textFieldChanged(sender: UITextField) {
+    @IBAction func textFieldChanged(_ sender: UITextField) {
         if (sender.tag == 7){
             SCGPush.instance.accessToken = accessTokenField.text!
         }
@@ -48,45 +48,45 @@ class ViewController: UIViewController {
         }
     }
     
-    @IBAction func clipboard(sender: AnyObject) {
+    @IBAction func clipboard(_ sender: AnyObject) {
         if (sender.tag == 11) {
-            UIPasteboard.generalPasteboard().string = rawPushTokenLabel.text
+            UIPasteboard.general.string = rawPushTokenLabel.text
         }
         if (sender.tag == 12) {
-            UIPasteboard.generalPasteboard().string = purePushTokenLabel.text
+            UIPasteboard.general.string = purePushTokenLabel.text
         }
     }
     
     
-    @IBAction func registerToken(sender: AnyObject) {
+    @IBAction func registerToken(_ sender: AnyObject) {
         accessTokenField.resignFirstResponder()
         baseURIField.resignFirstResponder()
         appIDField.resignFirstResponder()
         
-        SCGPush.instance.registerPushToken(purePushTokenLabel.text!, completionBlock: {
-            self.showAlert ("Success", mess: "You successfully register the token.")
+        SCGPush.instance.registerPushToken({
+                self.showAlert ("Success", mess: "You successfully register the token.")
             }) { (error) in
-                self.showAlert ("Error", mess: error.description)
+                self.showAlert ("Error", mess: (error?.localizedDescription)!)
         }
     }
     
-    @IBAction func unregisterToken(sender: AnyObject) {
+    @IBAction func unregisterToken(_ sender: AnyObject) {
         accessTokenField.resignFirstResponder()
         baseURIField.resignFirstResponder()
         appIDField.resignFirstResponder()
         
         SCGPush.instance.unregisterPushToken({
-            self.showAlert ("Success", mess: "You successfully unregister the token.")
+                self.showAlert ("Success", mess: "You successfully unregister the token.")
             }) { (error) in
-                self.showAlert ("Error", mess: error.description)
+                self.showAlert ("Error", mess: (error?.localizedDescription)!)
         }
     }
     
-    func showAlert(title:String, mess:String){
-        NSOperationQueue.mainQueue().addOperationWithBlock {
-            let alert = UIAlertController(title: title, message: mess, preferredStyle: UIAlertControllerStyle.Alert)
-            alert.addAction(UIAlertAction(title: "Ok", style: .Default, handler:nil))
-            self.presentViewController(alert, animated: true, completion: nil)
+    func showAlert(_ title:String, mess:String){
+        OperationQueue.main.addOperation {
+            let alert = UIAlertController(title: title, message: mess, preferredStyle: UIAlertControllerStyle.alert)
+            alert.addAction(UIAlertAction(title: "Ok", style: .default, handler:nil))
+            self.present(alert, animated: true, completion: nil)
         }
     }
 }

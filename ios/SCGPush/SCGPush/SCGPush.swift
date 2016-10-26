@@ -8,47 +8,47 @@
 
 import UIKit
 
-public class SCGPush: NSObject {
+open class SCGPush: NSObject {
     
     // PRIVATE VARIABLES
-    private var _accessToken:String = ""
+    fileprivate var _accessToken:String = ""
     
     // PUBLIC VARIABLES
-    public var accessToken:String
+    open var accessToken:String
     {
         set {
-            let defaults = NSUserDefaults.standardUserDefaults()
-            defaults.setObject(newValue, forKey: ("scg-access-token-dont-replace-this-default"))
+            let defaults = UserDefaults.standard
+            defaults.set(newValue, forKey: ("scg-access-token-dont-replace-this-default"))
             _accessToken = newValue
         }
         get {
             _accessToken = ""
-            let defaults = NSUserDefaults.standardUserDefaults()
-            if (defaults.stringForKey("scg-access-token-dont-replace-this-default") != nil) {
-                _accessToken = defaults.stringForKey("scg-access-token-dont-replace-this-default")!
+            let defaults = UserDefaults.standard
+            if (defaults.string(forKey: "scg-access-token-dont-replace-this-default") != nil) {
+                _accessToken = defaults.string(forKey: "scg-access-token-dont-replace-this-default")!
             }
             return _accessToken
         }
     }
     
-    public var appID:String = ""
+    open var appID:String = ""
     
-    public var callbackURI:String = ""
+    open var callbackURI:String = ""
     
     // PRIVATE VARIABLES
-    private let tokenType = "APN"
+    fileprivate let tokenType = "APN"
     
-    public static let instance = SCGPush()
+    open static let instance = SCGPush()
     
     public override init (){
         
     }
     
-    public func registerPushToken(deviceTokeData data:NSData, completionBlock: (() -> Void)? = nil, failureBlock : (NSError! -> ())? = nil) {
+    open func registerPushToken(deviceTokeData data:Data, completionBlock: (() -> Void)? = nil, failureBlock : ((Error?) -> ())? = nil) {
         
-        let tokenChars = UnsafePointer<CChar>(data.bytes)
+        let tokenChars = (data as NSData).bytes.bindMemory(to: CChar.self, capacity: data.count)
         var pushToken = ""
-        for i in 0..<data.length {
+        for i in 0..<data.count {
             pushToken += String(format: "%02.2hhx", arguments: [tokenChars[i]])
             
         }
@@ -56,44 +56,43 @@ public class SCGPush: NSObject {
         registerPushToken(pushToken, completionBlock: completionBlock, failureBlock: failureBlock)
     }
     
-    public func registerPushToken(deviceToken:String, completionBlock: (() -> Void)? = nil, failureBlock : (NSError! -> ())? = nil) {
-        saveDeviceToken(deviceToken: deviceToken)
+    open func registerPushToken(_ deviceToken:String, completionBlock: (() -> Void)? = nil, failureBlock : ((Error?) -> ())? = nil) {
+        saveDeviceToken(deviceToken: deviceToken as NSString)
         
         registerPushToken(completionBlock, failureBlock: failureBlock)
     }
     
-    public func registerPushToken(completionBlock: (() -> Void)? = nil, failureBlock : (NSError! -> ())? = nil) {
-        let defaults = NSUserDefaults.standardUserDefaults()
-        if (defaults.stringForKey("scg-push-token-dont-replace-this-default") == nil) {
+    open func registerPushToken(_ completionBlock: (() -> Void)? = nil, failureBlock : ((Error?) -> ())? = nil) {
+        let defaults = UserDefaults.standard
+        if (defaults.string(forKey: "scg-push-token-dont-replace-this-default") == nil) {
             return
         }
         
-        let deviceToken:String = defaults.stringForKey("scg-push-token-dont-replace-this-default")!
+        let deviceToken:String = defaults.string(forKey: "scg-push-token-dont-replace-this-default")!
         
         
-        let params = ["app_id":appID,
-                      "type":tokenType,
-                      "token":deviceToken] as Dictionary<String, AnyObject>
+        let params = ["app_id":appID as AnyObject,
+                      "type":tokenType as AnyObject,
+                      "token":deviceToken as AnyObject] as Dictionary<String, AnyObject>
         
-        let configuration = NSURLSessionConfiguration .defaultSessionConfiguration()
-        let session = NSURLSession(configuration: configuration)
+        let configuration = URLSessionConfiguration.default
+        let session = URLSession(configuration: configuration)
         
         let urlString = "\(callbackURI)/push_tokens/register"
+        let url = URL(string: urlString)
         
-        let request : NSMutableURLRequest = NSMutableURLRequest()
-        request.URL = NSURL(string: NSString(format: "%@", urlString) as String)
-        request.HTTPMethod = "POST"
+        var request = URLRequest(url: url!)
+        request.httpMethod = "POST"
         request.timeoutInterval = 30
         
         request.addValue("application/json", forHTTPHeaderField: "Content-Type")
         request.addValue("Bearer \(accessToken)", forHTTPHeaderField: "Authorization")
-        request.HTTPBody  = try! NSJSONSerialization.dataWithJSONObject(params, options: [])
+        request.httpBody  = try! JSONSerialization.data(withJSONObject: params, options: [])
         
-        let dataTask = session.dataTaskWithRequest(request)
-        {
-            (let data: NSData?, let response: NSURLResponse?, let error: NSError?) -> Void in
+        let dataTask = session.dataTask(with: request, completionHandler: {
+            (data: Data?, response: URLResponse?, error: Error?) -> Void in
             
-            guard let httpResponse = response as? NSHTTPURLResponse, _ = data
+            guard let httpResponse = response as? HTTPURLResponse, let _ = data
                 else {
                     //print("error: not a valid http response")
                     if (failureBlock != nil) {
@@ -115,41 +114,41 @@ public class SCGPush: NSObject {
                 
             default:
                 if (failureBlock != nil) {
-                    let errorSend = NSError(domain: (httpResponse.URL?.absoluteString)!, code: httpResponse.statusCode, userInfo: nil)
+                    let errorSend = NSError(domain: (httpResponse.url?.absoluteString)!, code: httpResponse.statusCode, userInfo: nil)
                     failureBlock! (errorSend)
                 }
             }
-        }
+        })        
+
         dataTask.resume()
     }
 
-    public func unregisterPushToken(completionBlock: (() -> Void)? = nil, failureBlock : (NSError! -> ())? = nil) {
-        let defaults = NSUserDefaults.standardUserDefaults()
-        let pushToken:String = defaults.stringForKey("scg-push-token-dont-replace-this-default")! as String
+    open func unregisterPushToken(_ completionBlock: (() -> Void)? = nil, failureBlock : ((Error?) -> ())? = nil) {
+        let defaults = UserDefaults.standard
+        let pushToken:String = defaults.string(forKey: "scg-push-token-dont-replace-this-default")! as String
         
         let params = ["app_id":appID,
                       "type":tokenType,
                       "token": pushToken] as Dictionary<String, String>
         
-        let configuration = NSURLSessionConfiguration .defaultSessionConfiguration()
-        let session = NSURLSession(configuration: configuration)
+        let configuration = URLSessionConfiguration.default
+        let session = URLSession(configuration: configuration)
         
         let urlString = "\(callbackURI)/push_tokens/unregister"
+        let url = URL(string: urlString)
         
-        let request : NSMutableURLRequest = NSMutableURLRequest()
-        request.URL = NSURL(string: NSString(format: "%@", urlString) as String)
-        request.HTTPMethod = "POST"
+        var request = URLRequest(url: url!)
+        request.httpMethod = "POST"
         request.timeoutInterval = 30
         
         request.addValue("application/json", forHTTPHeaderField: "Content-Type")
         request.addValue("Bearer \(accessToken)", forHTTPHeaderField: "Authorization")
-        request.HTTPBody  = try! NSJSONSerialization.dataWithJSONObject(params, options: [])
+        request.httpBody  = try! JSONSerialization.data(withJSONObject: params, options: [])
         
-        let dataTask = session.dataTaskWithRequest(request)
-        {
-            (let data: NSData?, let response: NSURLResponse?, let error: NSError?) -> Void in
+        let dataTask = session.dataTask(with: request, completionHandler: {
+            (data: Data?, response: URLResponse?, error: Error?) -> Void in
             
-            guard let httpResponse = response as? NSHTTPURLResponse, _ = data
+            guard let httpResponse = response as? HTTPURLResponse, let _ = data
                 else {
                     //print("error: not a valid http response")
                     if (failureBlock != nil) {
@@ -161,52 +160,52 @@ public class SCGPush: NSObject {
             switch (httpResponse.statusCode)
             {
             case 200:
-                defaults.removeObjectForKey("scg-push-token-dont-replace-this-default")
+                defaults.removeObject(forKey: "scg-push-token-dont-replace-this-default")
                 if (completionBlock != nil) {
                     completionBlock! ()
                 }
             case 204:
-                defaults.removeObjectForKey("scg-push-token-dont-replace-this-default")
+                defaults.removeObject(forKey: "scg-push-token-dont-replace-this-default")
                 if (completionBlock != nil) {
                     completionBlock! ()
                 }
                 
             default:
                 if (failureBlock != nil) {
-                    let errorSend = NSError(domain: (httpResponse.URL?.absoluteString)!, code: httpResponse.statusCode, userInfo: nil)
+                    let errorSend = NSError(domain: (httpResponse.url?.absoluteString)!, code: httpResponse.statusCode, userInfo: nil)
                     failureBlock! (errorSend)
                 }
             }
-        }
+        })        
+
         dataTask.resume()
     }
     //[NSObject : AnyObject]
-    public func deliveryConfirmation(userInfo userInfo:NSDictionary ,completionBlock: (() -> Void)? = nil, failureBlock : (NSError! -> ())? = nil) {
+    open func deliveryConfirmation(userInfo:NSDictionary ,completionBlock: (() -> Void)? = nil, failureBlock : ((Error?) -> ())? = nil) {
         if let messageID = userInfo["scg-message-id"] {
             deliveryConfirmation(messageID as! String, completionBlock: completionBlock, failureBlock: failureBlock)
         }
     }
     
-    public func deliveryConfirmation(messageID:String ,completionBlock: (() -> Void)? = nil, failureBlock : (NSError! -> ())? = nil) {
+    open func deliveryConfirmation(_ messageID:String ,completionBlock: (() -> Void)? = nil, failureBlock : ((Error?) -> ())? = nil) {
         
-        let configuration = NSURLSessionConfiguration .defaultSessionConfiguration()
-        let session = NSURLSession(configuration: configuration)
+        let configuration = URLSessionConfiguration.default
+        let session = URLSession(configuration: configuration)
         
         let urlString = "\(callbackURI)/messages/\(messageID)/delivery_confirmation"
+        let url = URL(string: urlString)
         
-        let request : NSMutableURLRequest = NSMutableURLRequest()
-        request.URL = NSURL(string: NSString(format: "%@", urlString) as String)
-        request.HTTPMethod = "POST"
+        var request = URLRequest(url: url!)
+        request.httpMethod = "POST"
         request.timeoutInterval = 30
         
         request.addValue("application/json", forHTTPHeaderField: "Content-Type")
         request.addValue("Bearer \(accessToken)", forHTTPHeaderField: "Authorization")
         
-        let dataTask = session.dataTaskWithRequest(request)
-        {
-            (let data: NSData?, let response: NSURLResponse?, let error: NSError?) -> Void in
+        let dataTask = session.dataTask(with: request, completionHandler: {
+            (data: Data?, response: URLResponse?, error: Error?) -> Void in
             
-            guard let httpResponse = response as? NSHTTPURLResponse, _ = data
+            guard let httpResponse = response as? HTTPURLResponse, let _ = data
                 else {
                     if (failureBlock != nil) {
                         failureBlock! (error)
@@ -227,28 +226,29 @@ public class SCGPush: NSObject {
                 
             default:
                 if (failureBlock != nil) {
-                    let errorSend = NSError(domain: (httpResponse.URL?.absoluteString)!, code: httpResponse.statusCode, userInfo: nil)
+                    let errorSend = NSError(domain: (httpResponse.url?.absoluteString)!, code: httpResponse.statusCode, userInfo: nil)
                     failureBlock! (errorSend)
                 }
             }
-        }
+        })        
+
         dataTask.resume()
     }
     
-    public func saveDeviceToken(deviceTokenData tokenData:NSData) {
-        let tokenChars = UnsafePointer<CChar>(tokenData.bytes)
+    open func saveDeviceToken(deviceTokenData tokenData:Data) {
+        let tokenChars = (tokenData as NSData).bytes.bindMemory(to: CChar.self, capacity: tokenData.count)
         var pushToken = ""
-        for i in 0..<tokenData.length {
+        for i in 0..<tokenData.count {
             pushToken += String(format: "%02.2hhx", arguments: [tokenChars[i]])
             
         }
         
-        let defaults = NSUserDefaults.standardUserDefaults()
-        defaults.setObject(pushToken, forKey: "scg-push-token-dont-replace-this-default")
+        let defaults = UserDefaults.standard
+        defaults.set(pushToken, forKey: "scg-push-token-dont-replace-this-default")
     }
     
-    public func saveDeviceToken(deviceToken token:NSString) {
-        let defaults = NSUserDefaults.standardUserDefaults()
-        defaults.setObject(token, forKey: "scg-push-token-dont-replace-this-default")
+    open func saveDeviceToken(deviceToken token:NSString) {
+        let defaults = UserDefaults.standard
+        defaults.set(token, forKey: "scg-push-token-dont-replace-this-default")
     }
 }

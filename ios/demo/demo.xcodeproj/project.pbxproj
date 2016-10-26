@@ -269,6 +269,7 @@
 					F59BC8241CEA56310043E96E = {
 						CreatedOnToolsVersion = 7.3;
 						DevelopmentTeam = 6D6V2A9HWX;
+						LastSwiftMigration = 0800;
 						SystemCapabilities = {
 							com.apple.Push = {
 								enabled = 1;
@@ -277,10 +278,12 @@
 					};
 					F59BC8381CEA56310043E96E = {
 						CreatedOnToolsVersion = 7.3;
+						LastSwiftMigration = 0800;
 						TestTargetID = F59BC8241CEA56310043E96E;
 					};
 					F59BC8431CEA56310043E96E = {
 						CreatedOnToolsVersion = 7.3;
+						LastSwiftMigration = 0800;
 						TestTargetID = F59BC8241CEA56310043E96E;
 					};
 				};
@@ -570,6 +573,7 @@
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				PROVISIONING_PROFILE = "";
 				SWIFT_OBJC_BRIDGING_HEADER = Bridge.h;
+				SWIFT_VERSION = 3.0;
 			};
 			name = Debug;
 		};
@@ -593,6 +597,7 @@
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				PROVISIONING_PROFILE = "c84ae7af-27c9-400b-b086-203fec62159a";
 				SWIFT_OBJC_BRIDGING_HEADER = Bridge.h;
+				SWIFT_VERSION = 3.0;
 			};
 			name = Release;
 		};
@@ -604,6 +609,7 @@
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = com.softavail.push.demoTests;
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_VERSION = 3.0;
 				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/demo.app/demo";
 			};
 			name = Debug;
@@ -616,6 +622,7 @@
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = com.softavail.push.demoTests;
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_VERSION = 3.0;
 				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/demo.app/demo";
 			};
 			name = Release;
@@ -627,6 +634,7 @@
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = com.softavail.push.demoUITests;
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_VERSION = 3.0;
 				TEST_TARGET_NAME = demo;
 			};
 			name = Debug;
@@ -638,6 +646,7 @@
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = com.softavail.push.demoUITests;
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_VERSION = 3.0;
 				TEST_TARGET_NAME = demo;
 			};
 			name = Release;
