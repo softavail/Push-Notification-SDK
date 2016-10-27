@@ -235,6 +235,63 @@ open class SCGPush: NSObject {
         dataTask.resume()
     }
     
+    open func loadContentPresentation(_ urlString:String ,completionBlock: ((_ contentURL:URL) -> Void)? = nil, failureBlock : ((Error?) -> ())? = nil) {
+        
+        let configuration = URLSessionConfiguration.default
+        let session = URLSession(configuration: configuration)
+        
+        let url:URL = URL(string: urlString)!
+        
+        var request = URLRequest(url: url)
+        request.httpMethod = "GET"
+        request.timeoutInterval = 30
+        
+        request.addValue("application/json", forHTTPHeaderField: "Content-Type")
+        request.addValue("Bearer \(accessToken)", forHTTPHeaderField: "Authorization")
+        print ("scg", urlString)
+        let dataTask = session.downloadTask(with: request, completionHandler: {
+            (location: URL?, response: URLResponse?, error: Error?) -> Void in
+            
+            guard let httpResponse = response as? HTTPURLResponse
+                else {
+                    if (failureBlock != nil) {
+                        failureBlock! (error)
+                    }
+                    return
+            }
+            var contentUrl:URL?
+            
+            if let location = location {
+                // Move temporary file to remove .tmp extension
+                let tmpDirectory = NSTemporaryDirectory()
+                let tmpFile = "file://".appending(tmpDirectory).appending(url.lastPathComponent)
+                let tmpUrl = URL(string: tmpFile)!
+                try! FileManager.default.moveItem(at: location, to: tmpUrl)
+                contentUrl = tmpUrl
+            }
+            
+            switch (httpResponse.statusCode)
+            {
+            case 200:
+                if (completionBlock != nil) {
+                    completionBlock! (contentUrl!)
+                }
+            case 204:
+                if (completionBlock != nil) {
+                    completionBlock! (contentUrl!)
+                }
+                
+            default:
+                if (failureBlock != nil) {
+                    let errorSend = NSError(domain: (httpResponse.url?.absoluteString)!, code: httpResponse.statusCode, userInfo: nil)
+                    failureBlock! (errorSend)
+                }
+            }
+        })
+        
+        dataTask.resume()
+    }
+    
     open func saveDeviceToken(deviceTokenData tokenData:Data) {
         let tokenChars = (tokenData as NSData).bytes.bindMemory(to: CChar.self, capacity: tokenData.count)
         var pushToken = ""

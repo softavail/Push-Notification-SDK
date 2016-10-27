@@ -31,11 +31,13 @@ function send_push()
 
 #default parameters
 ANGEL="608ac7bfcc3c3ae61dac339665e1cc8a12e310bb1df843aff237cf1e34c95d27"
-SLAV="b260b947b8388bd964fe22afd3fc23ca6fb2581a64ae6108d387eff573808a7b"
+SLAV="38060159fe3e0be0deff841dba033299bd654afe58b0ab567993f61b0750126c"
+ANGELPAD="bb154fa17923e56040c6d09259de4c48261a698cada0094f0250f8826408324e"
 ALERT="Hello"
 DEVICE=
-TOKEN=
+TOKEN=""
 URL="http://auto.ferrari.com/en_EN/wp-content/uploads/sites/5/2016/09/ferrari-70anni-home.jpg"
+
 
 # Parse arguments.
 while getopts "hd:a:u:" opt; do
@@ -44,6 +46,7 @@ while getopts "hd:a:u:" opt; do
     d) DEVICE="${OPTARG}";;
     a) ALERT="${OPTARG}";;
     u) URL="${OPTARG}";;
+    t) TOKEN="${OPTARG}";;
     *)
       usage
       exit 1
@@ -51,14 +54,18 @@ while getopts "hd:a:u:" opt; do
   esac
 done
 
+if [ X"${DEVICE}" != "" ]; then
 if [ X"${DEVICE}" == X"ANGEL" ]; then
-	TOKEN="${ANGEL}"
+TOKEN="${ANGEL}"
 elif  [ X"${DEVICE}" == X"SLAV" ]; then
-	TOKEN="${SLAV}"
+TOKEN="${SLAV}"
+elif  [ X"${DEVICE}" == X"ANGELPAD" ]; then
+TOKEN="${ANGELPAD}"
 else
-	echo "Unsupported device name: ${DEVICE}" 
-	usage
-	exit 1
+echo "Unsupported device name: ${DEVICE}"
+usage
+exit 1
+fi
 fi
 
 send_push "${TOKEN}" "${ALERT}" "${URL}"

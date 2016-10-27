@@ -18,6 +18,7 @@
 		F59BC8331CEA56310043E96E /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = F59BC8311CEA56310043E96E /* LaunchScreen.storyboard */; };
 		F59BC83E1CEA56310043E96E /* demoTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = F59BC83D1CEA56310043E96E /* demoTests.swift */; };
 		F59BC8491CEA56320043E96E /* demoUITests.swift in Sources */ = {isa = PBXBuildFile; fileRef = F59BC8481CEA56320043E96E /* demoUITests.swift */; };
+		F7235DCF1DC0EDA400FCF7B6 /* SCGPush.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 5B97E99E1D2252C40091617F /* SCGPush.framework */; };
 		F778FB031DC0CE4300D73AC7 /* NotificationService.swift in Sources */ = {isa = PBXBuildFile; fileRef = F778FB021DC0CE4300D73AC7 /* NotificationService.swift */; };
 		F778FB071DC0CE4300D73AC7 /* Downloader.appex in Embed App Extensions */ = {isa = PBXBuildFile; fileRef = F778FB001DC0CE4300D73AC7 /* Downloader.appex */; settings = {ATTRIBUTES = (RemoveHeadersOnCopy, ); }; };
 		F778FB0F1DC0CF7700D73AC7 /* UserNotifications.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = F778FB0E1DC0CF7700D73AC7 /* UserNotifications.framework */; };
@@ -149,6 +150,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				F7235DCF1DC0EDA400FCF7B6 /* SCGPush.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -336,7 +338,7 @@
 						CreatedOnToolsVersion = 7.3;
 						DevelopmentTeam = 6D6V2A9HWX;
 						LastSwiftMigration = 0800;
-						ProvisioningStyle = Manual;
+						ProvisioningStyle = Automatic;
 						SystemCapabilities = {
 							com.apple.Push = {
 								enabled = 1;
@@ -656,7 +658,7 @@
 				CODE_SIGN_IDENTITY = "iPhone Developer";
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
 				COPY_PHASE_STRIP = YES;
-				DEVELOPMENT_TEAM = 6D6V2A9HWX;
+				DEVELOPMENT_TEAM = "";
 				ENABLE_BITCODE = NO;
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(PROJECT_DIR)/../Frameworks",
@@ -665,11 +667,12 @@
 				);
 				HEADER_SEARCH_PATHS = "$(PROJECT_DIR)/../Frameworks";
 				INFOPLIST_FILE = demo/Info.plist;
+				IPHONEOS_DEPLOYMENT_TARGET = 10.0;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = com.softavail.scg.push.demo;
 				PRODUCT_NAME = "$(TARGET_NAME)";
-				PROVISIONING_PROFILE = "78e32c23-c66d-4b50-ad1f-c5ed4387f551";
-				PROVISIONING_PROFILE_SPECIFIER = SCGPushDemoDev;
+				PROVISIONING_PROFILE = "";
+				PROVISIONING_PROFILE_SPECIFIER = "";
 				SWIFT_OBJC_BRIDGING_HEADER = Bridge.h;
 				SWIFT_VERSION = 3.0;
 			};
@@ -684,7 +687,7 @@
 				CODE_SIGN_IDENTITY = "";
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
 				COPY_PHASE_STRIP = YES;
-				DEVELOPMENT_TEAM = 6D6V2A9HWX;
+				DEVELOPMENT_TEAM = "";
 				ENABLE_BITCODE = NO;
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(PROJECT_DIR)/../Frameworks",
@@ -694,11 +697,12 @@
 				GCC_PREPROCESSOR_DEFINITIONS = "WITH_CRASHLYTICS=1";
 				HEADER_SEARCH_PATHS = "$(PROJECT_DIR)/../Frameworks";
 				INFOPLIST_FILE = demo/Info.plist;
+				IPHONEOS_DEPLOYMENT_TARGET = 10.0;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = com.softavail.scg.push.demo;
 				PRODUCT_NAME = "$(TARGET_NAME)";
-				PROVISIONING_PROFILE = "78e32c23-c66d-4b50-ad1f-c5ed4387f551";
-				PROVISIONING_PROFILE_SPECIFIER = SCGPushDemoDev;
+				PROVISIONING_PROFILE = "";
+				PROVISIONING_PROFILE_SPECIFIER = "";
 				SWIFT_OBJC_BRIDGING_HEADER = Bridge.h;
 				SWIFT_VERSION = 3.0;
 			};
@@ -761,12 +765,15 @@
 				CLANG_WARN_INFINITE_RECURSION = YES;
 				CLANG_WARN_SUSPICIOUS_MOVES = YES;
 				CODE_SIGN_IDENTITY = "iPhone Developer";
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
 				DEVELOPMENT_TEAM = 6D6V2A9HWX;
 				INFOPLIST_FILE = Downloader/Info.plist;
 				IPHONEOS_DEPLOYMENT_TARGET = 10.0;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @executable_path/../../Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = com.softavail.scg.push.demo.Downloader;
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				PROVISIONING_PROFILE = "";
+				PROVISIONING_PROFILE_SPECIFIER = "";
 				SKIP_INSTALL = YES;
 				SWIFT_ACTIVE_COMPILATION_CONDITIONS = DEBUG;
 				SWIFT_VERSION = 3.0;
@@ -779,6 +786,7 @@
 				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
 				CLANG_WARN_INFINITE_RECURSION = YES;
 				CLANG_WARN_SUSPICIOUS_MOVES = YES;
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
 				DEVELOPMENT_TEAM = 6D6V2A9HWX;
 				INFOPLIST_FILE = Downloader/Info.plist;
 				IPHONEOS_DEPLOYMENT_TARGET = 10.0;

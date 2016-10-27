@@ -7,6 +7,7 @@
 //
 
 import UserNotifications
+import SCGPush
 
 class NotificationService: UNNotificationServiceExtension {
 
@@ -23,12 +24,30 @@ class NotificationService: UNNotificationServiceExtension {
             
             contentHandler(bestAttemptContent)
         }
+        print("step 1",request.content.userInfo)
+//        
+//        if let urlString = request.content.userInfo["scgg-attachment"] as? String {
+//                // Download the attachment
+//            print("step 2")
+//                SCGPush.instance.loadContentPresentation(urlString, completionBlock: {
+//                    (tmpUrl) in
+//                    print(tmpUrl)
+//                    if let attachment = try? UNNotificationAttachment(identifier: "", url: tmpUrl) {
+//                        print(attachment)
+//                        self.bestAttemptContent?.attachments = [attachment]
+//                    }
+//                    self.contentHandler!(self.bestAttemptContent!)
+//                })
+//            
+//            
+//        }
     }
     
     override func serviceExtensionTimeWillExpire() {
         // Called just before the extension will be terminated by the system.
         // Use this as an opportunity to deliver your "best attempt" at modified content, otherwise the original push payload will be used.
         if let contentHandler = contentHandler, let bestAttemptContent =  bestAttemptContent {
+            
             contentHandler(bestAttemptContent)
         }
     }
