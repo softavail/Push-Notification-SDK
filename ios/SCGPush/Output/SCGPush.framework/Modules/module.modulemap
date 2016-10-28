@@ -1,3 +1,0 @@
-framework module SCGPush {
-    header "SCGPush-Swift.h"
-}
