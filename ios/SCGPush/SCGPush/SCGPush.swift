@@ -266,6 +266,9 @@ open class SCGPush: NSObject {
                 let tmpDirectory = NSTemporaryDirectory()
                 let tmpFile = "file://".appending(tmpDirectory).appending(url.lastPathComponent)
                 let tmpUrl = URL(string: tmpFile)!
+                if FileManager.default.fileExists(atPath: tmpUrl.path) {
+                    try! FileManager.default.removeItem(at: tmpUrl)
+                }
                 try! FileManager.default.moveItem(at: location, to: tmpUrl)
                 contentUrl = tmpUrl
             }

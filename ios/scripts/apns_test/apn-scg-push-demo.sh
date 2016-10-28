@@ -20,10 +20,10 @@ function send_push()
 	local alert=$2
 	local url=$3
 
-	apn push "${token}" -c CSG_Demo_APNS_Devel_Key.pem -P "{\
+	apn push "${token}" -c CSG_Demo_APNS_Key.pem -e production -P "{\
 	  \"aps\": {\
     	\"alert\": \"${alert}\",\
-	    \"mutable-content\": 1\
+	    \"mutable-content\": 0\
 	  },\
 	  \"scgg-attachment\": \"${url}\"\
 	}"

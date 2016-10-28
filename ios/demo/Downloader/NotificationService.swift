@@ -25,22 +25,22 @@ class NotificationService: UNNotificationServiceExtension {
             contentHandler(bestAttemptContent)
         }
         print("step 1",request.content.userInfo)
-//        
-//        if let urlString = request.content.userInfo["scgg-attachment"] as? String {
-//                // Download the attachment
-//            print("step 2")
-//                SCGPush.instance.loadContentPresentation(urlString, completionBlock: {
-//                    (tmpUrl) in
-//                    print(tmpUrl)
-//                    if let attachment = try? UNNotificationAttachment(identifier: "", url: tmpUrl) {
-//                        print(attachment)
-//                        self.bestAttemptContent?.attachments = [attachment]
-//                    }
-//                    self.contentHandler!(self.bestAttemptContent!)
-//                })
-//            
-//            
-//        }
+        
+        if let urlString = request.content.userInfo["scgg-attachment"] as? String {
+                // Download the attachment
+            print("step 2")
+                SCGPush.instance.loadContentPresentation(urlString, completionBlock: {
+                    (tmpUrl) in
+                    print("tmp", tmpUrl)
+                    if let attachment = try? UNNotificationAttachment(identifier: "", url: tmpUrl) {
+                        print("att", attachment)
+                        self.bestAttemptContent?.attachments = [attachment]
+                    }
+                    self.contentHandler!(self.bestAttemptContent!)
+                })
+            
+            
+        }
     }
     
     override func serviceExtensionTimeWillExpire() {
