@@ -20,9 +20,9 @@ class NotificationService: UNNotificationServiceExtension {
         
         if let bestAttemptContent = bestAttemptContent {
             // Modify the notification content here...
-            bestAttemptContent.title = "\(bestAttemptContent.title) [modified]"
+            //bestAttemptContent.title = "\(bestAttemptContent.title) [modified]"
             
-            contentHandler(bestAttemptContent)
+            //contentHandler(bestAttemptContent)
         }
         print("step 1",request.content.userInfo)
         
@@ -32,7 +32,7 @@ class NotificationService: UNNotificationServiceExtension {
                 SCGPush.instance.loadContentPresentation(urlString, completionBlock: {
                     (tmpUrl) in
                     print("tmp", tmpUrl)
-                    if let attachment = try? UNNotificationAttachment(identifier: "", url: tmpUrl) {
+                    if let attachment = try? UNNotificationAttachment(identifier: "image", url: tmpUrl) {
                         print("att", attachment)
                         self.bestAttemptContent?.attachments = [attachment]
                     }
