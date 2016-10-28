@@ -33,7 +33,7 @@ import retrofit2.converter.gson.GsonConverterFactory;
  */
 public class ScgClient {
 
-    public static final String TAG = "ScgClient";
+    private static final String TAG = "ScgClient";
 
     private final String fAppId;
     private final String fApiUrl;
@@ -51,9 +51,11 @@ public class ScgClient {
     }
 
     /**
-     * @param context
-     * @param rootUrl
-     * @param appId
+     * Initialize library
+     *
+     * @param context Context to be initialized with
+     * @param rootUrl Root URL of the API
+     * @param appId Application ID
      */
     public static void initialize(Context context, String rootUrl, String appId) {
         Context application = context.getApplicationContext();
@@ -68,7 +70,10 @@ public class ScgClient {
     }
 
     /**
-     * @param accessToken
+     *
+     * Authenticate in front of the API
+     *
+     * @param accessToken Access token using for authentitacion
      */
     public void auth(String accessToken) {
 
@@ -80,12 +85,19 @@ public class ScgClient {
     }
 
 
+    /**
+     * Get authentication token
+     *
+     * @return Returns the authentication token
+     */
     public String getAuthToken() {
         return mAuthToken;
     }
 
     /**
-     * @return
+     * Get library instance
+     *
+     * @return Returns instance of the library
      */
     public static ScgClient getInstance() {
         if (sInstance == null) {
@@ -125,6 +137,12 @@ public class ScgClient {
         return retrofit.build().create(ScgRestService.class);
     }
 
+    /**
+     * Delivery confirmation
+     *
+     * @param messageId Message id to be confirm
+     * @param result Callback getting the result of the confirmation
+     */
     public synchronized void deliveryConfirmation(String messageId, final ScgCallback result) {
         if (messageId == null) return;
         mService.deliveryConfirmation(messageId).enqueue(new Callback<ResponseBody>() {
@@ -145,8 +163,11 @@ public class ScgClient {
     }
 
     /**
-     * @param pushToken
-     * @param result
+     *
+     * Register device push token
+     *
+     * @param pushToken The device push token
+     * @param result Callback getting the result of the register call
      */
     public synchronized void registerPushToken(final String pushToken, final ScgCallback result) {
         if (pushToken == null) return;
@@ -167,8 +188,11 @@ public class ScgClient {
     }
 
     /**
-     * @param pushToken
-     * @param result
+     *
+     * Unregister device push token
+     *
+     * @param pushToken The device push token
+     * @param result Callback getting the result of the unregister call
      */
     public synchronized void unregisterPushToken(final String pushToken, final ScgCallback result) {
         if (pushToken == null) return;
@@ -204,17 +228,27 @@ public class ScgClient {
     }
 
     /**
-     * @return
+     *
+     * Get device push token
+     *
+     * @return Returns device push token
      */
     public String getToken() {
         return FirebaseInstanceId.getInstance().getToken();
     }
 
 
+    /**
+     * Download attachment async
+     *
+     * You must pass to execute 2 strings: MessageId and AttachmentId
+     */
     public static abstract class DownloadAttachment extends AsyncTask<String, Void, Uri> {
 
         private final ScgClient client;
         private final Context fContext;
+
+        private String mimeType;
 
         public DownloadAttachment(Context context) {
             client = ScgClient.getInstance();
@@ -226,19 +260,24 @@ public class ScgClient {
 
         @Override
         protected Uri doInBackground(String... strings) {
-            if (strings.length != 2) {
+            if (strings.length != 2 || strings[0] == null || strings[1] == null) {
                 throw new IllegalArgumentException();
             }
+
+            Log.d(TAG, "doInBackground: downloading " + strings[1] + " attachment of " + strings[0]);
 
             try {
                 final retrofit2.Response<ResponseBody> res = client.getService().downloadAttachment(strings[0], strings[1]).execute();
 
                 if (res.isSuccessful()) {
-                    final String contentType = res.headers().get("Content-Type");
-                    final String extension = MimeTypeMap.getSingleton().getExtensionFromMimeType(contentType);
+                    mimeType = res.headers().get("Content-Type");
+                    final String extension = MimeTypeMap.getSingleton().getExtensionFromMimeType(mimeType);
                     return writeResponseBodyToDisk(res, String.format("%s-%s.%s", strings[0], strings[1], extension));
+                } else {
+                    Log.e(TAG, "doInBackground: " + res.code() + " -> " + res.errorBody().string());
                 }
             } catch (IOException e) {
+                e.printStackTrace();
                 Log.e(TAG, "doInBackground: ", e);
                 return null;
             }
@@ -247,7 +286,7 @@ public class ScgClient {
         }
 
         @Override
-        protected abstract void onPostExecute(Uri uri);
+        protected abstract void onPostExecute(Uri attachment);
 
         private Uri writeResponseBodyToDisk(retrofit2.Response<ResponseBody> body, String filename) {
             try {

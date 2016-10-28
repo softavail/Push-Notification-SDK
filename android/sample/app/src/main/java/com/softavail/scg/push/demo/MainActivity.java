@@ -82,7 +82,7 @@ public class MainActivity extends AppCompatActivity implements ScgCallback {
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
-        adapter = new MessageAdapter();
+        adapter = new MessageAdapter(this);
 
         accessToken = (EditText) findViewById(R.id.access);
         pushToken = (TextView) findViewById(R.id.token);
@@ -228,7 +228,7 @@ public class MainActivity extends AppCompatActivity implements ScgCallback {
             reportDelivery(messageId);
         }
 
-        adapter.addMessage(new MessageAdapter.MessageData(message.getData().toString(), messageId, message.getData().get(MainReceiver.MESSAGE_BODY)));
+        adapter.addMessage(new MessageAdapter.MessageData(message.getData().toString(), message));
     }
 
     public void saveAccessToken(View view) {

@@ -70,7 +70,7 @@ public class MainReceiver extends ScgPushReceiver {
         notificationManager.notify(messageId.hashCode(), notificationBuilder.build());
 
 
-        if (message.getData().containsKey(ScgPushReceiver.MESSAGE_ATTACHMENT_ID)) {
+        if (message.getData().containsKey(ScgPushReceiver.MESSAGE_ATTACHMENT_ID) && message.getData().get(ScgPushReceiver.MESSAGE_ATTACHMENT_ID) != null) {
             new ScgClient.DownloadAttachment(context) {
                 @Override
                 protected void onPreExecute() {
@@ -83,6 +83,8 @@ public class MainReceiver extends ScgPushReceiver {
 
                     if (uri == null) {
                         Log.e(TAG, "onPostExecute: Cannot download attachment");
+                        notificationBuilder.setProgress(0, 0, false);
+                        notificationManager.notify(messageId.hashCode(), notificationBuilder.build());
                         return;
                     }
 
