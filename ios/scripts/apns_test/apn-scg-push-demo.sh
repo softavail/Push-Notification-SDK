@@ -19,11 +19,14 @@ function send_push()
 	local token=$1
 	local alert=$2
 	local url=$3
+	local environ=$4
+	local key=$5
+	local mutable=$6
 
-	apn push "${token}" -c CSG_Demo_APNS_Key.pem -e production -P "{\
+	apn push "${token}" -c "$key" -e "$environ" -P "{\
 	  \"aps\": {\
     	\"alert\": \"${alert}\",\
-	    \"mutable-content\": 0\
+	    \"mutable-content\": $mutable\
 	  },\
 	  \"scgg-attachment\": \"${url}\"\
 	}"
@@ -37,16 +40,20 @@ ALERT="Hello"
 DEVICE=
 TOKEN=""
 URL="http://auto.ferrari.com/en_EN/wp-content/uploads/sites/5/2016/09/ferrari-70anni-home.jpg"
-
+ENVIRON="development"
+KEY="CSG_Demo_APNS_Devel_Key.pem"
+MUTABLE=1
 
 # Parse arguments.
-while getopts "hd:a:u:" opt; do
+while getopts "hd:a:u:t:e:m" opt; do
   case "${opt}" in
     h) usage;;
+    m) MUTABLE=0;;
     d) DEVICE="${OPTARG}";;
     a) ALERT="${OPTARG}";;
     u) URL="${OPTARG}";;
     t) TOKEN="${OPTARG}";;
+    e) ENVIRON="${OPTARG}";;
     *)
       usage
       exit 1
@@ -68,4 +75,9 @@ exit 1
 fi
 fi
 
-send_push "${TOKEN}" "${ALERT}" "${URL}"
+if [ X"${ENVIRON}" == X"production" ]; then
+	KEY="CSG_Demo_APNS_Key.pem"
+fi
+
+
+send_push "${TOKEN}" "${ALERT}" "${URL}" "${ENVIRON}" "${KEY}" $MUTABLE
