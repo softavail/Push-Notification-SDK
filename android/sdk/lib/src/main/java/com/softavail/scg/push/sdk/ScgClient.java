@@ -1,17 +1,22 @@
 package com.softavail.scg.push.sdk;
 
 import android.content.Context;
+import android.net.Uri;
+import android.os.AsyncTask;
 import android.util.Log;
+import android.webkit.MimeTypeMap;
 
 import com.google.firebase.iid.FirebaseInstanceId;
 import com.softavail.scg.push.sdk.ScgRestService.RegisterRequest;
 import com.softavail.scg.push.sdk.ScgRestService.UnregisterRequest;
 
-import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.io.File;
+import java.io.FileOutputStream;
 import java.io.IOException;
-import java.util.logging.Level;
+import java.io.InputStream;
+import java.io.OutputStream;
 
 import okhttp3.Interceptor;
 import okhttp3.OkHttpClient;
@@ -102,7 +107,7 @@ public class ScgClient {
             public Response intercept(Chain chain) throws IOException {
                 Request original = chain.request();
                 Request.Builder request = original.newBuilder()
-                        .header("Accept", "application/json")
+//                        .header("Accept", "application/json")
                         .header("Content-Type", "application/json")
                         .method(original.method(), original.body());
 
@@ -203,5 +208,94 @@ public class ScgClient {
      */
     public String getToken() {
         return FirebaseInstanceId.getInstance().getToken();
+    }
+
+
+    public static abstract class DownloadAttachment extends AsyncTask<String, Void, Uri> {
+
+        private final ScgClient client;
+        private final Context fContext;
+
+        public DownloadAttachment(Context context) {
+            client = ScgClient.getInstance();
+            fContext = context;
+        }
+
+        @Override
+        protected abstract void onPreExecute();
+
+        @Override
+        protected Uri doInBackground(String... strings) {
+            if (strings.length != 2) {
+                throw new IllegalArgumentException();
+            }
+
+            try {
+                final retrofit2.Response<ResponseBody> res = client.getService().downloadAttachment(strings[0], strings[1]).execute();
+
+                if (res.isSuccessful()) {
+                    final String contentType = res.headers().get("Content-Type");
+                    final String extension = MimeTypeMap.getSingleton().getExtensionFromMimeType(contentType);
+                    return writeResponseBodyToDisk(res, String.format("%s-%s.%s", strings[0], strings[1], extension));
+                }
+            } catch (IOException e) {
+                Log.e(TAG, "doInBackground: ", e);
+                return null;
+            }
+
+            return null;
+        }
+
+        @Override
+        protected abstract void onPostExecute(Uri uri);
+
+        private Uri writeResponseBodyToDisk(retrofit2.Response<ResponseBody> body, String filename) {
+            try {
+                final File file = new File(fContext.getExternalFilesDir(null), filename);
+
+                InputStream inputStream = null;
+                OutputStream outputStream = null;
+
+                try {
+                    byte[] fileReader = new byte[4096];
+
+                    long fileSize = body.body().contentLength();
+                    long fileSizeDownloaded = 0;
+
+                    inputStream = body.body().byteStream();
+                    outputStream = new FileOutputStream(file);
+
+                    while (true) {
+                        int read = inputStream.read(fileReader);
+
+                        if (read == -1) {
+                            break;
+                        }
+
+                        outputStream.write(fileReader, 0, read);
+
+                        fileSizeDownloaded += read;
+
+                        Log.d(TAG, "Attachment download: " + fileSizeDownloaded + " of " + fileSize);
+                    }
+
+                    outputStream.flush();
+
+                    return Uri.fromFile(file);
+                } catch (IOException e) {
+                    return null;
+                } finally {
+                    if (inputStream != null) {
+                        inputStream.close();
+                    }
+
+                    if (outputStream != null) {
+                        outputStream.close();
+                    }
+                }
+            } catch (IOException e) {
+                return null;
+            }
+        }
     }
 }

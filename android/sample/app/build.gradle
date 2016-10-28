@@ -17,13 +17,13 @@ apply plugin: 'io.fabric'
 
 
 android {
-    compileSdkVersion 24
-    buildToolsVersion "24.0.1"
+    compileSdkVersion 25
+    buildToolsVersion "25.0.0"
 
     defaultConfig {
         applicationId "com.softavail.scg.push.demo"
         minSdkVersion 15
-        targetSdkVersion 24
+        targetSdkVersion 25
         versionCode 3
         versionName "1.0.3"
     }
@@ -45,11 +45,11 @@ def getDate() {
 }
 
 dependencies {
-    compile 'com.android.support:appcompat-v7:24.1.1'
-    compile 'com.android.support:design:24.1.1'
+    compile 'com.android.support:appcompat-v7:25.0.0'
+    compile 'com.android.support:design:25.0.0'
 
     //    http://stackoverflow.com/a/36931247
-    //    compile('com.softavail.scg.push:sdk:1.0.3@aar') {
+    //    compile('com.softavail.scg.push:sdk:1.1.0@aar') {
     //        transitive = true
     //    }
     //    Meanwhile we explicitly define the sdk aar and it's dependencies

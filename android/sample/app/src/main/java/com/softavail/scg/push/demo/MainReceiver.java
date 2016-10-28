@@ -9,6 +9,7 @@ import android.media.RingtoneManager;
 import android.net.Uri;
 import android.preference.PreferenceManager;
 import android.support.v4.app.NotificationCompat;
+import android.util.Log;
 
 import com.google.firebase.messaging.RemoteMessage;
 import com.softavail.scg.push.sdk.ScgCallback;
@@ -22,6 +23,7 @@ public class MainReceiver extends ScgPushReceiver {
 
     public static final String MESSAGE_ID = "com.softavail.scg.push.demo.extra.ID";
     public static final String MESSAGE = "com.softavail.scg.push.demo.extra.MESSAGE";
+    private static final String TAG = "MainReceiver";
     SharedPreferences mPrefs;
 
     @Override
@@ -40,7 +42,7 @@ public class MainReceiver extends ScgPushReceiver {
     }
 
     @Override
-    protected void onMessageReceived(String messageId, RemoteMessage message) {
+    protected void onMessageReceived(final String messageId, RemoteMessage message) {
 
         deliveryReport(messageId);
 
@@ -55,7 +57,7 @@ public class MainReceiver extends ScgPushReceiver {
 
         Uri defaultSoundUri = RingtoneManager.getDefaultUri(RingtoneManager.TYPE_NOTIFICATION);
 
-        NotificationCompat.Builder notificationBuilder = new NotificationCompat.Builder(context)
+        final NotificationCompat.Builder notificationBuilder = new NotificationCompat.Builder(context)
                 .setSmallIcon(R.mipmap.ic_launcher)
                 .setContentTitle("SCG Message")
                 .setContentText(msg)
@@ -64,9 +66,35 @@ public class MainReceiver extends ScgPushReceiver {
                 .setTicker(String.format("%s: %s", "SCG Message", msg))
                 .setContentIntent(pendingIntent);
 
-        NotificationManager notificationManager = (NotificationManager) context.getSystemService(Context.NOTIFICATION_SERVICE);
-        notificationManager.notify((int) System.currentTimeMillis(), notificationBuilder.build());
+        final NotificationManager notificationManager = (NotificationManager) context.getSystemService(Context.NOTIFICATION_SERVICE);
+        notificationManager.notify(messageId.hashCode(), notificationBuilder.build());
 
+
+        if (message.getData().containsKey(ScgPushReceiver.MESSAGE_ATTACHMENT_ID)) {
+            new ScgClient.DownloadAttachment(context) {
+                @Override
+                protected void onPreExecute() {
+                    notificationBuilder.setProgress(100, 0, true);
+                    notificationManager.notify(messageId.hashCode(), notificationBuilder.build());
+                }
+
+                @Override
+                protected void onPostExecute(Uri uri) {
+
+                    if (uri == null) {
+                        Log.e(TAG, "onPostExecute: Cannot download attachment");
+                        return;
+                    }
+
+                    Intent attachmentIntent = new Intent(Intent.ACTION_VIEW);
+                    attachmentIntent.setData(uri);
+                    notificationBuilder.setProgress(0, 0, false);
+                    notificationBuilder.addAction(0, "Open attachment", PendingIntent.getActivity(context, 0, attachmentIntent, PendingIntent.FLAG_UPDATE_CURRENT));
+                    notificationManager.notify(messageId.hashCode(), notificationBuilder.build());
+
+                }
+            }.execute(messageId, message.getData().get(ScgPushReceiver.MESSAGE_ATTACHMENT_ID));
+        }
 
         abortBroadcast();
     }

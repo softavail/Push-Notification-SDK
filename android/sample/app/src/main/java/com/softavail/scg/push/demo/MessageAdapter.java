@@ -1,6 +1,7 @@
 package com.softavail.scg.push.demo;
 
 import android.content.Context;
+import android.net.Uri;
 import android.support.design.widget.Snackbar;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
@@ -19,7 +20,7 @@ import java.util.ArrayList;
 /**
  * Created by lekov on 7/8/16.
  */
-public class MessageAdapter extends RecyclerView.Adapter<MessageAdapter.MessageViewHolder> implements View.OnClickListener {
+class MessageAdapter extends RecyclerView.Adapter<MessageAdapter.MessageViewHolder> implements View.OnClickListener {
 
     private final ArrayList<MessageData> dataset = new ArrayList<>();
 
@@ -44,19 +45,28 @@ public class MessageAdapter extends RecyclerView.Adapter<MessageAdapter.MessageV
         }
     }
 
-    public static class MessageData {
+    static class MessageData {
         final String id;
         final String body;
         final String when;
+        Uri attachment;
 
-        public MessageData(String when, String id, String body) {
+        MessageData(String when, String id, String body) {
             this.when = when;
             this.id = id;
             this.body = body;
         }
+
+        public void setAttachment(Uri uri) {
+            this.attachment = uri;
+        }
+
+        public Uri getAttachment() {
+            return this.attachment;
+        }
     }
 
-    public void addMessage(MessageData msg) {
+    void addMessage(MessageData msg) {
         dataset.add(msg);
         notifyDataSetChanged();
     }
@@ -85,14 +95,14 @@ public class MessageAdapter extends RecyclerView.Adapter<MessageAdapter.MessageV
         return dataset.size();
     }
 
-    public static class MessageViewHolder extends RecyclerView.ViewHolder {
-        public TextView mMessageId;
-        public TextView mMessageBody;
-        public TextView mMessageDate;
-        public Button mDelivery;
+    static class MessageViewHolder extends RecyclerView.ViewHolder {
+        TextView mMessageId;
+        TextView mMessageBody;
+        TextView mMessageDate;
+        Button mDelivery;
 
 
-        public MessageViewHolder(View v) {
+        MessageViewHolder(View v) {
             super(v);
 
             mMessageId = (TextView) v.findViewById(R.id.messageId);

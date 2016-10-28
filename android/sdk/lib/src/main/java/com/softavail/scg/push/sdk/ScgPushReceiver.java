@@ -19,6 +19,7 @@ public abstract class ScgPushReceiver extends BroadcastReceiver {
 
     public static final String MESSAGE_BODY = "body";
     public static final String MESSAGE_ID = "scg-message-id";
+    public static final String MESSAGE_ATTACHMENT_ID = "scg-attachment-id";
 
     protected Context context;
 

@@ -1,5 +1,7 @@
 package com.softavail.scg.push.sdk;
 
+import android.net.Uri;
+
 /**
  * Created by lekov on 6/15/16.
  */
