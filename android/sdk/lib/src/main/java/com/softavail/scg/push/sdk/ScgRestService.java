@@ -4,6 +4,7 @@ import okhttp3.ResponseBody;
 import retrofit2.Call;
 import retrofit2.http.Body;
 import retrofit2.http.GET;
+import retrofit2.http.Headers;
 import retrofit2.http.POST;
 import retrofit2.http.Path;
 import retrofit2.http.Streaming;
@@ -37,12 +38,24 @@ interface ScgRestService {
         }
     }
 
+    @Headers({
+            "Accept:application/json",
+            "Content-Type:application/json"
+    })
     @POST("push_tokens/register")
     Call<ResponseBody> registerPushToken(@Body RegisterRequest request);
 
+    @Headers({
+            "Accept:application/json",
+            "Content-Type:application/json"
+    })
     @POST("push_tokens/unregister")
     Call<ResponseBody> unregisterPushToken(@Body UnregisterRequest request);
 
+    @Headers({
+            "Accept:application/json",
+            "Content-Type:application/json"
+    })
     @POST("messages/{message_id}/delivery_confirmation")
     Call<ResponseBody> deliveryConfirmation(@Path("message_id") String messageId);
 

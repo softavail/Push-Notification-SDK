@@ -1,5 +1,6 @@
 package com.softavail.scg.push.demo;
 
+import android.app.AlertDialog;
 import android.app.PendingIntent;
 import android.app.ProgressDialog;
 import android.content.Context;
@@ -61,7 +62,7 @@ class MessageAdapter extends RecyclerView.Adapter<MessageAdapter.MessageViewHold
 
                 new ScgClient.DownloadAttachment(context) {
 
-                    private ProgressDialog progress;
+                    private AlertDialog progress;
 
                     @Override
                     protected void onPreExecute() {
@@ -69,17 +70,22 @@ class MessageAdapter extends RecyclerView.Adapter<MessageAdapter.MessageViewHold
                     }
 
                     @Override
-                    protected void onPostExecute(Uri uri) {
-
+                    protected void onResult(String mimeType, Uri result) {
                         progress.dismiss();
 
-                        if (uri == null) {
+                        if (result == null) {
                             return;
                         }
 
                         Intent attachmentIntent = new Intent(Intent.ACTION_VIEW);
-                        attachmentIntent.setData(uri);
+                        attachmentIntent.setDataAndType(result, mimeType);
                         context.startActivity(Intent.createChooser(attachmentIntent, "Open with..."));
+                    }
+
+                    @Override
+                    protected void onFailed(int code, String error) {
+                        progress.dismiss();
+                        progress = new AlertDialog.Builder(context).setTitle("Error").setMessage(error).show();
                     }
                 }.execute(data.id, data.attachment);
                 break;

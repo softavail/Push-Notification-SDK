@@ -5,6 +5,8 @@ import android.app.PendingIntent;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.media.RingtoneManager;
 import android.net.Uri;
 import android.preference.PreferenceManager;
@@ -15,6 +17,12 @@ import com.google.firebase.messaging.RemoteMessage;
 import com.softavail.scg.push.sdk.ScgCallback;
 import com.softavail.scg.push.sdk.ScgClient;
 import com.softavail.scg.push.sdk.ScgPushReceiver;
+
+import java.io.FileNotFoundException;
+import java.io.IOException;
+import java.io.InputStream;
+
+import static java.security.AccessController.getContext;
 
 /**
  * Created by lekov on 7/7/16.
@@ -79,26 +87,47 @@ public class MainReceiver extends ScgPushReceiver {
                 }
 
                 @Override
-                protected void onPostExecute(Uri uri) {
+                protected void onResult(String mimeType, Uri result) {
+                    Intent attachmentIntent = new Intent(Intent.ACTION_VIEW);
+                    attachmentIntent.setDataAndType(result, mimeType);
+                    notificationBuilder.setProgress(0, 0, false);
 
-                    if (uri == null) {
-                        Log.e(TAG, "onPostExecute: Cannot download attachment");
-                        notificationBuilder.setProgress(0, 0, false);
-                        notificationManager.notify(messageId.hashCode(), notificationBuilder.build());
-                        return;
+                    if (mimeType.startsWith("image")) {
+                        notificationBuilder.setStyle(new NotificationCompat.BigPictureStyle().bigPicture(getThumbnail(result)));
                     }
 
-                    Intent attachmentIntent = new Intent(Intent.ACTION_VIEW);
-                    attachmentIntent.setData(uri);
-                    notificationBuilder.setProgress(0, 0, false);
                     notificationBuilder.addAction(0, "Open attachment", PendingIntent.getActivity(context, 0, attachmentIntent, PendingIntent.FLAG_UPDATE_CURRENT));
                     notificationManager.notify(messageId.hashCode(), notificationBuilder.build());
+                }
 
+                @Override
+                protected void onFailed(int code, String error) {
+                    Log.e(TAG, "onPostExecute: Cannot download attachment");
+                    notificationBuilder.setProgress(0, 0, false);
+                    notificationManager.notify(messageId.hashCode(), notificationBuilder.build());
                 }
             }.execute(messageId, message.getData().get(ScgPushReceiver.MESSAGE_ATTACHMENT_ID));
         }
 
         abortBroadcast();
+    }
+
+    private Bitmap getThumbnail(Uri uri) {
+        InputStream input = null;
+        try {
+            input = context.getContentResolver().openInputStream(uri);
+            return BitmapFactory.decodeStream(input);
+        } catch (FileNotFoundException e) {
+            e.printStackTrace();
+        } finally {
+            assert input != null;
+
+            try {
+                input.close();
+            } catch (IOException e) {
+            }
+        }
+        return null;
     }
 
     private void deliveryReport(String messageId) {

@@ -24,8 +24,8 @@ android {
         applicationId "com.softavail.scg.push.demo"
         minSdkVersion 15
         targetSdkVersion 25
-        versionCode 3
-        versionName "1.0.3"
+        versionCode 4
+        versionName "1.1.0"
     }
     buildTypes {
         release {
@@ -56,7 +56,9 @@ dependencies {
 
     // --- SDK and it's dependencies ---
 
-    compile project(':scg-push-sdk')
+     compile project(':scg-push-sdk')
+    // Only for development
+    //    compile project(':sdk')
     compile 'com.squareup.retrofit2:retrofit:2.0.2'
     compile 'com.squareup.retrofit2:converter-gson:2.0.2'
     compile 'com.google.firebase:firebase-messaging:9.4.0'

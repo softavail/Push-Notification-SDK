@@ -7,6 +7,7 @@ import android.util.Log;
 import android.webkit.MimeTypeMap;
 
 import com.google.firebase.iid.FirebaseInstanceId;
+import com.google.firebase.messaging.RemoteMessage;
 import com.softavail.scg.push.sdk.ScgRestService.RegisterRequest;
 import com.softavail.scg.push.sdk.ScgRestService.UnregisterRequest;
 
@@ -17,6 +18,7 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
+import java.util.List;
 
 import okhttp3.Interceptor;
 import okhttp3.OkHttpClient;
@@ -55,7 +57,7 @@ public class ScgClient {
      *
      * @param context Context to be initialized with
      * @param rootUrl Root URL of the API
-     * @param appId Application ID
+     * @param appId   Application ID
      */
     public static void initialize(Context context, String rootUrl, String appId) {
         Context application = context.getApplicationContext();
@@ -70,7 +72,6 @@ public class ScgClient {
     }
 
     /**
-     *
      * Authenticate in front of the API
      *
      * @param accessToken Access token using for authentitacion
@@ -119,8 +120,7 @@ public class ScgClient {
             public Response intercept(Chain chain) throws IOException {
                 Request original = chain.request();
                 Request.Builder request = original.newBuilder()
-//                        .header("Accept", "application/json")
-                        .header("Content-Type", "application/json")
+                        .headers(original.headers())
                         .method(original.method(), original.body());
 
                 if (mAuthToken != null) {
@@ -141,7 +141,7 @@ public class ScgClient {
      * Delivery confirmation
      *
      * @param messageId Message id to be confirm
-     * @param result Callback getting the result of the confirmation
+     * @param result    Callback getting the result of the confirmation
      */
     public synchronized void deliveryConfirmation(String messageId, final ScgCallback result) {
         if (messageId == null) return;
@@ -163,11 +163,10 @@ public class ScgClient {
     }
 
     /**
-     *
      * Register device push token
      *
      * @param pushToken The device push token
-     * @param result Callback getting the result of the register call
+     * @param result    Callback getting the result of the register call
      */
     public synchronized void registerPushToken(final String pushToken, final ScgCallback result) {
         if (pushToken == null) return;
@@ -188,11 +187,10 @@ public class ScgClient {
     }
 
     /**
-     *
      * Unregister device push token
      *
      * @param pushToken The device push token
-     * @param result Callback getting the result of the unregister call
+     * @param result    Callback getting the result of the unregister call
      */
     public synchronized void unregisterPushToken(final String pushToken, final ScgCallback result) {
         if (pushToken == null) return;
@@ -228,7 +226,6 @@ public class ScgClient {
     }
 
     /**
-     *
      * Get device push token
      *
      * @return Returns device push token
@@ -240,7 +237,7 @@ public class ScgClient {
 
     /**
      * Download attachment async
-     *
+     * <p>
      * You must pass to execute 2 strings: MessageId and AttachmentId
      */
     public static abstract class DownloadAttachment extends AsyncTask<String, Void, Uri> {
@@ -250,6 +247,9 @@ public class ScgClient {
 
         private String mimeType;
 
+        private int errorCode = 0;
+        private String errorMessage = null;
+
         public DownloadAttachment(Context context) {
             client = ScgClient.getInstance();
             fContext = context;
@@ -258,6 +258,27 @@ public class ScgClient {
         @Override
         protected abstract void onPreExecute();
 
+        /**
+         * Result download callback
+         *
+         * @param mimeType Mime type of the downloaded attachment
+         * @param result   URI to the downloaded attachment
+         */
+        protected abstract void onResult(String mimeType, Uri result);
+
+        /**
+         * Failure download callback
+         *
+         * @param code  Error code - HTTP code or -1 for writing the attachment ot storage
+         * @param error Error message - Returned from the server error or exception message
+         */
+        protected abstract void onFailed(int code, String error);
+
+
+        /**
+         * @param strings Strings of message ID and attachment ID
+         * @return Returns URI to the downloaded attachment
+         */
         @Override
         protected Uri doInBackground(String... strings) {
             if (strings.length != 2 || strings[0] == null || strings[1] == null) {
@@ -270,25 +291,37 @@ public class ScgClient {
                 final retrofit2.Response<ResponseBody> res = client.getService().downloadAttachment(strings[0], strings[1]).execute();
 
                 if (res.isSuccessful()) {
-                    mimeType = res.headers().get("Content-Type");
-                    final String extension = MimeTypeMap.getSingleton().getExtensionFromMimeType(mimeType);
-                    return writeResponseBodyToDisk(res, String.format("%s-%s.%s", strings[0], strings[1], extension));
+                    mimeType = res.body().contentType().type() + "/" + res.body().contentType().subtype();
+                    final String extension = res.body().contentType().subtype();
+
+                    Log.i(TAG, "doInBackground: " + mimeType);
+                    Log.i(TAG, "doInBackground: " + extension);
+
+                    return writeResponseBodyToDisk(res.body(), String.format("%s-%s.%s", strings[0], strings[1], extension));
                 } else {
-                    Log.e(TAG, "doInBackground: " + res.code() + " -> " + res.errorBody().string());
+                    errorCode = res.code();
+                    errorMessage = res.errorBody().string();
+                    Log.e(TAG, "doInBackground: " + errorCode + " -> " + errorMessage);
                 }
             } catch (IOException e) {
-                e.printStackTrace();
+                errorCode = -1;
+                errorMessage = e.getLocalizedMessage();
                 Log.e(TAG, "doInBackground: ", e);
-                return null;
             }
 
             return null;
         }
 
         @Override
-        protected abstract void onPostExecute(Uri attachment);
+        protected void onPostExecute(Uri attachment) {
+            if (errorMessage == null && attachment != null) {
+                onResult(mimeType, attachment);
+            } else {
+                onFailed(errorCode, errorMessage);
+            }
+        }
 
-        private Uri writeResponseBodyToDisk(retrofit2.Response<ResponseBody> body, String filename) {
+        private Uri writeResponseBodyToDisk(ResponseBody body, String filename) {
             try {
                 final File file = new File(fContext.getExternalFilesDir(null), filename);
 
@@ -298,10 +331,7 @@ public class ScgClient {
                 try {
                     byte[] fileReader = new byte[4096];
 
-                    long fileSize = body.body().contentLength();
-                    long fileSizeDownloaded = 0;
-
-                    inputStream = body.body().byteStream();
+                    inputStream = body.byteStream();
                     outputStream = new FileOutputStream(file);
 
                     while (true) {
@@ -312,10 +342,6 @@ public class ScgClient {
                         }
 
                         outputStream.write(fileReader, 0, read);
-
-                        fileSizeDownloaded += read;
-
-                        Log.d(TAG, "Attachment download: " + fileSizeDownloaded + " of " + fileSize);
                     }
 
                     outputStream.flush();
