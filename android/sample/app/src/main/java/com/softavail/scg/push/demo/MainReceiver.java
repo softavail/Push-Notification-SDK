@@ -124,7 +124,7 @@ public class MainReceiver extends ScgPushReceiver {
 
             try {
                 input.close();
-            } catch (IOException e) {
+            } catch (IOException ignored) {
             }
         }
         return null;

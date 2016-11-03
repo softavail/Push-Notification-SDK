@@ -8,6 +8,7 @@ import android.content.IntentFilter;
 import android.content.SharedPreferences;
 import android.net.Uri;
 import android.os.Bundle;
+import android.os.Handler;
 import android.preference.PreferenceManager;
 import android.support.design.widget.Snackbar;
 import android.support.v7.app.AlertDialog;
@@ -45,6 +46,7 @@ public class MainActivity extends AppCompatActivity implements ScgCallback {
     private static final String PREF_AUTH = "PREF_TOKEN";
 
     public static final String PREF_AUTO_DELIVERY = "PREF_AUTO_DELIVERY";
+    public static final String PREF_AUTO_OPEN = "PREF_AUTO_OPEN";
 
     private EditText accessToken;
     private TextView pushToken;
@@ -140,6 +142,7 @@ public class MainActivity extends AppCompatActivity implements ScgCallback {
     private void showDialog() {
         final View initView = LayoutInflater.from(this).inflate(R.layout.dialog_initialization, null, false);
         ((SwitchCompat) initView.findViewById(R.id.delivery)).setChecked(pref.getBoolean(PREF_AUTO_DELIVERY, true));
+        ((SwitchCompat) initView.findViewById(R.id.open)).setChecked(pref.getBoolean(PREF_AUTO_OPEN, true));
         ((EditText) initView.findViewById(R.id.apiUrl)).setText(pref.getString(PREF_URL, getString(R.string.rootUrl)));
         ((EditText) initView.findViewById(R.id.appId)).setText(pref.getString(PREF_APP_ID, getString(R.string.appId)));
 
@@ -152,6 +155,7 @@ public class MainActivity extends AppCompatActivity implements ScgCallback {
                         final String uri = ((EditText) initView.findViewById(R.id.apiUrl)).getText().toString();
                         final String appid = ((EditText) initView.findViewById(R.id.appId)).getText().toString();
                         final boolean autoDelivery = ((SwitchCompat) initView.findViewById(R.id.delivery)).isChecked();
+                        final boolean autoOpen = ((SwitchCompat) initView.findViewById(R.id.open)).isChecked();
 
                         if (TextUtils.isEmpty(uri) || TextUtils.isEmpty(appid)) {
                             Toast.makeText(MainActivity.this, "Library must be initialised properly!", Toast.LENGTH_LONG).show();
@@ -163,6 +167,7 @@ public class MainActivity extends AppCompatActivity implements ScgCallback {
                                 .putString(PREF_URL, uri)
                                 .putString(PREF_APP_ID, appid)
                                 .putBoolean(PREF_AUTO_DELIVERY, autoDelivery)
+                                .putBoolean(PREF_AUTO_OPEN, autoOpen)
                                 .apply();
 
                         if (ScgClient.isInitialized()) {
@@ -212,6 +217,10 @@ public class MainActivity extends AppCompatActivity implements ScgCallback {
         ScgClient.getInstance().deliveryConfirmation(messageId, MainActivity.this);
     }
 
+    private void reportOpen(String messageId) {
+        ScgClient.getInstance().interactionConfirmation(messageId, MainActivity.this);
+    }
+
     @Override
     public void onSuccess(int code, String message) {
         Snackbar.make(pushToken, String.format("Success (%s): %s", code, message), Snackbar.LENGTH_INDEFINITE).show();
@@ -226,6 +235,15 @@ public class MainActivity extends AppCompatActivity implements ScgCallback {
 
         if (pref.getBoolean(PREF_AUTO_DELIVERY, true)) {
             reportDelivery(messageId);
+        }
+
+        if (pref.getBoolean(PREF_AUTO_OPEN, true)) {
+            new Handler().postDelayed(new Runnable() {
+                @Override
+                public void run() {
+                    reportOpen(messageId);
+                }
+            }, 3141);
         }
 
         adapter.addMessage(new MessageAdapter.MessageData(message.getData().toString(), message));

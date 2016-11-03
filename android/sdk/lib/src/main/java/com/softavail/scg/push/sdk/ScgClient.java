@@ -4,10 +4,8 @@ import android.content.Context;
 import android.net.Uri;
 import android.os.AsyncTask;
 import android.util.Log;
-import android.webkit.MimeTypeMap;
 
 import com.google.firebase.iid.FirebaseInstanceId;
-import com.google.firebase.messaging.RemoteMessage;
 import com.softavail.scg.push.sdk.ScgRestService.RegisterRequest;
 import com.softavail.scg.push.sdk.ScgRestService.UnregisterRequest;
 
@@ -18,7 +16,6 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
-import java.util.List;
 
 import okhttp3.Interceptor;
 import okhttp3.OkHttpClient;
@@ -138,7 +135,7 @@ public class ScgClient {
     }
 
     /**
-     * Delivery confirmation
+     * Delivery confirmation when notification is received
      *
      * @param messageId Message id to be confirm
      * @param result    Callback getting the result of the confirmation
@@ -146,6 +143,31 @@ public class ScgClient {
     public synchronized void deliveryConfirmation(String messageId, final ScgCallback result) {
         if (messageId == null) return;
         mService.deliveryConfirmation(messageId).enqueue(new Callback<ResponseBody>() {
+            @Override
+            public void onResponse(Call<ResponseBody> call, retrofit2.Response<ResponseBody> response) {
+                if (response.code() > 400) {
+                    if (result != null) result.onFailed(response.code(), response.message());
+                } else {
+                    if (result != null) result.onSuccess(response.code(), response.message());
+                }
+            }
+
+            @Override
+            public void onFailure(Call<ResponseBody> call, Throwable t) {
+                result.onFailed(-1, t.getMessage());
+            }
+        });
+    }
+
+    /**
+     * Delivery confirmation when notification is open
+     *
+     * @param messageId Message id to be confirm
+     * @param result    Callback getting the result of the confirmation
+     */
+    public synchronized void interactionConfirmation(String messageId, final ScgCallback result) {
+        if (messageId == null) return;
+        mService.interactionConfirmation(messageId).enqueue(new Callback<ResponseBody>() {
             @Override
             public void onResponse(Call<ResponseBody> call, retrofit2.Response<ResponseBody> response) {
                 if (response.code() > 400) {

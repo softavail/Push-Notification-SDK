@@ -1,20 +1,17 @@
 package com.softavail.scg.push.demo;
 
 import android.app.AlertDialog;
-import android.app.PendingIntent;
 import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.Intent;
 import android.net.Uri;
 import android.support.design.widget.Snackbar;
 import android.support.v7.widget.RecyclerView;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.google.firebase.messaging.RemoteMessage;
 import com.softavail.scg.push.sdk.ScgCallback;
@@ -41,22 +38,27 @@ class MessageAdapter extends RecyclerView.Adapter<MessageAdapter.MessageViewHold
 
         final MessageViewHolder holder = (MessageViewHolder) v.getTag();
         final MessageData data = dataset.get(holder.getAdapterPosition());
+        final ScgCallback result = new ScgCallback() {
+            @Override
+            public void onSuccess(int code, String message) {
+                dataset.remove(holder.getAdapterPosition());
+                notifyItemRemoved(holder.getAdapterPosition());
+                Snackbar.make(v, String.format("Success (%s): %s", code, message), Snackbar.LENGTH_INDEFINITE).show();
+            }
+
+            @Override
+            public void onFailed(int code, String message) {
+                Snackbar.make(v, String.format("Failed (%s): %s", code, message), Snackbar.LENGTH_INDEFINITE).show();
+            }
+        };
 
         switch (v.getId()) {
             case R.id.messageDelivery:
-                ScgClient.getInstance().deliveryConfirmation(data.id, new ScgCallback() {
-                    @Override
-                    public void onSuccess(int code, String message) {
-                        dataset.remove(holder.getAdapterPosition());
-                        notifyItemRemoved(holder.getAdapterPosition());
-                        Snackbar.make(v, String.format("Success (%s): %s", code, message), Snackbar.LENGTH_INDEFINITE).show();
-                    }
+                ScgClient.getInstance().deliveryConfirmation(data.id, result);
+                break;
 
-                    @Override
-                    public void onFailed(int code, String message) {
-                        Snackbar.make(v, String.format("Failed (%s): %s", code, message), Snackbar.LENGTH_INDEFINITE).show();
-                    }
-                });
+            case R.id.messageOpen:
+                ScgClient.getInstance().interactionConfirmation(data.id, result);
                 break;
             case R.id.messageAttachment:
 
@@ -132,7 +134,7 @@ class MessageAdapter extends RecyclerView.Adapter<MessageAdapter.MessageViewHold
         final MessageData data = dataset.get(position);
         holder.mMessageId.setText(data.id);
         holder.mMessageBody.setText(data.body);
-        holder.mMessageDate.setText(data.when);
+        holder.mMessageData.setText(data.when);
         holder.mAttachment.setEnabled(data.attachment != null);
     }
 
@@ -144,7 +146,8 @@ class MessageAdapter extends RecyclerView.Adapter<MessageAdapter.MessageViewHold
     static class MessageViewHolder extends RecyclerView.ViewHolder {
         TextView mMessageId;
         TextView mMessageBody;
-        TextView mMessageDate;
+        TextView mMessageData;
+        Button mOpen;
         Button mDelivery;
         Button mAttachment;
 
@@ -154,7 +157,8 @@ class MessageAdapter extends RecyclerView.Adapter<MessageAdapter.MessageViewHold
 
             mMessageId = (TextView) v.findViewById(R.id.messageId);
             mMessageBody = (TextView) v.findViewById(R.id.messageBody);
-            mMessageDate = (TextView) v.findViewById(R.id.messageDate);
+            mMessageData = (TextView) v.findViewById(R.id.messageData);
+            mOpen = (Button) v.findViewById(R.id.messageOpen);
             mDelivery = (Button) v.findViewById(R.id.messageDelivery);
             mAttachment = (Button) v.findViewById(R.id.messageAttachment);
         }

@@ -59,6 +59,13 @@ interface ScgRestService {
     @POST("messages/{message_id}/delivery_confirmation")
     Call<ResponseBody> deliveryConfirmation(@Path("message_id") String messageId);
 
+    @Headers({
+            "Accept:application/json",
+            "Content-Type:application/json"
+    })
+    @POST("messages/{message_id}/click_thru_confirmation")
+    Call<ResponseBody> interactionConfirmation(@Path("message_id") String messageId);
+
     @Streaming
     @GET("attachment/{message_id}/{attachment_id}")
     Call<ResponseBody> downloadAttachment(@Path("message_id") String messageId, @Path("attachment_id") String attachment_id);
