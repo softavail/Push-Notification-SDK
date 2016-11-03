@@ -99,7 +99,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         application.applicationIconBadgeNumber =  0;
         
         if ((window?.rootViewController!.view.viewWithTag(24) as! UISwitch).isOn) {
-            SCGPush.instance.deliveryConfirmation(userInfo: userInfo as NSDictionary, completionBlock: {
+            SCGPush.instance.interactionConfirmation(userInfo: userInfo as NSDictionary, completionBlock: {
                 self.showAlert ("Success", mess: "You successfully send deliveryConfirmation.")
             }) { (error) in
                 self.showAlert ("Error", mess: (error?.localizedDescription)!)

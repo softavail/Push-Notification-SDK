@@ -95,13 +95,15 @@ open class SCGPush: NSObject {
         registerPushToken(pushToken, completionBlock: completionBlock, failureBlock: failureBlock)
     }
     
-    open func registerPushToken(_ deviceToken:String, completionBlock: (() -> Void)? = nil, failureBlock : ((Error?) -> ())? = nil) {
+    open func registerPushToken(_ deviceToken:String, completionBlock: (() -> Void)? = nil, failureBlock : ((Error?) -> ())? = nil)
+    {
         saveDeviceToken(deviceToken: deviceToken as NSString)
         
         registerPushToken(completionBlock, failureBlock: failureBlock)
     }
     
-    open func registerPushToken(_ completionBlock: (() -> Void)? = nil, failureBlock : ((Error?) -> ())? = nil) {
+    open func registerPushToken(_ completionBlock: (() -> Void)? = nil, failureBlock : ((Error?) -> ())? = nil)
+    {
         let defaults = UserDefaults.standard
         if (defaults.string(forKey: "scg-push-token-dont-replace-this-default") == nil) {
             return
@@ -162,7 +164,8 @@ open class SCGPush: NSObject {
         dataTask.resume()
     }
 
-    open func unregisterPushToken(_ completionBlock: (() -> Void)? = nil, failureBlock : ((Error?) -> ())? = nil) {
+    open func unregisterPushToken(_ completionBlock: (() -> Void)? = nil, failureBlock : ((Error?) -> ())? = nil)
+    {
         let defaults = UserDefaults.standard
         let pushToken:String = defaults.string(forKey: "scg-push-token-dont-replace-this-default")! as String
         
@@ -220,14 +223,16 @@ open class SCGPush: NSObject {
         dataTask.resume()
     }
     //[NSObject : AnyObject]
-    open func deliveryConfirmation(userInfo:NSDictionary ,completionBlock: (() -> Void)? = nil, failureBlock : ((Error?) -> ())? = nil) {
-        if let messageID = userInfo["scg-message-id"] {
+    open func deliveryConfirmation(userInfo:NSDictionary ,completionBlock: (() -> Void)? = nil, failureBlock : ((Error?) -> ())? = nil)
+    {
+        if let messageID = userInfo["scg-message-id"]
+        {
             deliveryConfirmation(messageID as! String, completionBlock: completionBlock, failureBlock: failureBlock)
         }
     }
     
-    open func deliveryConfirmation(_ messageID:String ,completionBlock: (() -> Void)? = nil, failureBlock : ((Error?) -> ())? = nil) {
-        
+    open func deliveryConfirmation(_ messageID:String ,completionBlock: (() -> Void)? = nil, failureBlock : ((Error?) -> ())? = nil)
+    {
         let configuration = URLSessionConfiguration.default
         let session = URLSession(configuration: configuration)
         
@@ -272,6 +277,69 @@ open class SCGPush: NSObject {
         })        
 
         dataTask.resume()
+    }
+    
+    open func interactionConfirmation(userInfo:NSDictionary ,completionBlock: (() -> Void)? = nil, failureBlock : ((Error?) -> ())? = nil) {
+        if let messageID = userInfo["scg-message-id"]
+        {
+            interactionConfirmation(messageID as! String, completionBlock: completionBlock, failureBlock: failureBlock)
+        }
+    }
+    
+    open func interactionConfirmation(_ messageID:String ,completionBlock: (() -> Void)? = nil, failureBlock : ((Error?) -> ())? = nil) {
+        
+        let configuration = URLSessionConfiguration.default
+        let session = URLSession(configuration: configuration)
+        
+        let urlString = "\(callbackURI)/messages/\(messageID)/click_thru_confirmation"
+        let url = URL(string: urlString)
+        
+        var request = URLRequest(url: url!)
+        request.httpMethod = "POST"
+        request.timeoutInterval = 30
+        
+        request.addValue("application/json", forHTTPHeaderField: "Content-Type")
+        request.addValue("Bearer \(accessToken)", forHTTPHeaderField: "Authorization")
+        
+        let dataTask = session.dataTask(with: request, completionHandler: {
+            (data: Data?, response: URLResponse?, error: Error?) -> Void in
+            
+            guard let httpResponse = response as? HTTPURLResponse, let _ = data
+                else {
+                    if (failureBlock != nil) {
+                        failureBlock! (error)
+                    }
+                    return
+            }
+            
+            switch (httpResponse.statusCode)
+            {
+            case 200:
+                if (completionBlock != nil) {
+                    completionBlock! ()
+                }
+            case 204:
+                if (completionBlock != nil) {
+                    completionBlock! ()
+                }
+                
+            default:
+                if (failureBlock != nil) {
+                    let errorSend = NSError(domain: (httpResponse.url?.absoluteString)!, code: httpResponse.statusCode, userInfo: nil)
+                    failureBlock! (errorSend)
+                }
+            }
+        })
+        
+        dataTask.resume()
+    }
+    
+    open func loadAttachment(userInfo:NSDictionary ,completionBlock: ((_ contentURL:URL, _ contentType:String) -> Void)? = nil, failureBlock : ((Error?) -> ())? = nil) {
+        if let attachmentID = userInfo["scg-attachment-id"] as? String,
+           let messageID = userInfo["scg-message-id"] as? String
+        {
+            self.loadAttachment(messageID, attachmentID: attachmentID, completionBlock: completionBlock, failureBlock: failureBlock)
+        }
     }
     
     open func loadAttachment(_ messageID:String, attachmentID:String ,completionBlock: ((_ contentURL:URL, _ contentType:String) -> Void)? = nil, failureBlock : ((Error?) -> ())? = nil) {
