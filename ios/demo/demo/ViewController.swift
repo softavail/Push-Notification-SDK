@@ -11,11 +11,11 @@ import SCGPush
 
 class ViewController: UIViewController {
 
-    @IBOutlet weak var rawPushTokenLabel: UILabel!
     @IBOutlet weak var purePushTokenLabel: UILabel!
     @IBOutlet weak var accessTokenField: UITextField!
     @IBOutlet weak var baseURIField: UITextField!
     @IBOutlet weak var appIDField: UITextField!
+    @IBOutlet weak var imageView: UIImageView!
     
     var baseURL:String = ""
     
@@ -26,9 +26,21 @@ class ViewController: UIViewController {
         baseURIField.text = "http://192.168.1.197:8080/scg-dra/proxy"
         appIDField.text = "com.syniverse.push_demo"
         
-//        SCGPush.instance.accessToken = "saFgvAco23YEkXKFhRX8Q-"
+        SCGPush.instance.groupBundle = "group.com.softavail.scg.push.demo.group"
+        SCGPush.instance.accessToken = "DQHlNta2J2QGHFHkI44Ei"
         SCGPush.instance.appID = "com.syniverse.push_demo"
         SCGPush.instance.callbackURI = "http://192.168.1.197:8080/scg-dra/proxy"
+        SCGPush.instance.callbackURI = "http://95.158.130.102:8080/scg-dra/proxy/"
+        //SCGPush.instance.callbackURI = "http://localhost:8912/scg-dra/proxy"
+        //SCGPush.instance.callbackURI = "http://192.168.1.102:8912/scg-dra/proxy"
+//        SCGPush.instance.loadAttachment("7h0W48pb3XRmYT9L1TScc1", attachmentID: "LYT9CBu3TlIBLVgFP585J2", completionBlock: {
+//            (tmpUrl) in
+//            print ("ura", tmpUrl)
+//            self.imageView.image = UIImage.init(contentsOfFile: tmpUrl.path)
+//        }, failureBlock: {
+//            (error) in
+//            print ("error", error!)
+//        })
     }
 
     override func didReceiveMemoryWarning() {
@@ -49,9 +61,7 @@ class ViewController: UIViewController {
     }
     
     @IBAction func clipboard(_ sender: AnyObject) {
-        if (sender.tag == 11) {
-            UIPasteboard.general.string = rawPushTokenLabel.text
-        }
+        
         if (sender.tag == 12) {
             UIPasteboard.general.string = purePushTokenLabel.text
         }

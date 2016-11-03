@@ -7,6 +7,7 @@
 //
 
 import UIKit
+import MobileCoreServices
 
 open class SCGPush: NSObject {
     
@@ -19,6 +20,11 @@ open class SCGPush: NSObject {
         set {
             let defaults = UserDefaults.standard
             defaults.set(newValue, forKey: ("scg-access-token-dont-replace-this-default"))
+            if groupBundle != "" {
+                if let groupDefault = UserDefaults(suiteName: groupBundle) {
+                    groupDefault.set(newValue, forKey: ("scg-access-token-dont-replace-this-default"))
+                }
+            }
             _accessToken = newValue
         }
         get {
@@ -26,14 +32,47 @@ open class SCGPush: NSObject {
             let defaults = UserDefaults.standard
             if (defaults.string(forKey: "scg-access-token-dont-replace-this-default") != nil) {
                 _accessToken = defaults.string(forKey: "scg-access-token-dont-replace-this-default")!
+            } else {
+                if let groupDefault = UserDefaults(suiteName: groupBundle) {
+                    if let token = groupDefault.string(forKey: "scg-access-token-dont-replace-this-default") {
+                        _accessToken = token
+                    }
+                }
             }
             return _accessToken
         }
     }
     
+    open var callbackURI:String
+    {
+        set {
+            let defaults = UserDefaults.standard
+            defaults.set(newValue, forKey: ("scg-callback-uri-dont-replace-this-default"))
+            if groupBundle != "" {
+                if let groupDefault = UserDefaults(suiteName: groupBundle) {
+                    groupDefault.set(newValue, forKey: ("scg-callback-uri-dont-replace-this-default"))
+                }
+            }
+        }
+        get {
+            let defaults = UserDefaults.standard
+            if (defaults.string(forKey: "scg-callback-uri-dont-replace-this-default") != nil) {
+                return defaults.string(forKey: "scg-callback-uri-dont-replace-this-default")!
+            }
+            else {
+                if let groupDefault = UserDefaults(suiteName: groupBundle) {
+                    if let uri = groupDefault.string(forKey: "scg-callback-uri-dont-replace-this-default") {
+                        return uri
+                    }
+                }
+            }
+            return ""
+        }
+    }
+    
     open var appID:String = ""
     
-    open var callbackURI:String = ""
+    open var groupBundle:String = ""
     
     // PRIVATE VARIABLES
     fileprivate let tokenType = "APN"
@@ -235,10 +274,13 @@ open class SCGPush: NSObject {
         dataTask.resume()
     }
     
-    open func loadContentPresentation(_ urlString:String ,completionBlock: ((_ contentURL:URL) -> Void)? = nil, failureBlock : ((Error?) -> ())? = nil) {
+    open func loadAttachment(_ messageID:String, attachmentID:String ,completionBlock: ((_ contentURL:URL, _ contentType:String) -> Void)? = nil, failureBlock : ((Error?) -> ())? = nil) {
         
         let configuration = URLSessionConfiguration.default
         let session = URLSession(configuration: configuration)
+        let urlString = "\(callbackURI)/attachment/\(messageID)/\(attachmentID)"
+//        let urlString = "https://www.hallaminternet.com/assets/https.jpg"
+//        let urlString = "https://framework.realtime.co/blog/img/ios10-video.mp4"
         
         let url:URL = URL(string: urlString)!
         
@@ -246,9 +288,8 @@ open class SCGPush: NSObject {
         request.httpMethod = "GET"
         request.timeoutInterval = 30
         
-        request.addValue("application/json", forHTTPHeaderField: "Content-Type")
         request.addValue("Bearer \(accessToken)", forHTTPHeaderField: "Authorization")
-        print ("scg", urlString)
+        
         let dataTask = session.downloadTask(with: request, completionHandler: {
             (location: URL?, response: URLResponse?, error: Error?) -> Void in
             
@@ -260,6 +301,7 @@ open class SCGPush: NSObject {
                     return
             }
             var contentUrl:URL?
+            let contentType:String = self.readTypeOfHeader(header: httpResponse)
             
             if let location = location {
                 // Move temporary file to remove .tmp extension
@@ -277,11 +319,11 @@ open class SCGPush: NSObject {
             {
             case 200:
                 if (completionBlock != nil) {
-                    completionBlock! (contentUrl!)
+                    completionBlock! (contentUrl!, contentType)
                 }
             case 204:
                 if (completionBlock != nil) {
-                    completionBlock! (contentUrl!)
+                    completionBlock! (contentUrl!, contentType)
                 }
                 
             default:
@@ -310,5 +352,23 @@ open class SCGPush: NSObject {
     open func saveDeviceToken(deviceToken token:NSString) {
         let defaults = UserDefaults.standard
         defaults.set(token, forKey: "scg-push-token-dont-replace-this-default")
+    }
+    
+    func readTypeOfHeader(header:HTTPURLResponse) -> String {
+        if let type:String = header.allHeaderFields["Content-Type"] as! String? {
+            switch type {
+            case "video/mpeg":
+                return kUTTypeMPEG4 as String
+            case "image/gif":
+                return kUTTypeGIF as String
+            case "image/png":
+                return kUTTypePNG as String
+            case "image/jpg":
+                return kUTTypeImage as String
+            default:
+                return ""
+            }
+        }
+        return ""
     }
 }

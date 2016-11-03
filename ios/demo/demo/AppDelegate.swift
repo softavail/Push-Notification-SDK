@@ -78,8 +78,6 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
             tokenString += String(format: "%02.2hhx", arguments: [tokenChars[i]])
             
         }
-        print (tokenString)
-        (window?.rootViewController!.view.viewWithTag(8) as! UILabel).text = tokenPureString
         (window?.rootViewController!.view.viewWithTag(9) as! UILabel).text = tokenString
         
         SCGPush.instance.saveDeviceToken(deviceTokenData: deviceToken)
@@ -98,7 +96,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     func application(_ application: UIApplication, didReceiveRemoteNotification userInfo: [AnyHashable: Any]){
         
 //        notificationNumber += 1
-//        application.applicationIconBadgeNumber =  notificationNumber;
+        application.applicationIconBadgeNumber =  0;
         
         if ((window?.rootViewController!.view.viewWithTag(24) as! UISwitch).isOn) {
             SCGPush.instance.deliveryConfirmation(userInfo: userInfo as NSDictionary, completionBlock: {
