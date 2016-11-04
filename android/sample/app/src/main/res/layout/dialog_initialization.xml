@@ -36,10 +36,17 @@
 
     <android.support.v7.widget.SwitchCompat
         android:id="@+id/delivery"
-        android:layout_width="wrap_content"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:checked="true"
         android:text="Auto delivery" />
+
+    <android.support.v7.widget.SwitchCompat
+        android:id="@+id/open"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:checked="true"
+        android:text="Auto report open" />
 
     <TextView
         android:layout_marginTop="16dp"
