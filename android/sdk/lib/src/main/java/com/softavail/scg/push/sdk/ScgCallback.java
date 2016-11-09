@@ -1,18 +1,24 @@
 package com.softavail.scg.push.sdk;
 
+import android.net.Uri;
+
 /**
  * Created by lekov on 6/15/16.
  */
 public interface ScgCallback {
     /**
-     * @param code
-     * @param message
+     * On operation success
+     *
+     * @param code in most cases HTTP code
+     * @param message error message
      */
     void onSuccess(int code, String message);
 
     /**
-     * @param code
-     * @param message
+     * On operation failed
+     *
+     * @param code error code, in most cases HTTP code
+     * @param message error message
      */
     void onFailed(int code, String message);
 }

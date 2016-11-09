@@ -10,6 +10,7 @@ buildscript {
 
 repositories {
     maven { url 'https://maven.fabric.io/public' }
+    mavenLocal()
 }
 
 apply plugin: 'com.android.application'
@@ -17,15 +18,15 @@ apply plugin: 'io.fabric'
 
 
 android {
-    compileSdkVersion 24
-    buildToolsVersion "24.0.1"
+    compileSdkVersion 25
+    buildToolsVersion "25.0.0"
 
     defaultConfig {
         applicationId "com.softavail.scg.push.demo"
         minSdkVersion 15
-        targetSdkVersion 24
-        versionCode 3
-        versionName "1.0.3"
+        targetSdkVersion 25
+        versionCode 4
+        versionName "1.1.0"
     }
     buildTypes {
         release {
@@ -45,18 +46,20 @@ def getDate() {
 }
 
 dependencies {
-    compile 'com.android.support:appcompat-v7:24.1.1'
-    compile 'com.android.support:design:24.1.1'
+    compile 'com.android.support:appcompat-v7:25.0.0'
+    compile 'com.android.support:design:25.0.0'
 
     //    http://stackoverflow.com/a/36931247
-    //    compile('com.softavail.scg.push:sdk:1.0.3@aar') {
+    //    compile('com.softavail.scg.push:sdk:1.1.0@aar') {
     //        transitive = true
     //    }
     //    Meanwhile we explicitly define the sdk aar and it's dependencies
 
     // --- SDK and it's dependencies ---
 
-    compile project(':scg-push-sdk')
+     compile project(':scg-push-sdk')
+    // Only for development
+    //     compile project(':sdk')
     compile 'com.squareup.retrofit2:retrofit:2.0.2'
     compile 'com.squareup.retrofit2:converter-gson:2.0.2'
     compile 'com.google.firebase:firebase-messaging:9.4.0'
