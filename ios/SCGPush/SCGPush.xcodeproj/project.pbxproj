@@ -161,6 +161,7 @@
 					};
 					F7EFFC4C1D0DCEB10057A2B6 = {
 						CreatedOnToolsVersion = 7.3.1;
+						DevelopmentTeam = 6D6V2A9HWX;
 						LastSwiftMigration = 0810;
 					};
 				};
@@ -406,6 +407,7 @@
 		F7EFFC5B1D0DCEB10057A2B6 /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
+				DEVELOPMENT_TEAM = 6D6V2A9HWX;
 				INFOPLIST_FILE = SCGPushTests/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = com.spiritinvoker.SCGPushTests;
@@ -417,6 +419,7 @@
 		F7EFFC5C1D0DCEB10057A2B6 /* Release */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
+				DEVELOPMENT_TEAM = 6D6V2A9HWX;
 				INFOPLIST_FILE = SCGPushTests/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = com.spiritinvoker.SCGPushTests;

@@ -25,6 +25,13 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
+		5B4D64451DCD13D0003EAD13 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 5B97E9981D2252C40091617F /* SCGPush.xcodeproj */;
+			proxyType = 1;
+			remoteGlobalIDString = F7EFFC421D0DCEB10057A2B6;
+			remoteInfo = SCGPush;
+		};
 		5B97E99D1D2252C40091617F /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
 			containerPortal = 5B97E9981D2252C40091617F /* SCGPush.xcodeproj */;
@@ -320,6 +327,7 @@
 			buildRules = (
 			);
 			dependencies = (
+				5B4D64461DCD13D0003EAD13 /* PBXTargetDependency */,
 			);
 			name = Downloader;
 			productName = Downloader;
@@ -532,6 +540,11 @@
 /* End PBXSourcesBuildPhase section */
 
 /* Begin PBXTargetDependency section */
+		5B4D64461DCD13D0003EAD13 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			name = SCGPush;
+			targetProxy = 5B4D64451DCD13D0003EAD13 /* PBXContainerItemProxy */;
+		};
 		5B97E9A21D2253000091617F /* PBXTargetDependency */ = {
 			isa = PBXTargetDependency;
 			name = SCGPush;
