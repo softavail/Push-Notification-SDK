@@ -61,10 +61,7 @@ class ViewController: UIViewController {
     }
     
     @IBAction func clipboard(_ sender: AnyObject) {
-        
-        if (sender.tag == 12) {
-            UIPasteboard.general.string = purePushTokenLabel.text
-        }
+        UIPasteboard.general.string = purePushTokenLabel.text
     }
     
     
