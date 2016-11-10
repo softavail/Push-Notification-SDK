@@ -14,7 +14,7 @@
             buildForAnalyzing = "YES">
             <BuildableReference
                BuildableIdentifier = "primary"
-               BlueprintIdentifier = "F7837A601D3501F700E724E7"
+               BlueprintIdentifier = "F7837A661D3516C200E724E7"
                BuildableName = "SCGPush-Universal"
                BlueprintName = "SCGPush-Universal"
                ReferencedContainer = "container:SCGPush.xcodeproj">
@@ -45,7 +45,7 @@
       <MacroExpansion>
          <BuildableReference
             BuildableIdentifier = "primary"
-            BlueprintIdentifier = "F7837A601D3501F700E724E7"
+            BlueprintIdentifier = "F7837A661D3516C200E724E7"
             BuildableName = "SCGPush-Universal"
             BlueprintName = "SCGPush-Universal"
             ReferencedContainer = "container:SCGPush.xcodeproj">
@@ -63,7 +63,7 @@
       <MacroExpansion>
          <BuildableReference
             BuildableIdentifier = "primary"
-            BlueprintIdentifier = "F7837A601D3501F700E724E7"
+            BlueprintIdentifier = "F7837A661D3516C200E724E7"
             BuildableName = "SCGPush-Universal"
             BlueprintName = "SCGPush-Universal"
             ReferencedContainer = "container:SCGPush.xcodeproj">
