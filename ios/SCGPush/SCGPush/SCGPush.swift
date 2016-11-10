@@ -427,11 +427,27 @@ open class SCGPush: NSObject {
             switch type {
             case "video/mpeg":
                 return kUTTypeMPEG4 as String
+            case "video/mp4":
+                return kUTTypeMPEG4 as String
+            case "video/webm":
+                return kUTTypeVideo as String
+            case "video/ogg":
+                return kUTTypeVideo as String
+                
+            case "audio/ogg":
+                return kUTTypeAudio as String
+            case "audio/webm":
+                return kUTTypeAudio as String
+            case "audio/mpeg":
+                return kUTTypeAudio as String
+            case "audio/mp4":
+                return kUTTypeMP3 as String
+            
             case "image/gif":
                 return kUTTypeGIF as String
             case "image/png":
                 return kUTTypePNG as String
-            case "image/jpg":
+            case "image/jpeg":
                 return kUTTypeImage as String
             default:
                 return ""
