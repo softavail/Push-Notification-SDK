@@ -431,7 +431,7 @@ open class SCGPush: NSObject {
                 return kUTTypeGIF as String
             case "image/png":
                 return kUTTypePNG as String
-            case "image/jpg":
+            case "image/jpeg":
                 return kUTTypeImage as String
             default:
                 return ""
