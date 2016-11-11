@@ -98,12 +98,6 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 //        notificationNumber += 1
         application.applicationIconBadgeNumber =  0;
         
-        //var timer = Timer.scheduledTimer(timeInterval: 1.1, target: self, selector: #selector(AppDelegate.someSelector), userInfo: nil, repeats: false)
-        
-        let when = DispatchTime.now() + 2 // change 2 to desired number of seconds
-        DispatchQueue.main.asyncAfter(deadline: when) {
-            self.showAlert ("Error", mess: "test 2")
-        }
         
         if ((window?.rootViewController!.view.viewWithTag(24) as! UISwitch).isOn) {
             if (UserDefaults.standard.bool(forKey: "reporton")) {
@@ -121,11 +115,6 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
             print("my messages : \(aps["alert"])")
             (window?.rootViewController!.view.viewWithTag(10) as! UILabel).text = aps["alert"] as? String
         }
-    }
-    
-    
-    func someSelector() {
-        self.showAlert ("Error", mess: "test")
     }
     
     func showAlert(_ title:String, mess:String){
