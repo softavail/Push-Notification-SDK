@@ -12,7 +12,7 @@ import MobileCoreServices
 open class SCGPush: NSObject {
     
     // PRIVATE VARIABLES
-    fileprivate var _accessToken:String = ""
+    fileprivate let tokenType = "APN"
     
     // PUBLIC VARIABLES
     open var accessToken:String
@@ -25,21 +25,19 @@ open class SCGPush: NSObject {
                     groupDefault.set(newValue, forKey: ("scg-access-token-dont-replace-this-default"))
                 }
             }
-            _accessToken = newValue
         }
         get {
-            _accessToken = ""
             let defaults = UserDefaults.standard
             if (defaults.string(forKey: "scg-access-token-dont-replace-this-default") != nil) {
-                _accessToken = defaults.string(forKey: "scg-access-token-dont-replace-this-default")!
+                return defaults.string(forKey: "scg-access-token-dont-replace-this-default")!
             } else {
                 if let groupDefault = UserDefaults(suiteName: groupBundle) {
                     if let token = groupDefault.string(forKey: "scg-access-token-dont-replace-this-default") {
-                        _accessToken = token
+                        return token
                     }
                 }
             }
-            return _accessToken
+            return ""
         }
     }
     
@@ -70,17 +68,38 @@ open class SCGPush: NSObject {
         }
     }
     
-    open var appID:String = ""
+    open var appID:String
+        {
+        set {
+            let defaults = UserDefaults.standard
+            defaults.set(newValue, forKey: ("scg-appID-dont-replace-this-default"))
+            if groupBundle != "" {
+                if let groupDefault = UserDefaults(suiteName: groupBundle) {
+                    groupDefault.set(newValue, forKey: ("scg-appID-dont-replace-this-default"))
+                }
+            }
+        }
+        get {
+            let defaults = UserDefaults.standard
+            if (defaults.string(forKey: "scg-appID-dont-replace-this-default") != nil) {
+                return defaults.string(forKey: "scg-appID-dont-replace-this-default")!
+            } else {
+                if let groupDefault = UserDefaults(suiteName: groupBundle) {
+                    if let appid = groupDefault.string(forKey: "scg-appID-dont-replace-this-default") {
+                        return appid
+                    }
+                }
+            }
+            return ""
+        }
+    }
     
     open var groupBundle:String = ""
     
-    // PRIVATE VARIABLES
-    fileprivate let tokenType = "APN"
-    
+    //Shared Instance
     open static let instance = SCGPush()
     
     public override init (){
-        
     }
     
     open func registerPushToken(deviceTokeData data:Data, completionBlock: (() -> Void)? = nil, failureBlock : ((Error?) -> ())? = nil) {
@@ -110,7 +129,6 @@ open class SCGPush: NSObject {
         }
         
         let deviceToken:String = defaults.string(forKey: "scg-push-token-dont-replace-this-default")!
-        
         
         let params = ["app_id":appID as AnyObject,
                       "type":tokenType as AnyObject,

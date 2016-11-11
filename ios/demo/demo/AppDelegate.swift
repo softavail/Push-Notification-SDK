@@ -98,11 +98,20 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 //        notificationNumber += 1
         application.applicationIconBadgeNumber =  0;
         
+        //var timer = Timer.scheduledTimer(timeInterval: 1.1, target: self, selector: #selector(AppDelegate.someSelector), userInfo: nil, repeats: false)
+        
+        let when = DispatchTime.now() + 2 // change 2 to desired number of seconds
+        DispatchQueue.main.asyncAfter(deadline: when) {
+            self.showAlert ("Error", mess: "test 2")
+        }
+        
         if ((window?.rootViewController!.view.viewWithTag(24) as! UISwitch).isOn) {
-            SCGPush.instance.interactionConfirmation(userInfo: userInfo as NSDictionary, completionBlock: {
-                self.showAlert ("Success", mess: "You successfully send deliveryConfirmation.")
-            }) { (error) in
-                self.showAlert ("Error", mess: (error?.localizedDescription)!)
+            if (UserDefaults.standard.bool(forKey: "reporton")) {
+                SCGPush.instance.interactionConfirmation(userInfo: userInfo as NSDictionary, completionBlock: {
+                    self.showAlert ("Success", mess: "You successfully send interactionConfirmation.")
+                }) { (error) in
+                    self.showAlert ("Error", mess: (error?.localizedDescription)!)
+                }
             }
         }
         
@@ -114,10 +123,17 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         }
     }
     
+    
+    func someSelector() {
+        self.showAlert ("Error", mess: "test")
+    }
+    
     func showAlert(_ title:String, mess:String){
         let alert = UIAlertController(title: title, message: mess, preferredStyle: UIAlertControllerStyle.alert)
         alert.addAction(UIAlertAction(title: "Ok", style: .default, handler:nil))
-        window?.rootViewController!.present(alert, animated: true, completion: nil)
+        DispatchQueue.main.async {
+            self.window?.rootViewController!.present(alert, animated: true, completion: nil)
+        }
     }
 }
 
