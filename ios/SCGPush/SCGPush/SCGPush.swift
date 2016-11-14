@@ -143,7 +143,7 @@ open class SCGPush: NSObject {
         
         let urlString = "\(callbackURI)/push_tokens/register"
         let url = URL(string: urlString)
-        
+        print(urlString)
         var request = URLRequest(url: url!)
         request.httpMethod = "POST"
         request.timeoutInterval = 30
