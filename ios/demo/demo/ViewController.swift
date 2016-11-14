@@ -24,9 +24,10 @@ class ViewController: UIViewController {
         super.viewDidLoad()
         
         let defauts = UserDefaults.standard
-        
+        print (defauts.object(forKey: "baseurl"))
         if (defauts.object(forKey: "baseurl") == nil) {
             defauts.set("http://192.168.1.197:8080/scg-dra/proxy", forKey: "baseurl")
+            
         }
         if (defauts.object(forKey: "appid") == nil) {
             defauts.set("com.syniverse.push_demo", forKey: "appid")
@@ -47,6 +48,10 @@ class ViewController: UIViewController {
         
         baseURIField.text = defauts.string(forKey: "baseurl")
         appIDField.text = defauts.string(forKey: "appid")
+        
+        SCGPush.instance.callbackURI = baseURIField.text!
+        SCGPush.instance.appID = appIDField.text!
+        SCGPush.instance.accessToken = accessTokenField.text!
 
         //SLAV
 //        SCGPush.instance.groupBundle = "group.com.softavail.scg.push.demo.group"
