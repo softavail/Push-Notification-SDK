@@ -49,6 +49,7 @@ class ViewController: UIViewController {
         baseURIField.text = defauts.string(forKey: "baseurl")
         appIDField.text = defauts.string(forKey: "appid")
         
+        SCGPush.instance.groupBundle = "group.com.softavail.scg.push.demo.group"
         SCGPush.instance.callbackURI = baseURIField.text!
         SCGPush.instance.appID = appIDField.text!
         SCGPush.instance.accessToken = accessTokenField.text!
