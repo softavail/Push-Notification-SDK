@@ -44,11 +44,15 @@ open class SCGPush: NSObject {
     open var callbackURI:String
     {
         set {
+            var uri = newValue
+            if uri.characters.last == "/" {
+                uri = String(uri.characters.dropLast())
+            }
             let defaults = UserDefaults.standard
-            defaults.set(newValue, forKey: ("scg-callback-uri-dont-replace-this-default"))
+            defaults.set(uri, forKey: ("scg-callback-uri-dont-replace-this-default"))
             if groupBundle != "" {
                 if let groupDefault = UserDefaults(suiteName: groupBundle) {
-                    groupDefault.set(newValue, forKey: ("scg-callback-uri-dont-replace-this-default"))
+                    groupDefault.set(uri, forKey: ("scg-callback-uri-dont-replace-this-default"))
                 }
             }
         }
