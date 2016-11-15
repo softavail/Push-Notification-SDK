@@ -102,6 +102,7 @@
 
 /* Begin PBXFileReference section */
 		5B97E9981D2252C40091617F /* SCGPush.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = SCGPush.xcodeproj; path = ../SCGPush/SCGPush.xcodeproj; sourceTree = "<group>"; };
+		5BB7F9341DD9FF640087F8C1 /* export_ipa.sh */ = {isa = PBXFileReference; lastKnownFileType = text.script.sh; path = export_ipa.sh; sourceTree = "<group>"; };
 		5BC0FE931D22996A007A9637 /* deploy.sh */ = {isa = PBXFileReference; lastKnownFileType = text.script.sh; path = deploy.sh; sourceTree = "<group>"; };
 		5BC0FE941D22996A007A9637 /* prepare.sh */ = {isa = PBXFileReference; lastKnownFileType = text.script.sh; path = prepare.sh; sourceTree = "<group>"; };
 		5BC0FE951D229BB6007A9637 /* Fabric.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Fabric.framework; path = depends/fabric_ios/Fabric.framework; sourceTree = "<group>"; };
@@ -197,6 +198,7 @@
 				F59BC8261CEA56310043E96E /* Products */,
 				5BC0FE931D22996A007A9637 /* deploy.sh */,
 				5BC0FE941D22996A007A9637 /* prepare.sh */,
+				5BB7F9341DD9FF640087F8C1 /* export_ipa.sh */,
 			);
 			sourceTree = "<group>";
 		};

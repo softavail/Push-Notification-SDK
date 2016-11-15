@@ -6,9 +6,15 @@ CURRENT_DIR="$(pwd)"
 # change current directory where scripts file is
 cd "${SCRIPT_DIR}"
 
-REVISION_NUMBER=93
-ARCHIVE_PATH="${SCRIPT_DIR}/demo.xcarchive"
-IPA_FILE_ADHOC="${SCRIPT_DIR}/demo-adhoc-$REVISION_NUMBER.ipa"
+ARCHIVE_PATH=$1
+OUT_DIR=$2
+REVISION_NUMBER=$3
+
+if [ X"${REVISION_NUMBER}" == X"" ]; then
+    REVISION_NUMBER=$(git rev-list HEAD | wc -l | tr -d ' ')
+fi
+
+IPA_FILE_ADHOC="${OUT_DIR}/demo-adhoc-$REVISION_NUMBER.ipa"
 
 #exit batch script with error
 do_exit ()
@@ -26,13 +32,52 @@ check_failure ()
     fi
 }
 
+#print usage and exit with error
+usage()
+{
+    echo "==================================================================================="
+    echo "Usage: `basename $0` <XCARCHIVE> <OUT_DIR> [REVNUM]"
+    echo ""
+    echo "Options:"
+    echo "  <XCARCHIVE> Specifies path to the xcarchive file to be exported"
+    echo "  <OUT_DIR>   Output folder where the ipa file will be placed"
+    echo "  [REVNUM]    Revision number to be assigned to the build number"
+    echo "              If not specified wiill be computed form git rev number"
+    echo "==================================================================================="
+
+    #restore current directory
+    cd "${CURRENT_DIR}"
+    do_exit "Invalid Usage"
+}
+
+# check input arguments
+check_arguments()
+{
+    if [ X"${ARCHIVE_PATH}" == X"" ]; then
+        usage "Invalid usage"
+    fi
+
+    if [ X"${OUT_DIR}" == X"" ]; then
+        usage "Invalid usage"
+    fi
+
+    if [ ! -d "${OUT_DIR}" ]; then
+        do_exit "OUT_DIR <${OUT_DIR}> does not exist."
+    fi
+
+    if [ ! -d "${ARCHIVE_PATH}" ]; then
+        do_exit "Archive <${ARCHIVE_PATH}> does not exist."
+    fi
+}
+
+
 # exports archive
 # param 1 method appstore or adhoc
 # param 2 optionsplist file
 # param 3 final exported ipa file
 export_archive()
 {
-    local EXPORT_PATH="${ARCHIVE_PATH}/$1"
+    local EXPORT_PATH="${OUT_DIR}/$1"
     local EXPORT_OPTIONS_PLIST="${2}"
     local EXPORTED_IPA_FILE="${3}"
 
@@ -61,6 +106,9 @@ create_ipa_files()
 # main function
 main()
 {
+    # check arguments
+    check_arguments
+
     # clean up
     create_ipa_files
 }
