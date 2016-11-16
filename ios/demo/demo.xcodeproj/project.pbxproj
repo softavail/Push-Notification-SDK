@@ -25,6 +25,13 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
+		5B4D64451DCD13D0003EAD13 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 5B97E9981D2252C40091617F /* SCGPush.xcodeproj */;
+			proxyType = 1;
+			remoteGlobalIDString = F7EFFC421D0DCEB10057A2B6;
+			remoteInfo = SCGPush;
+		};
 		5B97E99D1D2252C40091617F /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
 			containerPortal = 5B97E9981D2252C40091617F /* SCGPush.xcodeproj */;
@@ -95,6 +102,7 @@
 
 /* Begin PBXFileReference section */
 		5B97E9981D2252C40091617F /* SCGPush.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = SCGPush.xcodeproj; path = ../SCGPush/SCGPush.xcodeproj; sourceTree = "<group>"; };
+		5BB7F9341DD9FF640087F8C1 /* export_ipa.sh */ = {isa = PBXFileReference; lastKnownFileType = text.script.sh; path = export_ipa.sh; sourceTree = "<group>"; };
 		5BC0FE931D22996A007A9637 /* deploy.sh */ = {isa = PBXFileReference; lastKnownFileType = text.script.sh; path = deploy.sh; sourceTree = "<group>"; };
 		5BC0FE941D22996A007A9637 /* prepare.sh */ = {isa = PBXFileReference; lastKnownFileType = text.script.sh; path = prepare.sh; sourceTree = "<group>"; };
 		5BC0FE951D229BB6007A9637 /* Fabric.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Fabric.framework; path = depends/fabric_ios/Fabric.framework; sourceTree = "<group>"; };
@@ -190,6 +198,7 @@
 				F59BC8261CEA56310043E96E /* Products */,
 				5BC0FE931D22996A007A9637 /* deploy.sh */,
 				5BC0FE941D22996A007A9637 /* prepare.sh */,
+				5BB7F9341DD9FF640087F8C1 /* export_ipa.sh */,
 			);
 			sourceTree = "<group>";
 		};
@@ -320,6 +329,7 @@
 			buildRules = (
 			);
 			dependencies = (
+				5B4D64461DCD13D0003EAD13 /* PBXTargetDependency */,
 			);
 			name = Downloader;
 			productName = Downloader;
@@ -532,6 +542,11 @@
 /* End PBXSourcesBuildPhase section */
 
 /* Begin PBXTargetDependency section */
+		5B4D64461DCD13D0003EAD13 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			name = SCGPush;
+			targetProxy = 5B4D64451DCD13D0003EAD13 /* PBXContainerItemProxy */;
+		};
 		5B97E9A21D2253000091617F /* PBXTargetDependency */ = {
 			isa = PBXTargetDependency;
 			name = SCGPush;

@@ -89,7 +89,7 @@ upload_to_crashlytics()
         DISTRIBUTION_LISTS="${DIST_LISTS}"
     fi
 
-    ./Crashlytics.framework/submit ${CL_API_KEY} ${CL_BUILD_SECRET} \
+    ./depends/fabric_ios/Crashlytics.framework/submit ${CL_API_KEY} ${CL_BUILD_SECRET} \
         -ipaPath ${IPA_FILE} \
         -notesPath ${RELEASE_NOTES_PATH} \
         -groupAliases ${DISTRIBUTION_LISTS}

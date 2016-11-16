@@ -12,7 +12,7 @@ import MobileCoreServices
 open class SCGPush: NSObject {
     
     // PRIVATE VARIABLES
-    fileprivate var _accessToken:String = ""
+    fileprivate let tokenType = "APN"
     
     // PUBLIC VARIABLES
     open var accessToken:String
@@ -25,32 +25,34 @@ open class SCGPush: NSObject {
                     groupDefault.set(newValue, forKey: ("scg-access-token-dont-replace-this-default"))
                 }
             }
-            _accessToken = newValue
         }
         get {
-            _accessToken = ""
             let defaults = UserDefaults.standard
             if (defaults.string(forKey: "scg-access-token-dont-replace-this-default") != nil) {
-                _accessToken = defaults.string(forKey: "scg-access-token-dont-replace-this-default")!
+                return defaults.string(forKey: "scg-access-token-dont-replace-this-default")!
             } else {
                 if let groupDefault = UserDefaults(suiteName: groupBundle) {
                     if let token = groupDefault.string(forKey: "scg-access-token-dont-replace-this-default") {
-                        _accessToken = token
+                        return token
                     }
                 }
             }
-            return _accessToken
+            return ""
         }
     }
     
     open var callbackURI:String
     {
         set {
+            var uri = newValue
+            if uri.characters.last == "/" {
+                uri = String(uri.characters.dropLast())
+            }
             let defaults = UserDefaults.standard
-            defaults.set(newValue, forKey: ("scg-callback-uri-dont-replace-this-default"))
+            defaults.set(uri, forKey: ("scg-callback-uri-dont-replace-this-default"))
             if groupBundle != "" {
                 if let groupDefault = UserDefaults(suiteName: groupBundle) {
-                    groupDefault.set(newValue, forKey: ("scg-callback-uri-dont-replace-this-default"))
+                    groupDefault.set(uri, forKey: ("scg-callback-uri-dont-replace-this-default"))
                 }
             }
         }
@@ -70,17 +72,38 @@ open class SCGPush: NSObject {
         }
     }
     
-    open var appID:String = ""
+    open var appID:String
+        {
+        set {
+            let defaults = UserDefaults.standard
+            defaults.set(newValue, forKey: ("scg-appID-dont-replace-this-default"))
+            if groupBundle != "" {
+                if let groupDefault = UserDefaults(suiteName: groupBundle) {
+                    groupDefault.set(newValue, forKey: ("scg-appID-dont-replace-this-default"))
+                }
+            }
+        }
+        get {
+            let defaults = UserDefaults.standard
+            if (defaults.string(forKey: "scg-appID-dont-replace-this-default") != nil) {
+                return defaults.string(forKey: "scg-appID-dont-replace-this-default")!
+            } else {
+                if let groupDefault = UserDefaults(suiteName: groupBundle) {
+                    if let appid = groupDefault.string(forKey: "scg-appID-dont-replace-this-default") {
+                        return appid
+                    }
+                }
+            }
+            return ""
+        }
+    }
     
     open var groupBundle:String = ""
     
-    // PRIVATE VARIABLES
-    fileprivate let tokenType = "APN"
-    
+    //Shared Instance
     open static let instance = SCGPush()
     
     public override init (){
-        
     }
     
     open func registerPushToken(deviceTokeData data:Data, completionBlock: (() -> Void)? = nil, failureBlock : ((Error?) -> ())? = nil) {
@@ -111,7 +134,6 @@ open class SCGPush: NSObject {
         
         let deviceToken:String = defaults.string(forKey: "scg-push-token-dont-replace-this-default")!
         
-        
         let params = ["app_id":appID as AnyObject,
                       "type":tokenType as AnyObject,
                       "token":deviceToken as AnyObject] as Dictionary<String, AnyObject>
@@ -121,7 +143,7 @@ open class SCGPush: NSObject {
         
         let urlString = "\(callbackURI)/push_tokens/register"
         let url = URL(string: urlString)
-        
+        print(urlString)
         var request = URLRequest(url: url!)
         request.httpMethod = "POST"
         request.timeoutInterval = 30
@@ -427,12 +449,28 @@ open class SCGPush: NSObject {
             switch type {
             case "video/mpeg":
                 return kUTTypeMPEG4 as String
+            case "video/mp4":
+                return kUTTypeMPEG4 as String
+            case "video/webm":
+                return kUTTypeVideo as String
+            case "video/ogg":
+                return kUTTypeVideo as String
+                
+            case "audio/ogg":
+                return kUTTypeAudio as String
+            case "audio/webm":
+                return kUTTypeAudio as String
+            case "audio/mpeg":
+                return kUTTypeAudio as String
+            case "audio/mp4":
+                return kUTTypeMP3 as String
+            
             case "image/gif":
                 return kUTTypeGIF as String
             case "image/png":
                 return kUTTypePNG as String
-            case "image/jpg":
-                return kUTTypeImage as String
+            case "image/jpeg":
+                return kUTTypeJPEG as String
             default:
                 return ""
             }
