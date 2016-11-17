@@ -36,7 +36,6 @@ public class ScgClient {
 
     private final String fAppId;
     private final String fApiUrl;
-    private final Interceptor authorization;
 
     private ScgRestService mService;
 
@@ -48,22 +47,6 @@ public class ScgClient {
         fAppId = appId;
         fApiUrl = rootUrl;
         mService = getService();
-
-        authorization = new Interceptor() {
-            @Override
-            public Response intercept(Chain chain) throws IOException {
-                Request original = chain.request();
-                Request.Builder request = original.newBuilder()
-                        .headers(original.headers())
-                        .method(original.method(), original.body());
-
-                if (mAuthToken != null) {
-                    request.header("Authorization", "Bearer " + mAuthToken);
-                }
-
-                return chain.proceed(request.build());
-            }
-        };
     }
 
     /**
@@ -136,7 +119,21 @@ public class ScgClient {
         OkHttpClient.Builder httpClient = new OkHttpClient.Builder();
 
         if (withAuthorization)
-            httpClient.addInterceptor(authorization);
+            httpClient.addInterceptor(new Interceptor() {
+                @Override
+                public Response intercept(Chain chain) throws IOException {
+                    Request original = chain.request();
+                    Request.Builder request = original.newBuilder()
+                            .headers(original.headers())
+                            .method(original.method(), original.body());
+
+                    if (mAuthToken != null) {
+                        request.header("Authorization", "Bearer " + mAuthToken);
+                    }
+
+                    return chain.proceed(request.build());
+                }
+            });
 
         httpClient.followRedirects(followRedirects);
         httpClient.followSslRedirects(followRedirects);
@@ -244,7 +241,7 @@ public class ScgClient {
     private void sendRedirectResult(Response response, ScgCallback result) {
         if (result == null) return;
 
-        if (response.isSuccessful() && response.isRedirect()) {
+        if (response.isRedirect()) {
             result.onSuccess(response.code(), response.headers().get("Location"));
         } else {
             result.onFailed(response.code(), "Link cannot be tracked");

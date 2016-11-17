@@ -34,9 +34,9 @@ public abstract class ScgPushReceiver extends BroadcastReceiver {
         } else if (ACTION_MESSAGE_RECEIVED.equals(intent.getAction())) {
 
             if (intent.hasExtra(EXTRA_MESSAGE)) {
-                final RemoteMessage message = intent.getParcelableExtra(EXTRA_MESSAGE);
-                final String delivery = message.getData().get(MESSAGE_ID);
-                onMessageReceived(delivery, ScgMessage.from(message));
+                final ScgMessage message = intent.getParcelableExtra(EXTRA_MESSAGE);
+                final String delivery = message.getId();
+                onMessageReceived(delivery, message);
             }
         }
     }
