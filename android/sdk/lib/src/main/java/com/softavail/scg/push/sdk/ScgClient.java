@@ -38,6 +38,7 @@ public class ScgClient {
     private final String fApiUrl;
 
     private ScgRestService mService;
+    private final OkHttpClient fClient;
 
     private static ScgClient sInstance;
     private String mAuthToken;
@@ -47,6 +48,25 @@ public class ScgClient {
         fAppId = appId;
         fApiUrl = rootUrl;
         mService = getService();
+
+        OkHttpClient.Builder httpClient = new OkHttpClient.Builder();
+        httpClient.addInterceptor(new Interceptor() {
+            @Override
+            public Response intercept(Chain chain) throws IOException {
+                Request original = chain.request();
+                Request.Builder request = original.newBuilder()
+                        .headers(original.headers())
+                        .method(original.method(), original.body());
+
+                if (mAuthToken != null) {
+                    request.header("Authorization", "Bearer " + mAuthToken);
+                }
+
+                return chain.proceed(request.build());
+            }
+        });
+
+        fClient = httpClient.build();
     }
 
     /**
@@ -109,29 +129,14 @@ public class ScgClient {
 
         Retrofit.Builder retrofit = new Retrofit.Builder()
                 .baseUrl(fApiUrl)
-                .addConverterFactory(GsonConverterFactory.create());
-
-        OkHttpClient.Builder httpClient = new OkHttpClient.Builder();
-        httpClient.addInterceptor(new Interceptor() {
-            @Override
-            public Response intercept(Chain chain) throws IOException {
-                Request original = chain.request();
-                Request.Builder request = original.newBuilder()
-                        .headers(original.headers())
-                        .method(original.method(), original.body());
-
-                if (mAuthToken != null) {
-                    request.header("Authorization", "Bearer " + mAuthToken);
-                }
-
-                return chain.proceed(request.build());
-            }
-        });
-
-        OkHttpClient client = httpClient.build();
-        retrofit.client(client);
+                .addConverterFactory(GsonConverterFactory.create())
+                .client(fClient);
 
         return retrofit.build().create(ScgRestService.class);
+    }
+
+    OkHttpClient getClient() {
+        return fClient;
     }
 
     /**
@@ -230,6 +235,35 @@ public class ScgClient {
                 result.onFailed(-1, t.getMessage());
             }
         });
+    }
+
+    public synchronized void resolveTrackedLink(String url, final ScgCallback result) {
+
+        final Request.Builder r = new Request.Builder()
+                .url(url)
+                .head();
+
+        ScgClient.getInstance().getClient().newCall(r.build()).enqueue(new okhttp3.Callback() {
+            @Override
+            public void onFailure(okhttp3.Call call, IOException e) {
+                result.onFailed(-1, e.getMessage());
+            }
+
+            @Override
+            public void onResponse(okhttp3.Call call, Response response) throws IOException {
+                sendResult(response, result);
+            }
+        });
+    }
+
+    private void sendResult(Response response, ScgCallback result) {
+        if (result == null) return;
+
+        if (response.isSuccessful() && response.isRedirect()) {
+            result.onSuccess(response.code(), response.headers().get("Location"));
+        } else {
+            result.onFailed(response.code(), "Link cannot be tracked");
+        }
     }
 
     private void sendResult(retrofit2.Response<ResponseBody> response, ScgCallback result) {
