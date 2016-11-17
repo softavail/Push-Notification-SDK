@@ -36,9 +36,9 @@ public class ScgClient {
 
     private final String fAppId;
     private final String fApiUrl;
+    private final Interceptor authorization;
 
     private ScgRestService mService;
-    private final OkHttpClient fClient;
 
     private static ScgClient sInstance;
     private String mAuthToken;
@@ -49,8 +49,7 @@ public class ScgClient {
         fApiUrl = rootUrl;
         mService = getService();
 
-        OkHttpClient.Builder httpClient = new OkHttpClient.Builder();
-        httpClient.addInterceptor(new Interceptor() {
+        authorization = new Interceptor() {
             @Override
             public Response intercept(Chain chain) throws IOException {
                 Request original = chain.request();
@@ -64,9 +63,7 @@ public class ScgClient {
 
                 return chain.proceed(request.build());
             }
-        });
-
-        fClient = httpClient.build();
+        };
     }
 
     /**
@@ -130,13 +127,24 @@ public class ScgClient {
         Retrofit.Builder retrofit = new Retrofit.Builder()
                 .baseUrl(fApiUrl)
                 .addConverterFactory(GsonConverterFactory.create())
-                .client(fClient);
+                .client(getClient(true, true));
 
         return retrofit.build().create(ScgRestService.class);
     }
 
-    OkHttpClient getClient() {
-        return fClient;
+    private OkHttpClient getClient(boolean withAuthorization, boolean followRedirects) {
+        OkHttpClient.Builder httpClient = new OkHttpClient.Builder();
+
+        if (withAuthorization)
+            httpClient.addInterceptor(authorization);
+
+        httpClient.followRedirects(followRedirects);
+        httpClient.followSslRedirects(followRedirects);
+        return httpClient.build();
+    }
+
+    private OkHttpClient getClient(boolean withAuthorization) {
+        return getClient(withAuthorization, false);
     }
 
     /**
@@ -220,7 +228,7 @@ public class ScgClient {
                 .url(url)
                 .head();
 
-        ScgClient.getInstance().getClient().newCall(r.build()).enqueue(new okhttp3.Callback() {
+        ScgClient.getInstance().getClient(false).newCall(r.build()).enqueue(new okhttp3.Callback() {
             @Override
             public void onFailure(okhttp3.Call call, IOException e) {
                 result.onFailed(-1, e.getMessage());
