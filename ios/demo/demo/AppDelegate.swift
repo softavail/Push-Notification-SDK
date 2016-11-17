@@ -99,6 +99,13 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         
         SCGPush.shared.resolveTrackedLink(userInfo: userInfo)
         
+        let rootController:ViewController = window?.rootViewController! as! ViewController
+        
+        if let appdata = userInfo["app_data"] as? String {
+            
+            rootController.logField.text = rootController.logField.text.appending("AppData: \(appdata)\n")
+        }
+        
         if ((window?.rootViewController!.view.viewWithTag(24) as! UISwitch).isOn) {
             if (UserDefaults.standard.bool(forKey: "reporton")) {
                 SCGPush.shared.reportStatus(userInfo: userInfo, state: .read, completionBlock: {
@@ -111,7 +118,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         
         if let aps = userInfo["aps"] as? NSDictionary {
             print("my messages : \(aps["alert"])")
-            (window?.rootViewController!.view.viewWithTag(10) as! UILabel).text = aps["alert"] as? String
+            (rootController.view.viewWithTag(10) as! UILabel).text = aps["alert"] as? String
         }
     }
     
