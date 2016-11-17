@@ -4,19 +4,20 @@ import android.app.AlertDialog;
 import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.Intent;
+import android.databinding.DataBindingUtil;
+import android.databinding.ViewDataBinding;
 import android.net.Uri;
 import android.support.design.widget.Snackbar;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Button;
-import android.widget.TextView;
 
-import com.google.firebase.messaging.RemoteMessage;
+import com.softavail.scg.push.demo.databinding.MessageItemBinding;
 import com.softavail.scg.push.sdk.ScgCallback;
 import com.softavail.scg.push.sdk.ScgClient;
-import com.softavail.scg.push.sdk.ScgPushReceiver;
+import com.softavail.scg.push.sdk.ScgMessage;
+import com.softavail.scg.push.sdk.ScgState;
 
 import java.util.ArrayList;
 
@@ -26,7 +27,7 @@ import java.util.ArrayList;
  */
 class MessageAdapter extends RecyclerView.Adapter<MessageAdapter.MessageViewHolder> implements View.OnClickListener {
 
-    private final ArrayList<MessageData> dataset = new ArrayList<>();
+    private final ArrayList<ScgMessage> dataset = new ArrayList<>();
     private final Context context;
 
     MessageAdapter(Context context) {
@@ -37,7 +38,7 @@ class MessageAdapter extends RecyclerView.Adapter<MessageAdapter.MessageViewHold
     public void onClick(final View v) {
 
         final MessageViewHolder holder = (MessageViewHolder) v.getTag();
-        final MessageData data = dataset.get(holder.getAdapterPosition());
+        final ScgMessage data = dataset.get(holder.getAdapterPosition());
         final ScgCallback result = new ScgCallback() {
             @Override
             public void onSuccess(int code, String message) {
@@ -54,11 +55,11 @@ class MessageAdapter extends RecyclerView.Adapter<MessageAdapter.MessageViewHold
 
         switch (v.getId()) {
             case R.id.messageDelivery:
-                ScgClient.getInstance().deliveryConfirmation(data.id, result);
+                ScgClient.getInstance().confirm(data.getId(), ScgState.DELIVERED, result);
                 break;
 
-            case R.id.messageOpen:
-                ScgClient.getInstance().interactionConfirmation(data.id, result);
+            case R.id.messageClicktrhu:
+                ScgClient.getInstance().confirm(data.getId(), ScgState.CLICKTHRU, result);
                 break;
             case R.id.messageAttachment:
 
@@ -89,28 +90,14 @@ class MessageAdapter extends RecyclerView.Adapter<MessageAdapter.MessageViewHold
                         progress.dismiss();
                         progress = new AlertDialog.Builder(context).setTitle("Error").setMessage(error).show();
                     }
-                }.execute(data.id, data.attachment);
+                }.execute(data.getId(), data.getAttachment());
                 break;
         }
 
 
     }
 
-    static class MessageData {
-        final String id;
-        final String body;
-        final String when;
-        String attachment;
-
-        MessageData(String when, RemoteMessage message) {
-            this.when = when;
-            this.id = message.getData().get(ScgPushReceiver.MESSAGE_ID);
-            this.body = message.getData().get(MainReceiver.MESSAGE_BODY);
-            this.attachment = message.getData().get(MainReceiver.MESSAGE_ATTACHMENT_ID);
-        }
-    }
-
-    void addMessage(MessageData msg) {
+    void addMessage(ScgMessage msg) {
         dataset.add(msg);
         notifyDataSetChanged();
     }
@@ -118,24 +105,26 @@ class MessageAdapter extends RecyclerView.Adapter<MessageAdapter.MessageViewHold
     @Override
     public MessageViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         View v = LayoutInflater.from(parent.getContext()).inflate(R.layout.message_item, parent, false);
-
-        MessageViewHolder holder = new MessageViewHolder(v);
-        holder.mDelivery.setOnClickListener(this);
-        holder.mDelivery.setTag(holder);
-
-        holder.mAttachment.setOnClickListener(this);
-        holder.mAttachment.setTag(holder);
-
-        return holder;
+        return new MessageViewHolder(v);
     }
 
     @Override
     public void onBindViewHolder(MessageViewHolder holder, int position) {
-        final MessageData data = dataset.get(position);
-        holder.mMessageId.setText(data.id);
-        holder.mMessageBody.setText(data.body);
-        holder.mMessageData.setText(data.when);
-        holder.mAttachment.setEnabled(data.attachment != null);
+        final ScgMessage data = dataset.get(position);
+        holder.getBinding().setVariable(BR.message, data);
+        holder.getBinding().executePendingBindings();
+
+        holder.binding.messageAttachment.setOnClickListener(this);
+        holder.binding.messageAttachment.setTag(holder);
+
+        holder.binding.messageClicktrhu.setOnClickListener(this);
+        holder.binding.messageClicktrhu.setTag(holder);
+
+        holder.binding.messageDelivery.setOnClickListener(this);
+        holder.binding.messageDelivery.setTag(holder);
+
+        holder.binding.messageDeeplink.setOnClickListener(this);
+        holder.binding.messageDeeplink.setTag(holder);
     }
 
     @Override
@@ -144,23 +133,16 @@ class MessageAdapter extends RecyclerView.Adapter<MessageAdapter.MessageViewHold
     }
 
     static class MessageViewHolder extends RecyclerView.ViewHolder {
-        TextView mMessageId;
-        TextView mMessageBody;
-        TextView mMessageData;
-        Button mOpen;
-        Button mDelivery;
-        Button mAttachment;
 
+        private MessageItemBinding binding;
 
         MessageViewHolder(View v) {
             super(v);
+            binding = DataBindingUtil.bind(v);
+        }
 
-            mMessageId = (TextView) v.findViewById(R.id.messageId);
-            mMessageBody = (TextView) v.findViewById(R.id.messageBody);
-            mMessageData = (TextView) v.findViewById(R.id.messageData);
-            mOpen = (Button) v.findViewById(R.id.messageOpen);
-            mDelivery = (Button) v.findViewById(R.id.messageDelivery);
-            mAttachment = (Button) v.findViewById(R.id.messageAttachment);
+        public ViewDataBinding getBinding() {
+            return binding;
         }
     }
 }

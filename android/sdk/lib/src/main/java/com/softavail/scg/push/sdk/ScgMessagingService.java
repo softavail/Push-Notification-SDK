@@ -19,7 +19,7 @@ public final class ScgMessagingService extends FirebaseMessagingService {
         Log.d(TAG, remoteMessage.getData().toString());
 
         Intent tokenIntent = new Intent(ScgPushReceiver.ACTION_MESSAGE_RECEIVED);
-        tokenIntent.putExtra(ScgPushReceiver.EXTRA_MESSAGE, remoteMessage);
+        tokenIntent.putExtra(ScgPushReceiver.EXTRA_MESSAGE, ScgMessage.from(remoteMessage));
 
         getApplicationContext().sendOrderedBroadcast(tokenIntent, null);
     }

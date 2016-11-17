@@ -16,7 +16,9 @@ import android.util.Log;
 import com.google.firebase.messaging.RemoteMessage;
 import com.softavail.scg.push.sdk.ScgCallback;
 import com.softavail.scg.push.sdk.ScgClient;
+import com.softavail.scg.push.sdk.ScgMessage;
 import com.softavail.scg.push.sdk.ScgPushReceiver;
+import com.softavail.scg.push.sdk.ScgState;
 
 import java.io.FileNotFoundException;
 import java.io.IOException;
@@ -50,11 +52,11 @@ public class MainReceiver extends ScgPushReceiver {
     }
 
     @Override
-    protected void onMessageReceived(final String messageId, RemoteMessage message) {
+    protected void onMessageReceived(final String messageId, ScgMessage message) {
 
         deliveryReport(messageId);
 
-        final String msg = message.getData().get(MESSAGE_BODY);
+        final String msg = message.getBody();
 
         Intent intent = new Intent(context, MainActivity.class);
         intent.putExtra(MESSAGE_ID, messageId);
@@ -78,7 +80,7 @@ public class MainReceiver extends ScgPushReceiver {
         notificationManager.notify(messageId.hashCode(), notificationBuilder.build());
 
 
-        if (message.getData().containsKey(ScgPushReceiver.MESSAGE_ATTACHMENT_ID) && message.getData().get(ScgPushReceiver.MESSAGE_ATTACHMENT_ID) != null) {
+        if (message.hasAttachment() && message.getAttachment() != null) {
             new ScgClient.DownloadAttachment(context) {
                 @Override
                 protected void onPreExecute() {
@@ -106,7 +108,7 @@ public class MainReceiver extends ScgPushReceiver {
                     notificationBuilder.setProgress(0, 0, false);
                     notificationManager.notify(messageId.hashCode(), notificationBuilder.build());
                 }
-            }.execute(messageId, message.getData().get(ScgPushReceiver.MESSAGE_ATTACHMENT_ID));
+            }.execute(messageId, message.getAttachment());
         }
 
         abortBroadcast();
@@ -141,7 +143,7 @@ public class MainReceiver extends ScgPushReceiver {
         autoDelivery = mPrefs.getBoolean(MainActivity.PREF_AUTO_DELIVERY, false);
 
         if (autoDelivery) {
-            ScgClient.getInstance().deliveryConfirmation(messageId, new ScgCallback() {
+            ScgClient.getInstance().confirm(messageId, ScgState.DELIVERED, new ScgCallback() {
                 @Override
                 public void onSuccess(int code, String message) {
 

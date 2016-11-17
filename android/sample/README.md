@@ -1,6 +1,22 @@
 SCG Push SDK
 ===
 
+# Changelog
+## 1.2.0
+- added support for deep links and app data.
+- added common method for confirmation of different events
+- added handy ScgMessage class which wraps RemoteMessage
+- update the ui and use the android binding framework
+- update libraries
+- fixed when and what to confirm in the sample
+
+## 1.1.0
+- added attachments support
+- added seen/interaction confirmation support
+
+## 1.0.3
+- initial version with delivery confirmation
+
 # Pre-requirements
 Configured project for the Android platform using Gradle and Android Studio
 
@@ -169,21 +185,52 @@ RemoteMessage message....
 message.getData();
 ```
 
+There are constants you can use to extract some helpful data from notification message:
+
 Available constants:
 - `ScgPushReceiver.MESSAGE_ID`
 - `ScgPushReceiver.MESSAGE_BODY`
+- `ScgPushReceiver.MESSAGE_ATTACHMENT_ID`
 
 > Retrieving message body or ID
 
 ```java
 RemoteMessage message....
 final String id = message.getData().get(ScgPushReceiver.MESSAGE_ID);
-final String body = message.getData().get(ScgPushReceiver.MESSAGE_BODY)
+final String body = message.getData().get(ScgPushReceiver.MESSAGE_BODY);
 ```
 
-There are constants you can use to extract some helpful data from notification message:
+## Handle notification attachment
+Some notifications can have attachment ID, which can be used to against the SCG backend to query and download it.
 
-# Delivery report
+Create new instance of `ScgClient.DownloadAttachment` and pass to `execute`:
+- messageId - id of the message
+- attachmentId - id of the attachment
+
+```java
+new ScgClient.DownloadAttachment(context) {
+  @Override
+  protected void onPreExecute() {
+    // Update the UI, show progress for example
+  }
+
+  @Override
+  protected void onResult(String mimeType, Uri result) {
+      // Do what ever you want with the attachment file using the provided URI and mimeType.
+  }
+
+  @Override
+  protected void onFailed(int code, String error) {
+      // Update the UI, show error for example
+  }
+}.execute(messageId, message.getData().get(ScgPushReceiver.MESSAGE_ATTACHMENT_ID));
+```
+
+Note that attachments are downloaded in the files directory of the application. If you want to give access to other application you must provide `URI_READ_PERMISSIONS` or `URI_WRITE_PERMISSIONS` for this URI and the target application in the intent.
+
+If your logic heavily download attachments, consider saving the `ScgClient.DownloadAttachment` object. You can call `execute` multiple times with different `messageId` and `attachmentId`
+
+# Delivery and seen/interaction report
 
 Once message is arrived you can perform optionally delivery report by calling ` ScgClient.getInstance().deliveryConfirmation(messageId, callback);` with the `messageId` and some `callback`:
 
@@ -197,6 +244,22 @@ ScgClient.getInstance().deliveryConfirmation(messageId, new ScgCallback() {
   @Override
   public void onFailed(int code, String message) {
     // When delivery report failed
+  }
+});
+```
+
+Identical you can also report notification as seen or on user interaction using ` ScgClient.getInstance().interactionConfirmation(messageId, callback);`  with the `messageId` and some `callback`.
+
+```java
+ScgClient.getInstance().interactionConfirmation(messageId, new ScgCallback() {
+  @Override
+  public void onSuccess(int code, String message) {
+      // When interaction confirmation was successful
+  }
+
+  @Override
+  public void onFailed(int code, String message) {
+    // When interaction confirmation failed
   }
 });
 ```

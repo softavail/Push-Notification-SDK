@@ -6,6 +6,8 @@ import android.content.Intent;
 
 import com.google.firebase.messaging.RemoteMessage;
 
+import static com.softavail.scg.push.sdk.ScgMessage.MESSAGE_ID;
+
 /**
  * Created by lekov on 7/7/16.
  */
@@ -16,10 +18,6 @@ public abstract class ScgPushReceiver extends BroadcastReceiver {
 
     public static final String EXTRA_TOKEN = "com.softavail.scg.push.sdk.extra.TOKEN";
     public static final String EXTRA_MESSAGE = "com.softavail.scg.push.sdk.extra.MESSAGE";
-
-    public static final String MESSAGE_BODY = "body";
-    public static final String MESSAGE_ID = "scg-message-id";
-    public static final String MESSAGE_ATTACHMENT_ID = "scg-attachment-id";
 
     protected Context context;
 
@@ -38,11 +36,12 @@ public abstract class ScgPushReceiver extends BroadcastReceiver {
             if (intent.hasExtra(EXTRA_MESSAGE)) {
                 final RemoteMessage message = intent.getParcelableExtra(EXTRA_MESSAGE);
                 final String delivery = message.getData().get(MESSAGE_ID);
-                onMessageReceived(delivery, message);
+                onMessageReceived(delivery, ScgMessage.from(message));
             }
         }
     }
 
     protected abstract void onPushTokenReceived(String token);
-    protected abstract void onMessageReceived(String messageId, RemoteMessage message);
+
+    protected abstract void onMessageReceived(String messageId, ScgMessage message);
 }

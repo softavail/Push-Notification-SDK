@@ -20,10 +20,6 @@ import retrofit2.http.Streaming;
  */
 interface ScgRestService {
 
-    enum State {
-        DELIVERED, MEDIA_REQUESTED, READ, CLICKTHRU, CONVERTED;
-    }
-
     class RegisterRequest {
         final String app_id;
         final String type;
@@ -66,22 +62,8 @@ interface ScgRestService {
             "Accept:application/json",
             "Content-Type:application/json"
     })
-    @POST("messages/{message_id}/delivery_confirmation")
-    Call<ResponseBody> deliveryConfirmation(@Path("message_id") String messageId);
-
-    @Headers({
-            "Accept:application/json",
-            "Content-Type:application/json"
-    })
-    @POST("messages/{message_id}/click_thru_confirmation")
-    Call<ResponseBody> interactionConfirmation(@Path("message_id") String messageId);
-
-    @Headers({
-            "Accept:application/json",
-            "Content-Type:application/json"
-    })
     @POST("messages/{message_id}/confirm/{type_of}")
-    Call<ResponseBody> confirmation(@Path("message_id") String messageId, @Path("type_of") State typeOf);
+    Call<ResponseBody> confirmation(@Path("message_id") String messageId, @Path("type_of") ScgState typeOf);
 
     @Streaming
     @GET("attachment/{message_id}/{attachment_id}")
