@@ -99,13 +99,24 @@ open class SCGPush: NSObject {
     }
     
     open var groupBundle:String = ""
+    open weak var delegate:SCGPushDelegate?
+    public enum MessageState:String{
+        case delivered  = "DELIVERED"
+        case media      = "MEDIA_REQUESTED"
+        case read       = "READ"
+        case clickthru  = "CLICKTHRU"
+        case converted  = "CONVERTED"
+    }
     
-    //Shared Instance
-    open static let instance = SCGPush()
+    // MARK: Shared Instance
+    open static let shared = SCGPush()
     
     public override init (){
     }
     
+    
+    // MARK: functions
+    // MARK: Register Token
     open func registerPushToken(deviceTokeData data:Data, completionBlock: (() -> Void)? = nil, failureBlock : ((Error?) -> ())? = nil) {
         
         let tokenChars = (data as NSData).bytes.bindMemory(to: CChar.self, capacity: data.count)
@@ -186,6 +197,7 @@ open class SCGPush: NSObject {
         dataTask.resume()
     }
 
+    // MARK: Unregister Token
     open func unregisterPushToken(_ completionBlock: (() -> Void)? = nil, failureBlock : ((Error?) -> ())? = nil)
     {
         let defaults = UserDefaults.standard
@@ -244,76 +256,22 @@ open class SCGPush: NSObject {
 
         dataTask.resume()
     }
-    //[NSObject : AnyObject]
-    open func deliveryConfirmation(userInfo:NSDictionary ,completionBlock: (() -> Void)? = nil, failureBlock : ((Error?) -> ())? = nil)
+    
+    // MARK: Report Status
+    open func reportStatus(userInfo:[AnyHashable: Any], state:MessageState, completionBlock: (() -> Void)? = nil, failureBlock : ((Error?) -> ())? = nil)
     {
-        if let messageID = userInfo["scg-message-id"]
+        if let messageID:String = userInfo["scg-message-id"] as? String
         {
-            deliveryConfirmation(messageID as! String, completionBlock: completionBlock, failureBlock: failureBlock)
+            self.reportStatus(messageID, state: state, completionBlock: completionBlock, failureBlock: failureBlock)
         }
     }
     
-    open func deliveryConfirmation(_ messageID:String ,completionBlock: (() -> Void)? = nil, failureBlock : ((Error?) -> ())? = nil)
+    open func reportStatus(_ messageID:String, state:MessageState, completionBlock: (() -> Void)? = nil, failureBlock : ((Error?) -> ())? = nil)
     {
         let configuration = URLSessionConfiguration.default
         let session = URLSession(configuration: configuration)
         
-        let urlString = "\(callbackURI)/messages/\(messageID)/delivery_confirmation"
-        let url = URL(string: urlString)
-        
-        var request = URLRequest(url: url!)
-        request.httpMethod = "POST"
-        request.timeoutInterval = 30
-        
-        request.addValue("application/json", forHTTPHeaderField: "Content-Type")
-        request.addValue("Bearer \(accessToken)", forHTTPHeaderField: "Authorization")
-        
-        let dataTask = session.dataTask(with: request, completionHandler: {
-            (data: Data?, response: URLResponse?, error: Error?) -> Void in
-            
-            guard let httpResponse = response as? HTTPURLResponse, let _ = data
-                else {
-                    if (failureBlock != nil) {
-                        failureBlock! (error)
-                    }
-                    return
-            }
-            
-            switch (httpResponse.statusCode)
-            {
-            case 200:
-                if (completionBlock != nil) {
-                    completionBlock! ()
-                }
-            case 204:
-                if (completionBlock != nil) {
-                    completionBlock! ()
-                }
-                
-            default:
-                if (failureBlock != nil) {
-                    let errorSend = NSError(domain: (httpResponse.url?.absoluteString)!, code: httpResponse.statusCode, userInfo: nil)
-                    failureBlock! (errorSend)
-                }
-            }
-        })        
-
-        dataTask.resume()
-    }
-    
-    open func interactionConfirmation(userInfo:NSDictionary ,completionBlock: (() -> Void)? = nil, failureBlock : ((Error?) -> ())? = nil) {
-        if let messageID = userInfo["scg-message-id"]
-        {
-            interactionConfirmation(messageID as! String, completionBlock: completionBlock, failureBlock: failureBlock)
-        }
-    }
-    
-    open func interactionConfirmation(_ messageID:String ,completionBlock: (() -> Void)? = nil, failureBlock : ((Error?) -> ())? = nil) {
-        
-        let configuration = URLSessionConfiguration.default
-        let session = URLSession(configuration: configuration)
-        
-        let urlString = "\(callbackURI)/messages/\(messageID)/click_thru_confirmation"
+        let urlString = "\(callbackURI)/messages/\(messageID)/confirm\(state.rawValue)"
         let url = URL(string: urlString)
         
         var request = URLRequest(url: url!)
@@ -356,7 +314,60 @@ open class SCGPush: NSObject {
         dataTask.resume()
     }
     
-    open func loadAttachment(userInfo:NSDictionary ,completionBlock: ((_ contentURL:URL, _ contentType:String) -> Void)? = nil, failureBlock : ((Error?) -> ())? = nil) {
+    // MARK: Resolve Tracked Link
+    open func resolveTrackedLink(userInfo:[AnyHashable: Any]) {
+        if let url:String = userInfo["deep_link"] as? String
+        {
+            self.resolveTrackedLink(url)
+        }
+    }
+    
+    open func resolveTrackedLink(_ url:String) {
+        
+        let delegate:SessionDelegateHandler = SessionDelegateHandler(preventRedirect: true)
+        
+        let configuration = URLSessionConfiguration.default
+        let session = URLSession(configuration: configuration, delegate: delegate, delegateQueue: nil)
+        let urlString = url
+        
+        let url:URL = URL(string: urlString)!
+        
+        var request = URLRequest(url: url)
+        request.httpMethod = "HEAD"
+        request.timeoutInterval = 30
+        
+        let dataTask = session.dataTask(with: request, completionHandler: {
+            (data: Data?, response: URLResponse?, error: Error?) -> Void in
+            
+            guard let httpResponse = response as? HTTPURLResponse
+                else {
+                   
+                    return
+            }
+            
+            switch (httpResponse.statusCode)
+            {
+            case 300, 301, 307:
+                if (self.delegate != nil) {
+                    if let redirectLocation:String = httpResponse.allHeaderFields["Location"] as! String? {
+                        self.delegate?.resolveTrackedLinkDidSuccess?(redirectLocation: redirectLocation, request: request)
+                    }
+                    else {
+                        self.delegate?.resolveTrackedLinkHasNotRedirect?(request: request)
+                    }
+                }
+            default:
+                if (self.delegate != nil) {
+                    self.delegate?.resolveTrackedLinkHasNotRedirect?(request: request)
+                }
+            }
+        })
+        
+        dataTask.resume()
+    }
+    
+    // MARK: Load Attachment
+    open func loadAttachment(userInfo:[AnyHashable: Any] ,completionBlock: ((_ contentURL:URL, _ contentType:String) -> Void)? = nil, failureBlock : ((Error?) -> ())? = nil) {
         if let attachmentID = userInfo["scg-attachment-id"] as? String,
            let messageID = userInfo["scg-message-id"] as? String
         {
@@ -427,6 +438,7 @@ open class SCGPush: NSObject {
         dataTask.resume()
     }
     
+    // MARK: Save Device Token
     open func saveDeviceToken(deviceTokenData tokenData:Data) {
         let tokenChars = (tokenData as NSData).bytes.bindMemory(to: CChar.self, capacity: tokenData.count)
         var pushToken = ""
@@ -476,5 +488,30 @@ open class SCGPush: NSObject {
             }
         }
         return ""
+    }
+}
+
+@objc public protocol SCGPushDelegate: class{
+    @objc optional func resolveTrackedLinkHasNotRedirect(request:URLRequest)->Void
+    @objc optional func resolveTrackedLinkDidSuccess(redirectLocation:String, request:URLRequest)->Void
+}
+
+class SessionDelegateHandler: NSObject, URLSessionDelegate, URLSessionTaskDelegate {
+    
+    var preventRedirect:Bool = false
+    
+    init(preventRedirect:Bool) {
+        self.preventRedirect = preventRedirect
+    }
+    
+    //PREVENT REDIRECT
+    func urlSession(_ session: URLSession,
+                    task: URLSessionTask,
+                    willPerformHTTPRedirection response: HTTPURLResponse,
+                    newRequest request: URLRequest,
+                    completionHandler: @escaping (URLRequest?) -> Void){
+        if (preventRedirect) {
+            completionHandler(nil)
+        }
     }
 }

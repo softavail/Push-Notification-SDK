@@ -9,13 +9,13 @@
 import UIKit
 import SCGPush
 
-class ViewController: UIViewController {
+class ViewController: UIViewController, SCGPushDelegate {
 
     @IBOutlet weak var purePushTokenLabel: UILabel!
     @IBOutlet weak var accessTokenField: UITextField!
     @IBOutlet weak var baseURIField: UITextField!
     @IBOutlet weak var appIDField: UITextField!
-    @IBOutlet weak var imageView: UIImageView!
+    @IBOutlet weak var logField: UITextView!
     @IBOutlet weak var reportSwith: UISwitch!
     
     var baseURL:String = ""
@@ -49,11 +49,16 @@ class ViewController: UIViewController {
         baseURIField.text = defauts.string(forKey: "baseurl")
         appIDField.text = defauts.string(forKey: "appid")
         
-        SCGPush.instance.groupBundle = "group.com.softavail.scg.push.demo.group"
-        SCGPush.instance.callbackURI = baseURIField.text!
-        SCGPush.instance.appID = appIDField.text!
-        SCGPush.instance.accessToken = accessTokenField.text!
+        SCGPush.shared.groupBundle = "group.com.softavail.scg.push.demo.group"
+        SCGPush.shared.callbackURI = baseURIField.text!
+        SCGPush.shared.appID = appIDField.text!
+        SCGPush.shared.accessToken = accessTokenField.text!
 
+        SCGPush.shared.delegate = self
+//        SCGPush.shared.resolveTrackedLink("https://app.partners1993.com:8088/scg-link/5idWpd")
+        
+        logField.layer.borderColor = UIColor.black.cgColor
+        logField.layer.borderWidth = 1
         //SLAV
 //        SCGPush.instance.groupBundle = "group.com.softavail.scg.push.demo.group"
 //        SCGPush.instance.accessToken = "DQHlNta2J2QGHFHkI44Ei"
@@ -72,15 +77,15 @@ class ViewController: UIViewController {
     @IBAction func textFieldChanged(_ sender: UITextField) {
         let defauts = UserDefaults.standard
         if (sender.tag == 7){
-            SCGPush.instance.accessToken = accessTokenField.text!
+            SCGPush.shared.accessToken = accessTokenField.text!
             defauts.set(accessTokenField.text!, forKey: "token")
         }
         if (sender.tag == 8){
-            SCGPush.instance.appID = appIDField.text!
+            SCGPush.shared.appID = appIDField.text!
             defauts.set(appIDField.text!, forKey: "appid")
         }
         if (sender.tag == 9) {
-            SCGPush.instance.callbackURI = baseURIField.text!
+            SCGPush.shared.callbackURI = baseURIField.text!
             defauts.set(baseURIField.text!, forKey: "baseurl")
         }
     }
@@ -95,7 +100,7 @@ class ViewController: UIViewController {
         baseURIField.resignFirstResponder()
         appIDField.resignFirstResponder()
         
-        SCGPush.instance.registerPushToken({
+        SCGPush.shared.registerPushToken({
                 self.showAlert ("Success", mess: "You successfully register the token.")
             }) { (error) in
                 self.showAlert ("Error", mess: (error?.localizedDescription)!)
@@ -107,7 +112,7 @@ class ViewController: UIViewController {
         baseURIField.resignFirstResponder()
         appIDField.resignFirstResponder()
         
-        SCGPush.instance.unregisterPushToken({
+        SCGPush.shared.unregisterPushToken({
                 self.showAlert ("Success", mess: "You successfully unregister the token.")
             }) { (error) in
                 self.showAlert ("Error", mess: (error?.localizedDescription)!)
@@ -125,6 +130,12 @@ class ViewController: UIViewController {
             DispatchQueue.main.async {
                 self.present(alert, animated: true, completion: nil)
             }
+        }
+    }
+    
+    func resolveTrackedLinkDidSuccess(redirectLocation: String, request: URLRequest) {
+        DispatchQueue.main.async {
+            self.logField.text = self.logField.text.appending("RedirectionLocation: \(redirectLocation)\n")
         }
     }
 }

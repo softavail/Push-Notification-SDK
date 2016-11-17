@@ -72,7 +72,6 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     func application(_ application: UIApplication, didRegisterForRemoteNotificationsWithDeviceToken deviceToken: Data) {
         let tokenChars = (deviceToken as NSData).bytes.bindMemory(to: CChar.self, capacity: deviceToken.count)
         var tokenString = ""
-        let tokenPureString = "\(deviceToken)"
         
         for i in 0..<deviceToken.count {
             tokenString += String(format: "%02.2hhx", arguments: [tokenChars[i]])
@@ -80,8 +79,8 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         }
         (window?.rootViewController!.view.viewWithTag(9) as! UILabel).text = tokenString
         
-        SCGPush.instance.saveDeviceToken(deviceTokenData: deviceToken)
-        SCGPush.instance.registerPushToken(deviceTokeData: deviceToken, completionBlock: {
+        SCGPush.shared.saveDeviceToken(deviceTokenData: deviceToken)
+        SCGPush.shared.registerPushToken(deviceTokeData: deviceToken, completionBlock: {
             
             }) { (error) in
                 
@@ -98,18 +97,17 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 //        notificationNumber += 1
         application.applicationIconBadgeNumber =  0;
         
+        SCGPush.shared.resolveTrackedLink(userInfo: userInfo)
         
         if ((window?.rootViewController!.view.viewWithTag(24) as! UISwitch).isOn) {
             if (UserDefaults.standard.bool(forKey: "reporton")) {
-                SCGPush.instance.interactionConfirmation(userInfo: userInfo as NSDictionary, completionBlock: {
+                SCGPush.shared.reportStatus(userInfo: userInfo, state: .read, completionBlock: {
                     self.showAlert ("Success", mess: "You successfully send interactionConfirmation.")
                 }) { (error) in
                     self.showAlert ("Error", mess: (error?.localizedDescription)!)
                 }
             }
         }
-        
-        
         
         if let aps = userInfo["aps"] as? NSDictionary {
             print("my messages : \(aps["alert"])")

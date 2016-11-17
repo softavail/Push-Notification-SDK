@@ -19,13 +19,13 @@ class NotificationService: UNNotificationServiceExtension {
         self.contentHandler = contentHandler
         bestAttemptContent = (request.content.mutableCopy() as? UNMutableNotificationContent)
         
-        SCGPush.instance.groupBundle = "group.com.softavail.scg.push.demo.group"
+        SCGPush.shared.groupBundle = "group.com.softavail.scg.push.demo.group"
         
         if let attachmentID = request.content.userInfo["scg-attachment-id"] as? String, let messageID = request.content.userInfo["scg-message-id"] as? String {
             // Download the attachment
             print("step 2", attachmentID, messageID)
             
-            SCGPush.instance.loadAttachment(messageID, attachmentID: attachmentID, completionBlock: {
+            SCGPush.shared.loadAttachment(messageID, attachmentID: attachmentID, completionBlock: {
                 (url, type) in
                 print("tmp", type)
                 
