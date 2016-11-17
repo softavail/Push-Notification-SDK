@@ -242,6 +242,7 @@ public class ScgClient {
         if (result == null) return;
 
         if (response.isRedirect()) {
+            Log.i(TAG, "sendRedirectResult: Resolved URL is " + response.headers().get("Location"));
             result.onSuccess(response.code(), response.headers().get("Location"));
         } else {
             result.onFailed(response.code(), "Link cannot be tracked");

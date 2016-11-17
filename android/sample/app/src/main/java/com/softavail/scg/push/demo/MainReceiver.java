@@ -9,6 +9,7 @@ import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.media.RingtoneManager;
 import android.net.Uri;
+import android.os.Handler;
 import android.preference.PreferenceManager;
 import android.support.v4.app.NotificationCompat;
 import android.util.Log;
@@ -52,7 +53,7 @@ public class MainReceiver extends ScgPushReceiver {
     }
 
     @Override
-    protected void onMessageReceived(final String messageId, ScgMessage message) {
+    protected void onMessageReceived(final String messageId, final ScgMessage message) {
 
         deliveryReport(messageId);
 
@@ -65,7 +66,8 @@ public class MainReceiver extends ScgPushReceiver {
         intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_SINGLE_TOP | Intent.FLAG_ACTIVITY_NEW_TASK);
         PendingIntent pendingIntent = PendingIntent.getActivity(context, 0, intent, PendingIntent.FLAG_UPDATE_CURRENT);
 
-        Uri defaultSoundUri = RingtoneManager.getDefaultUri(RingtoneManager.TYPE_NOTIFICATION);
+        final Uri defaultSoundUri = RingtoneManager.getDefaultUri(RingtoneManager.TYPE_NOTIFICATION);
+        final NotificationManager notificationManager = (NotificationManager) context.getSystemService(Context.NOTIFICATION_SERVICE);
 
         final NotificationCompat.Builder notificationBuilder = new NotificationCompat.Builder(context)
                 .setSmallIcon(R.mipmap.ic_launcher)
@@ -76,9 +78,26 @@ public class MainReceiver extends ScgPushReceiver {
                 .setTicker(String.format("%s: %s", "SCG Message", msg))
                 .setContentIntent(pendingIntent);
 
-        final NotificationManager notificationManager = (NotificationManager) context.getSystemService(Context.NOTIFICATION_SERVICE);
-        notificationManager.notify(messageId.hashCode(), notificationBuilder.build());
+        new Handler().postDelayed(new Runnable() {
+            @Override
+            public void run() {
+                if (message.hasDeepLink()) {
+                    ScgClient.getInstance().resolveTrackedLink(message.getDeepLink(), new ScgCallback() {
+                        @Override
+                        public void onSuccess(int i, String s) {
+                            notificationBuilder.addAction(0, "Link", PendingIntent.getActivity(context, 0, new Intent(Intent.ACTION_VIEW, Uri.parse(s)), PendingIntent.FLAG_UPDATE_CURRENT));
+                            notificationManager.notify(messageId.hashCode(), notificationBuilder.build());
+                        }
 
+                        @Override
+                        public void onFailed(int i, String s) {
+                        }
+                    });
+                }
+            }
+        }, 1000);
+
+        notificationManager.notify(messageId.hashCode(), notificationBuilder.build());
 
         if (message.hasAttachment() && message.getAttachment() != null) {
             new ScgClient.DownloadAttachment(context) {
@@ -98,7 +117,7 @@ public class MainReceiver extends ScgPushReceiver {
                         notificationBuilder.setStyle(new NotificationCompat.BigPictureStyle().bigPicture(getThumbnail(result)));
                     }
 
-                    notificationBuilder.addAction(0, "Open attachment", PendingIntent.getActivity(context, 0, attachmentIntent, PendingIntent.FLAG_UPDATE_CURRENT));
+                    notificationBuilder.addAction(0, "Attachment", PendingIntent.getActivity(context, 0, attachmentIntent, PendingIntent.FLAG_UPDATE_CURRENT));
                     notificationManager.notify(messageId.hashCode(), notificationBuilder.build());
                 }
 
