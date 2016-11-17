@@ -41,10 +41,21 @@ class MessageAdapter extends RecyclerView.Adapter<MessageAdapter.MessageViewHold
         final ScgMessage data = dataset.get(holder.getAdapterPosition());
         final ScgCallback result = new ScgCallback() {
             @Override
-            public void onSuccess(int code, String message) {
-                dataset.remove(holder.getAdapterPosition());
-                notifyItemRemoved(holder.getAdapterPosition());
-                Snackbar.make(v, String.format("Success (%s): %s", code, message), Snackbar.LENGTH_INDEFINITE).show();
+            public void onSuccess(final int code, final String message) {
+
+                // Redirect
+                if (code > 300 && code < 400) {
+                    Snackbar.make(v, "Resolved URL successful", Snackbar.LENGTH_INDEFINITE).setAction("Open", new View.OnClickListener() {
+                        @Override
+                        public void onClick(View view) {
+                            context.startActivity(new Intent(Intent.ACTION_VIEW, Uri.parse(message)));
+                        }
+                    }).show();
+                } else {
+                    dataset.remove(holder.getAdapterPosition());
+                    notifyItemRemoved(holder.getAdapterPosition());
+                    Snackbar.make(v, String.format("Success (%s): %s", code, message), Snackbar.LENGTH_INDEFINITE).show();
+                }
             }
 
             @Override
@@ -57,12 +68,15 @@ class MessageAdapter extends RecyclerView.Adapter<MessageAdapter.MessageViewHold
             case R.id.messageDelivery:
                 ScgClient.getInstance().confirm(data.getId(), ScgState.DELIVERED, result);
                 break;
-
             case R.id.messageClicktrhu:
                 ScgClient.getInstance().confirm(data.getId(), ScgState.CLICKTHRU, result);
                 break;
+            case R.id.messageDeeplink:
+                if (data.hasDeepLink()) {
+                    ScgClient.getInstance().resolveTrackedLink(data.getDeepLink(), result);
+                }
+                break;
             case R.id.messageAttachment:
-
                 new ScgClient.DownloadAttachment(context) {
 
                     private AlertDialog progress;
