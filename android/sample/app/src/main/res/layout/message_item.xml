@@ -81,14 +81,20 @@
                     android:text="Delivery" />
 
                 <Button
-                    android:id="@+id/messageAttachment"
+                    android:id="@+id/messageRead"
                     style="@style/Widget.AppCompat.Button.Colored"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
-                    android:enabled="@{message.hasAttachment()}"
-                    android:text="Attachment" />
+                    android:text="Read" />
 
+                <Button
+                    android:id="@+id/messageClicktrhu"
+                    style="@style/Widget.AppCompat.Button.Colored"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:text="Clickthru" />
             </LinearLayout>
 
             <LinearLayout
@@ -98,12 +104,13 @@
                 android:orientation="horizontal">
 
                 <Button
-                    android:id="@+id/messageClicktrhu"
+                    android:id="@+id/messageAttachment"
                     style="@style/Widget.AppCompat.Button.Colored"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
-                    android:text="Clickthru" />
+                    android:enabled="@{message.hasAttachment()}"
+                    android:text="Attachment" />
 
                 <Button
                     android:id="@+id/messageDeeplink"

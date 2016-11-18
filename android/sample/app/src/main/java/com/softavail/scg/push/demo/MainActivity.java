@@ -154,35 +154,34 @@ public class MainActivity extends AppCompatActivity implements ScgCallback {
                 .setPositiveButton("Finish", new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
-                        final String uri = ((EditText) initView.findViewById(R.id.apiUrl)).getText().toString();
-                        final String appid = ((EditText) initView.findViewById(R.id.appId)).getText().toString();
-                        final boolean autoDelivery = ((SwitchCompat) initView.findViewById(R.id.delivery)).isChecked();
-                        final boolean autoOpen = ((SwitchCompat) initView.findViewById(R.id.open)).isChecked();
-
-                        if (TextUtils.isEmpty(uri) || TextUtils.isEmpty(appid)) {
-                            Toast.makeText(MainActivity.this, "Library must be initialised properly!", Toast.LENGTH_LONG).show();
-                            finish();
-                            return;
-                        }
-
-                        pref.edit()
-                                .putString(PREF_URL, uri)
-                                .putString(PREF_APP_ID, appid)
-                                .putBoolean(PREF_AUTO_DELIVERY, autoDelivery)
-                                .putBoolean(PREF_AUTO_OPEN, autoOpen)
-                                .apply();
-
-                        if (ScgClient.isInitialized()) {
-                            recreate();
-                        } else {
-                            init(uri, appid, pref.getString(PREF_AUTH, null));
-                        }
+                        dialog.cancel();
                     }
                 }).setOnCancelListener(new DialogInterface.OnCancelListener() {
             @Override
             public void onCancel(DialogInterface dialog) {
-                Toast.makeText(MainActivity.this, "Library must be initialised!", Toast.LENGTH_LONG).show();
-                finish();
+                final String uri = ((EditText) initView.findViewById(R.id.apiUrl)).getText().toString();
+                final String appid = ((EditText) initView.findViewById(R.id.appId)).getText().toString();
+                final boolean autoDelivery = ((SwitchCompat) initView.findViewById(R.id.delivery)).isChecked();
+                final boolean autoOpen = ((SwitchCompat) initView.findViewById(R.id.open)).isChecked();
+
+                if (TextUtils.isEmpty(uri) || TextUtils.isEmpty(appid)) {
+                    Toast.makeText(MainActivity.this, "Library must be initialised properly!", Toast.LENGTH_LONG).show();
+                    finish();
+                    return;
+                }
+
+                pref.edit()
+                        .putString(PREF_URL, uri)
+                        .putString(PREF_APP_ID, appid)
+                        .putBoolean(PREF_AUTO_DELIVERY, autoDelivery)
+                        .putBoolean(PREF_AUTO_OPEN, autoOpen)
+                        .apply();
+
+                if (ScgClient.isInitialized()) {
+                    recreate();
+                } else {
+                    init(uri, appid, pref.getString(PREF_AUTH, null));
+                }
             }
         }).show();
     }
