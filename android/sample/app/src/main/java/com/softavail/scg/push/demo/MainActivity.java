@@ -30,7 +30,9 @@ import com.crashlytics.android.Crashlytics;
 import com.google.firebase.messaging.RemoteMessage;
 import com.softavail.scg.push.sdk.ScgCallback;
 import com.softavail.scg.push.sdk.ScgClient;
+import com.softavail.scg.push.sdk.ScgMessage;
 import com.softavail.scg.push.sdk.ScgPushReceiver;
+import com.softavail.scg.push.sdk.ScgState;
 
 import io.fabric.sdk.android.Fabric;
 
@@ -70,7 +72,7 @@ public class MainActivity extends AppCompatActivity implements ScgCallback {
         }
 
         @Override
-        protected void onMessageReceived(String messageId, RemoteMessage message) {
+        protected void onMessageReceived(String messageId, ScgMessage message) {
             handleMessageReceive(messageId, message);
             abortBroadcast(); // Block passing the broadcast to the receiver in the manifest
         }
@@ -121,7 +123,7 @@ public class MainActivity extends AppCompatActivity implements ScgCallback {
         setIntent(intent);
 
         if (getIntent().hasExtra(MainReceiver.MESSAGE_ID))
-            handleMessageReceive(getIntent().getStringExtra(MainReceiver.MESSAGE_ID), (RemoteMessage) getIntent().getParcelableExtra(MainReceiver.MESSAGE));
+            handleMessageReceive(getIntent().getStringExtra(MainReceiver.MESSAGE_ID), (ScgMessage) getIntent().getParcelableExtra(MainReceiver.MESSAGE));
     }
 
     @Override
@@ -213,12 +215,8 @@ public class MainActivity extends AppCompatActivity implements ScgCallback {
         }
     }
 
-    private void reportDelivery(String messageId) {
-        ScgClient.getInstance().deliveryConfirmation(messageId, MainActivity.this);
-    }
-
-    private void reportOpen(String messageId) {
-        ScgClient.getInstance().interactionConfirmation(messageId, MainActivity.this);
+    private void reportState(String messageId, ScgState state) {
+        ScgClient.getInstance().confirm(messageId, state, MainActivity.this);
     }
 
     @Override
@@ -231,22 +229,22 @@ public class MainActivity extends AppCompatActivity implements ScgCallback {
         Snackbar.make(pushToken, String.format("Failed (%s): %s", code, message), Snackbar.LENGTH_INDEFINITE).show();
     }
 
-    private void handleMessageReceive(final String messageId, RemoteMessage message) {
+    private void handleMessageReceive(final String messageId, ScgMessage message) {
 
         if (pref.getBoolean(PREF_AUTO_DELIVERY, true)) {
-            reportDelivery(messageId);
+            reportState(messageId, ScgState.DELIVERED);
         }
 
         if (pref.getBoolean(PREF_AUTO_OPEN, true)) {
             new Handler().postDelayed(new Runnable() {
                 @Override
                 public void run() {
-                    reportOpen(messageId);
+                    reportState(messageId, ScgState.CLICKTHRU);
                 }
             }, 3141);
         }
 
-        adapter.addMessage(new MessageAdapter.MessageData(message.getData().toString(), message));
+        adapter.addMessage(message);
     }
 
     public void saveAccessToken(View view) {

@@ -109,65 +109,52 @@ public class ScgClient {
 
         Retrofit.Builder retrofit = new Retrofit.Builder()
                 .baseUrl(fApiUrl)
-                .addConverterFactory(GsonConverterFactory.create());
-
-        OkHttpClient.Builder httpClient = new OkHttpClient.Builder();
-        httpClient.addInterceptor(new Interceptor() {
-            @Override
-            public Response intercept(Chain chain) throws IOException {
-                Request original = chain.request();
-                Request.Builder request = original.newBuilder()
-                        .headers(original.headers())
-                        .method(original.method(), original.body());
-
-                if (mAuthToken != null) {
-                    request.header("Authorization", "Bearer " + mAuthToken);
-                }
-
-                return chain.proceed(request.build());
-            }
-        });
-
-        OkHttpClient client = httpClient.build();
-        retrofit.client(client);
+                .addConverterFactory(GsonConverterFactory.create())
+                .client(getClient(true, true));
 
         return retrofit.build().create(ScgRestService.class);
     }
 
-    /**
-     * Delivery confirmation when notification is received
-     *
-     * @param messageId Message id to be confirm
-     * @param result    Callback getting the result of the confirmation
-     */
-    public synchronized void deliveryConfirmation(String messageId, final ScgCallback result) {
-        if (messageId == null) return;
-        mService.deliveryConfirmation(messageId).enqueue(new Callback<ResponseBody>() {
-            @Override
-            public void onResponse(Call<ResponseBody> call, retrofit2.Response<ResponseBody> response) {
-                if (response.code() > 400) {
-                    if (result != null) result.onFailed(response.code(), response.message());
-                } else {
-                    if (result != null) result.onSuccess(response.code(), response.message());
-                }
-            }
+    private OkHttpClient getClient(boolean withAuthorization, boolean followRedirects) {
+        OkHttpClient.Builder httpClient = new OkHttpClient.Builder();
 
-            @Override
-            public void onFailure(Call<ResponseBody> call, Throwable t) {
-                result.onFailed(-1, t.getMessage());
-            }
-        });
+        if (withAuthorization)
+            httpClient.addInterceptor(new Interceptor() {
+                @Override
+                public Response intercept(Chain chain) throws IOException {
+                    Request original = chain.request();
+                    Request.Builder request = original.newBuilder()
+                            .headers(original.headers())
+                            .method(original.method(), original.body());
+
+                    if (mAuthToken != null) {
+                        request.header("Authorization", "Bearer " + mAuthToken);
+                    }
+
+                    return chain.proceed(request.build());
+                }
+            });
+
+        httpClient.followRedirects(followRedirects);
+        httpClient.followSslRedirects(followRedirects);
+        return httpClient.build();
+    }
+
+    private OkHttpClient getClient(boolean withAuthorization) {
+        return getClient(withAuthorization, false);
     }
 
     /**
-     * Delivery confirmation when notification is open
+     * Confirm state of message
      *
-     * @param messageId Message id to be confirm
+     * @param messageId ID of the message to be confirm
+     * @param state     Message state to be confirm
      * @param result    Callback getting the result of the confirmation
+     * @see ScgState
      */
-    public synchronized void interactionConfirmation(String messageId, final ScgCallback result) {
+    public synchronized void confirm(String messageId, ScgState state, final ScgCallback result) {
         if (messageId == null) return;
-        mService.interactionConfirmation(messageId).enqueue(new Callback<ResponseBody>() {
+        mService.confirmation(messageId, state).enqueue(new Callback<ResponseBody>() {
             @Override
             public void onResponse(Call<ResponseBody> call, retrofit2.Response<ResponseBody> response) {
                 if (response.code() > 400) {
@@ -230,6 +217,36 @@ public class ScgClient {
                 result.onFailed(-1, t.getMessage());
             }
         });
+    }
+
+    public synchronized void resolveTrackedLink(String url, final ScgCallback result) {
+
+        final Request.Builder r = new Request.Builder()
+                .url(url)
+                .head();
+
+        ScgClient.getInstance().getClient(false).newCall(r.build()).enqueue(new okhttp3.Callback() {
+            @Override
+            public void onFailure(okhttp3.Call call, IOException e) {
+                result.onFailed(-1, e.getMessage());
+            }
+
+            @Override
+            public void onResponse(okhttp3.Call call, Response response) throws IOException {
+                sendRedirectResult(response, result);
+            }
+        });
+    }
+
+    private void sendRedirectResult(Response response, ScgCallback result) {
+        if (result == null) return;
+
+        if (response.isRedirect()) {
+            Log.i(TAG, "sendRedirectResult: Resolved URL is " + response.headers().get("Location"));
+            result.onSuccess(response.code(), response.headers().get("Location"));
+        } else {
+            result.onFailed(response.code(), "Link cannot be tracked");
+        }
     }
 
     private void sendResult(retrofit2.Response<ResponseBody> response, ScgCallback result) {

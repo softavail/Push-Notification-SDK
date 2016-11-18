@@ -1,9 +1,15 @@
 package com.softavail.scg.push.sdk;
 
+import android.net.Uri;
+
+import java.net.URL;
+
+import okhttp3.Request;
 import okhttp3.ResponseBody;
 import retrofit2.Call;
 import retrofit2.http.Body;
 import retrofit2.http.GET;
+import retrofit2.http.HEAD;
 import retrofit2.http.Headers;
 import retrofit2.http.POST;
 import retrofit2.http.Path;
@@ -56,15 +62,8 @@ interface ScgRestService {
             "Accept:application/json",
             "Content-Type:application/json"
     })
-    @POST("messages/{message_id}/delivery_confirmation")
-    Call<ResponseBody> deliveryConfirmation(@Path("message_id") String messageId);
-
-    @Headers({
-            "Accept:application/json",
-            "Content-Type:application/json"
-    })
-    @POST("messages/{message_id}/click_thru_confirmation")
-    Call<ResponseBody> interactionConfirmation(@Path("message_id") String messageId);
+    @POST("messages/{message_id}/confirm/{type_of}")
+    Call<ResponseBody> confirmation(@Path("message_id") String messageId, @Path("type_of") ScgState typeOf);
 
     @Streaming
     @GET("attachment/{message_id}/{attachment_id}")

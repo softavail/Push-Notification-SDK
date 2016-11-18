@@ -25,8 +25,8 @@ android {
         applicationId "com.softavail.scg.push.demo"
         minSdkVersion 15
         targetSdkVersion 25
-        versionCode 4
-        versionName "1.1.0"
+        versionCode 5
+        versionName "1.2.0"
     }
     buildTypes {
         release {
@@ -37,6 +37,10 @@ android {
             versionNameSuffix "_${getDate()}-SNAPSHOT"
         }
     }
+
+    dataBinding {
+        enabled = true
+    }
 }
 
 def getDate() {
@@ -46,8 +50,8 @@ def getDate() {
 }
 
 dependencies {
-    compile 'com.android.support:appcompat-v7:25.0.0'
-    compile 'com.android.support:design:25.0.0'
+    compile 'com.android.support:appcompat-v7:25.0.1'
+    compile 'com.android.support:design:25.0.1'
 
     //    http://stackoverflow.com/a/36931247
     //    compile('com.softavail.scg.push:sdk:1.1.0@aar') {
@@ -60,9 +64,9 @@ dependencies {
      compile project(':scg-push-sdk')
     // Only for development
     //     compile project(':sdk')
-    compile 'com.squareup.retrofit2:retrofit:2.0.2'
-    compile 'com.squareup.retrofit2:converter-gson:2.0.2'
-    compile 'com.google.firebase:firebase-messaging:9.4.0'
+    compile 'com.squareup.retrofit2:retrofit:2.1.0'
+    compile 'com.squareup.retrofit2:converter-gson:2.1.0'
+    compile 'com.google.firebase:firebase-messaging:9.8.0'
 
     // --- END SDK and it's dependencies ---
     compile('com.crashlytics.sdk.android:crashlytics:2.6.0@aar') {

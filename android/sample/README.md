@@ -1,6 +1,22 @@
 SCG Push SDK
 ===
 
+# Changelog
+## 1.2.0 (uses Firebase 9.8.0)
+- added support for deep links and app data.
+- added common method for confirmation of different events
+- added handy ScgMessage class which wraps RemoteMessage
+- update the ui and use the android binding framework
+- update libraries
+- fixed when and what to confirm in the sample
+
+## 1.1.0 (uses Firebase 9.4.0)
+- added attachments support
+- added seen/interaction confirmation support
+
+## 1.0.3
+- initial version with delivery confirmation
+
 # Pre-requirements
 Configured project for the Android platform using Gradle and Android Studio
 
@@ -63,7 +79,7 @@ You must implement:
 
   Called when device push token is registered for first time or refreshed.
 
-- `onMessageReceived(String messageId, RemoteMessage message)`
+- `onMessageReceived(String messageId, ScgMessage message)`
 
   Called when notification `message` with `messageId` arrived.
 
@@ -107,7 +123,7 @@ ScgClient.getInstance().auth("validtoken");
 Device push token must registered before you can receive notifications. For both methods you must have properly initialized and authenticated library.
 
 When device push token is refreshed or registered to the Firebase Messaging service you will
-receive the it in the `onPushTokenReceived(String token)` method in the broadcast receiver you registered.
+receive the it in the `onPushTokenReceived(String token)` method in the broadcast receiver you have registered.
 
 ## Register
 
@@ -162,33 +178,81 @@ Notifications are arrived using broadcast receiver whatever application is in ba
 Registering two broadcasts one in the manifest and one in activity will deliver same notification twice. You can abort the broadcast using `abortBroadcast()` method after you consume the event from one of the broadcast receivers.
 
 ## Notification data
-All notification data is located in the `Map`:
+All notification data is located in the `ScgMessage` object, which provides handy methods to get data.
 
+> Example checking if push message has attachment
 ```java
-RemoteMessage message....
-message.getData();
+ScgMessage message....
+message.hasAttachment();
 ```
 
-Available constants:
-- `ScgPushReceiver.MESSAGE_ID`
-- `ScgPushReceiver.MESSAGE_BODY`
+## Handle notification attachment
+Some notifications can have attachment ID, which can be used to against the SCG backend to query and download it.
 
-> Retrieving message body or ID
+Create new instance of `ScgClient.DownloadAttachment` and pass to `execute`:
+- **messageId** - id of the message
+- **attachmentId** - id of the attachment
 
 ```java
-RemoteMessage message....
-final String id = message.getData().get(ScgPushReceiver.MESSAGE_ID);
-final String body = message.getData().get(ScgPushReceiver.MESSAGE_BODY)
+new ScgClient.DownloadAttachment(context) {
+  @Override
+  protected void onPreExecute() {
+    // Update the UI, show progress for example
+  }
+
+  @Override
+  protected void onResult(String mimeType, Uri result) {
+      // Do what ever you want with the attachment file using the provided URI and mimeType.
+  }
+
+  @Override
+  protected void onFailed(int code, String error) {
+      // Update the UI, show error for example
+  }
+}.execute(messageId, message.getAttachment());
 ```
 
-There are constants you can use to extract some helpful data from notification message:
+Note that attachments are downloaded in the files directory of the application. If you want to give access to other application you must provide `URI_READ_PERMISSIONS` or `URI_WRITE_PERMISSIONS` for this URI and the target application in the intent.
 
-# Delivery report
+If your logic heavily download attachments, consider saving the `ScgClient.DownloadAttachment` object. You can call `execute` multiple times with different `messageId` and `attachmentId`.
 
-Once message is arrived you can perform optionally delivery report by calling ` ScgClient.getInstance().deliveryConfirmation(messageId, callback);` with the `messageId` and some `callback`:
+## Handle deep links and app data
+Some notifications can contains also deep link or app data. You can check and query them using provided in `ScgMessage` methods.
+
+> Example of checking for deep link or add data
+```
+boolean hasDeepLink = scgMsg.hasDeepLink();
+boolean hasAppData = scgMsg.hasAppData();
+```
+
+### Resolve tracked URL
+Some deep links are tracked, this means that you must resolve them to get the real URL. SCG SDK provides easy way to do this:
+
+> Example of resolving tracked URL
+```
+if (message.hasDeepLink()) {
+    ScgClient.getInstance().resolveTrackedLink(message.getDeepLink(), new ScgCallback() {
+        @Override
+        public void onSuccess(int code, String resolvedUrl) {
+            ...
+            Update notification/UI etc.
+        }
+
+        @Override
+        public void onFailed(int code, String errorMessage) {
+        }
+    });
+}
+
+```
+
+
+# Delivery and seen/interaction report
+
+Once message is arrived you can perform **optionally**, confirmation report by calling ` ScgClient.getInstance().confirm(messageId, ScgState.DELIVERED, callback);` with the `messageId`, `ScgState` and some `callback`:
 
 ```java
-ScgClient.getInstance().deliveryConfirmation(messageId, new ScgCallback() {
+ScgClient.getInstance().confirm(messageId, messageState, new ScgCallback() {
   @Override
   public void onSuccess(int code, String message) {
       // When delivery was successful
@@ -200,6 +264,15 @@ ScgClient.getInstance().deliveryConfirmation(messageId, new ScgCallback() {
   }
 });
 ```
+
+## Supported event confirmations
+
+- `ScgState.DELIVERED` - message is delivered to the device, but cannot say if is open
+- `ScgState.MEDIA_REQUESTED`
+- `ScgState.READ`
+- `ScgState.CLICKTHRU` - after we download attachment or follow deep link
+- `ScgState.CONVERTED`
+
 
 **Note that:** when failed `code` will be one of the valid http error codes and `message`
 will give you some human error message.

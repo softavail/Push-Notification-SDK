@@ -9,6 +9,7 @@ import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.media.RingtoneManager;
 import android.net.Uri;
+import android.os.Handler;
 import android.preference.PreferenceManager;
 import android.support.v4.app.NotificationCompat;
 import android.util.Log;
@@ -16,7 +17,9 @@ import android.util.Log;
 import com.google.firebase.messaging.RemoteMessage;
 import com.softavail.scg.push.sdk.ScgCallback;
 import com.softavail.scg.push.sdk.ScgClient;
+import com.softavail.scg.push.sdk.ScgMessage;
 import com.softavail.scg.push.sdk.ScgPushReceiver;
+import com.softavail.scg.push.sdk.ScgState;
 
 import java.io.FileNotFoundException;
 import java.io.IOException;
@@ -50,11 +53,11 @@ public class MainReceiver extends ScgPushReceiver {
     }
 
     @Override
-    protected void onMessageReceived(final String messageId, RemoteMessage message) {
+    protected void onMessageReceived(final String messageId, final ScgMessage message) {
 
         deliveryReport(messageId);
 
-        final String msg = message.getData().get(MESSAGE_BODY);
+        final String msg = message.getBody();
 
         Intent intent = new Intent(context, MainActivity.class);
         intent.putExtra(MESSAGE_ID, messageId);
@@ -63,7 +66,8 @@ public class MainReceiver extends ScgPushReceiver {
         intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_SINGLE_TOP | Intent.FLAG_ACTIVITY_NEW_TASK);
         PendingIntent pendingIntent = PendingIntent.getActivity(context, 0, intent, PendingIntent.FLAG_UPDATE_CURRENT);
 
-        Uri defaultSoundUri = RingtoneManager.getDefaultUri(RingtoneManager.TYPE_NOTIFICATION);
+        final Uri defaultSoundUri = RingtoneManager.getDefaultUri(RingtoneManager.TYPE_NOTIFICATION);
+        final NotificationManager notificationManager = (NotificationManager) context.getSystemService(Context.NOTIFICATION_SERVICE);
 
         final NotificationCompat.Builder notificationBuilder = new NotificationCompat.Builder(context)
                 .setSmallIcon(R.mipmap.ic_launcher)
@@ -74,11 +78,28 @@ public class MainReceiver extends ScgPushReceiver {
                 .setTicker(String.format("%s: %s", "SCG Message", msg))
                 .setContentIntent(pendingIntent);
 
-        final NotificationManager notificationManager = (NotificationManager) context.getSystemService(Context.NOTIFICATION_SERVICE);
+        new Handler().postDelayed(new Runnable() {
+            @Override
+            public void run() {
+                if (message.hasDeepLink()) {
+                    ScgClient.getInstance().resolveTrackedLink(message.getDeepLink(), new ScgCallback() {
+                        @Override
+                        public void onSuccess(int i, String s) {
+                            notificationBuilder.addAction(0, "Link", PendingIntent.getActivity(context, 0, new Intent(Intent.ACTION_VIEW, Uri.parse(s)), PendingIntent.FLAG_UPDATE_CURRENT));
+                            notificationManager.notify(messageId.hashCode(), notificationBuilder.build());
+                        }
+
+                        @Override
+                        public void onFailed(int i, String s) {
+                        }
+                    });
+                }
+            }
+        }, 1000);
+
         notificationManager.notify(messageId.hashCode(), notificationBuilder.build());
 
-
-        if (message.getData().containsKey(ScgPushReceiver.MESSAGE_ATTACHMENT_ID) && message.getData().get(ScgPushReceiver.MESSAGE_ATTACHMENT_ID) != null) {
+        if (message.hasAttachment() && message.getAttachment() != null) {
             new ScgClient.DownloadAttachment(context) {
                 @Override
                 protected void onPreExecute() {
@@ -96,7 +117,7 @@ public class MainReceiver extends ScgPushReceiver {
                         notificationBuilder.setStyle(new NotificationCompat.BigPictureStyle().bigPicture(getThumbnail(result)));
                     }
 
-                    notificationBuilder.addAction(0, "Open attachment", PendingIntent.getActivity(context, 0, attachmentIntent, PendingIntent.FLAG_UPDATE_CURRENT));
+                    notificationBuilder.addAction(0, "Attachment", PendingIntent.getActivity(context, 0, attachmentIntent, PendingIntent.FLAG_UPDATE_CURRENT));
                     notificationManager.notify(messageId.hashCode(), notificationBuilder.build());
                 }
 
@@ -106,7 +127,7 @@ public class MainReceiver extends ScgPushReceiver {
                     notificationBuilder.setProgress(0, 0, false);
                     notificationManager.notify(messageId.hashCode(), notificationBuilder.build());
                 }
-            }.execute(messageId, message.getData().get(ScgPushReceiver.MESSAGE_ATTACHMENT_ID));
+            }.execute(messageId, message.getAttachment());
         }
 
         abortBroadcast();
@@ -141,7 +162,7 @@ public class MainReceiver extends ScgPushReceiver {
         autoDelivery = mPrefs.getBoolean(MainActivity.PREF_AUTO_DELIVERY, false);
 
         if (autoDelivery) {
-            ScgClient.getInstance().deliveryConfirmation(messageId, new ScgCallback() {
+            ScgClient.getInstance().confirm(messageId, ScgState.DELIVERED, new ScgCallback() {
                 @Override
                 public void onSuccess(int code, String message) {
 
