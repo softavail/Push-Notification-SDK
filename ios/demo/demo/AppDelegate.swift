@@ -102,7 +102,6 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         let rootController:ViewController = window?.rootViewController! as! ViewController
         
         if let appdata = userInfo["app_data"] as? String {
-            
             rootController.logField.text = rootController.logField.text.appending("AppData: \(appdata)\n")
         }
         
