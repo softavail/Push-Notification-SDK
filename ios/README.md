@@ -201,16 +201,24 @@ SCGPush.instance.unregisterPushToken({
 ```
 
 
-# Delivery report
+# Report status
 
-Once message is arrived you can perform optionally delivery report by calling ` deliveryConfirmation`:
+If you want to track the status of the messages you can use `reportStatus`.
+You can report different type of status:
+  - DELIVERED
+  - MEDIA REQUESTED
+  - READ
+  - CLICKTHRU
+  - CONVERTED
+
+> TODO: Explain different states
 
 > Swift
 ```swift
 func application(application: UIApplication, didReceiveRemoteNotification userInfo: [NSObject : AnyObject]){
        ...
-       SCGPush.instance.deliveryConfirmation(userInfo: userInfo, completionBlock: {
-             //handle when successful register the push
+       func reportStatus(userInfo: userInfo, state:MessageState.read, completionBlock: {
+             //send report when the message is read
              }) { (error) in
              //handle when some error occurred
              //use error.description for more details
@@ -223,7 +231,7 @@ func application(application: UIApplication, didReceiveRemoteNotification userIn
 ```objective-c
 - (void)application:(UIApplication *)application didReceiveRemoteNotification:(NSDictionary *)userInfo {
   ...
-  [[SCGPush instance] deliveryConfirmationWithUserInfo:userInfo
+  [[SCGPush instance] reportStatusUserInfo:userInfo state:Read
   completionBlock:^{
         //handle when successful register the push token
     } failureBlock:^(NSError * error) {
@@ -233,3 +241,91 @@ func application(application: UIApplication, didReceiveRemoteNotification userIn
   ...
 }
 ```
+
+# Resolve Tracked Link
+
+If you want to send an URL via push messages, you have to use `resolveTrackedLink` to track the correct URL.
+For that you have to register for `SessionDelegateHandler`
+
+> Swift
+```swift
+func application(application: UIApplication, didReceiveRemoteNotification userInfo: [NSObject : AnyObject]){
+       ...
+       SCGPush.shared.resolveTrackedLink(userInfo: userInfo)
+        ...
+}
+
+func resolveTrackedLinkDidSuccess(redirectLocation: String, request: URLRequest) {
+       Take the result of the original url - redirectLocation
+}
+```
+
+*For example:*
+> Swift
+```swift
+...
+class YourClass:TypeOfClass, SCGPushDelegate{
+...
+func init(){
+       SCGPush.shared.delegate = self
+}
+...
+```
+
+# Push notification with media content
+
+This future is new for iOS and it is supported in iOS 10 and later
+With this functionality you can present image, animated image, video or audio on notification screen.
+
+1. Create an `App Group`
+  1.1 Go to apple developer portal
+  1.2 Go to `Certificates, Identifiers & Profiles`
+  1.3 Under the `Indentifiers` tab select `App Groups`
+  1.4 Enter a description and identifier (`group.` will be automatically added in front after you created the identifier)
+  1.5 Go to `App IDs` under the `Indentifiers` tab
+  1.6 Select your app, activate `App Groups` under `Application Services` and select the group you created a minute before
+
+2. Create `Notification Service Extension`
+  2.1 Open your project
+  2.2 Select File->New->Target...
+  2.3 Choose `Notification Service Extension`. Write a product name (e.x. `NotificationService`)
+  2.4 A new Group will be added to your project with same name. Open it and select YourProductName.swift (e.x. `NotificationService.swift`) or YourProductName.m for Objective-c (e.x. `NotificationService.m`)
+
+3. Load attachment from push message and present it
+  3.1 In function `didReceive withContentHandler` tell to SCGPush your group identifier that created in step 1.
+  > Swift
+  ```swift
+        override func didReceive(_ request: UNNotificationRequest, withContentHandler contentHandler: @escaping (UNNotificationContent) -> Void) {
+            self.contentHandler = contentHandler
+            bestAttemptContent = (request.content.mutableCopy() as? UNMutableNotificationContent)
+
+            SCGPush.shared.groupBundle = "your.group.bundel.identifier"
+            ...
+  ```
+
+  3.2 Load attachment with `loadAttachment`
+  > Swift
+  ```swift
+        SCGPush.shared.loadAttachment(messageID, attachmentID: attachmentID, completionBlock: {
+                (url, type) in
+                let options = [UNNotificationAttachmentOptionsTypeHintKey: type]
+                if let attachment = try? UNNotificationAttachment(identifier: "someID", url: url, options: options) {
+                    self.bestAttemptContent?.attachments = [attachment]
+                }
+                self.contentHandler!(self.bestAttemptContent!)
+            }, failureBlock: { (error) in
+                print("load error", error!)
+            })
+  ```
+
+4. Tell to the SDK for group identifier.
+  *IMPORTANT*
+  You must declare `groupBundle` before `appID` and `callbackURI`
+> Swift
+```swift
+    SCGPush.shared.groupBundle = "your.group.bundel.identifier"
+    SSCGPush.instance.appID = "your app id"
+    SCGPush.instance.callbackURI = "http://example.com"
+```
+
+You are ready to test it and see nice media attachments to your push messages
