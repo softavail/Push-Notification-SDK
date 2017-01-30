@@ -271,7 +271,7 @@ open class SCGPush: NSObject {
         let configuration = URLSessionConfiguration.default
         let session = URLSession(configuration: configuration)
         
-        let urlString = "\(callbackURI)/messages/\(messageID)/confirm\(state.rawValue)"
+        let urlString = "\(callbackURI)/messages/\(messageID)/confirm/\(state.rawValue)"
         let url = URL(string: urlString)
         
         var request = URLRequest(url: url!)

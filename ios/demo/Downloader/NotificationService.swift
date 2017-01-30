@@ -25,6 +25,8 @@ class NotificationService: UNNotificationServiceExtension {
             // Download the attachment
             print("step 2", attachmentID, messageID)
             
+            
+            
             SCGPush.shared.loadAttachment(messageID, attachmentID: attachmentID, completionBlock: {
                 (url, type) in
                 print("tmp", type)
