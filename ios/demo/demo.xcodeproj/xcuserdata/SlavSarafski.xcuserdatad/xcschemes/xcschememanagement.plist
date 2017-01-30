@@ -4,6 +4,11 @@
 <dict>
 	<key>SchemeUserState</key>
 	<dict>
+		<key>Downloader.xcscheme</key>
+		<dict>
+			<key>orderHint</key>
+			<integer>5</integer>
+		</dict>
 		<key>demo.xcscheme</key>
 		<dict>
 			<key>orderHint</key>
@@ -28,6 +33,16 @@
 			<true/>
 		</dict>
 		<key>F59BC8431CEA56310043E96E</key>
+		<dict>
+			<key>primary</key>
+			<true/>
+		</dict>
+		<key>F778FAFF1DC0CE4300D73AC7</key>
+		<dict>
+			<key>primary</key>
+			<true/>
+		</dict>
+		<key>F7DD6F4B1DC21764005CD035</key>
 		<dict>
 			<key>primary</key>
 			<true/>
