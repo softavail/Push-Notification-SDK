@@ -10,6 +10,7 @@ import UserNotifications
 import SCGPush
 import MobileCoreServices
 
+@available(iOSApplicationExtension 10.0, *)
 class NotificationService: UNNotificationServiceExtension {
 
     var contentHandler: ((UNNotificationContent) -> Void)?
