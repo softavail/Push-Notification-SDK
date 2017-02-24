@@ -1,20 +1,20 @@
+
 SCG Push SDK
 ===
 
 # Pre-requirements
-Configured project used Xcode
+Configure your project to use Xcode.
 
-# SDK Download and Install
-## Download
+# SDK Installation
 
-> TODO: way to distribute the SDK
+
 
 ## Install
 
-> TODO: way to distribute the SDK
-Drag the SCGPush.framework file to the project in Xcode
 
-Than:
+Drag the SCGPush.framework file to the project in Xcode.
+
+Then:
 
 > Import library
 
@@ -23,7 +23,7 @@ Than:
 import SSCGPush
 ```
 
-For Objective-C project
+For an Objective-C project
 1. Under Build Settings, in Packaging, make sure the Defines Module setting for that framework target is set to “Yes".
 
 2. Import library
@@ -34,8 +34,8 @@ For Objective-C project
 
 
 ## Initialize with root URL and App ID
-SDK Push library must be used as a singleton object. Before start using it,
-you must initialize it with `callbackURI` and `appID`
+The SDK Push library must be used as a singleton object. Before start using it,
+you must initialize it with `callbackURI` and `appID`.
 
 You can initialize the library from every entry point, but `AppDelegate` class is preferred.
 
@@ -134,7 +134,7 @@ If you are working on Objective-C project You can register token in `- (void)app
 }
 ```
 
-If you want to register `token` somewhere else, you can save token with `saveDeviceToken` method.
+If you want to register the `token` somewhere else, you can save token with `saveDeviceToken` method.
 
 > Swift
 ```swift
@@ -203,15 +203,14 @@ SCGPush.instance.unregisterPushToken({
 
 # Report status
 
-If you want to track the status of the messages you can use `reportStatus`.
-You can report different type of status:
+If you want to update the status of a recieved push message with the SCG server you can use `reportStatus`.
+Allowed statuses are:
   - DELIVERED
   - MEDIA REQUESTED
   - READ
   - CLICKTHRU
   - CONVERTED
 
-> TODO: Explain different states
 
 > Swift
 ```swift
@@ -274,8 +273,8 @@ func init(){
 
 # Push notification with media content
 
-This future is new for iOS and it is supported in iOS 10 and later
-With this functionality you can present image, animated image, video or audio on notification screen.
+This feature is new for iOS and it is supported in iOS 10 and later
+With this functionality you can present an image, an animated image, a video or audio on notification screen.
 
 1. Create an `App Group`
   1.1 Go to apple developer portal
@@ -283,7 +282,7 @@ With this functionality you can present image, animated image, video or audio on
   1.3 Under the `Indentifiers` tab select `App Groups`
   1.4 Enter a description and identifier (`group.` will be automatically added in front after you created the identifier)
   1.5 Go to `App IDs` under the `Indentifiers` tab
-  1.6 Select your app, activate `App Groups` under `Application Services` and select the group you created a minute before
+  1.6 Select your app, activate `App Groups` under `Application Services` and select the group you just created
 
 2. Create `Notification Service Extension`
   2.1 Open your project
@@ -291,8 +290,8 @@ With this functionality you can present image, animated image, video or audio on
   2.3 Choose `Notification Service Extension`. Write a product name (e.x. `NotificationService`)
   2.4 A new Group will be added to your project with same name. Open it and select YourProductName.swift (e.x. `NotificationService.swift`) or YourProductName.m for Objective-c (e.x. `NotificationService.m`)
 
-3. Load attachment from push message and present it
-  3.1 In function `didReceive withContentHandler` tell to SCGPush your group identifier that created in step 1.
+3. Load the attachment from push message and present it
+  3.1 In function `didReceive withContentHandler` pass SCGPush your group identifier that was created in step 1.
   > Swift
   ```swift
         override func didReceive(_ request: UNNotificationRequest, withContentHandler contentHandler: @escaping (UNNotificationContent) -> Void) {
@@ -303,7 +302,7 @@ With this functionality you can present image, animated image, video or audio on
             ...
   ```
 
-  3.2 Load attachment with `loadAttachment`
+  3.2 Load the attachment with `loadAttachment`
   > Swift
   ```swift
         SCGPush.shared.loadAttachment(messageID, attachmentID: attachmentID, completionBlock: {
@@ -318,7 +317,7 @@ With this functionality you can present image, animated image, video or audio on
             })
   ```
 
-4. Tell to the SDK for group identifier.
+4. Set the group identifier in the SDK.
   *IMPORTANT*
   You must declare `groupBundle` before `appID` and `callbackURI`
 > Swift
@@ -328,4 +327,3 @@ With this functionality you can present image, animated image, video or audio on
     SCGPush.instance.callbackURI = "http://example.com"
 ```
 
-You are ready to test it and see nice media attachments to your push messages
