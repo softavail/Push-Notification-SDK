@@ -71,12 +71,18 @@ class MessageAdapter extends RecyclerView.Adapter<MessageAdapter.MessageViewHold
             case R.id.messageClicktrhu:
                 ScgClient.getInstance().confirm(data.getId(), ScgState.CLICKTHRU, result);
                 break;
+            case R.id.messageRead:
+                ScgClient.getInstance().confirm(data.getId(), ScgState.READ, result);
+                break;
             case R.id.messageDeeplink:
                 if (data.hasDeepLink()) {
                     ScgClient.getInstance().resolveTrackedLink(data.getDeepLink(), result);
                 }
                 break;
             case R.id.messageAttachment:
+                if (!data.hasAttachment())
+                    break;
+
                 new ScgClient.DownloadAttachment(context) {
 
                     private AlertDialog progress;
@@ -136,6 +142,9 @@ class MessageAdapter extends RecyclerView.Adapter<MessageAdapter.MessageViewHold
 
         holder.binding.messageDelivery.setOnClickListener(this);
         holder.binding.messageDelivery.setTag(holder);
+
+        holder.binding.messageRead.setOnClickListener(this);
+        holder.binding.messageRead.setTag(holder);
 
         holder.binding.messageDeeplink.setOnClickListener(this);
         holder.binding.messageDeeplink.setTag(holder);

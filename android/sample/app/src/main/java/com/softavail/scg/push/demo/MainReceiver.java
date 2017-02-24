@@ -55,6 +55,12 @@ public class MainReceiver extends ScgPushReceiver {
     @Override
     protected void onMessageReceived(final String messageId, final ScgMessage message) {
 
+        if (!ScgClient.isInitialized()) {
+            Log.w(TAG, "onMessageReceived() called with: messageId = [" + messageId + "], message = [" + message + "] " +
+                    "but ScgClient was not initialized, so message was not handled.");
+            return;
+        }
+
         deliveryReport(messageId);
 
         final String msg = message.getBody();
