@@ -1,16 +1,16 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    package="com.softavail.scg.push.demo">
+    package="com.syniverse.scg.push.demo">
 
     <uses-permission android:name="android.permission.INTERNET" />
     <uses-permission android:name="android.permission.WAKE_LOCK" />
     <uses-permission android:name="com.google.android.c2dm.permission.RECEIVE" />
 
     <permission
-        android:name="com.softavail.scg.push.permission.C2D_MESSAGE"
+        android:name="com.syniverse.scg.push.permission.C2D_MESSAGE"
         android:protectionLevel="signature" />
 
-    <uses-permission android:name="com.softavail.scg.push.permission.C2D_MESSAGE" />
+    <uses-permission android:name="com.syniverse.scg.push.permission.C2D_MESSAGE" />
 
     <application
         android:allowBackup="true"
@@ -18,12 +18,12 @@
         android:label="@string/app_name"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-        <service android:name="com.softavail.scg.push.sdk.ScgMessagingService">
+        <service android:name="com.syniverse.scg.push.sdk.ScgMessagingService">
             <intent-filter>
                 <action android:name="com.google.firebase.MESSAGING_EVENT" />
             </intent-filter>
         </service>
-        <service android:name="com.softavail.scg.push.sdk.ScgInstanceIdService">
+        <service android:name="com.syniverse.scg.push.sdk.ScgInstanceIdService">
             <intent-filter>
                 <action android:name="com.google.firebase.INSTANCE_ID_EVENT" />
             </intent-filter>
@@ -45,8 +45,8 @@
             android:exported="false"
             android:enabled="true">
             <intent-filter>
-                <action android:name="com.softavail.scg.push.sdk.action.PUSH_TOKEN_RECEIVED"/>
-                <action android:name="com.softavail.scg.push.sdk.action.MESSAGE_RECEIVED"/>
+                <action android:name="com.syniverse.scg.push.sdk.action.PUSH_TOKEN_RECEIVED"/>
+                <action android:name="com.syniverse.scg.push.sdk.action.MESSAGE_RECEIVED"/>
             </intent-filter>
         </receiver>
         <meta-data

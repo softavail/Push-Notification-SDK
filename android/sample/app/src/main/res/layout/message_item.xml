@@ -6,7 +6,7 @@
 
         <variable
             name="message"
-            type="com.softavail.scg.push.sdk.ScgMessage" />
+            type="com.syniverse.scg.push.sdk.ScgMessage" />
     </data>
 
     <LinearLayout

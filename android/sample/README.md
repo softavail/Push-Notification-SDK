@@ -34,17 +34,17 @@ Before starting using the SCG Push SDK, library must be initialized.
 
 Follow the instructions for initializing [Firebase Messaging Client](https://firebase.google.com/docs/cloud-messaging/android/client) on Android.
 
-- Replace `.MyFirebaseMessagingService` service with  `com.softavail.scg.push.sdk.ScgMessagingService`
-- Replace `.MyFirebaseInstanceIDService` service with `com.softavail.scg.push.sdk.ScgInstanceIdService`
+- Replace `.MyFirebaseMessagingService` service with  `com.syniverse.scg.push.sdk.ScgMessagingService`
+- Replace `.MyFirebaseInstanceIDService` service with `com.syniverse.scg.push.sdk.ScgInstanceIdService`
 
 ```xml
 <application .... >
-  <service android:name="com.softavail.scg.push.sdk.ScgMessagingService">
+  <service android:name="com.syniverse.scg.push.sdk.ScgMessagingService">
       <intent-filter>
           <action android:name="com.google.firebase.MESSAGING_EVENT" />
       </intent-filter>
   </service>
-  <service android:name="com.softavail.scg.push.sdk.ScgInstanceIdService">
+  <service android:name="com.syniverse.scg.push.sdk.ScgInstanceIdService">
       <intent-filter>
           <action android:name="com.google.firebase.INSTANCE_ID_EVENT" />
       </intent-filter>
@@ -53,8 +53,8 @@ Follow the instructions for initializing [Firebase Messaging Client](https://fir
             android:exported="false"
             android:enabled="true">
     <intent-filter>
-        <action android:name="com.softavail.scg.push.sdk.action.PUSH_TOKEN_RECEIVED"/>
-        <action android:name="com.softavail.scg.push.sdk.action.MESSAGE_RECEIVED"/>
+        <action android:name="com.syniverse.scg.push.sdk.action.PUSH_TOKEN_RECEIVED"/>
+        <action android:name="com.syniverse.scg.push.sdk.action.MESSAGE_RECEIVED"/>
     </intent-filter>
   </receiver>
 </application>
@@ -66,8 +66,8 @@ To handle receiving push notifications and refresh push tokens you must register
 ```xml
 <receiver android:name=".MainReceiver" android:exported="false" android:enabled="true">
   <intent-filter>
-      <action android:name="com.softavail.scg.push.sdk.action.PUSH_TOKEN_RECEIVED"/>
-      <action android:name="com.softavail.scg.push.sdk.action.MESSAGE_RECEIVED"/>
+      <action android:name="com.syniverse.scg.push.sdk.action.PUSH_TOKEN_RECEIVED"/>
+      <action android:name="com.syniverse.scg.push.sdk.action.MESSAGE_RECEIVED"/>
   </intent-filter>
 </receiver>
 ```

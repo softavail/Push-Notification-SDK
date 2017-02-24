@@ -10,7 +10,7 @@
     android:paddingRight="@dimen/activity_horizontal_margin"
     android:paddingTop="@dimen/activity_vertical_margin"
 
-    tools:context="com.softavail.scg.push.demo.MainActivity"
+    tools:context="com.syniverse.scg.push.demo.MainActivity"
     tools:showIn="@layout/activity_main">
 
     <TextView
