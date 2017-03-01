@@ -3,6 +3,8 @@ package com.syniverse.scg.push.sdk;
 import android.content.Context;
 import android.net.Uri;
 import android.os.AsyncTask;
+import android.os.Handler;
+import android.os.Looper;
 import android.util.Log;
 
 import com.google.firebase.iid.FirebaseInstanceId;
@@ -34,6 +36,11 @@ public class ScgClient {
 
     private static final String TAG = "ScgClient";
 
+    private static final int DEFAULT_RETRY_COUNT = 5;
+    //200 millis
+    private static final long DEFAULT_RETRY_DELAY = 200;
+
+
     private final String fAppId;
     private final String fApiUrl;
 
@@ -42,11 +49,17 @@ public class ScgClient {
     private static ScgClient sInstance;
     private String mAuthToken;
 
+    private int mRetryCount;
+    private long mInitialDelay;
 
-    private ScgClient(Context application, String rootUrl, String appId) {
+
+    private ScgClient(Context application, String rootUrl, String appId, int retryCount, long initialDelay) {
         fAppId = appId;
         fApiUrl = rootUrl;
         mService = getService();
+
+        mRetryCount = (retryCount >= 0) ? retryCount : DEFAULT_RETRY_COUNT;
+        mInitialDelay = (initialDelay >= 0) ? initialDelay : DEFAULT_RETRY_DELAY;
     }
 
     /**
@@ -55,12 +68,14 @@ public class ScgClient {
      * @param context Context to be initialized with
      * @param rootUrl Root URL of the API
      * @param appId   Application ID
+     * @param retriesCount How many times the SDK should retry on 503 error code.
+     * @param initialRetryDelay Sets how long the SDK should wait before resending the request. The next retry delays is doubled.
      */
-    public static void initialize(Context context, String rootUrl, String appId) {
+    public static void initialize(Context context, String rootUrl, String appId, int retriesCount, long initialRetryDelay) {
         Context application = context.getApplicationContext();
 
         if (sInstance == null) {
-            sInstance = new ScgClient(application, rootUrl, appId);
+            sInstance = new ScgClient(application, rootUrl, appId, retriesCount, initialRetryDelay);
         }
     }
 
@@ -135,7 +150,30 @@ public class ScgClient {
                 }
             });
 
+        //test the 503 error response
+//        httpClient.interceptors().add(new Interceptor() {
+//            @Override
+//            public Response intercept(Chain chain) throws IOException {
+//                Request request = chain.request();
+//                if (request.url().toString().contains("/register")) {
+//                    return chain.proceed(request);
+//                }
+//
+//                Response response = new Response.Builder()
+//                        .code(503)
+//                        .message("Service unavail.")
+//                        .request(chain.request())
+//                        .protocol(Protocol.HTTP_1_0)
+//                        .addHeader("content-type", "application/json")
+//                        .body(ResponseBody.create(MediaType.parse("application/json"), new byte[0]))
+//                        .build();
+//
+//                return response;
+//            }
+//        });
+
         httpClient.followRedirects(followRedirects);
+        httpClient.retryOnConnectionFailure(true);
         httpClient.followSslRedirects(followRedirects);
         return httpClient.build();
     }
@@ -153,22 +191,34 @@ public class ScgClient {
      * @see ScgState
      */
     public synchronized void confirm(String messageId, ScgState state, final ScgCallback result) {
-        if (messageId == null) return;
-        mService.confirmation(messageId, state).enqueue(new Callback<ResponseBody>() {
-            @Override
-            public void onResponse(Call<ResponseBody> call, retrofit2.Response<ResponseBody> response) {
-                if (response.code() > 400) {
-                    if (result != null) result.onFailed(response.code(), response.message());
-                } else {
-                    if (result != null) result.onSuccess(response.code(), response.message());
-                }
-            }
+        confirm(messageId, state, result, 0, mInitialDelay);
+    }
 
+    private void confirm(final String messageId, final ScgState state, final ScgCallback result, final int retryCount, final long delay) {
+        if (messageId == null) return;
+        new Handler(Looper.myLooper()).postDelayed(new Runnable() {
             @Override
-            public void onFailure(Call<ResponseBody> call, Throwable t) {
-                result.onFailed(-1, t.getMessage());
+            public void run() {
+                mService.confirmation(messageId, state).enqueue(new Callback<ResponseBody>() {
+                    @Override
+                    public void onResponse(Call<ResponseBody> call, retrofit2.Response<ResponseBody> response) {
+                        if (response.code() == 503 && retryCount < mRetryCount) {
+                            Log.d(TAG, "confirm: 503 - retrying (" + retryCount + ")");
+                            confirm(messageId, state, result, retryCount + 1, delay * 2);
+                        } else if (response.code() > 400) {
+                            if (result != null) result.onFailed(response.code(), response.message());
+                        } else {
+                            if (result != null) result.onSuccess(response.code(), response.message());
+                        }
+                    }
+
+                    @Override
+                    public void onFailure(Call<ResponseBody> call, Throwable t) {
+                        result.onFailed(-1, t.getMessage());
+                    }
+                });
             }
-        });
+        }, delay);
     }
 
     /**
@@ -177,22 +227,36 @@ public class ScgClient {
      * @param pushToken The device push token
      * @param result    Callback getting the result of the register call
      */
-    public synchronized void registerPushToken(final String pushToken, final ScgCallback result) {
+    public synchronized void registerPushToken(String pushToken, ScgCallback result) {
+        registerPushToken(pushToken, result, 0, mInitialDelay);
+    }
+
+    private void registerPushToken(final String pushToken, final ScgCallback result, final int retryCount, final long delay) {
         if (pushToken == null) return;
 
         final RegisterRequest request = new RegisterRequest(fAppId, pushToken);
 
-        mService.registerPushToken(request).enqueue(new Callback<ResponseBody>() {
+        new Handler(Looper.myLooper()).postDelayed(new Runnable() {
             @Override
-            public void onResponse(Call<ResponseBody> call, retrofit2.Response<ResponseBody> response) {
-                sendResult(response, result);
-            }
+            public void run() {
+                mService.registerPushToken(request).enqueue(new Callback<ResponseBody>() {
+                    @Override
+                    public void onResponse(Call<ResponseBody> call, retrofit2.Response<ResponseBody> response) {
+                        if (response.code() == 503 && retryCount < mRetryCount) {
+                            Log.d(TAG, "registerPushToken: 503 - retrying (" + retryCount + ")");
+                            registerPushToken(pushToken, result, retryCount + 1, delay * 2);
+                        } else {
+                            sendResult(response, result);
+                        }
+                    }
 
-            @Override
-            public void onFailure(Call<ResponseBody> call, Throwable t) {
-                result.onFailed(-1, t.getMessage());
+                    @Override
+                    public void onFailure(Call<ResponseBody> call, Throwable t) {
+                        result.onFailed(-1, t.getMessage());
+                    }
+                });
             }
-        });
+        }, delay);
     }
 
     /**
@@ -202,21 +266,35 @@ public class ScgClient {
      * @param result    Callback getting the result of the unregister call
      */
     public synchronized void unregisterPushToken(final String pushToken, final ScgCallback result) {
+        unregisterPushToken(pushToken, result, 0, mInitialDelay);
+    }
+
+    private void unregisterPushToken(final String pushToken, final ScgCallback result, final int retryCount, final long delay) {
         if (pushToken == null) return;
 
         final UnregisterRequest request = new UnregisterRequest(fAppId, pushToken);
 
-        mService.unregisterPushToken(request).enqueue(new Callback<ResponseBody>() {
+        new Handler(Looper.myLooper()).postDelayed(new Runnable() {
             @Override
-            public void onResponse(Call<ResponseBody> call, retrofit2.Response<ResponseBody> response) {
-                sendResult(response, result);
-            }
+            public void run() {
+                mService.unregisterPushToken(request).enqueue(new Callback<ResponseBody>() {
+                    @Override
+                    public void onResponse(Call<ResponseBody> call, retrofit2.Response<ResponseBody> response) {
+                        if (response.code() == 503 && retryCount < mRetryCount) {
+                            Log.d(TAG, "unregisterPushToken: 503 - retrying (" + retryCount + ")");
+                            unregisterPushToken(pushToken, result, retryCount + 1, delay * 2);
+                        } else {
+                            sendResult(response, result);
+                        }
+                    }
 
-            @Override
-            public void onFailure(Call<ResponseBody> call, Throwable t) {
-                result.onFailed(-1, t.getMessage());
+                    @Override
+                    public void onFailure(Call<ResponseBody> call, Throwable t) {
+                        result.onFailed(-1, t.getMessage());
+                    }
+                });
             }
-        });
+        }, delay);
     }
 
     public synchronized void resolveTrackedLink(String url, final ScgCallback result) {
@@ -327,7 +405,25 @@ public class ScgClient {
             Log.d(TAG, "doInBackground: downloading " + strings[1] + " attachment of " + strings[0]);
 
             try {
-                final retrofit2.Response<ResponseBody> res = client.getService().downloadAttachment(strings[0], strings[1]).execute();
+                retrofit2.Response<ResponseBody> res = client.getService().downloadAttachment(strings[0], strings[1]).execute();
+
+                if (res.code() == 503) {
+                    int retryCount = 0;
+                    long delay = ScgClient.getInstance().mInitialDelay;
+
+                    do {
+                        try {
+                            Thread.sleep(delay);
+                        } catch (InterruptedException e) {
+                            Log.e(TAG, "doInBackground: ", e);
+                        }
+                        Log.d(TAG, "doInBackground: downloading " + strings[1] + " attachment of "
+                                + strings[0] + ": 503 - retrying (" + retryCount + ")");
+                        res = client.getService().downloadAttachment(strings[0], strings[1]).execute();
+                        retryCount++;
+                        delay *= 2;
+                    } while (retryCount < ScgClient.getInstance().mRetryCount && res.code() == 503);
+                }
 
                 if (res.isSuccessful()) {
                     mimeType = res.body().contentType().type() + "/" + res.body().contentType().subtype();

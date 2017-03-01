@@ -179,7 +179,7 @@ public class MainActivity extends AppCompatActivity implements ScgCallback {
     }
 
     private void init(String url, String appId, String auth) {
-        ScgClient.initialize(MainActivity.this, url, appId);
+        ScgClient.initialize(MainActivity.this, url, appId, 5, 200);
         ScgClient.getInstance().auth(auth);
         pushToken.setText(ScgClient.getInstance().getToken());
         accessToken.setText(auth);
