@@ -119,6 +119,12 @@ public class ScgClient {
         return sInstance;
     }
 
+    /**
+     * Destroys the currently initialized instance
+     */
+    public static void destroyInstance() {
+        sInstance = null;
+    }
 
     private ScgRestService getService() {
 
