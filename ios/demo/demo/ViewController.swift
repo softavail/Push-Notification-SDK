@@ -49,7 +49,7 @@ class ViewController: UIViewController, SCGPushDelegate {
         baseURIField.text = defauts.string(forKey: "baseurl")
         appIDField.text = defauts.string(forKey: "appid")
         
-        SCGPush.shared.groupBundle = "group.com.softavail.scg.push.demo.group"
+        SCGPush.shared.groupBundle = "group.com.syniverse.scg.push.demo"
         SCGPush.shared.callbackURI = baseURIField.text!
         SCGPush.shared.appID = appIDField.text!
         SCGPush.shared.accessToken = accessTokenField.text!
@@ -60,7 +60,7 @@ class ViewController: UIViewController, SCGPushDelegate {
         logField.layer.borderColor = UIColor.black.cgColor
         logField.layer.borderWidth = 1
         //SLAV
-//        SCGPush.instance.groupBundle = "group.com.softavail.scg.push.demo.group"
+//        SCGPush.instance.groupBundle = "group.com.syniverse.scg.push.demo"
 //        SCGPush.instance.accessToken = "DQHlNta2J2QGHFHkI44Ei"
 //        SCGPush.instance.appID = "com.syniverse.push_demo"
 //        SCGPush.instance.callbackURI = "http://192.168.1.197:8080/scg-dra/proxy"

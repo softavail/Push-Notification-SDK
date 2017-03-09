@@ -20,7 +20,7 @@
 		F59BC8491CEA56320043E96E /* demoUITests.swift in Sources */ = {isa = PBXBuildFile; fileRef = F59BC8481CEA56320043E96E /* demoUITests.swift */; };
 		F7235DCF1DC0EDA400FCF7B6 /* SCGPush.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 5B97E99E1D2252C40091617F /* SCGPush.framework */; };
 		F778FB031DC0CE4300D73AC7 /* NotificationService.swift in Sources */ = {isa = PBXBuildFile; fileRef = F778FB021DC0CE4300D73AC7 /* NotificationService.swift */; };
-		F778FB071DC0CE4300D73AC7 /* Downloader.appex in Embed App Extensions */ = {isa = PBXBuildFile; fileRef = F778FB001DC0CE4300D73AC7 /* Downloader.appex */; settings = {ATTRIBUTES = (RemoveHeadersOnCopy, ); }; };
+		F778FB071DC0CE4300D73AC7 /* SCGPushDemoNotificationExtension.appex in Embed App Extensions */ = {isa = PBXBuildFile; fileRef = F778FB001DC0CE4300D73AC7 /* SCGPushDemoNotificationExtension.appex */; settings = {ATTRIBUTES = (RemoveHeadersOnCopy, ); }; };
 		F778FB0F1DC0CF7700D73AC7 /* UserNotifications.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = F778FB0E1DC0CF7700D73AC7 /* UserNotifications.framework */; };
 /* End PBXBuildFile section */
 
@@ -93,7 +93,7 @@
 			dstPath = "";
 			dstSubfolderSpec = 13;
 			files = (
-				F778FB071DC0CE4300D73AC7 /* Downloader.appex in Embed App Extensions */,
+				F778FB071DC0CE4300D73AC7 /* SCGPushDemoNotificationExtension.appex in Embed App Extensions */,
 			);
 			name = "Embed App Extensions";
 			runOnlyForDeploymentPostprocessing = 0;
@@ -107,23 +107,23 @@
 		5BC0FE941D22996A007A9637 /* prepare.sh */ = {isa = PBXFileReference; lastKnownFileType = text.script.sh; path = prepare.sh; sourceTree = "<group>"; };
 		5BC0FE951D229BB6007A9637 /* Fabric.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Fabric.framework; path = depends/fabric_ios/Fabric.framework; sourceTree = "<group>"; };
 		5BC0FE961D229BB6007A9637 /* Crashlytics.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Crashlytics.framework; path = depends/fabric_ios/Crashlytics.framework; sourceTree = "<group>"; };
-		F59BC8251CEA56310043E96E /* demo.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = demo.app; sourceTree = BUILT_PRODUCTS_DIR; };
+		F59BC8251CEA56310043E96E /* SCGPushDemo.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = SCGPushDemo.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		F59BC8281CEA56310043E96E /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		F59BC82A1CEA56310043E96E /* ViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ViewController.swift; sourceTree = "<group>"; };
 		F59BC82D1CEA56310043E96E /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/Main.storyboard; sourceTree = "<group>"; };
 		F59BC82F1CEA56310043E96E /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		F59BC8321CEA56310043E96E /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
 		F59BC8341CEA56310043E96E /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
-		F59BC8391CEA56310043E96E /* demoTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = demoTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
+		F59BC8391CEA56310043E96E /* SCGPushDemoTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = SCGPushDemoTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		F59BC83D1CEA56310043E96E /* demoTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = demoTests.swift; sourceTree = "<group>"; };
 		F59BC83F1CEA56310043E96E /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
-		F59BC8441CEA56310043E96E /* demoUITests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = demoUITests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
+		F59BC8441CEA56310043E96E /* SCGPushDemoUITests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = SCGPushDemoUITests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		F59BC8481CEA56320043E96E /* demoUITests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = demoUITests.swift; sourceTree = "<group>"; };
 		F59BC84A1CEA56320043E96E /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		F59BC86F1CEA5B530043E96E /* Bridge.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = Bridge.h; sourceTree = "<group>"; };
 		F73EE3BA1DC9FC74003EEC18 /* Downloader.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = Downloader.entitlements; sourceTree = "<group>"; };
 		F745EF6A1DC0D39700906C6C /* demo.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = demo.entitlements; sourceTree = "<group>"; };
-		F778FB001DC0CE4300D73AC7 /* Downloader.appex */ = {isa = PBXFileReference; explicitFileType = "wrapper.app-extension"; includeInIndex = 0; path = Downloader.appex; sourceTree = BUILT_PRODUCTS_DIR; };
+		F778FB001DC0CE4300D73AC7 /* SCGPushDemoNotificationExtension.appex */ = {isa = PBXFileReference; explicitFileType = "wrapper.app-extension"; includeInIndex = 0; path = SCGPushDemoNotificationExtension.appex; sourceTree = BUILT_PRODUCTS_DIR; };
 		F778FB021DC0CE4300D73AC7 /* NotificationService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NotificationService.swift; sourceTree = "<group>"; };
 		F778FB041DC0CE4300D73AC7 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		F778FB0E1DC0CF7700D73AC7 /* UserNotifications.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = UserNotifications.framework; path = System/Library/Frameworks/UserNotifications.framework; sourceTree = SDKROOT; };
@@ -205,10 +205,10 @@
 		F59BC8261CEA56310043E96E /* Products */ = {
 			isa = PBXGroup;
 			children = (
-				F59BC8251CEA56310043E96E /* demo.app */,
-				F59BC8391CEA56310043E96E /* demoTests.xctest */,
-				F59BC8441CEA56310043E96E /* demoUITests.xctest */,
-				F778FB001DC0CE4300D73AC7 /* Downloader.appex */,
+				F59BC8251CEA56310043E96E /* SCGPushDemo.app */,
+				F59BC8391CEA56310043E96E /* SCGPushDemoTests.xctest */,
+				F59BC8441CEA56310043E96E /* SCGPushDemoUITests.xctest */,
+				F778FB001DC0CE4300D73AC7 /* SCGPushDemoNotificationExtension.appex */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -258,9 +258,9 @@
 /* End PBXGroup section */
 
 /* Begin PBXNativeTarget section */
-		F59BC8241CEA56310043E96E /* demo */ = {
+		F59BC8241CEA56310043E96E /* SCGPushDemo */ = {
 			isa = PBXNativeTarget;
-			buildConfigurationList = F59BC84D1CEA56320043E96E /* Build configuration list for PBXNativeTarget "demo" */;
+			buildConfigurationList = F59BC84D1CEA56320043E96E /* Build configuration list for PBXNativeTarget "SCGPushDemo" */;
 			buildPhases = (
 				5BC0FE9A1D229C0E007A9637 /* Prepare */,
 				F59BC8211CEA56310043E96E /* Sources */,
@@ -277,14 +277,14 @@
 				5B97E9A21D2253000091617F /* PBXTargetDependency */,
 				F778FB061DC0CE4300D73AC7 /* PBXTargetDependency */,
 			);
-			name = demo;
+			name = SCGPushDemo;
 			productName = demo;
-			productReference = F59BC8251CEA56310043E96E /* demo.app */;
+			productReference = F59BC8251CEA56310043E96E /* SCGPushDemo.app */;
 			productType = "com.apple.product-type.application";
 		};
-		F59BC8381CEA56310043E96E /* demoTests */ = {
+		F59BC8381CEA56310043E96E /* SCGPushDemoTests */ = {
 			isa = PBXNativeTarget;
-			buildConfigurationList = F59BC8501CEA56320043E96E /* Build configuration list for PBXNativeTarget "demoTests" */;
+			buildConfigurationList = F59BC8501CEA56320043E96E /* Build configuration list for PBXNativeTarget "SCGPushDemoTests" */;
 			buildPhases = (
 				F59BC8351CEA56310043E96E /* Sources */,
 				F59BC8361CEA56310043E96E /* Frameworks */,
@@ -295,14 +295,14 @@
 			dependencies = (
 				F59BC83B1CEA56310043E96E /* PBXTargetDependency */,
 			);
-			name = demoTests;
+			name = SCGPushDemoTests;
 			productName = demoTests;
-			productReference = F59BC8391CEA56310043E96E /* demoTests.xctest */;
+			productReference = F59BC8391CEA56310043E96E /* SCGPushDemoTests.xctest */;
 			productType = "com.apple.product-type.bundle.unit-test";
 		};
-		F59BC8431CEA56310043E96E /* demoUITests */ = {
+		F59BC8431CEA56310043E96E /* SCGPushDemoUITests */ = {
 			isa = PBXNativeTarget;
-			buildConfigurationList = F59BC8531CEA56320043E96E /* Build configuration list for PBXNativeTarget "demoUITests" */;
+			buildConfigurationList = F59BC8531CEA56320043E96E /* Build configuration list for PBXNativeTarget "SCGPushDemoUITests" */;
 			buildPhases = (
 				F59BC8401CEA56310043E96E /* Sources */,
 				F59BC8411CEA56310043E96E /* Frameworks */,
@@ -313,14 +313,14 @@
 			dependencies = (
 				F59BC8461CEA56310043E96E /* PBXTargetDependency */,
 			);
-			name = demoUITests;
+			name = SCGPushDemoUITests;
 			productName = demoUITests;
-			productReference = F59BC8441CEA56310043E96E /* demoUITests.xctest */;
+			productReference = F59BC8441CEA56310043E96E /* SCGPushDemoUITests.xctest */;
 			productType = "com.apple.product-type.bundle.ui-testing";
 		};
-		F778FAFF1DC0CE4300D73AC7 /* Downloader */ = {
+		F778FAFF1DC0CE4300D73AC7 /* SCGPushDemoNotificationExtension */ = {
 			isa = PBXNativeTarget;
-			buildConfigurationList = F778FB0C1DC0CE4300D73AC7 /* Build configuration list for PBXNativeTarget "Downloader" */;
+			buildConfigurationList = F778FB0C1DC0CE4300D73AC7 /* Build configuration list for PBXNativeTarget "SCGPushDemoNotificationExtension" */;
 			buildPhases = (
 				F778FAFC1DC0CE4300D73AC7 /* Sources */,
 				F778FAFD1DC0CE4300D73AC7 /* Frameworks */,
@@ -331,9 +331,9 @@
 			dependencies = (
 				5B4D64461DCD13D0003EAD13 /* PBXTargetDependency */,
 			);
-			name = Downloader;
+			name = SCGPushDemoNotificationExtension;
 			productName = Downloader;
-			productReference = F778FB001DC0CE4300D73AC7 /* Downloader.appex */;
+			productReference = F778FB001DC0CE4300D73AC7 /* SCGPushDemoNotificationExtension.appex */;
 			productType = "com.apple.product-type.app-extension";
 		};
 /* End PBXNativeTarget section */
@@ -382,7 +382,7 @@
 					};
 				};
 			};
-			buildConfigurationList = F59BC8201CEA56310043E96E /* Build configuration list for PBXProject "demo" */;
+			buildConfigurationList = F59BC8201CEA56310043E96E /* Build configuration list for PBXProject "SCGPushDemo" */;
 			compatibilityVersion = "Xcode 3.2";
 			developmentRegion = English;
 			hasScannedForEncodings = 0;
@@ -401,10 +401,10 @@
 			);
 			projectRoot = "";
 			targets = (
-				F59BC8241CEA56310043E96E /* demo */,
-				F59BC8381CEA56310043E96E /* demoTests */,
-				F59BC8431CEA56310043E96E /* demoUITests */,
-				F778FAFF1DC0CE4300D73AC7 /* Downloader */,
+				F59BC8241CEA56310043E96E /* SCGPushDemo */,
+				F59BC8381CEA56310043E96E /* SCGPushDemoTests */,
+				F59BC8431CEA56310043E96E /* SCGPushDemoUITests */,
+				F778FAFF1DC0CE4300D73AC7 /* SCGPushDemoNotificationExtension */,
 			);
 		};
 /* End PBXProject section */
@@ -473,7 +473,7 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
-			shellScript = "echo \"GCC_PREPROCESSOR_DEFINITIONS=${GCC_PREPROCESSOR_DEFINITIONS}\"\n\nWITH_CRASHLYTICS_STRING=\"WITH_CRASHLYTICS=1\"\n\nif echo \"$GCC_PREPROCESSOR_DEFINITIONS\" | grep -q \"$WITH_CRASHLYTICS_STRING\"; then\necho \"!!! Running Fabric !!!\"\n./depends/fabric_ios/Fabric.framework/run 04514ea659042cc5c7368ba808304e40ff726e7c 6aa5626991f10e90acf79f617ebb09f78e554a17a95fb850682e1dd251a9e740\nfi\n";
+			shellScript = "echo \"GCC_PREPROCESSOR_DEFINITIONS=${GCC_PREPROCESSOR_DEFINITIONS}\"\n\nWITH_CRASHLYTICS_STRING=\"WITH_CRASHLYTICS=true\"\n\nif echo \"$GCC_PREPROCESSOR_DEFINITIONS\" | grep -q \"$WITH_CRASHLYTICS_STRING\"; then\necho \"!!! Running Fabric !!!\"\n./depends/fabric_ios/Fabric.framework/run 04514ea659042cc5c7368ba808304e40ff726e7c 6aa5626991f10e90acf79f617ebb09f78e554a17a95fb850682e1dd251a9e740\nfi\n";
 		};
 		5BC0FE9A1D229C0E007A9637 /* Prepare */ = {
 			isa = PBXShellScriptBuildPhase;
@@ -554,17 +554,17 @@
 		};
 		F59BC83B1CEA56310043E96E /* PBXTargetDependency */ = {
 			isa = PBXTargetDependency;
-			target = F59BC8241CEA56310043E96E /* demo */;
+			target = F59BC8241CEA56310043E96E /* SCGPushDemo */;
 			targetProxy = F59BC83A1CEA56310043E96E /* PBXContainerItemProxy */;
 		};
 		F59BC8461CEA56310043E96E /* PBXTargetDependency */ = {
 			isa = PBXTargetDependency;
-			target = F59BC8241CEA56310043E96E /* demo */;
+			target = F59BC8241CEA56310043E96E /* SCGPushDemo */;
 			targetProxy = F59BC8451CEA56310043E96E /* PBXContainerItemProxy */;
 		};
 		F778FB061DC0CE4300D73AC7 /* PBXTargetDependency */ = {
 			isa = PBXTargetDependency;
-			target = F778FAFF1DC0CE4300D73AC7 /* Downloader */;
+			target = F778FAFF1DC0CE4300D73AC7 /* SCGPushDemoNotificationExtension */;
 			targetProxy = F778FB051DC0CE4300D73AC7 /* PBXContainerItemProxy */;
 		};
 /* End PBXTargetDependency section */
@@ -616,10 +616,7 @@
 				GCC_DYNAMIC_NO_PIC = NO;
 				GCC_NO_COMMON_BLOCKS = YES;
 				GCC_OPTIMIZATION_LEVEL = 0;
-				GCC_PREPROCESSOR_DEFINITIONS = (
-					"DEBUG=1",
-					"$(inherited)",
-				);
+				GCC_PREPROCESSOR_DEFINITIONS = "$(inherited)";
 				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
 				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
 				GCC_WARN_UNDECLARED_SELECTOR = YES;
@@ -694,7 +691,8 @@
 				INFOPLIST_FILE = demo/Info.plist;
 				IPHONEOS_DEPLOYMENT_TARGET = 8.0;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
-				PRODUCT_BUNDLE_IDENTIFIER = com.softavail.scg.push.demo;
+				OTHER_SWIFT_FLAGS = "";
+				PRODUCT_BUNDLE_IDENTIFIER = com.syniverse.scg.push.demo;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				PROVISIONING_PROFILE = "44344447-b722-4de9-9f4c-05252ab688fd";
 				PROVISIONING_PROFILE_SPECIFIER = SCGPushDemoDev;
@@ -724,7 +722,8 @@
 				INFOPLIST_FILE = demo/Info.plist;
 				IPHONEOS_DEPLOYMENT_TARGET = 8.0;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
-				PRODUCT_BUNDLE_IDENTIFIER = com.softavail.scg.push.demo;
+				OTHER_SWIFT_FLAGS = "-DWITH_CRASHLYTICS";
+				PRODUCT_BUNDLE_IDENTIFIER = com.syniverse.scg.push.demo;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				PROVISIONING_PROFILE = "23d91312-5bd2-4484-8d14-d1d14ddcbcb7";
 				PROVISIONING_PROFILE_SPECIFIER = SCGPushDemoAdHoc;
@@ -742,7 +741,7 @@
 				PRODUCT_BUNDLE_IDENTIFIER = com.softavail.push.demoTests;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_VERSION = 3.0;
-				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/demo.app/demo";
+				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/SCGPushDemo.app/SCGPushDemo";
 			};
 			name = Debug;
 		};
@@ -755,7 +754,7 @@
 				PRODUCT_BUNDLE_IDENTIFIER = com.softavail.push.demoTests;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_VERSION = 3.0;
-				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/demo.app/demo";
+				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/SCGPushDemo.app/SCGPushDemo";
 			};
 			name = Release;
 		};
@@ -794,9 +793,9 @@
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
 				DEVELOPMENT_TEAM = 6D6V2A9HWX;
 				INFOPLIST_FILE = Downloader/Info.plist;
-				IPHONEOS_DEPLOYMENT_TARGET = 8.0;
+				IPHONEOS_DEPLOYMENT_TARGET = 10.0;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @executable_path/../../Frameworks";
-				PRODUCT_BUNDLE_IDENTIFIER = com.softavail.scg.push.demo.downloader;
+				PRODUCT_BUNDLE_IDENTIFIER = com.syniverse.scg.push.demo.NotificationExtension;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				PROVISIONING_PROFILE = "d53e011a-9a25-4351-987d-2072d509570f";
 				PROVISIONING_PROFILE_SPECIFIER = "SCG Push Demo Extension Dev";
@@ -816,9 +815,9 @@
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Distribution";
 				DEVELOPMENT_TEAM = 6D6V2A9HWX;
 				INFOPLIST_FILE = Downloader/Info.plist;
-				IPHONEOS_DEPLOYMENT_TARGET = 8.0;
+				IPHONEOS_DEPLOYMENT_TARGET = 10.0;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @executable_path/../../Frameworks";
-				PRODUCT_BUNDLE_IDENTIFIER = com.softavail.scg.push.demo.downloader;
+				PRODUCT_BUNDLE_IDENTIFIER = com.syniverse.scg.push.demo.NotificationExtension;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				PROVISIONING_PROFILE = "e6afe1d2-3b71-4d92-98ac-7c0b3877eacd";
 				PROVISIONING_PROFILE_SPECIFIER = "SCG Push Demo Extension AdHoc";
@@ -831,7 +830,7 @@
 /* End XCBuildConfiguration section */
 
 /* Begin XCConfigurationList section */
-		F59BC8201CEA56310043E96E /* Build configuration list for PBXProject "demo" */ = {
+		F59BC8201CEA56310043E96E /* Build configuration list for PBXProject "SCGPushDemo" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
 				F59BC84B1CEA56320043E96E /* Debug */,
@@ -840,7 +839,7 @@
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
 		};
-		F59BC84D1CEA56320043E96E /* Build configuration list for PBXNativeTarget "demo" */ = {
+		F59BC84D1CEA56320043E96E /* Build configuration list for PBXNativeTarget "SCGPushDemo" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
 				F59BC84E1CEA56320043E96E /* Debug */,
@@ -849,7 +848,7 @@
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
 		};
-		F59BC8501CEA56320043E96E /* Build configuration list for PBXNativeTarget "demoTests" */ = {
+		F59BC8501CEA56320043E96E /* Build configuration list for PBXNativeTarget "SCGPushDemoTests" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
 				F59BC8511CEA56320043E96E /* Debug */,
@@ -858,7 +857,7 @@
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
 		};
-		F59BC8531CEA56320043E96E /* Build configuration list for PBXNativeTarget "demoUITests" */ = {
+		F59BC8531CEA56320043E96E /* Build configuration list for PBXNativeTarget "SCGPushDemoUITests" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
 				F59BC8541CEA56320043E96E /* Debug */,
@@ -867,7 +866,7 @@
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
 		};
-		F778FB0C1DC0CE4300D73AC7 /* Build configuration list for PBXNativeTarget "Downloader" */ = {
+		F778FB0C1DC0CE4300D73AC7 /* Build configuration list for PBXNativeTarget "SCGPushDemoNotificationExtension" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
 				F778FB081DC0CE4300D73AC7 /* Debug */,

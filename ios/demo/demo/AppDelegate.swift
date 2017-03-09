@@ -24,7 +24,10 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplicationLaunchOptionsKey: Any]?) -> Bool {
         // Override point for customization after application launch.
         #if WITH_CRASHLYTICS
-        Fabric.with([Crashlytics.self])
+            debugPrint("WITH_CRASHLYTICS")
+            Fabric.with([Crashlytics.self])
+        #else
+            debugPrint("NO CRASHLYTICS")
         #endif
 
         let settings = UIUserNotificationSettings(types: [.alert, .badge, .sound], categories: nil)
