@@ -1,20 +1,27 @@
 {
   "project_info": {
-    "project_number": "343875524685",
-    "project_id": "scg-push-sample"
+    "project_number": "919551373144",
+    "firebase_url": "https://scg-push-sample-fda3f.firebaseio.com",
+    "project_id": "scg-push-sample-fda3f",
+    "storage_bucket": "scg-push-sample-fda3f.appspot.com"
   },
   "client": [
     {
       "client_info": {
-        "mobilesdk_app_id": "1:343875524685:android:baa1d28c1da39c9d",
+        "mobilesdk_app_id": "1:919551373144:android:c8cd852e86b4075f",
         "android_client_info": {
-          "package_name": "com.softavail.scg.push.demo"
+          "package_name": "com.syniverse.scg.push.demo"
         }
       },
-      "oauth_client": [],
+      "oauth_client": [
+        {
+          "client_id": "919551373144-r27fhl7u2mslmeu6v18bgfi7tbtnl3q5.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
       "api_key": [
         {
-          "current_key": "AIzaSyCyOykijoNPvNra3MbyviCj1PIskwWh1B4"
+          "current_key": "AIzaSyAOCelqphTJmC7JHcYypvaxh4t8iyagLtc"
         }
       ],
       "services": {
@@ -26,7 +33,7 @@
           "other_platform_oauth_client": []
         },
         "ads_service": {
-          "status": 1
+          "status": 2
         }
       }
     }

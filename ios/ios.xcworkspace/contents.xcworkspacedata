@@ -5,6 +5,6 @@
       location = "group:SCGPush/SCGPush.xcodeproj">
    </FileRef>
    <FileRef
-      location = "group:demo/demo.xcodeproj">
+      location = "group:demo/SCGPushDemo.xcodeproj">
    </FileRef>
 </Workspace>

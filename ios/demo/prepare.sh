@@ -16,7 +16,7 @@ TEMP_DIR="$(pwd)/.temp"
 
 CLEAN=$1
 
-fabric_ar="fabric_ios_1.tar.gz"
+fabric_ar="fabric_ios_2.tar.gz"
 fabric_dst="fabric_ios"
 fabric_cfg=$(cat "$DEPENDENCIES_DIR_NAME/fabric.cfg")
 
