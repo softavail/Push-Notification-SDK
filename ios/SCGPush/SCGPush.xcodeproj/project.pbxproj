@@ -39,7 +39,6 @@
 /* Begin PBXFileReference section */
 		F73C6C231D1BCAED00D3773B /* ios-build-framework-script.sh */ = {isa = PBXFileReference; lastKnownFileType = text.script.sh; path = "ios-build-framework-script.sh"; sourceTree = "<group>"; };
 		F7EFFC431D0DCEB10057A2B6 /* SCGPush.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = SCGPush.framework; sourceTree = BUILT_PRODUCTS_DIR; };
-		F7EFFC461D0DCEB10057A2B6 /* SCGPush.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = SCGPush.h; sourceTree = "<group>"; };
 		F7EFFC481D0DCEB10057A2B6 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		F7EFFC4D1D0DCEB10057A2B6 /* SCGPushTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = SCGPushTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		F7EFFC521D0DCEB10057A2B6 /* SCGPushTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SCGPushTests.swift; sourceTree = "<group>"; };
@@ -87,7 +86,6 @@
 		F7EFFC451D0DCEB10057A2B6 /* SCGPush */ = {
 			isa = PBXGroup;
 			children = (
-				F7EFFC461D0DCEB10057A2B6 /* SCGPush.h */,
 				F7EFFC481D0DCEB10057A2B6 /* Info.plist */,
 				F7EFFC5D1D0DCF9B0057A2B6 /* SCGPush.swift */,
 				F73C6C231D1BCAED00D3773B /* ios-build-framework-script.sh */,
