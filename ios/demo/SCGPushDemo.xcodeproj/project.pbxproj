@@ -7,8 +7,9 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
-		5B97E9A31D2253780091617F /* SCGPush.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 5B97E99E1D2252C40091617F /* SCGPush.framework */; };
-		5B97E9A41D2253890091617F /* SCGPush.framework in CopyFiles */ = {isa = PBXBuildFile; fileRef = 5B97E99E1D2252C40091617F /* SCGPush.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
+		5B831B631E78539200A53428 /* SCGPushSDK.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 5B831B561E77C53000A53428 /* SCGPushSDK.framework */; };
+		5B831B641E7853A900A53428 /* SCGPushSDK.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 5B831B561E77C53000A53428 /* SCGPushSDK.framework */; };
+		5B831B651E7853A900A53428 /* SCGPushSDK.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 5B831B561E77C53000A53428 /* SCGPushSDK.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
 		5BC0FE971D229BB6007A9637 /* Fabric.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 5BC0FE951D229BB6007A9637 /* Fabric.framework */; };
 		5BC0FE981D229BB6007A9637 /* Crashlytics.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 5BC0FE961D229BB6007A9637 /* Crashlytics.framework */; };
 		F59BC8291CEA56310043E96E /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = F59BC8281CEA56310043E96E /* AppDelegate.swift */; };
@@ -18,19 +19,46 @@
 		F59BC8331CEA56310043E96E /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = F59BC8311CEA56310043E96E /* LaunchScreen.storyboard */; };
 		F59BC83E1CEA56310043E96E /* demoTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = F59BC83D1CEA56310043E96E /* demoTests.swift */; };
 		F59BC8491CEA56320043E96E /* demoUITests.swift in Sources */ = {isa = PBXBuildFile; fileRef = F59BC8481CEA56320043E96E /* demoUITests.swift */; };
-		F7235DCF1DC0EDA400FCF7B6 /* SCGPush.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 5B97E99E1D2252C40091617F /* SCGPush.framework */; };
 		F778FB031DC0CE4300D73AC7 /* NotificationService.swift in Sources */ = {isa = PBXBuildFile; fileRef = F778FB021DC0CE4300D73AC7 /* NotificationService.swift */; };
 		F778FB071DC0CE4300D73AC7 /* SCGPushDemoNotificationExtension.appex in Embed App Extensions */ = {isa = PBXBuildFile; fileRef = F778FB001DC0CE4300D73AC7 /* SCGPushDemoNotificationExtension.appex */; settings = {ATTRIBUTES = (RemoveHeadersOnCopy, ); }; };
 		F778FB0F1DC0CF7700D73AC7 /* UserNotifications.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = F778FB0E1DC0CF7700D73AC7 /* UserNotifications.framework */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
-		5B4D64451DCD13D0003EAD13 /* PBXContainerItemProxy */ = {
+		5B831B551E77C53000A53428 /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
-			containerPortal = 5B97E9981D2252C40091617F /* SCGPush.xcodeproj */;
+			containerPortal = 5B831B4E1E77C53000A53428 /* SCGPushSDK.xcodeproj */;
+			proxyType = 2;
+			remoteGlobalIDString = 5BF52A271E76D251008DEE80;
+			remoteInfo = SCGPushSDK;
+		};
+		5B831B571E77C53000A53428 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 5B831B4E1E77C53000A53428 /* SCGPushSDK.xcodeproj */;
+			proxyType = 2;
+			remoteGlobalIDString = 5BF52A301E76D251008DEE80;
+			remoteInfo = SCGPushSDKTests;
+		};
+		5B831B591E77C54500A53428 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 5B831B4E1E77C53000A53428 /* SCGPushSDK.xcodeproj */;
 			proxyType = 1;
-			remoteGlobalIDString = F7EFFC421D0DCEB10057A2B6;
-			remoteInfo = SCGPush;
+			remoteGlobalIDString = 5BF52A261E76D251008DEE80;
+			remoteInfo = SCGPushSDK;
+		};
+		5B831B611E782CB200A53428 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 5B831B4E1E77C53000A53428 /* SCGPushSDK.xcodeproj */;
+			proxyType = 1;
+			remoteGlobalIDString = 5BF52A261E76D251008DEE80;
+			remoteInfo = SCGPushSDK;
+		};
+		5B831B661E7853A900A53428 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 5B831B4E1E77C53000A53428 /* SCGPushSDK.xcodeproj */;
+			proxyType = 1;
+			remoteGlobalIDString = 5BF52A261E76D251008DEE80;
+			remoteInfo = SCGPushSDK;
 		};
 		5B97E99D1D2252C40091617F /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
@@ -45,13 +73,6 @@
 			proxyType = 2;
 			remoteGlobalIDString = F7EFFC4D1D0DCEB10057A2B6;
 			remoteInfo = SCGPushTests;
-		};
-		5B97E9A11D2253000091617F /* PBXContainerItemProxy */ = {
-			isa = PBXContainerItemProxy;
-			containerPortal = 5B97E9981D2252C40091617F /* SCGPush.xcodeproj */;
-			proxyType = 1;
-			remoteGlobalIDString = F7EFFC421D0DCEB10057A2B6;
-			remoteInfo = SCGPush;
 		};
 		F59BC83A1CEA56310043E96E /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
@@ -77,14 +98,15 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXCopyFilesBuildPhase section */
-		5B97E9931D22497F0091617F /* CopyFiles */ = {
+		5B831B681E7853A900A53428 /* Embed Frameworks */ = {
 			isa = PBXCopyFilesBuildPhase;
 			buildActionMask = 2147483647;
 			dstPath = "";
 			dstSubfolderSpec = 10;
 			files = (
-				5B97E9A41D2253890091617F /* SCGPush.framework in CopyFiles */,
+				5B831B651E7853A900A53428 /* SCGPushSDK.framework in Embed Frameworks */,
 			);
+			name = "Embed Frameworks";
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 		F778FB0D1DC0CE4300D73AC7 /* Embed App Extensions */ = {
@@ -101,6 +123,8 @@
 /* End PBXCopyFilesBuildPhase section */
 
 /* Begin PBXFileReference section */
+		5B831B4E1E77C53000A53428 /* SCGPushSDK.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = SCGPushSDK.xcodeproj; path = ../SCGPushSDK/SCGPushSDK.xcodeproj; sourceTree = "<group>"; };
+		5B831B5C1E77C6A700A53428 /* SCGPushDemo-Bridging-Header.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "SCGPushDemo-Bridging-Header.h"; sourceTree = "<group>"; };
 		5B97E9981D2252C40091617F /* SCGPush.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = SCGPush.xcodeproj; path = ../SCGPush/SCGPush.xcodeproj; sourceTree = "<group>"; };
 		5BB7F9341DD9FF640087F8C1 /* export_ipa.sh */ = {isa = PBXFileReference; lastKnownFileType = text.script.sh; path = export_ipa.sh; sourceTree = "<group>"; };
 		5BC0FE931D22996A007A9637 /* deploy.sh */ = {isa = PBXFileReference; lastKnownFileType = text.script.sh; path = deploy.sh; sourceTree = "<group>"; };
@@ -120,7 +144,6 @@
 		F59BC8441CEA56310043E96E /* SCGPushDemoUITests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = SCGPushDemoUITests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		F59BC8481CEA56320043E96E /* demoUITests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = demoUITests.swift; sourceTree = "<group>"; };
 		F59BC84A1CEA56320043E96E /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
-		F59BC86F1CEA5B530043E96E /* Bridge.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = Bridge.h; sourceTree = "<group>"; };
 		F73EE3BA1DC9FC74003EEC18 /* Downloader.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = Downloader.entitlements; sourceTree = "<group>"; };
 		F745EF6A1DC0D39700906C6C /* demo.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = demo.entitlements; sourceTree = "<group>"; };
 		F778FB001DC0CE4300D73AC7 /* SCGPushDemoNotificationExtension.appex */ = {isa = PBXFileReference; explicitFileType = "wrapper.app-extension"; includeInIndex = 0; path = SCGPushDemoNotificationExtension.appex; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -135,9 +158,9 @@
 			buildActionMask = 2147483647;
 			files = (
 				F778FB0F1DC0CF7700D73AC7 /* UserNotifications.framework in Frameworks */,
+				5B831B641E7853A900A53428 /* SCGPushSDK.framework in Frameworks */,
 				5BC0FE971D229BB6007A9637 /* Fabric.framework in Frameworks */,
 				5BC0FE981D229BB6007A9637 /* Crashlytics.framework in Frameworks */,
-				5B97E9A31D2253780091617F /* SCGPush.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -159,13 +182,22 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				F7235DCF1DC0EDA400FCF7B6 /* SCGPush.framework in Frameworks */,
+				5B831B631E78539200A53428 /* SCGPushSDK.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		5B831B4F1E77C53000A53428 /* Products */ = {
+			isa = PBXGroup;
+			children = (
+				5B831B561E77C53000A53428 /* SCGPushSDK.framework */,
+				5B831B581E77C53000A53428 /* SCGPushSDKTests.xctest */,
+			);
+			name = Products;
+			sourceTree = "<group>";
+		};
 		5B97E9991D2252C40091617F /* Products */ = {
 			isa = PBXGroup;
 			children = (
@@ -188,10 +220,11 @@
 		F59BC81C1CEA56310043E96E = {
 			isa = PBXGroup;
 			children = (
+				5B831B5C1E77C6A700A53428 /* SCGPushDemo-Bridging-Header.h */,
+				5B831B4E1E77C53000A53428 /* SCGPushSDK.xcodeproj */,
 				F778FB011DC0CE4300D73AC7 /* Downloader */,
 				5BC0FE991D229BC3007A9637 /* Frameworks */,
 				5B97E9981D2252C40091617F /* SCGPush.xcodeproj */,
-				F59BC86F1CEA5B530043E96E /* Bridge.h */,
 				F59BC8271CEA56310043E96E /* demo */,
 				F59BC83C1CEA56310043E96E /* demoTests */,
 				F59BC8471CEA56320043E96E /* demoUITests */,
@@ -266,16 +299,17 @@
 				F59BC8211CEA56310043E96E /* Sources */,
 				F59BC8221CEA56310043E96E /* Frameworks */,
 				F59BC8231CEA56310043E96E /* Resources */,
-				5B97E9931D22497F0091617F /* CopyFiles */,
 				5BC0FE9B1D229E03007A9637 /* BuildNumber */,
 				5BC0FE8D1D229188007A9637 /* Fabric */,
 				F778FB0D1DC0CE4300D73AC7 /* Embed App Extensions */,
+				5B831B681E7853A900A53428 /* Embed Frameworks */,
 			);
 			buildRules = (
 			);
 			dependencies = (
-				5B97E9A21D2253000091617F /* PBXTargetDependency */,
+				5B831B5A1E77C54500A53428 /* PBXTargetDependency */,
 				F778FB061DC0CE4300D73AC7 /* PBXTargetDependency */,
+				5B831B671E7853A900A53428 /* PBXTargetDependency */,
 			);
 			name = SCGPushDemo;
 			productName = demo;
@@ -329,7 +363,7 @@
 			buildRules = (
 			);
 			dependencies = (
-				5B4D64461DCD13D0003EAD13 /* PBXTargetDependency */,
+				5B831B621E782CB200A53428 /* PBXTargetDependency */,
 			);
 			name = SCGPushDemoNotificationExtension;
 			productName = Downloader;
@@ -398,6 +432,10 @@
 					ProductGroup = 5B97E9991D2252C40091617F /* Products */;
 					ProjectRef = 5B97E9981D2252C40091617F /* SCGPush.xcodeproj */;
 				},
+				{
+					ProductGroup = 5B831B4F1E77C53000A53428 /* Products */;
+					ProjectRef = 5B831B4E1E77C53000A53428 /* SCGPushSDK.xcodeproj */;
+				},
 			);
 			projectRoot = "";
 			targets = (
@@ -410,6 +448,20 @@
 /* End PBXProject section */
 
 /* Begin PBXReferenceProxy section */
+		5B831B561E77C53000A53428 /* SCGPushSDK.framework */ = {
+			isa = PBXReferenceProxy;
+			fileType = wrapper.framework;
+			path = SCGPushSDK.framework;
+			remoteRef = 5B831B551E77C53000A53428 /* PBXContainerItemProxy */;
+			sourceTree = BUILT_PRODUCTS_DIR;
+		};
+		5B831B581E77C53000A53428 /* SCGPushSDKTests.xctest */ = {
+			isa = PBXReferenceProxy;
+			fileType = wrapper.cfbundle;
+			path = SCGPushSDKTests.xctest;
+			remoteRef = 5B831B571E77C53000A53428 /* PBXContainerItemProxy */;
+			sourceTree = BUILT_PRODUCTS_DIR;
+		};
 		5B97E99E1D2252C40091617F /* SCGPush.framework */ = {
 			isa = PBXReferenceProxy;
 			fileType = wrapper.framework;
@@ -542,15 +594,20 @@
 /* End PBXSourcesBuildPhase section */
 
 /* Begin PBXTargetDependency section */
-		5B4D64461DCD13D0003EAD13 /* PBXTargetDependency */ = {
+		5B831B5A1E77C54500A53428 /* PBXTargetDependency */ = {
 			isa = PBXTargetDependency;
-			name = SCGPush;
-			targetProxy = 5B4D64451DCD13D0003EAD13 /* PBXContainerItemProxy */;
+			name = SCGPushSDK;
+			targetProxy = 5B831B591E77C54500A53428 /* PBXContainerItemProxy */;
 		};
-		5B97E9A21D2253000091617F /* PBXTargetDependency */ = {
+		5B831B621E782CB200A53428 /* PBXTargetDependency */ = {
 			isa = PBXTargetDependency;
-			name = SCGPush;
-			targetProxy = 5B97E9A11D2253000091617F /* PBXContainerItemProxy */;
+			name = SCGPushSDK;
+			targetProxy = 5B831B611E782CB200A53428 /* PBXContainerItemProxy */;
+		};
+		5B831B671E7853A900A53428 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			name = SCGPushSDK;
+			targetProxy = 5B831B661E7853A900A53428 /* PBXContainerItemProxy */;
 		};
 		F59BC83B1CEA56310043E96E /* PBXTargetDependency */ = {
 			isa = PBXTargetDependency;
@@ -685,6 +742,7 @@
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(PROJECT_DIR)/../Frameworks",
 					"$(PROJECT_DIR)",
+					"$(BUILT_PRODUCTS_DIR)",
 					"$(PROJECT_DIR)/depends/fabric_ios",
 				);
 				HEADER_SEARCH_PATHS = "$(PROJECT_DIR)/../Frameworks";
@@ -696,7 +754,7 @@
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				PROVISIONING_PROFILE = "44344447-b722-4de9-9f4c-05252ab688fd";
 				PROVISIONING_PROFILE_SPECIFIER = SCGPushDemoDev;
-				SWIFT_OBJC_BRIDGING_HEADER = Bridge.h;
+				SWIFT_OBJC_BRIDGING_HEADER = "$(SRCROOT)/SCGPushDemo-Bridging-Header.h";
 				SWIFT_VERSION = 3.0;
 			};
 			name = Debug;
@@ -715,6 +773,7 @@
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(PROJECT_DIR)/../Frameworks",
 					"$(PROJECT_DIR)",
+					"$(BUILT_PRODUCTS_DIR)",
 					"$(PROJECT_DIR)/depends/fabric_ios",
 				);
 				GCC_PREPROCESSOR_DEFINITIONS = "WITH_CRASHLYTICS=1";
@@ -727,7 +786,7 @@
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				PROVISIONING_PROFILE = "23d91312-5bd2-4484-8d14-d1d14ddcbcb7";
 				PROVISIONING_PROFILE_SPECIFIER = SCGPushDemoAdHoc;
-				SWIFT_OBJC_BRIDGING_HEADER = Bridge.h;
+				SWIFT_OBJC_BRIDGING_HEADER = "$(SRCROOT)/SCGPushDemo-Bridging-Header.h";
 				SWIFT_VERSION = 3.0;
 			};
 			name = Release;
@@ -801,6 +860,7 @@
 				PROVISIONING_PROFILE_SPECIFIER = "SCG Push Demo Extension Dev";
 				SKIP_INSTALL = YES;
 				SWIFT_ACTIVE_COMPILATION_CONDITIONS = DEBUG;
+				SWIFT_OBJC_BRIDGING_HEADER = "$(SRCROOT)/SCGPushDemo-Bridging-Header.h";
 				SWIFT_VERSION = 3.0;
 			};
 			name = Debug;
@@ -822,6 +882,7 @@
 				PROVISIONING_PROFILE = "e6afe1d2-3b71-4d92-98ac-7c0b3877eacd";
 				PROVISIONING_PROFILE_SPECIFIER = "SCG Push Demo Extension AdHoc";
 				SKIP_INSTALL = YES;
+				SWIFT_OBJC_BRIDGING_HEADER = "$(SRCROOT)/SCGPushDemo-Bridging-Header.h";
 				SWIFT_OPTIMIZATION_LEVEL = "-Owholemodule";
 				SWIFT_VERSION = 3.0;
 			};

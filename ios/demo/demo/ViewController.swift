@@ -7,9 +7,9 @@
 //
 
 import UIKit
-import SCGPush
+import SCGPushSDK
 
-class ViewController: UIViewController, SCGPushDelegate {
+class ViewController: UIViewController, SCGPushSDK.SCGPushDelegate {
 
     @IBOutlet weak var purePushTokenLabel: UILabel!
     @IBOutlet weak var accessTokenField: UITextField!
@@ -49,12 +49,13 @@ class ViewController: UIViewController, SCGPushDelegate {
         baseURIField.text = defauts.string(forKey: "baseurl")
         appIDField.text = defauts.string(forKey: "appid")
         
-        SCGPush.shared.groupBundle = "group.com.syniverse.scg.push.demo"
-        SCGPush.shared.callbackURI = baseURIField.text!
-        SCGPush.shared.appID = appIDField.text!
-        SCGPush.shared.accessToken = accessTokenField.text!
-
-        SCGPush.shared.delegate = self
+        SCGPush.sharedInstance().groupBundle = "group.com.syniverse.scg.push.demo"
+        SCGPush.sharedInstance().callbackURI = baseURIField.text!
+        SCGPush.sharedInstance().appID = appIDField.text!
+        SCGPush.sharedInstance().accessToken = accessTokenField.text!
+        
+        SCGPush.sharedInstance().delegate = self
+        //SCGPush.shared.delegate = self
 //        SCGPush.shared.resolveTrackedLink("https://app.partners1993.com:8088/scg-link/5idWpd")
         
         logField.layer.borderColor = UIColor.black.cgColor
@@ -77,15 +78,15 @@ class ViewController: UIViewController, SCGPushDelegate {
     @IBAction func textFieldChanged(_ sender: UITextField) {
         let defauts = UserDefaults.standard
         if (sender.tag == 7){
-            SCGPush.shared.accessToken = accessTokenField.text!
+            SCGPush.sharedInstance().accessToken = accessTokenField.text!
             defauts.set(accessTokenField.text!, forKey: "token")
         }
         if (sender.tag == 8){
-            SCGPush.shared.appID = appIDField.text!
+            SCGPush.sharedInstance().appID = appIDField.text!
             defauts.set(appIDField.text!, forKey: "appid")
         }
         if (sender.tag == 9) {
-            SCGPush.shared.callbackURI = baseURIField.text!
+            SCGPush.sharedInstance().callbackURI = baseURIField.text!
             defauts.set(baseURIField.text!, forKey: "baseurl")
         }
     }
@@ -100,10 +101,12 @@ class ViewController: UIViewController, SCGPushDelegate {
         baseURIField.resignFirstResponder()
         appIDField.resignFirstResponder()
         
-        SCGPush.shared.registerPushToken({
-                self.showAlert ("Success", mess: "You successfully register the token.")
-            }) { (error) in
-                self.showAlert ("Error", mess: (error?.localizedDescription)!)
+        let token: String = "alabala";
+        
+        SCGPush.sharedInstance().registerToken(token, withCompletionHandler: { (registeredToken) in
+            self.showAlert ("Success", mess: "You successfully register the token.")
+        }) { (error) in
+            self.showAlert ("Error", mess: (error?.localizedDescription)!)
         }
     }
     
@@ -111,12 +114,13 @@ class ViewController: UIViewController, SCGPushDelegate {
         accessTokenField.resignFirstResponder()
         baseURIField.resignFirstResponder()
         appIDField.resignFirstResponder()
-        
-        SCGPush.shared.unregisterPushToken({
+        /*
+        SCGPush.sharedInstance().unregisterPushToken({
                 self.showAlert ("Success", mess: "You successfully unregister the token.")
             }) { (error) in
                 self.showAlert ("Error", mess: (error?.localizedDescription)!)
         }
+ */
     }
     
     @IBAction func reportSwitchAction(_ sender: UISwitch) {

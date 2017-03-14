@@ -7,13 +7,15 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		5B831B5F1E7822E200A53428 /* HttpRedirectDecisionMaker.h in Headers */ = {isa = PBXBuildFile; fileRef = 5B831B5D1E7822E200A53428 /* HttpRedirectDecisionMaker.h */; };
+		5B831B601E7822E200A53428 /* HttpRedirectDecisionMaker.m in Sources */ = {isa = PBXBuildFile; fileRef = 5B831B5E1E7822E200A53428 /* HttpRedirectDecisionMaker.m */; };
 		5BF52A311E76D251008DEE80 /* SCGPushSDK.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 5BF52A271E76D251008DEE80 /* SCGPushSDK.framework */; };
 		5BF52A361E76D251008DEE80 /* SCGPushSDKTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 5BF52A351E76D251008DEE80 /* SCGPushSDKTests.m */; };
 		5BF52A381E76D251008DEE80 /* SCGPushSDK.h in Headers */ = {isa = PBXBuildFile; fileRef = 5BF52A2A1E76D251008DEE80 /* SCGPushSDK.h */; settings = {ATTRIBUTES = (Public, ); }; };
-		5BF52A441E76D488008DEE80 /* SCGPush.h in Headers */ = {isa = PBXBuildFile; fileRef = 5BF52A421E76D488008DEE80 /* SCGPush.h */; };
+		5BF52A441E76D488008DEE80 /* SCGPush.h in Headers */ = {isa = PBXBuildFile; fileRef = 5BF52A421E76D488008DEE80 /* SCGPush.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		5BF52A451E76D488008DEE80 /* SCGPush.m in Sources */ = {isa = PBXBuildFile; fileRef = 5BF52A431E76D488008DEE80 /* SCGPush.m */; };
 		5BF52A461E76D488008DEE80 /* SCGPush.m in Sources */ = {isa = PBXBuildFile; fileRef = 5BF52A431E76D488008DEE80 /* SCGPush.m */; };
-		5BF52A491E76E01C008DEE80 /* SCGPushDelegate.h in Headers */ = {isa = PBXBuildFile; fileRef = 5BF52A481E76E01C008DEE80 /* SCGPushDelegate.h */; };
+		5BF52A491E76E01C008DEE80 /* SCGPushDelegate.h in Headers */ = {isa = PBXBuildFile; fileRef = 5BF52A481E76E01C008DEE80 /* SCGPushDelegate.h */; settings = {ATTRIBUTES = (Public, ); }; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -27,6 +29,8 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
+		5B831B5D1E7822E200A53428 /* HttpRedirectDecisionMaker.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = HttpRedirectDecisionMaker.h; sourceTree = "<group>"; };
+		5B831B5E1E7822E200A53428 /* HttpRedirectDecisionMaker.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = HttpRedirectDecisionMaker.m; sourceTree = "<group>"; };
 		5BF52A271E76D251008DEE80 /* SCGPushSDK.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = SCGPushSDK.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		5BF52A2A1E76D251008DEE80 /* SCGPushSDK.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = SCGPushSDK.h; sourceTree = "<group>"; };
 		5BF52A2B1E76D251008DEE80 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
@@ -83,6 +87,8 @@
 				5BF52A421E76D488008DEE80 /* SCGPush.h */,
 				5BF52A431E76D488008DEE80 /* SCGPush.m */,
 				5BF52A481E76E01C008DEE80 /* SCGPushDelegate.h */,
+				5B831B5D1E7822E200A53428 /* HttpRedirectDecisionMaker.h */,
+				5B831B5E1E7822E200A53428 /* HttpRedirectDecisionMaker.m */,
 			);
 			path = SCGPushSDK;
 			sourceTree = "<group>";
@@ -103,9 +109,10 @@
 			isa = PBXHeadersBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				5BF52A381E76D251008DEE80 /* SCGPushSDK.h in Headers */,
+				5B831B5F1E7822E200A53428 /* HttpRedirectDecisionMaker.h in Headers */,
 				5BF52A441E76D488008DEE80 /* SCGPush.h in Headers */,
 				5BF52A491E76E01C008DEE80 /* SCGPushDelegate.h in Headers */,
-				5BF52A381E76D251008DEE80 /* SCGPushSDK.h in Headers */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -209,6 +216,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				5B831B601E7822E200A53428 /* HttpRedirectDecisionMaker.m in Sources */,
 				5BF52A451E76D488008DEE80 /* SCGPush.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -406,6 +414,7 @@
 				5BF52A3D1E76D251008DEE80 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
 		};
 		5BF52A3E1E76D251008DEE80 /* Build configuration list for PBXNativeTarget "SCGPushSDKTests" */ = {
 			isa = XCConfigurationList;
@@ -414,6 +423,7 @@
 				5BF52A401E76D251008DEE80 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
 	};

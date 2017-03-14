@@ -7,7 +7,7 @@
 //
 
 import UIKit
-import SCGPush
+import SCGPushSDK
 import UserNotifications
 
 #if WITH_CRASHLYTICS
@@ -82,11 +82,11 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         }
         (window?.rootViewController!.view.viewWithTag(9) as! UILabel).text = tokenString
         
-        SCGPush.shared.saveDeviceToken(deviceTokenData: deviceToken)
-        SCGPush.shared.registerPushToken(deviceTokeData: deviceToken, completionBlock: {
+        
+        SCGPush.sharedInstance().registerToken(tokenString, withCompletionHandler: { (token) in
             
-            }) { (error) in
-                
+        }) { (error) in
+            
         }
     }
     
@@ -96,11 +96,12 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     
     var notificationNumber:Int = 0
     func application(_ application: UIApplication, didReceiveRemoteNotification userInfo: [AnyHashable: Any]){
-        
-//        notificationNumber += 1
         application.applicationIconBadgeNumber =  0;
         
-        SCGPush.shared.resolveTrackedLink(userInfo: userInfo)
+        if let url:String = userInfo["deep_link"] as? String
+        {
+            SCGPush.sharedInstance().resolveTrackedLink(url)
+        }
         
         let rootController:ViewController = window?.rootViewController! as! ViewController
         
@@ -110,10 +111,13 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         
         if ((window?.rootViewController!.view.viewWithTag(24) as! UISwitch).isOn) {
             if (UserDefaults.standard.bool(forKey: "reporton")) {
-                SCGPush.shared.reportStatus(userInfo: userInfo, state: .read, completionBlock: {
-                    self.showAlert ("Success", mess: "You successfully send interactionConfirmation.")
-                }) { (error) in
-                    self.showAlert ("Error", mess: (error?.localizedDescription)!)
+                if let messageID:String = userInfo["scg-message-id"] as? String
+                {
+                    SCGPush.sharedInstance().reportStatus(withMessageId: messageID, andMessageState: .read, completionBlock: {
+                        self.showAlert ("Success", mess: "You successfully send interactionConfirmation.")
+                    }, failureBlock: { (error) in
+                        self.showAlert ("Error", mess: (error?.localizedDescription)!)
+                    })
                 }
             }
         }
