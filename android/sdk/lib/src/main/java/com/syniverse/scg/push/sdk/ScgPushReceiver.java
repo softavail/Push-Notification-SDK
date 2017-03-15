@@ -33,6 +33,10 @@ public abstract class ScgPushReceiver extends BroadcastReceiver {
                 final ScgMessage message = intent.getParcelableExtra(EXTRA_MESSAGE);
                 final String delivery = message.getId();
                 onMessageReceived(delivery, message);
+
+                if (message.isInbox()) {
+                    ScgInboxDbHelper.getInstance(context).addMessage(message);
+                }
             }
         }
     }

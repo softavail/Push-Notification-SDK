@@ -1,9 +1,12 @@
 package com.syniverse.scg.push.sdk;
 
+import android.os.Bundle;
 import android.os.Parcel;
 import android.os.Parcelable;
 
 import com.google.firebase.messaging.RemoteMessage;
+
+import java.util.Map;
 
 /**
  * Created by lekov on 11/17/16.
@@ -16,52 +19,74 @@ public class ScgMessage implements Parcelable {
     static final String MESSAGE_DEEP_LINK = "deep_link";
     static final String MESSAGE_APP_DATA = "app_data";
     static final String MESSAGE_ATTACHMENT_ID = "scg-attachment-id";
+    static final String MESSAGE_SHOW_NOTIFICATION = "show-notification";
+    static final String MESSAGE_TIME_RECEIVED = "received_time";
 
-    private final RemoteMessage fMessage;
+    private final Bundle data;
 
     static ScgMessage from(RemoteMessage message) {
         return new ScgMessage(message);
     }
 
+    static ScgMessage from(Bundle message) {
+        return new ScgMessage(message);
+    }
+
     private ScgMessage(RemoteMessage message) {
-        fMessage = message;
+        data = new Bundle();
+        for (Map.Entry<String, String> entry : message.getData().entrySet()) {
+            data.putString(entry.getKey(), entry.getValue());
+        }
+        data.putLong(MESSAGE_TIME_RECEIVED, System.currentTimeMillis());
+    }
+
+    private ScgMessage(Bundle bundle) {
+        this.data = bundle;
     }
 
     public String getBody() {
-        return fMessage.getData().get(MESSAGE_BODY);
+        return data.getString(MESSAGE_BODY);
     }
 
     public String getId() {
-        return fMessage.getData().get(MESSAGE_ID);
+        return data.getString(MESSAGE_ID);
     }
 
     public boolean hasAttachment() {
-        return fMessage.getData().containsKey(MESSAGE_ATTACHMENT_ID);
+        return data.containsKey(MESSAGE_ATTACHMENT_ID);
     }
 
     public String getAttachment() {
-        return fMessage.getData().get(MESSAGE_ATTACHMENT_ID);
+        return data.getString(MESSAGE_ATTACHMENT_ID);
     }
 
     public boolean hasDeepLink() {
-        return fMessage.getData().containsKey(MESSAGE_DEEP_LINK);
+        return data.containsKey(MESSAGE_DEEP_LINK);
     }
 
     public String getDeepLink() {
-        return fMessage.getData().get(MESSAGE_DEEP_LINK);
+        return data.getString(MESSAGE_DEEP_LINK);
     }
 
     public boolean hasAppData() {
-        return fMessage.getData().containsKey(MESSAGE_APP_DATA);
+        return data.containsKey(MESSAGE_APP_DATA);
     }
 
     public String getAppData() {
-        return fMessage.getData().get(MESSAGE_APP_DATA);
+        return data.getString(MESSAGE_APP_DATA);
+    }
+
+    public boolean isInbox() {
+        return !"false".equalsIgnoreCase(data.getString(MESSAGE_SHOW_NOTIFICATION));
+    }
+
+    public long getReceivedTimeUtc() {
+        return data.getLong(MESSAGE_TIME_RECEIVED);
     }
 
     @Override
     public String toString() {
-        return fMessage.getData().toString();
+        return data.toString();
     }
 
     @Override
@@ -71,11 +96,11 @@ public class ScgMessage implements Parcelable {
 
     @Override
     public void writeToParcel(Parcel dest, int flags) {
-        dest.writeParcelable(this.fMessage, flags);
+        dest.writeBundle(this.data);
     }
 
     protected ScgMessage(Parcel in) {
-        this.fMessage = in.readParcelable(RemoteMessage.class.getClassLoader());
+        this.data = in.readBundle();
     }
 
     public static final Parcelable.Creator<ScgMessage> CREATOR = new Parcelable.Creator<ScgMessage>() {
