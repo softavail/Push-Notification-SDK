@@ -7,6 +7,17 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		5B12CA421E7934DB00B24546 /* PushInbox.xcdatamodeld in Sources */ = {isa = PBXBuildFile; fileRef = 5B12CA401E7934DB00B24546 /* PushInbox.xcdatamodeld */; };
+		5B12CA431E7934DB00B24546 /* PushInbox.xcdatamodeld in Sources */ = {isa = PBXBuildFile; fileRef = 5B12CA401E7934DB00B24546 /* PushInbox.xcdatamodeld */; };
+		5B12CA4D1E7946C800B24546 /* SCGPushCoreDataManager.h in Headers */ = {isa = PBXBuildFile; fileRef = 5B12CA4B1E7946C800B24546 /* SCGPushCoreDataManager.h */; };
+		5B12CA4E1E7946C800B24546 /* SCGPushCoreDataManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 5B12CA4C1E7946C800B24546 /* SCGPushCoreDataManager.m */; };
+		5B12CA4F1E7946C800B24546 /* SCGPushCoreDataManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 5B12CA4C1E7946C800B24546 /* SCGPushCoreDataManager.m */; };
+		5B12CA521E79476E00B24546 /* SCGPushMessage.h in Headers */ = {isa = PBXBuildFile; fileRef = 5B12CA501E79476E00B24546 /* SCGPushMessage.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		5B12CA531E79476E00B24546 /* SCGPushMessage.m in Sources */ = {isa = PBXBuildFile; fileRef = 5B12CA511E79476E00B24546 /* SCGPushMessage.m */; };
+		5B12CA541E79476E00B24546 /* SCGPushMessage.m in Sources */ = {isa = PBXBuildFile; fileRef = 5B12CA511E79476E00B24546 /* SCGPushMessage.m */; };
+		5B12CA571E79478200B24546 /* SCGPushAttachment.h in Headers */ = {isa = PBXBuildFile; fileRef = 5B12CA551E79478200B24546 /* SCGPushAttachment.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		5B12CA581E79478200B24546 /* SCGPushAttachment.m in Sources */ = {isa = PBXBuildFile; fileRef = 5B12CA561E79478200B24546 /* SCGPushAttachment.m */; };
+		5B12CA591E79478200B24546 /* SCGPushAttachment.m in Sources */ = {isa = PBXBuildFile; fileRef = 5B12CA561E79478200B24546 /* SCGPushAttachment.m */; };
 		5B831B5F1E7822E200A53428 /* HttpRedirectDecisionMaker.h in Headers */ = {isa = PBXBuildFile; fileRef = 5B831B5D1E7822E200A53428 /* HttpRedirectDecisionMaker.h */; };
 		5B831B601E7822E200A53428 /* HttpRedirectDecisionMaker.m in Sources */ = {isa = PBXBuildFile; fileRef = 5B831B5E1E7822E200A53428 /* HttpRedirectDecisionMaker.m */; };
 		5BF52A311E76D251008DEE80 /* SCGPushSDK.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 5BF52A271E76D251008DEE80 /* SCGPushSDK.framework */; };
@@ -29,6 +40,13 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
+		5B12CA411E7934DB00B24546 /* PushInbox.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = PushInbox.xcdatamodel; sourceTree = "<group>"; };
+		5B12CA4B1E7946C800B24546 /* SCGPushCoreDataManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SCGPushCoreDataManager.h; sourceTree = "<group>"; };
+		5B12CA4C1E7946C800B24546 /* SCGPushCoreDataManager.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SCGPushCoreDataManager.m; sourceTree = "<group>"; };
+		5B12CA501E79476E00B24546 /* SCGPushMessage.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SCGPushMessage.h; sourceTree = "<group>"; };
+		5B12CA511E79476E00B24546 /* SCGPushMessage.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SCGPushMessage.m; sourceTree = "<group>"; };
+		5B12CA551E79478200B24546 /* SCGPushAttachment.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SCGPushAttachment.h; sourceTree = "<group>"; };
+		5B12CA561E79478200B24546 /* SCGPushAttachment.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SCGPushAttachment.m; sourceTree = "<group>"; };
 		5B831B5D1E7822E200A53428 /* HttpRedirectDecisionMaker.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = HttpRedirectDecisionMaker.h; sourceTree = "<group>"; };
 		5B831B5E1E7822E200A53428 /* HttpRedirectDecisionMaker.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = HttpRedirectDecisionMaker.m; sourceTree = "<group>"; };
 		5BF52A271E76D251008DEE80 /* SCGPushSDK.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = SCGPushSDK.framework; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -89,6 +107,13 @@
 				5BF52A481E76E01C008DEE80 /* SCGPushDelegate.h */,
 				5B831B5D1E7822E200A53428 /* HttpRedirectDecisionMaker.h */,
 				5B831B5E1E7822E200A53428 /* HttpRedirectDecisionMaker.m */,
+				5B12CA401E7934DB00B24546 /* PushInbox.xcdatamodeld */,
+				5B12CA4B1E7946C800B24546 /* SCGPushCoreDataManager.h */,
+				5B12CA4C1E7946C800B24546 /* SCGPushCoreDataManager.m */,
+				5B12CA501E79476E00B24546 /* SCGPushMessage.h */,
+				5B12CA511E79476E00B24546 /* SCGPushMessage.m */,
+				5B12CA551E79478200B24546 /* SCGPushAttachment.h */,
+				5B12CA561E79478200B24546 /* SCGPushAttachment.m */,
 			);
 			path = SCGPushSDK;
 			sourceTree = "<group>";
@@ -109,8 +134,11 @@
 			isa = PBXHeadersBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				5B12CA4D1E7946C800B24546 /* SCGPushCoreDataManager.h in Headers */,
 				5BF52A381E76D251008DEE80 /* SCGPushSDK.h in Headers */,
+				5B12CA521E79476E00B24546 /* SCGPushMessage.h in Headers */,
 				5B831B5F1E7822E200A53428 /* HttpRedirectDecisionMaker.h in Headers */,
+				5B12CA571E79478200B24546 /* SCGPushAttachment.h in Headers */,
 				5BF52A441E76D488008DEE80 /* SCGPush.h in Headers */,
 				5BF52A491E76E01C008DEE80 /* SCGPushDelegate.h in Headers */,
 			);
@@ -167,11 +195,13 @@
 					5BF52A261E76D251008DEE80 = {
 						CreatedOnToolsVersion = 8.2.1;
 						DevelopmentTeam = 6D6V2A9HWX;
+						LastSwiftMigration = 0820;
 						ProvisioningStyle = Automatic;
 					};
 					5BF52A2F1E76D251008DEE80 = {
 						CreatedOnToolsVersion = 8.2.1;
 						DevelopmentTeam = 6D6V2A9HWX;
+						LastSwiftMigration = 0820;
 						ProvisioningStyle = Automatic;
 					};
 				};
@@ -216,7 +246,11 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				5B12CA531E79476E00B24546 /* SCGPushMessage.m in Sources */,
 				5B831B601E7822E200A53428 /* HttpRedirectDecisionMaker.m in Sources */,
+				5B12CA421E7934DB00B24546 /* PushInbox.xcdatamodeld in Sources */,
+				5B12CA4E1E7946C800B24546 /* SCGPushCoreDataManager.m in Sources */,
+				5B12CA581E79478200B24546 /* SCGPushAttachment.m in Sources */,
 				5BF52A451E76D488008DEE80 /* SCGPush.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -225,7 +259,11 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				5B12CA541E79476E00B24546 /* SCGPushMessage.m in Sources */,
 				5BF52A361E76D251008DEE80 /* SCGPushSDKTests.m in Sources */,
+				5B12CA431E7934DB00B24546 /* PushInbox.xcdatamodeld in Sources */,
+				5B12CA4F1E7946C800B24546 /* SCGPushCoreDataManager.m in Sources */,
+				5B12CA591E79478200B24546 /* SCGPushAttachment.m in Sources */,
 				5BF52A461E76D488008DEE80 /* SCGPush.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -340,6 +378,7 @@
 		5BF52A3C1E76D251008DEE80 /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
+				CLANG_ENABLE_MODULES = YES;
 				CODE_SIGN_IDENTITY = "";
 				DEFINES_MODULE = YES;
 				DEVELOPMENT_TEAM = 6D6V2A9HWX;
@@ -348,16 +387,20 @@
 				DYLIB_INSTALL_NAME_BASE = "@rpath";
 				INFOPLIST_FILE = SCGPushSDK/Info.plist;
 				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Frameworks";
+				IPHONEOS_DEPLOYMENT_TARGET = 8.0;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = com.syniverse.scg.push.sdk;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SKIP_INSTALL = YES;
+				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
+				SWIFT_VERSION = 3.0;
 			};
 			name = Debug;
 		};
 		5BF52A3D1E76D251008DEE80 /* Release */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
+				CLANG_ENABLE_MODULES = YES;
 				CODE_SIGN_IDENTITY = "";
 				DEFINES_MODULE = YES;
 				DEVELOPMENT_TEAM = 6D6V2A9HWX;
@@ -366,32 +409,39 @@
 				DYLIB_INSTALL_NAME_BASE = "@rpath";
 				INFOPLIST_FILE = SCGPushSDK/Info.plist;
 				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Frameworks";
+				IPHONEOS_DEPLOYMENT_TARGET = 8.0;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = com.syniverse.scg.push.sdk;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SKIP_INSTALL = YES;
+				SWIFT_VERSION = 3.0;
 			};
 			name = Release;
 		};
 		5BF52A3F1E76D251008DEE80 /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
+				CLANG_ENABLE_MODULES = YES;
 				DEVELOPMENT_TEAM = 6D6V2A9HWX;
 				INFOPLIST_FILE = SCGPushSDKTests/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = com.syniverse.scg.push.SCGPushSDKTests;
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
+				SWIFT_VERSION = 3.0;
 			};
 			name = Debug;
 		};
 		5BF52A401E76D251008DEE80 /* Release */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
+				CLANG_ENABLE_MODULES = YES;
 				DEVELOPMENT_TEAM = 6D6V2A9HWX;
 				INFOPLIST_FILE = SCGPushSDKTests/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = com.syniverse.scg.push.SCGPushSDKTests;
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_VERSION = 3.0;
 			};
 			name = Release;
 		};
@@ -426,6 +476,19 @@
 			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
+
+/* Begin XCVersionGroup section */
+		5B12CA401E7934DB00B24546 /* PushInbox.xcdatamodeld */ = {
+			isa = XCVersionGroup;
+			children = (
+				5B12CA411E7934DB00B24546 /* PushInbox.xcdatamodel */,
+			);
+			currentVersion = 5B12CA411E7934DB00B24546 /* PushInbox.xcdatamodel */;
+			path = PushInbox.xcdatamodeld;
+			sourceTree = "<group>";
+			versionGroupType = wrapper.xcdatamodel;
+		};
+/* End XCVersionGroup section */
 	};
 	rootObject = 5BF52A1E1E76D251008DEE80 /* Project object */;
 }
