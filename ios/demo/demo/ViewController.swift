@@ -24,14 +24,11 @@ class ViewController: UIViewController, SCGPushSDK.SCGPushDelegate {
         super.viewDidLoad()
         
         let defauts = UserDefaults.standard
-        print (defauts.object(forKey: "baseurl"))
-//        if (defauts.object(forKey: "baseurl") == nil) {
-//            defauts.set("http://192.168.1.197:8080/scg-dra/proxy", forKey: "baseurl")
-//            
-//        }
+
         if (defauts.object(forKey: "appid") == nil) {
-            defauts.set("com.syniverse.push_demo", forKey: "appid")
+            defauts.set("", forKey: "appid")
         }
+        
         if (defauts.object(forKey: "token") != nil) {
             accessTokenField.text = defauts.string(forKey: "token")
         }
@@ -48,11 +45,6 @@ class ViewController: UIViewController, SCGPushSDK.SCGPushDelegate {
         
         //baseURIField.text = defauts.string(forKey: "baseurl")
         appIDField.text = defauts.string(forKey: "appid")
-        
-        SCGPush.sharedInstance().groupBundle = "group.com.syniverse.scg.push.demo"
-        //SCGPush.sharedInstance().callbackURI = baseURIField.text!
-        SCGPush.sharedInstance().appID = appIDField.text!
-        SCGPush.sharedInstance().accessToken = accessTokenField.text!
         
         SCGPush.sharedInstance().delegate = self
         //SCGPush.shared.delegate = self

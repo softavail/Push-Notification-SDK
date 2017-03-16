@@ -18,6 +18,10 @@
 		5B12CA571E79478200B24546 /* SCGPushAttachment.h in Headers */ = {isa = PBXBuildFile; fileRef = 5B12CA551E79478200B24546 /* SCGPushAttachment.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		5B12CA581E79478200B24546 /* SCGPushAttachment.m in Sources */ = {isa = PBXBuildFile; fileRef = 5B12CA561E79478200B24546 /* SCGPushAttachment.m */; };
 		5B12CA591E79478200B24546 /* SCGPushAttachment.m in Sources */ = {isa = PBXBuildFile; fileRef = 5B12CA561E79478200B24546 /* SCGPushAttachment.m */; };
+		5B25EAF81E7A91E7000D80A7 /* SCGPushBase.h in Headers */ = {isa = PBXBuildFile; fileRef = 5B25EAF71E7A90FF000D80A7 /* SCGPushBase.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		5B25EAFA1E7A92ED000D80A7 /* SCGPushError.m in Sources */ = {isa = PBXBuildFile; fileRef = 5B25EAF91E7A92ED000D80A7 /* SCGPushError.m */; };
+		5B25EAFB1E7A92ED000D80A7 /* SCGPushError.m in Sources */ = {isa = PBXBuildFile; fileRef = 5B25EAF91E7A92ED000D80A7 /* SCGPushError.m */; };
+		5B25EAFD1E7A92FF000D80A7 /* SCGPushError.h in Headers */ = {isa = PBXBuildFile; fileRef = 5B25EAFC1E7A92FF000D80A7 /* SCGPushError.h */; };
 		5B831B5F1E7822E200A53428 /* HttpRedirectDecisionMaker.h in Headers */ = {isa = PBXBuildFile; fileRef = 5B831B5D1E7822E200A53428 /* HttpRedirectDecisionMaker.h */; };
 		5B831B601E7822E200A53428 /* HttpRedirectDecisionMaker.m in Sources */ = {isa = PBXBuildFile; fileRef = 5B831B5E1E7822E200A53428 /* HttpRedirectDecisionMaker.m */; };
 		5BF52A311E76D251008DEE80 /* SCGPushSDK.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 5BF52A271E76D251008DEE80 /* SCGPushSDK.framework */; };
@@ -47,6 +51,9 @@
 		5B12CA511E79476E00B24546 /* SCGPushMessage.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SCGPushMessage.m; sourceTree = "<group>"; };
 		5B12CA551E79478200B24546 /* SCGPushAttachment.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SCGPushAttachment.h; sourceTree = "<group>"; };
 		5B12CA561E79478200B24546 /* SCGPushAttachment.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SCGPushAttachment.m; sourceTree = "<group>"; };
+		5B25EAF71E7A90FF000D80A7 /* SCGPushBase.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = SCGPushBase.h; sourceTree = "<group>"; };
+		5B25EAF91E7A92ED000D80A7 /* SCGPushError.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SCGPushError.m; sourceTree = "<group>"; };
+		5B25EAFC1E7A92FF000D80A7 /* SCGPushError.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SCGPushError.h; sourceTree = "<group>"; };
 		5B831B5D1E7822E200A53428 /* HttpRedirectDecisionMaker.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = HttpRedirectDecisionMaker.h; sourceTree = "<group>"; };
 		5B831B5E1E7822E200A53428 /* HttpRedirectDecisionMaker.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = HttpRedirectDecisionMaker.m; sourceTree = "<group>"; };
 		5BF52A271E76D251008DEE80 /* SCGPushSDK.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = SCGPushSDK.framework; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -100,6 +107,7 @@
 		5BF52A291E76D251008DEE80 /* SCGPushSDK */ = {
 			isa = PBXGroup;
 			children = (
+				5B25EAF71E7A90FF000D80A7 /* SCGPushBase.h */,
 				5BF52A2A1E76D251008DEE80 /* SCGPushSDK.h */,
 				5BF52A2B1E76D251008DEE80 /* Info.plist */,
 				5BF52A421E76D488008DEE80 /* SCGPush.h */,
@@ -114,6 +122,8 @@
 				5B12CA511E79476E00B24546 /* SCGPushMessage.m */,
 				5B12CA551E79478200B24546 /* SCGPushAttachment.h */,
 				5B12CA561E79478200B24546 /* SCGPushAttachment.m */,
+				5B25EAF91E7A92ED000D80A7 /* SCGPushError.m */,
+				5B25EAFC1E7A92FF000D80A7 /* SCGPushError.h */,
 			);
 			path = SCGPushSDK;
 			sourceTree = "<group>";
@@ -135,7 +145,9 @@
 			buildActionMask = 2147483647;
 			files = (
 				5B12CA4D1E7946C800B24546 /* SCGPushCoreDataManager.h in Headers */,
+				5B25EAFD1E7A92FF000D80A7 /* SCGPushError.h in Headers */,
 				5BF52A381E76D251008DEE80 /* SCGPushSDK.h in Headers */,
+				5B25EAF81E7A91E7000D80A7 /* SCGPushBase.h in Headers */,
 				5B12CA521E79476E00B24546 /* SCGPushMessage.h in Headers */,
 				5B831B5F1E7822E200A53428 /* HttpRedirectDecisionMaker.h in Headers */,
 				5B12CA571E79478200B24546 /* SCGPushAttachment.h in Headers */,
@@ -246,6 +258,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				5B25EAFA1E7A92ED000D80A7 /* SCGPushError.m in Sources */,
 				5B12CA531E79476E00B24546 /* SCGPushMessage.m in Sources */,
 				5B831B601E7822E200A53428 /* HttpRedirectDecisionMaker.m in Sources */,
 				5B12CA421E7934DB00B24546 /* PushInbox.xcdatamodeld in Sources */,
@@ -259,6 +272,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				5B25EAFB1E7A92ED000D80A7 /* SCGPushError.m in Sources */,
 				5B12CA541E79476E00B24546 /* SCGPushMessage.m in Sources */,
 				5BF52A361E76D251008DEE80 /* SCGPushSDKTests.m in Sources */,
 				5B12CA431E7934DB00B24546 /* PushInbox.xcdatamodeld in Sources */,

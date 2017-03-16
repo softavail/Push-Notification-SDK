@@ -13,37 +13,66 @@
 
 #import <MobileCoreServices/UTCoreTypes.h>
 
+static SCGPush *_sharedInstance = nil;
+
 @interface SCGPush()
 @property (nonatomic, strong) HttpRedirectDecisionMaker* redirectDecisionMaker;
 @property (nonatomic, strong) SCGPushCoreDataManager* coreDataManager;
+
+@property (nonatomic, copy, nonnull) NSString* accessTokenInternal;
+@property (nonatomic, copy, nonnull) NSString* callbackURIInternal;
+@property (nonatomic, copy, nonnull) NSString* appIDInternal;
+
 @end
 
 @implementation SCGPush
 
-+ (instancetype) sharedInstance
++ (instancetype) sharedInstanceWithDelegate: (id<SCGPushDelegate>) delegate
 {
-    // 1
-    static SCGPush *_sharedInstance = nil;
-    
     // 2
     static dispatch_once_t oncePredicate;
     
     // 3
     dispatch_once(&oncePredicate, ^{
-        _sharedInstance = [[SCGPush alloc] init];
+        _sharedInstance = [[SCGPush alloc] initWithDelegate: delegate];
     });
     
     return _sharedInstance;
 }
 
-- (instancetype) init
++ (instancetype) sharedInstance
+{
+    return [[self class] sharedInstanceWithDelegate: nil];
+}
+
+- (instancetype) initWithDelegate: (id<SCGPushDelegate>) delegate
 {
     if (nil != (self = [super init])) {
-        NSLog(@"Debug: Initialzing SCGPush <%p>", self);
-        self.coreDataManager = [SCGPushCoreDataManager sharedInstance];
+        NSLog(@"Debug: [SCGPush] Initialzing  <%p>", self);
+        _delegate = delegate;
+        
+        self.accessTokenInternal = @"";
+        self.appIDInternal = @"";
+        self.callbackURIInternal = @"";
     }
     
     return self;
+}
+
++ (instancetype _Nonnull) startWithAccessToken: (NSString* _Nonnull) accessToken
+                                         appId: (NSString* _Nonnull) appId
+                                   callbackUri: (NSString* _Nonnull) callbackUri
+                                      delegate: (id<SCGPushDelegate> _Nullable) delegate
+{
+    SCGPush* scgPush = [[self class] sharedInstanceWithDelegate: delegate];
+    
+    scgPush.accessToken = accessToken;
+    scgPush.appID = appId;
+    scgPush.callbackURI = callbackUri;
+    
+    [scgPush initializeInbox];
+    
+    return scgPush;
 }
 
 
@@ -75,7 +104,7 @@
         return;
     }
     
-    NSLog(@"URL: %@", url.absoluteString);
+    NSLog(@"Debug: [SCGPush] URL: %@", url.absoluteString);
     
     NSMutableURLRequest* request = [NSMutableURLRequest requestWithURL: url];
     request.HTTPMethod = @"POST";
@@ -190,7 +219,7 @@
         return;
     }
     
-    NSLog(@"URL: %@", url.absoluteString);
+    NSLog(@"Debug: [SCGPush] URL: %@", url.absoluteString);
     
     NSMutableURLRequest* request = [NSMutableURLRequest requestWithURL: url];
     request.HTTPMethod = @"POST";
@@ -240,7 +269,7 @@
     NSURLSession* session = [NSURLSession sessionWithConfiguration:configuration delegate:self.redirectDecisionMaker delegateQueue:nil];
     NSURL* url = [NSURL URLWithString: urlString];
 
-    NSLog(@"URL: %@", url.absoluteString);
+    NSLog(@"Debug: [SCGPush] URL: %@", url.absoluteString);
     
     NSMutableURLRequest* request = [NSMutableURLRequest requestWithURL: url];
     request.HTTPMethod = @"HEAD";
@@ -325,7 +354,7 @@
                      completionBlock:(void(^_Nullable)(NSURL* _Nonnull contentUrl, NSString* _Nonnull contentType))completionBlock
                         failureBlock:(void(^_Nullable)(NSError* _Nullable error))failureBlock
 {
-    NSLog(@"Debug: SCGPush '<%p>', will load attachment '%@' for message '%@'",
+    NSLog(@"Debug: [SCGPush] '<%p>', will load attachment '%@' for message '%@'",
           self,
           attachmentId,
           messageId);
@@ -337,7 +366,7 @@
                            attachmentId];
     NSURL* url = [NSURL URLWithString: urlString];
     
-    NSLog(@"URL: %@", url.absoluteString);
+    NSLog(@"Debug: [SCGPush] URL: %@", url.absoluteString);
     NSMutableURLRequest* request = [NSMutableURLRequest requestWithURL: url];
     request.HTTPMethod = @"GET";
     request.timeoutInterval = 30;
@@ -405,6 +434,11 @@
 }
 
 //MARK: - PushInbox
+- (void) initializeInbox
+{
+    self.coreDataManager = [SCGPushCoreDataManager sharedInstance];
+}
+
 - (BOOL) pushToInbox: (NSDictionary* _Nonnull) payload
 {
     BOOL fOk = NO;
@@ -448,6 +482,31 @@
     return fOk;
 }
 
+- (NSUInteger) numberOfMessages
+{
+    return [self.coreDataManager numberOfMessages];
+}
+
+- (SCGPushMessage* _Nullable) messageAtIndex:(NSUInteger) index
+{
+    return [self.coreDataManager messageAtIndex: index];
+}
+
+- (BOOL) deleteMessage: (SCGPushMessage* _Nonnull) message
+{
+    return [self.coreDataManager deleteMessage:message];
+}
+
+- (BOOL) deleteMessageAtIndex: (NSUInteger) index
+{
+    return [self.coreDataManager deleteMessageAtIndex:index];
+}
+
+- (BOOL) deleteAllMessages
+{
+    return [self.coreDataManager deleteAllMessages];
+}
+
 //MARK: - accessors
 - (HttpRedirectDecisionMaker *)redirectDecisionMaker {
 
@@ -458,64 +517,58 @@
     return _redirectDecisionMaker;
 }
 
-- (void)setAccessToken:(NSString *)accessToken {
+-(void)setAccessToken:(NSString *)newValue {
     @synchronized (self) {
-        NSUserDefaults* groupDefault = [[NSUserDefaults alloc] initWithSuiteName: @"group.com.syniverse.scg.push.demo"];
-        if (nil != groupDefault) {
-            [groupDefault setObject:accessToken forKey:@"scg-access-token-dont-replace-this-default"];
+        if ([newValue length]) {
+            NSLog(@"Debug: [SCGPush] set accessToken %@", newValue);
+            self.accessTokenInternal = [newValue copy];
+        } else{
+            NSLog(@"Debug: [SCGPush] clear accessToken");
+            self.accessTokenInternal = [@"" copy];
         }
     }
 }
 
-- (NSString *)accessToken {
+-(NSString *)accessToken {
     @synchronized (self) {
-        NSUserDefaults* groupDefault = [[NSUserDefaults alloc] initWithSuiteName: @"group.com.syniverse.scg.push.demo"];
-        if (nil != groupDefault) {
-            return [groupDefault objectForKey:@"scg-access-token-dont-replace-this-default"];
-        }
-    }
-    
-    return nil;
-}
-
-- (void)setCallbackURI:(NSString *)callbackURI {
-    @synchronized (self) {
-        NSUserDefaults* groupDefault = [[NSUserDefaults alloc] initWithSuiteName: @"group.com.syniverse.scg.push.demo"];
-        if (nil != groupDefault) {
-            [groupDefault setObject:callbackURI forKey:@"scg-callback-uri-dont-replace-this-default"];
-        }
+        return self.accessTokenInternal;
     }
 }
 
-- (NSString *)callbackURI {
+-(void)setAppID:(NSString *)newValue {
     @synchronized (self) {
-        NSUserDefaults* groupDefault = [[NSUserDefaults alloc] initWithSuiteName: @"group.com.syniverse.scg.push.demo"];
-        if (nil != groupDefault) {
-            return [groupDefault objectForKey:@"scg-callback-uri-dont-replace-this-default"];
-        }
-    }
-    
-    return nil;
-}
-
-- (void)setAppID:(NSString *)appID {
-    @synchronized (self) {
-        NSUserDefaults* groupDefault = [[NSUserDefaults alloc] initWithSuiteName: @"group.com.syniverse.scg.push.demo"];
-        if (nil != groupDefault) {
-            [groupDefault setObject:appID forKey:@"scg-appID-dont-replace-this-default"];
+        if ([newValue length]) {
+            NSLog(@"Debug: [SCGPush] set appID %@", newValue);
+            self.appIDInternal = [newValue copy];
+        } else{
+            NSLog(@"Debug: [SCGPush] clear appID");
+            self.appIDInternal = [@"" copy];
         }
     }
 }
 
 -(NSString *)appID {
     @synchronized (self) {
-        NSUserDefaults* groupDefault = [[NSUserDefaults alloc] initWithSuiteName: @"group.com.syniverse.scg.push.demo"];
-        if (nil != groupDefault) {
-            return [groupDefault objectForKey:@"scg-appID-dont-replace-this-default"];
+        return self.appIDInternal;
+    }
+}
+
+-(void)setCallbackURI:(NSString *)newValue{
+    @synchronized (self) {
+        if ([newValue length]) {
+            NSLog(@"Debug: [SCGPush] set callbackURI %@", newValue);
+            self.callbackURIInternal = [newValue copy];
+        } else{
+            NSLog(@"Debug: [SCGPush] clear callbackURI");
+            self.callbackURIInternal = [@"" copy];
         }
     }
     
-    return nil;
 }
 
+-(NSString *)callbackURI {
+    @synchronized (self) {
+        return self.callbackURIInternal;
+    }
+}
 @end

@@ -63,20 +63,6 @@
 			remoteGlobalIDString = 5BF52A261E76D251008DEE80;
 			remoteInfo = SCGPushSDK;
 		};
-		5B97E99D1D2252C40091617F /* PBXContainerItemProxy */ = {
-			isa = PBXContainerItemProxy;
-			containerPortal = 5B97E9981D2252C40091617F /* SCGPush.xcodeproj */;
-			proxyType = 2;
-			remoteGlobalIDString = F7EFFC431D0DCEB10057A2B6;
-			remoteInfo = SCGPush;
-		};
-		5B97E99F1D2252C40091617F /* PBXContainerItemProxy */ = {
-			isa = PBXContainerItemProxy;
-			containerPortal = 5B97E9981D2252C40091617F /* SCGPush.xcodeproj */;
-			proxyType = 2;
-			remoteGlobalIDString = F7EFFC4D1D0DCEB10057A2B6;
-			remoteInfo = SCGPushTests;
-		};
 		F59BC83A1CEA56310043E96E /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
 			containerPortal = F59BC81D1CEA56310043E96E /* Project object */;
@@ -128,7 +114,6 @@
 /* Begin PBXFileReference section */
 		5B831B4E1E77C53000A53428 /* SCGPushSDK.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = SCGPushSDK.xcodeproj; path = ../SCGPushSDK/SCGPushSDK.xcodeproj; sourceTree = "<group>"; };
 		5B831B5C1E77C6A700A53428 /* SCGPushDemo-Bridging-Header.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "SCGPushDemo-Bridging-Header.h"; sourceTree = "<group>"; };
-		5B97E9981D2252C40091617F /* SCGPush.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = SCGPush.xcodeproj; path = ../SCGPush/SCGPush.xcodeproj; sourceTree = "<group>"; };
 		5BB7F9341DD9FF640087F8C1 /* export_ipa.sh */ = {isa = PBXFileReference; lastKnownFileType = text.script.sh; path = export_ipa.sh; sourceTree = "<group>"; };
 		5BC0FE931D22996A007A9637 /* deploy.sh */ = {isa = PBXFileReference; lastKnownFileType = text.script.sh; path = deploy.sh; sourceTree = "<group>"; };
 		5BC0FE941D22996A007A9637 /* prepare.sh */ = {isa = PBXFileReference; lastKnownFileType = text.script.sh; path = prepare.sh; sourceTree = "<group>"; };
@@ -204,15 +189,6 @@
 			name = Products;
 			sourceTree = "<group>";
 		};
-		5B97E9991D2252C40091617F /* Products */ = {
-			isa = PBXGroup;
-			children = (
-				5B97E99E1D2252C40091617F /* SCGPush.framework */,
-				5B97E9A01D2252C40091617F /* SCGPushTests.xctest */,
-			);
-			name = Products;
-			sourceTree = "<group>";
-		};
 		5BC0FE991D229BC3007A9637 /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
@@ -230,7 +206,6 @@
 				5B831B4E1E77C53000A53428 /* SCGPushSDK.xcodeproj */,
 				F778FB011DC0CE4300D73AC7 /* Downloader */,
 				5BC0FE991D229BC3007A9637 /* Frameworks */,
-				5B97E9981D2252C40091617F /* SCGPush.xcodeproj */,
 				F59BC8271CEA56310043E96E /* demo */,
 				F59BC83C1CEA56310043E96E /* demoTests */,
 				F59BC8471CEA56320043E96E /* demoUITests */,
@@ -441,10 +416,6 @@
 			projectDirPath = "";
 			projectReferences = (
 				{
-					ProductGroup = 5B97E9991D2252C40091617F /* Products */;
-					ProjectRef = 5B97E9981D2252C40091617F /* SCGPush.xcodeproj */;
-				},
-				{
 					ProductGroup = 5B831B4F1E77C53000A53428 /* Products */;
 					ProjectRef = 5B831B4E1E77C53000A53428 /* SCGPushSDK.xcodeproj */;
 				},
@@ -472,20 +443,6 @@
 			fileType = wrapper.cfbundle;
 			path = SCGPushSDKTests.xctest;
 			remoteRef = 5B831B571E77C53000A53428 /* PBXContainerItemProxy */;
-			sourceTree = BUILT_PRODUCTS_DIR;
-		};
-		5B97E99E1D2252C40091617F /* SCGPush.framework */ = {
-			isa = PBXReferenceProxy;
-			fileType = wrapper.framework;
-			path = SCGPush.framework;
-			remoteRef = 5B97E99D1D2252C40091617F /* PBXContainerItemProxy */;
-			sourceTree = BUILT_PRODUCTS_DIR;
-		};
-		5B97E9A01D2252C40091617F /* SCGPushTests.xctest */ = {
-			isa = PBXReferenceProxy;
-			fileType = wrapper.cfbundle;
-			path = SCGPushTests.xctest;
-			remoteRef = 5B97E99F1D2252C40091617F /* PBXContainerItemProxy */;
 			sourceTree = BUILT_PRODUCTS_DIR;
 		};
 /* End PBXReferenceProxy section */

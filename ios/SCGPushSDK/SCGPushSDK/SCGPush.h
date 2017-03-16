@@ -9,6 +9,7 @@
 #import <Foundation/Foundation.h>
 
 #import <SCGPushSDK/SCGPushDelegate.h>
+#import <SCGPushSDK/SCGPushMessage.h>
 
 typedef NS_ENUM(NSInteger, MessageState) {
     MessageStateDelivered,
@@ -22,12 +23,16 @@ typedef NS_ENUM(NSInteger, MessageState) {
 
 + (instancetype _Nonnull) sharedInstance;
 
-@property (nonatomic, assign, nullable) id <SCGPushDelegate> delegate;
++ (instancetype _Nonnull) startWithAccessToken: (NSString* _Nonnull) accessToken
+                                         appId: (NSString* _Nonnull) appId
+                                   callbackUri: (NSString* _Nonnull) callbackUri
+                                      delegate: (id<SCGPushDelegate> _Nullable) delegate;
 
 @property (atomic, copy, nonnull) NSString* accessToken;
 @property (atomic, copy, nonnull) NSString* callbackURI;
 @property (atomic, copy, nonnull) NSString* appID;
-@property (atomic, copy, nullable) NSString* groupBundle;
+
+@property (atomic, weak, nullable) id<SCGPushDelegate> delegate;
 
 - (void) registerPushToken:( NSString* _Nonnull) pushToken
      withCompletionHandler:( void (^ _Nullable)(NSString * _Nullable token)) completionBlock
@@ -36,7 +41,7 @@ typedef NS_ENUM(NSInteger, MessageState) {
 - (void) reportStatusWithMessageId: ( NSString* _Nonnull) messageId
                    andMessageState: ( MessageState ) state
                    completionBlock: ( void(^ _Nullable)()    ) completionBlock
-                     failureBlock : ( void(^ _Nullable) (NSError* _Nullable error)) failureBlock;
+                      failureBlock: ( void(^ _Nullable) (NSError* _Nullable error)) failureBlock;
 
 - (void) resolveTrackedLink:(NSString* _Nonnull) url;
 
@@ -45,11 +50,16 @@ typedef NS_ENUM(NSInteger, MessageState) {
                      completionBlock:(void(^_Nullable)(NSURL* _Nonnull contentUrl, NSString* _Nonnull contentType))completionBlock
                         failureBlock:(void(^_Nullable)(NSError* _Nullable error))failureBlock;
 
-- (void) saveDeviceToken: (NSString* _Nonnull) token;
-- (void) saveDeviceTokenData: (NSData* _Nonnull) tokenData;
-
 
 //MARK: - PushInbox
 - (BOOL) pushToInbox: (NSDictionary* _Nonnull) payload;
+
+- (NSUInteger) numberOfMessages;
+
+- (SCGPushMessage* _Nullable) messageAtIndex:(NSUInteger) index;
+
+- (BOOL) deleteMessage: (SCGPushMessage* _Nonnull) message;
+- (BOOL) deleteMessageAtIndex: (NSUInteger) index;
+- (BOOL) deleteAllMessages;
 
 @end
