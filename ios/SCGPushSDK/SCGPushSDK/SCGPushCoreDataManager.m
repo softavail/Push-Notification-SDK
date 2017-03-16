@@ -223,7 +223,7 @@ static NSString* const _dbName = @"PushInbox.sqlite";
     NSUInteger count = 0;
     
     [self.contextGuard lock];
-    count = self.messagesIndex.count;
+    count = self.messages.count;
     [self.contextGuard unlock];
 
     return count;
@@ -234,7 +234,28 @@ static NSString* const _dbName = @"PushInbox.sqlite";
     SCGPushMessage* message;
     
     [self.contextGuard lock];
-    // TODO: Fetch message by message id
+    if (index < self.messages.count) {
+        NSManagedObjectID* objectId = self.messages[index];
+        NSManagedObject* managed = [self.managedObjectContext objectWithID: objectId];
+        if (managed) {
+            NSString* msgId = [managed valueForKey: @"identifier"];
+            NSDate* created = [managed valueForKey: @"created"];
+            NSString* body = [managed valueForKey: @"body"];
+            
+            message = [[SCGPushMessage alloc] initWithId:msgId dateCreated:created andBody:body];
+            
+            if (nil != [managed valueForKey: @"attachmentId"]) {
+                message.attachmentId = [managed valueForKey: @"attachmentId"];
+            }
+            
+            if (nil != [managed valueForKey: @"deepLink"]) {
+                message.deepLink = [managed valueForKey: @"deepLink"];
+            }
+            if (nil != [managed valueForKey: @"showNotification"]) {
+                message.showNotification = [[managed valueForKey: @"showNotification"] boolValue];
+            }
+        }
+    }
     [self.contextGuard unlock];
     
     return message;
