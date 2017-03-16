@@ -482,6 +482,31 @@ static SCGPush *_sharedInstance = nil;
     return fOk;
 }
 
+- (NSUInteger) numberOfMessages
+{
+    return [self.coreDataManager numberOfMessages];
+}
+
+- (SCGPushMessage* _Nullable) messageAtIndex:(NSUInteger) index
+{
+    return [self.coreDataManager messageAtIndex: index];
+}
+
+- (BOOL) deleteMessage: (SCGPushMessage* _Nonnull) message
+{
+    return [self.coreDataManager deleteMessage:message];
+}
+
+- (BOOL) deleteMessageAtIndex: (NSUInteger) index
+{
+    return [self.coreDataManager deleteMessageAtIndex:index];
+}
+
+- (BOOL) deleteAllMessages
+{
+    return [self.coreDataManager deleteAllMessages];
+}
+
 //MARK: - accessors
 - (HttpRedirectDecisionMaker *)redirectDecisionMaker {
 

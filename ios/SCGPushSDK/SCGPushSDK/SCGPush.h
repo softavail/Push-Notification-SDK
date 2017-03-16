@@ -9,6 +9,7 @@
 #import <Foundation/Foundation.h>
 
 #import <SCGPushSDK/SCGPushDelegate.h>
+#import <SCGPushSDK/SCGPushMessage.h>
 
 typedef NS_ENUM(NSInteger, MessageState) {
     MessageStateDelivered,
@@ -52,5 +53,13 @@ typedef NS_ENUM(NSInteger, MessageState) {
 
 //MARK: - PushInbox
 - (BOOL) pushToInbox: (NSDictionary* _Nonnull) payload;
+
+- (NSUInteger) numberOfMessages;
+
+- (SCGPushMessage* _Nullable) messageAtIndex:(NSUInteger) index;
+
+- (BOOL) deleteMessage: (SCGPushMessage* _Nonnull) message;
+- (BOOL) deleteMessageAtIndex: (NSUInteger) index;
+- (BOOL) deleteAllMessages;
 
 @end
