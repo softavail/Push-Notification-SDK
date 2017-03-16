@@ -7,17 +7,31 @@
 //
 
 import UIKit
+import SCGPushSDK
 
 class MessagesTableViewController: UITableViewController {
 
+
     override func viewDidLoad() {
         super.viewDidLoad()
+        
+//        self.navigationItem.hidesBackButton = true
+//        let newBackButton = UIBarButtonItem(title: "Back", style: UIBarButtonItemStyle.plain, target: self, action: #selector(YourViewController.back(sender:)))
+//        self.navigationItem.leftBarButtonItem = newBackButton
 
         // Uncomment the following line to preserve selection between presentations
         // self.clearsSelectionOnViewWillAppear = false
 
         // Uncomment the following line to display an Edit button in the navigation bar for this view controller.
         // self.navigationItem.rightBarButtonItem = self.editButtonItem()
+    }
+    
+    override func viewWillDisappear(_ animated : Bool) {
+        super.viewWillDisappear(animated)
+        
+        if (self.isMovingFromParentViewController){
+            debugPrint("LogOutAlaBala")
+        }
     }
 
     override func didReceiveMemoryWarning() {
@@ -29,24 +43,28 @@ class MessagesTableViewController: UITableViewController {
 
     override func numberOfSections(in tableView: UITableView) -> Int {
         // #warning Incomplete implementation, return the number of sections
-        return 0
+        return 1
     }
 
     override func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         // #warning Incomplete implementation, return the number of rows
         return 0
     }
-
-    /*
+    
     override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        let cell = tableView.dequeueReusableCell(withIdentifier: "reuseIdentifier", for: indexPath)
-
+        let cell = tableView.dequeueReusableCell(withIdentifier: "myCell", for: indexPath)
+        
         // Configure the cell...
 
         return cell
     }
-    */
-
+    
+    override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+        let mainStoryBoard = UIStoryboard(name: "Main", bundle: nil)
+        let detailsViewController = mainStoryBoard.instantiateViewController(withIdentifier: "DetailsViewController")
+        self.navigationController?.pushViewController(detailsViewController, animated: true)
+    }
+    
     /*
     // Override to support conditional editing of the table view.
     override func tableView(_ tableView: UITableView, canEditRowAt indexPath: IndexPath) -> Bool {
@@ -91,19 +109,17 @@ class MessagesTableViewController: UITableViewController {
         // Pass the selected object to the new view controller.
     }
     */
-    @IBAction func didPressLogOutButton(_ sender: UIBarButtonItem) {
-        self.performSegue(withIdentifier: "logOutSegue", sender: nil)
-    }
+
     
-    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
-        if(segue.identifier == "logOutSegue") {
-            let destination = segue.destination as! ViewController
-            if #available(iOS 9.0, *) {
-                destination.loadViewIfNeeded()
-            } else {
-                // Fallback on earlier versions
-            }
-        }
-    }
+//    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
+//        if(segue.identifier == "logOutSegue") {
+//            let destination = segue.destination as! ViewController
+//            if #available(iOS 9.0, *) {
+//                destination.loadViewIfNeeded()
+//            } else {
+//                // Fallback on earlier versions
+//            }
+//        }
+//    }
 
 }

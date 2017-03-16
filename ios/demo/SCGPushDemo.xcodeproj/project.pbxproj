@@ -13,6 +13,8 @@
 		5BC0FE971D229BB6007A9637 /* Fabric.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 5BC0FE951D229BB6007A9637 /* Fabric.framework */; };
 		5BC0FE981D229BB6007A9637 /* Crashlytics.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 5BC0FE961D229BB6007A9637 /* Crashlytics.framework */; };
 		94AF5F0B1E79799200852808 /* MessagesTableViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 94AF5F0A1E79799200852808 /* MessagesTableViewController.swift */; };
+		94CE16211E7A991D0054C0B3 /* SettingsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 94CE16201E7A991D0054C0B3 /* SettingsViewController.swift */; };
+		94CE16271E7AE7620054C0B3 /* DetailsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 94CE16261E7AE7620054C0B3 /* DetailsViewController.swift */; };
 		F59BC8291CEA56310043E96E /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = F59BC8281CEA56310043E96E /* AppDelegate.swift */; };
 		F59BC82B1CEA56310043E96E /* ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = F59BC82A1CEA56310043E96E /* ViewController.swift */; };
 		F59BC82E1CEA56310043E96E /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = F59BC82C1CEA56310043E96E /* Main.storyboard */; };
@@ -133,6 +135,8 @@
 		5BC0FE951D229BB6007A9637 /* Fabric.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Fabric.framework; path = depends/fabric_ios/Fabric.framework; sourceTree = "<group>"; };
 		5BC0FE961D229BB6007A9637 /* Crashlytics.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Crashlytics.framework; path = depends/fabric_ios/Crashlytics.framework; sourceTree = "<group>"; };
 		94AF5F0A1E79799200852808 /* MessagesTableViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MessagesTableViewController.swift; sourceTree = "<group>"; };
+		94CE16201E7A991D0054C0B3 /* SettingsViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SettingsViewController.swift; sourceTree = "<group>"; };
+		94CE16261E7AE7620054C0B3 /* DetailsViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DetailsViewController.swift; sourceTree = "<group>"; };
 		F59BC8251CEA56310043E96E /* SCGPushDemo.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = SCGPushDemo.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		F59BC8281CEA56310043E96E /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		F59BC82A1CEA56310043E96E /* ViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ViewController.swift; sourceTree = "<group>"; };
@@ -255,7 +259,9 @@
 				F59BC8281CEA56310043E96E /* AppDelegate.swift */,
 				F59BC82A1CEA56310043E96E /* ViewController.swift */,
 				F59BC82C1CEA56310043E96E /* Main.storyboard */,
+				94CE16261E7AE7620054C0B3 /* DetailsViewController.swift */,
 				94AF5F0A1E79799200852808 /* MessagesTableViewController.swift */,
+				94CE16201E7A991D0054C0B3 /* SettingsViewController.swift */,
 				F59BC82F1CEA56310043E96E /* Assets.xcassets */,
 				F59BC8311CEA56310043E96E /* LaunchScreen.storyboard */,
 				F59BC8341CEA56310043E96E /* Info.plist */,
@@ -571,6 +577,8 @@
 				F59BC82B1CEA56310043E96E /* ViewController.swift in Sources */,
 				94AF5F0B1E79799200852808 /* MessagesTableViewController.swift in Sources */,
 				F59BC8291CEA56310043E96E /* AppDelegate.swift in Sources */,
+				94CE16211E7A991D0054C0B3 /* SettingsViewController.swift in Sources */,
+				94CE16271E7AE7620054C0B3 /* DetailsViewController.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

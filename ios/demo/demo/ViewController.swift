@@ -25,10 +25,10 @@ class ViewController: UIViewController, SCGPushSDK.SCGPushDelegate {
         
         let defauts = UserDefaults.standard
         print (defauts.object(forKey: "baseurl"))
-        if (defauts.object(forKey: "baseurl") == nil) {
-            defauts.set("http://192.168.1.197:8080/scg-dra/proxy", forKey: "baseurl")
-            
-        }
+//        if (defauts.object(forKey: "baseurl") == nil) {
+//            defauts.set("http://192.168.1.197:8080/scg-dra/proxy", forKey: "baseurl")
+//            
+//        }
         if (defauts.object(forKey: "appid") == nil) {
             defauts.set("com.syniverse.push_demo", forKey: "appid")
         }
@@ -38,19 +38,19 @@ class ViewController: UIViewController, SCGPushSDK.SCGPushDelegate {
         else {
             accessTokenField.text = ""
         }
-        if (defauts.object(forKey: "reporton") != nil) {
-            reportSwith.isOn = defauts.bool(forKey: "reporton")
-        }
-        else {
-            reportSwith.isOn = true
-            defauts.set(true, forKey: "reporton")
-        }
+//        if (defauts.object(forKey: "reporton") != nil) {
+//            reportSwith.isOn = defauts.bool(forKey: "reporton")
+//        }
+//        else {
+//            reportSwith.isOn = true
+//            defauts.set(true, forKey: "reporton")
+//        }
         
-        baseURIField.text = defauts.string(forKey: "baseurl")
+        //baseURIField.text = defauts.string(forKey: "baseurl")
         appIDField.text = defauts.string(forKey: "appid")
         
         SCGPush.sharedInstance().groupBundle = "group.com.syniverse.scg.push.demo"
-        SCGPush.sharedInstance().callbackURI = baseURIField.text!
+        //SCGPush.sharedInstance().callbackURI = baseURIField.text!
         SCGPush.sharedInstance().appID = appIDField.text!
         SCGPush.sharedInstance().accessToken = accessTokenField.text!
         
@@ -58,8 +58,8 @@ class ViewController: UIViewController, SCGPushSDK.SCGPushDelegate {
         //SCGPush.shared.delegate = self
 //        SCGPush.shared.resolveTrackedLink("https://app.partners1993.com:8088/scg-link/5idWpd")
         
-        logField.layer.borderColor = UIColor.black.cgColor
-        logField.layer.borderWidth = 1
+//        logField.layer.borderColor = UIColor.black.cgColor
+//        logField.layer.borderWidth = 1
         //SLAV
 //        SCGPush.instance.groupBundle = "group.com.syniverse.scg.push.demo"
 //        SCGPush.instance.accessToken = "DQHlNta2J2QGHFHkI44Ei"
@@ -85,10 +85,10 @@ class ViewController: UIViewController, SCGPushSDK.SCGPushDelegate {
             SCGPush.sharedInstance().appID = appIDField.text!
             defauts.set(appIDField.text!, forKey: "appid")
         }
-        if (sender.tag == 9) {
-            SCGPush.sharedInstance().callbackURI = baseURIField.text!
-            defauts.set(baseURIField.text!, forKey: "baseurl")
-        }
+//        if (sender.tag == 9) {
+//            SCGPush.sharedInstance().callbackURI = baseURIField.text!
+//            defauts.set(baseURIField.text!, forKey: "baseurl")
+//        }
     }
 
     
@@ -99,7 +99,7 @@ class ViewController: UIViewController, SCGPushSDK.SCGPushDelegate {
     
     @IBAction func registerToken(_ sender: AnyObject) {
         accessTokenField.resignFirstResponder()
-        baseURIField.resignFirstResponder()
+//        baseURIField.resignFirstResponder()
         appIDField.resignFirstResponder()
         
         let token: String = "alabala";
@@ -116,7 +116,7 @@ class ViewController: UIViewController, SCGPushSDK.SCGPushDelegate {
     
     @IBAction func unregisterToken(_ sender: AnyObject) {
         accessTokenField.resignFirstResponder()
-        baseURIField.resignFirstResponder()
+//        baseURIField.resignFirstResponder()
         appIDField.resignFirstResponder()
         /*
         SCGPush.sharedInstance().unregisterPushToken({
