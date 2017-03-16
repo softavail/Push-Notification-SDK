@@ -35,7 +35,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         application.registerUserNotificationSettings(settings)
         application.registerForRemoteNotifications()
         
-        
+        SCGPush.sharedInstance()
         
         return true
     }
@@ -95,15 +95,39 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     }
     
     var notificationNumber:Int = 0
-    func application(_ application: UIApplication, didReceiveRemoteNotification userInfo: [AnyHashable: Any]){
+    
+    
+    func application(_ application: UIApplication, didReceiveRemoteNotification userInfo: [AnyHashable : Any], fetchCompletionHandler completionHandler: @escaping (UIBackgroundFetchResult) -> Void) {
+        
         application.applicationIconBadgeNumber =  0;
+
+        let aps:NSDictionary? = userInfo["aps"] as? NSDictionary
+        
+        if aps != nil {
+            if let silent:Int = aps?["content-available"] as? Int {
+                
+                if silent == 1 {
+                    debugPrint("pushing to inbox")
+                    SCGPush.sharedInstance().push(toInbox: userInfo)
+                    
+                    completionHandler(UIBackgroundFetchResult.newData)
+                    return
+                }
+            }
+        }
+        
+        let rootController:ViewController = window?.rootViewController! as! ViewController
+        
+        if let alertMessage = aps?["alert"] as? String {
+            print("my messages : \(alertMessage)")
+            (rootController.view.viewWithTag(10) as! UILabel).text = alertMessage
+        }
         
         if let url:String = userInfo["deep_link"] as? String
         {
             SCGPush.sharedInstance().resolveTrackedLink(url)
         }
         
-        let rootController:ViewController = window?.rootViewController! as! ViewController
         
         if let appdata = userInfo["app_data"] as? String {
             rootController.logField.text = rootController.logField.text.appending("AppData: \(appdata)\n")
@@ -113,18 +137,13 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
             if (UserDefaults.standard.bool(forKey: "reporton")) {
                 if let messageID:String = userInfo["scg-message-id"] as? String
                 {
-                    SCGPush.sharedInstance().reportStatus(withMessageId: messageID, andMessageState: .read, completionBlock: {
+                    SCGPush.sharedInstance().reportStatus(withMessageId: messageID, andMessageState: MessageState.read, completionBlock: {
                         self.showAlert ("Success", mess: "You successfully send interactionConfirmation.")
                     }, failureBlock: { (error) in
                         self.showAlert ("Error", mess: (error?.localizedDescription)!)
                     })
                 }
             }
-        }
-        
-        if let aps = userInfo["aps"] as? NSDictionary {
-            print("my messages : \(aps["alert"])")
-            (rootController.view.viewWithTag(10) as! UILabel).text = aps["alert"] as? String
         }
     }
     

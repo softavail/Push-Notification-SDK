@@ -9,10 +9,13 @@
 #import "SCGPush.h"
 #import "HttpRedirectDecisionMaker.h"
 
+#import "SCGPushCoreDataManager.h"
+
 #import <MobileCoreServices/UTCoreTypes.h>
 
 @interface SCGPush()
 @property (nonatomic, strong) HttpRedirectDecisionMaker* redirectDecisionMaker;
+@property (nonatomic, strong) SCGPushCoreDataManager* coreDataManager;
 @end
 
 @implementation SCGPush
@@ -32,6 +35,17 @@
     
     return _sharedInstance;
 }
+
+- (instancetype) init
+{
+    if (nil != (self = [super init])) {
+        NSLog(@"Debug: Initialzing SCGPush <%p>", self);
+        self.coreDataManager = [SCGPushCoreDataManager sharedInstance];
+    }
+    
+    return self;
+}
+
 
 //MARK: - Push Token
 
@@ -311,6 +325,10 @@
                      completionBlock:(void(^_Nullable)(NSURL* _Nonnull contentUrl, NSString* _Nonnull contentType))completionBlock
                         failureBlock:(void(^_Nullable)(NSError* _Nullable error))failureBlock
 {
+    NSLog(@"Debug: SCGPush '<%p>', will load attachment '%@' for message '%@'",
+          self,
+          attachmentId,
+          messageId);
     NSURLSessionConfiguration* configuration = [NSURLSessionConfiguration defaultSessionConfiguration];
     NSURLSession* session = [NSURLSession sessionWithConfiguration:configuration];
     NSString* urlString = [NSString stringWithFormat: @"%@/attachment/%@/%@",
@@ -384,6 +402,50 @@
 
 - (void) saveDeviceTokenData: (NSData* _Nonnull) tokenData
 {
+}
+
+//MARK: - PushInbox
+- (BOOL) pushToInbox: (NSDictionary* _Nonnull) payload
+{
+    BOOL fOk = NO;
+    id identifier = payload[@"scg-message-id"];
+    id body = payload[@"body"];
+    id deepLink = payload[@"deep_link"];
+    id attachmentId = payload[@"scg-attachment-id"];
+    id showNotification = payload[@"show-notification"];
+    
+    if (nil == identifier || ![identifier isKindOfClass: [NSString class]])
+        return fOk;
+    
+    NSString* messageId = (NSString*) identifier;
+    NSString* messageBody = @"";
+    
+    if (nil != body && [body isKindOfClass:[NSString class]]) {
+        messageBody = (NSString*) body;
+    }
+    
+    SCGPushMessage* message =
+    [[SCGPushMessage alloc] initWithId: messageId
+                           dateCreated: [NSDate date]
+                               andBody: messageBody];
+    
+    if (!message)
+        return fOk;
+    
+    if (deepLink && [deepLink isKindOfClass:[NSString class]]) {
+        message.deepLink = (NSString*) deepLink;
+    }
+    if (attachmentId && [attachmentId isKindOfClass:[NSString class]]) {
+        message.attachmentId = (NSString*) attachmentId;
+    }
+    
+    if (showNotification && [showNotification isKindOfClass:[NSNumber class]]) {
+        message.showNotification = [showNotification boolValue];
+    }
+    
+    fOk = [self.coreDataManager addNewMessage: message];
+    
+    return fOk;
 }
 
 //MARK: - accessors

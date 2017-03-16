@@ -48,4 +48,8 @@ typedef NS_ENUM(NSInteger, MessageState) {
 - (void) saveDeviceToken: (NSString* _Nonnull) token;
 - (void) saveDeviceTokenData: (NSData* _Nonnull) tokenData;
 
+
+//MARK: - PushInbox
+- (BOOL) pushToInbox: (NSDictionary* _Nonnull) payload;
+
 @end

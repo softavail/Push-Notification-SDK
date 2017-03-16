@@ -19,3 +19,5 @@ FOUNDATION_EXPORT const unsigned char SCGPushSDKVersionString[];
 
 #import <SCGPushSDK/SCGPushDelegate.h>
 #import <SCGPushSDK/SCGPush.h>
+#import <SCGPushSDK/SCGPushMessage.h>
+#import <SCGPushSDK/SCGPushAttachment.h>
