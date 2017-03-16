@@ -90,6 +90,7 @@ class ViewController: UIViewController, SCGPushSDK.SCGPushDelegate {
             defauts.set(baseURIField.text!, forKey: "baseurl")
         }
     }
+
     
     @IBAction func clipboard(_ sender: AnyObject) {
         UIPasteboard.general.string = purePushTokenLabel.text
@@ -104,7 +105,10 @@ class ViewController: UIViewController, SCGPushSDK.SCGPushDelegate {
         let token: String = "alabala";
         
         SCGPush.sharedInstance().registerToken(token, withCompletionHandler: { (registeredToken) in
-            self.showAlert ("Success", mess: "You successfully register the token.")
+            //self.showAlert ("Success", mess: "You successfully register the token.")
+            DispatchQueue.main.async {
+                self.performSegue(withIdentifier: "loginCompleteSegue", sender: nil)
+            }
         }) { (error) in
             self.showAlert ("Error", mess: (error?.localizedDescription)!)
         }
