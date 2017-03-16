@@ -35,7 +35,25 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         application.registerUserNotificationSettings(settings)
         application.registerForRemoteNotifications()
         
-        SCGPush.sharedInstance()
+        let savedToken:String? = UserDefaults.standard.string(forKey: "token")
+        let savedAppid:String? = UserDefaults.standard.string(forKey: "appid")
+        let savedBaseurl:String? = UserDefaults.standard.string(forKey: "baseurl")
+
+        let token: String = savedToken != nil ? savedToken! : ""
+        let appid: String = savedAppid != nil ? savedAppid! : ""
+        let baseurl: String = savedBaseurl != nil ? savedBaseurl! : ""
+        
+        SCGPush.start(withAccessToken: token, appId: appid, callbackUri: baseurl, delegate: nil)
+
+        if let groupDefaults:UserDefaults = UserDefaults(suiteName: "group.com.syniverse.scg.push.demo") {
+            groupDefaults.set(token, forKey: "scg-push-token")
+            groupDefaults.set(appid, forKey: "scg-push-appid")
+            groupDefaults.set(baseurl, forKey: "scg-push-baseurl")
+            
+        } else {
+            debugPrint("Error: [SCGPush] could not access defaults with suite group.com.syniverse.scg.push.demo")
+        }
+        
         
         return true
     }

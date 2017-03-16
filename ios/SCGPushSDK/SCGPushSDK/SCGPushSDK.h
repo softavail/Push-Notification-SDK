@@ -16,6 +16,7 @@ FOUNDATION_EXPORT const unsigned char SCGPushSDKVersionString[];
 
 // In this header, you should import all the public headers of your framework using statements like #import <SCGPushSDK/PublicHeader.h>
 
+#import <SCGPushSDK/SCGPushBase.h>
 
 #import <SCGPushSDK/SCGPushDelegate.h>
 #import <SCGPushSDK/SCGPush.h>
