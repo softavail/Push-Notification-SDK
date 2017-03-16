@@ -48,11 +48,15 @@ class MessagesTableViewController: UITableViewController {
 
     override func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         // #warning Incomplete implementation, return the number of rows
-        return 0
+        return Int(SCGPush.sharedInstance().numberOfMessages())
     }
     
     override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCell(withIdentifier: "myCell", for: indexPath)
+        
+        let message:SCGPushMessage = SCGPush.sharedInstance().message(at: UInt(indexPath.row))!
+        
+        cell.textLabel?.text = message.body!
         
         // Configure the cell...
 
