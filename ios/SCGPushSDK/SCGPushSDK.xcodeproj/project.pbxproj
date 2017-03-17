@@ -24,6 +24,9 @@
 		5B25EAFD1E7A92FF000D80A7 /* SCGPushError.h in Headers */ = {isa = PBXBuildFile; fileRef = 5B25EAFC1E7A92FF000D80A7 /* SCGPushError.h */; };
 		5B831B5F1E7822E200A53428 /* HttpRedirectDecisionMaker.h in Headers */ = {isa = PBXBuildFile; fileRef = 5B831B5D1E7822E200A53428 /* HttpRedirectDecisionMaker.h */; };
 		5B831B601E7822E200A53428 /* HttpRedirectDecisionMaker.m in Sources */ = {isa = PBXBuildFile; fileRef = 5B831B5E1E7822E200A53428 /* HttpRedirectDecisionMaker.m */; };
+		5BF06B671E7BD94B00A9EE9D /* SCGPushErrorFactory.h in Headers */ = {isa = PBXBuildFile; fileRef = 5BF06B661E7BD94B00A9EE9D /* SCGPushErrorFactory.h */; };
+		5BF06B691E7BDA6900A9EE9D /* SCGPushErrorFactory.m in Sources */ = {isa = PBXBuildFile; fileRef = 5BF06B681E7BDA6900A9EE9D /* SCGPushErrorFactory.m */; };
+		5BF06B6A1E7BDA6900A9EE9D /* SCGPushErrorFactory.m in Sources */ = {isa = PBXBuildFile; fileRef = 5BF06B681E7BDA6900A9EE9D /* SCGPushErrorFactory.m */; };
 		5BF52A311E76D251008DEE80 /* SCGPushSDK.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 5BF52A271E76D251008DEE80 /* SCGPushSDK.framework */; };
 		5BF52A361E76D251008DEE80 /* SCGPushSDKTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 5BF52A351E76D251008DEE80 /* SCGPushSDKTests.m */; };
 		5BF52A381E76D251008DEE80 /* SCGPushSDK.h in Headers */ = {isa = PBXBuildFile; fileRef = 5BF52A2A1E76D251008DEE80 /* SCGPushSDK.h */; settings = {ATTRIBUTES = (Public, ); }; };
@@ -56,6 +59,8 @@
 		5B25EAFC1E7A92FF000D80A7 /* SCGPushError.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SCGPushError.h; sourceTree = "<group>"; };
 		5B831B5D1E7822E200A53428 /* HttpRedirectDecisionMaker.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = HttpRedirectDecisionMaker.h; sourceTree = "<group>"; };
 		5B831B5E1E7822E200A53428 /* HttpRedirectDecisionMaker.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = HttpRedirectDecisionMaker.m; sourceTree = "<group>"; };
+		5BF06B661E7BD94B00A9EE9D /* SCGPushErrorFactory.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SCGPushErrorFactory.h; sourceTree = "<group>"; };
+		5BF06B681E7BDA6900A9EE9D /* SCGPushErrorFactory.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SCGPushErrorFactory.m; sourceTree = "<group>"; };
 		5BF52A271E76D251008DEE80 /* SCGPushSDK.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = SCGPushSDK.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		5BF52A2A1E76D251008DEE80 /* SCGPushSDK.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = SCGPushSDK.h; sourceTree = "<group>"; };
 		5BF52A2B1E76D251008DEE80 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
@@ -124,6 +129,8 @@
 				5B12CA561E79478200B24546 /* SCGPushAttachment.m */,
 				5B25EAF91E7A92ED000D80A7 /* SCGPushError.m */,
 				5B25EAFC1E7A92FF000D80A7 /* SCGPushError.h */,
+				5BF06B661E7BD94B00A9EE9D /* SCGPushErrorFactory.h */,
+				5BF06B681E7BDA6900A9EE9D /* SCGPushErrorFactory.m */,
 			);
 			path = SCGPushSDK;
 			sourceTree = "<group>";
@@ -152,6 +159,7 @@
 				5B831B5F1E7822E200A53428 /* HttpRedirectDecisionMaker.h in Headers */,
 				5B12CA571E79478200B24546 /* SCGPushAttachment.h in Headers */,
 				5BF52A441E76D488008DEE80 /* SCGPush.h in Headers */,
+				5BF06B671E7BD94B00A9EE9D /* SCGPushErrorFactory.h in Headers */,
 				5BF52A491E76E01C008DEE80 /* SCGPushDelegate.h in Headers */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -265,6 +273,7 @@
 				5B12CA4E1E7946C800B24546 /* SCGPushCoreDataManager.m in Sources */,
 				5B12CA581E79478200B24546 /* SCGPushAttachment.m in Sources */,
 				5BF52A451E76D488008DEE80 /* SCGPush.m in Sources */,
+				5BF06B691E7BDA6900A9EE9D /* SCGPushErrorFactory.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -279,6 +288,7 @@
 				5B12CA4F1E7946C800B24546 /* SCGPushCoreDataManager.m in Sources */,
 				5B12CA591E79478200B24546 /* SCGPushAttachment.m in Sources */,
 				5BF52A461E76D488008DEE80 /* SCGPush.m in Sources */,
+				5BF06B6A1E7BDA6900A9EE9D /* SCGPushErrorFactory.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

@@ -27,6 +27,10 @@ typedef NS_ENUM(NSInteger, SCGPushErrorCode) {
 typedef NS_ENUM(NSInteger, SCGPushInboxErrorCode) {
     SCGPushInboxErrorCodeUnknown = 0,
     SCGPushInboxErrorCodeUnentitled = 1,
+    SCGPushInboxErrorCodeNoAttachment = 2,
+    SCGPushInboxErrorCodeAttachmentDownloadAlreadyInProgress = 3,
+    SCGPushInboxErrorCodeAttachmentDownloadTemporaryFailure = 4,
+    SCGPushInboxErrorCodeAttachmentDownloadPermanentFailure = 5,
 };
 
 NS_ASSUME_NONNULL_END

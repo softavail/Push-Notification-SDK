@@ -61,5 +61,10 @@ typedef NS_ENUM(NSInteger, MessageState) {
 - (BOOL) deleteMessage: (SCGPushMessage* _Nonnull) message;
 - (BOOL) deleteMessageAtIndex: (NSUInteger) index;
 - (BOOL) deleteAllMessages;
+- (void) loadAttachmentForMessage: (SCGPushMessage* _Nonnull) message
+                  completionBlock: (void(^ _Nullable) (SCGPushAttachment* _Nonnull attachment)) completionBlock
+                     failureBlock: (void(^ _Nullable) (NSError* _Nullable error)) failureBlock;
+
+- (SCGPushAttachment* _Nullable) getAttachmentForMessage:(SCGPushMessage* _Nonnull) message;
 
 @end

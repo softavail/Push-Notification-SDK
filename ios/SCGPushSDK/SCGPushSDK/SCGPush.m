@@ -10,6 +10,7 @@
 #import "HttpRedirectDecisionMaker.h"
 
 #import "SCGPushCoreDataManager.h"
+#import "SCGPushErrorFactory.h"
 
 #import <MobileCoreServices/UTCoreTypes.h>
 
@@ -349,6 +350,71 @@ static SCGPush *_sharedInstance = nil;
     
 }
 
+- (void) loadInboxAttachmentForMessage: (SCGPushMessage* _Nonnull) message
+                       completionBlock:(void(^_Nullable)(SCGPushAttachment* _Nonnull attachment))completionBlock
+                          failureBlock:(void(^_Nullable)(NSError* _Nullable error))failureBlock
+{
+    NSLog(@"Debug: [SCGPush] '<%p>', will load inbox attachment '%@' for message '%@'",
+          self,
+          message.attachmentId,
+          message.identifier);
+    NSURLSessionConfiguration* configuration = [NSURLSessionConfiguration defaultSessionConfiguration];
+    NSURLSession* session = [NSURLSession sessionWithConfiguration:configuration];
+    NSString* urlString = [NSString stringWithFormat: @"%@/attachment/%@/%@",
+                           self.callbackURI,
+                           message.identifier,
+                           message.attachmentId];
+    NSURL* url = [NSURL URLWithString: urlString];
+    
+    NSLog(@"Debug: [SCGPush] URL: %@", url.absoluteString);
+    NSMutableURLRequest* request = [NSMutableURLRequest requestWithURL: url];
+    request.HTTPMethod = @"GET";
+    request.timeoutInterval = 30;
+    
+    NSString* bearer = [NSString stringWithFormat:@"Bearer %@", self.accessToken];
+    [request addValue: bearer forHTTPHeaderField:@"Authorization"];
+    
+    NSURLSessionDownloadTask* downloadTask =
+    [session downloadTaskWithRequest:request completionHandler:^(NSURL * _Nullable location,
+                                                                 NSURLResponse * _Nullable response,
+                                                                 NSError * _Nullable error) {
+        if (error != nil) {
+            if (failureBlock) {
+                failureBlock(error);
+            }
+            return;
+        }
+
+        NSHTTPURLResponse* httpResponse = (NSHTTPURLResponse*) response;
+        if (httpResponse.statusCode >= 200 && httpResponse.statusCode < 300) {
+            NSString* contentType = [self translateContentTypeHeader: httpResponse];
+            
+            if (nil != location && contentType != nil) {
+                // Move temporary file to remove .tmp extension
+                SCGPushAttachment* a = [[SCGPushAttachment alloc] initWithIdentifier: message.attachmentId];
+                a.contentType = contentType;
+                NSData* data = [NSData dataWithContentsOfURL: location];
+                if (data) {a.data = data;}
+
+                if (completionBlock)
+                    completionBlock(a);
+            } else {
+                if (failureBlock) {
+                    NSError* error = [NSError errorWithDomain: NSURLErrorDomain code: httpResponse.statusCode userInfo: nil];
+                    failureBlock(error);
+                }
+            }
+        } else {
+            if (failureBlock) {
+                NSError* error = [NSError errorWithDomain: NSURLErrorDomain code: httpResponse.statusCode userInfo: nil];
+                failureBlock(error);
+            }
+        }
+    }];
+    
+    [downloadTask resume];
+}
+
 - (void) loadAttachmentWithMessageId:(NSString* _Nonnull) messageId
                      andAttachmentId:(NSString* _Nonnull) attachmentId
                      completionBlock:(void(^_Nullable)(NSURL* _Nonnull contentUrl, NSString* _Nonnull contentType))completionBlock
@@ -506,6 +572,89 @@ static SCGPush *_sharedInstance = nil;
 {
     return [self.coreDataManager deleteAllMessages];
 }
+
+- (void) loadAttachmentForMessage: (SCGPushMessage* _Nonnull) message
+                  completionBlock: (void(^ _Nullable) (SCGPushAttachment* _Nonnull attachment)) completionBlock
+                     failureBlock: (void(^ _Nullable) (NSError* _Nullable error)) failureBlock
+{
+    if( !message.attachmentId.length ) {
+        if (failureBlock) {
+            NSError* error = [SCGPushErrorFactory pushInboxErrorWithCode:SCGPushInboxErrorCodeNoAttachment];
+            failureBlock(error);
+        }
+        
+        return;
+    }
+    
+    SCGPushAttachment* attachment = [self.coreDataManager loadAttachmentForMessage: message];
+    
+    if (attachment == nil) {
+        // No attachment found, lets try to download it now
+        attachment = [self.coreDataManager createAttachmentWithId: message.attachmentId];
+        if (nil == attachment) {
+            if (failureBlock) {
+                NSError* error =
+                [SCGPushErrorFactory pushInboxErrorWithCode: SCGPushInboxErrorCodeNoAttachment];
+                
+                failureBlock(error);
+            }
+            return;
+        }
+    }
+    
+    if (attachment.state == SCGPushAttachmentDownloadNotStarted ||
+        attachment.state == SCGPushAttachmentDownloadFailed)
+    {
+        [self loadInboxAttachmentForMessage:message
+                            completionBlock:^(SCGPushAttachment * _Nonnull loadedAttachment) {
+                                // success
+                                loadedAttachment.state = SCGPushAttachmentDownloadSucceeded;
+                                [self.coreDataManager updateAttachment: loadedAttachment];
+                                
+                                if (completionBlock)
+                                    completionBlock(loadedAttachment);
+                            }
+                               failureBlock:^(NSError * _Nullable error) {
+                                   //failure. mark the attachment as failed temp or perm
+                                   attachment.retryCount += 1;
+                                   if (attachment.retryCount < 3)
+                                       attachment.state = SCGPushAttachmentDownloadFailed;
+                                   else
+                                       attachment.state = SCGPushAttachmentDownloadError;
+
+                                   [self.coreDataManager updateAttachment: attachment];
+
+                                   if (failureBlock) {
+                                       NSError* error;
+                                       if (attachment.state == SCGPushAttachmentDownloadFailed)
+                                           error = [SCGPushErrorFactory pushInboxErrorWithCode: SCGPushInboxErrorCodeAttachmentDownloadTemporaryFailure];
+                                       else
+                                           error = [SCGPushErrorFactory pushInboxErrorWithCode: SCGPushInboxErrorCodeAttachmentDownloadPermanentFailure];
+
+                                       failureBlock(error);
+                                   }
+                             }];
+    } else if (attachment.state == SCGPushAttachmentDownloadInProgress) {
+        if (failureBlock) {
+            NSError* error = [SCGPushErrorFactory pushInboxErrorWithCode: SCGPushInboxErrorCodeAttachmentDownloadAlreadyInProgress];
+            failureBlock(error);
+        }
+    } else if (attachment.state == SCGPushAttachmentDownloadSucceeded) {
+        if (completionBlock)
+            completionBlock(attachment);
+    } else {
+        if (failureBlock) {
+            NSError* error = [SCGPushErrorFactory pushInboxErrorWithCode: SCGPushInboxErrorCodeAttachmentDownloadPermanentFailure];
+            failureBlock(error);
+        }
+    }
+}
+
+- (SCGPushAttachment* _Nullable) getAttachmentForMessage:(SCGPushMessage* _Nonnull) message
+{
+    return [self.coreDataManager loadAttachmentForMessage: message];
+}
+
 
 //MARK: - accessors
 - (HttpRedirectDecisionMaker *)redirectDecisionMaker {

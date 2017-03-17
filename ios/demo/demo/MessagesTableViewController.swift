@@ -7,9 +7,11 @@
 //
 
 import UIKit
+import QuickLook
 import SCGPushSDK
+import MobileCoreServices
 
-class MessagesTableViewController: UITableViewController {
+class MessagesTableViewController: UITableViewController, QLPreviewControllerDataSource {
 
 
     override func viewDidLoad() {
@@ -64,11 +66,42 @@ class MessagesTableViewController: UITableViewController {
     }
     
     override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-        let mainStoryBoard = UIStoryboard(name: "Main", bundle: nil)
-        let detailsViewController = mainStoryBoard.instantiateViewController(withIdentifier: "DetailsViewController")
-        self.navigationController?.pushViewController(detailsViewController, animated: true)
+        
+        if let message:SCGPushMessage = SCGPush.sharedInstance().message(at: UInt(indexPath.row)) {
+            
+            SCGPush.sharedInstance().loadAttachment(for: message, completionBlock: { (attachment) in
+                DispatchQueue.main.async {
+                    let previewQL = QLPreviewController()
+                    previewQL.dataSource = self
+                    previewQL.currentPreviewItemIndex = indexPath.row
+                    self.navigationController?.pushViewController(previewQL, animated: true)
+                }
+            }, failureBlock: { (error) in
+                DispatchQueue.main.async {
+//                    self.showAlert("Attachment", mess: "Error loadingattachment")
+                    let previewQL = QLPreviewController()
+                    previewQL.dataSource = self
+                    previewQL.currentPreviewItemIndex = indexPath.row
+                    self.navigationController?.pushViewController(previewQL, animated: true)
+                }
+            })
+        }
+        
+//        let mainStoryBoard = UIStoryboard(name: "Main", bundle: nil)
+//        let detailsViewController = mainStoryBoard.instantiateViewController(withIdentifier: "DetailsViewController")
+//        self.navigationController?.pushViewController(detailsViewController, animated: true)
     }
-    
+
+    func showAlert(_ title:String, mess:String){
+        OperationQueue.main.addOperation {
+            let alert = UIAlertController(title: title, message: mess, preferredStyle: UIAlertControllerStyle.alert)
+            alert.addAction(UIAlertAction(title: "Ok", style: .default, handler:nil))
+            DispatchQueue.main.async {
+                self.present(alert, animated: true, completion: nil)
+            }
+        }
+    }
+
     /*
     // Override to support conditional editing of the table view.
     override func tableView(_ tableView: UITableView, canEditRowAt indexPath: IndexPath) -> Bool {
@@ -125,5 +158,46 @@ class MessagesTableViewController: UITableViewController {
 //            }
 //        }
 //    }
+
+    // MARK: Preview
+    func numberOfPreviewItems(in controller: QLPreviewController) -> Int {
+        return Int(SCGPush.sharedInstance().numberOfMessages())
+    }
+        
+    func previewController(_ controller: QLPreviewController, previewItemAt index: Int) -> QLPreviewItem {
+
+        var itemUrl = NSURL(fileURLWithPath: NSTemporaryDirectory()).appendingPathComponent("nopreview.txt")!
+        do {
+            let data = "no preview available".data(using: String.Encoding.utf8)
+            if !FileManager.default.fileExists(atPath: itemUrl.absoluteString) {
+                try data?.write(to: itemUrl)
+            }
+        } catch  {
+        }
+
+        let message: SCGPushMessage? = SCGPush.sharedInstance().message(at: UInt(index))
+        
+        if (message?.hasAttachment)! {
+            let attachment:SCGPushAttachment? = SCGPush.sharedInstance().getAttachmentFor(message!)
+            
+            if (attachment != nil && (attachment?.data != nil) && (attachment?.contentType != nil)) {
+                if let tempDirURL = NSURL(fileURLWithPath: NSTemporaryDirectory()).appendingPathComponent((attachment?.fileName)!) {
+                    do {
+                        if FileManager.default.fileExists(atPath: tempDirURL.absoluteString) {
+                            try FileManager.default.removeItem(at: tempDirURL)
+                        }
+                        debugPrint("will try to save \(attachment?.data?.count) bytes")
+                        try attachment!.data?.write(to: tempDirURL)
+                        
+                        itemUrl = tempDirURL
+                    } catch  {
+                        debugPrint("Failed to save data into item")
+                    }
+                }
+            }
+        }
+        
+        return itemUrl as QLPreviewItem
+    }
 
 }

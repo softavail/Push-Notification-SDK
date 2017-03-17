@@ -24,4 +24,6 @@
 @property (nonatomic, assign) BOOL showNotification;
 @property (nonatomic, strong) NSString* attachmentId;
 
+@property (nonatomic, assign, readonly) BOOL hasAttachment;
+
 @end

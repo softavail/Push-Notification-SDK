@@ -10,6 +10,7 @@
 
 #import <CoreData/CoreData.h>
 
+
 static NSString* const _modelName = @"PushInbox";
 static NSString* const _dbName = @"PushInbox.sqlite";
 
@@ -201,6 +202,21 @@ static NSString* const _dbName = @"PushInbox.sqlite";
 }
 
 // This method must be called ninside lock/unlock
+- (BOOL) isAttachmentWithIdExist: (NSString*) attachmentId
+{
+    NSFetchRequest* request = [NSFetchRequest fetchRequestWithEntityName: @"Attachment"];
+    request.predicate = [NSPredicate predicateWithFormat:@"identifier == %@", attachmentId];
+    
+    NSError* error;
+    NSArray *fetchedAttachments = [self.managedObjectContext executeFetchRequest:request error:&error];
+    
+    if (error != nil)
+        return NO;
+    
+    return (fetchedAttachments.count > 0);
+}
+
+// This method must be called ninside lock/unlock
 - (void) deleteMessageId: ( NSString* ) messageId
 {
     NSManagedObjectID* objectId = [self.messagesIndex objectForKey:messageId];
@@ -215,6 +231,50 @@ static NSString* const _dbName = @"PushInbox.sqlite";
 {
     [self.messages removeAllObjects];
     [self.messagesIndex removeAllObjects];
+}
+
+// This method must be called ninside lock/unlock
+- (SCGPushAttachment* _Nullable) loadAttachmentWithId: (NSString*) attachmentId
+{
+    __block SCGPushAttachment* attachment;
+    
+    if (nil == self.managedObjectContext ) {
+        return attachment;
+    }
+
+    [self.managedObjectContext performBlockAndWait:^{
+        
+        NSFetchRequest* request = [NSFetchRequest fetchRequestWithEntityName: @"Attachment"];
+        request.predicate = [NSPredicate predicateWithFormat:@"identifier == %@", attachmentId];
+        
+        NSError* error;
+        NSArray *fetchedAttachments = [self.managedObjectContext executeFetchRequest:request error:&error];
+        
+        if (!error) {
+            if (fetchedAttachments.count) {
+                NSManagedObject* managed = fetchedAttachments[0];
+                NSString* identifier = (NSString*) [managed valueForKey:@"identifier"];
+                attachment = [[SCGPushAttachment alloc] initWithIdentifier: identifier];
+                attachment.state = (SCGPushAttachmentDownloadState)[[managed valueForKey:@"state"] integerValue];
+                attachment.retryCount = [[managed valueForKey:@"retryCount"] integerValue];
+                
+                if (attachment.state == SCGPushAttachmentDownloadSucceeded) {
+                    NSString* contentType = (NSString*) [managed valueForKey:@"contentType"];
+                    if (contentType.length)
+                        attachment.contentType = contentType;
+                    
+                    NSData* data = (NSData*) [managed valueForKey:@"data"];
+                    if (data)
+                        attachment.data = data;
+                }
+            }
+        } else {
+            NSLog(@"Error: failed to fetch attachment");
+        }
+        
+    }];
+    
+    return attachment;
 }
 
 //MARK: - Interface
@@ -452,17 +512,132 @@ static NSString* const _dbName = @"PushInbox.sqlite";
     return fOk;
 }
 
-/* Future API
-- (SCGPushAttachment* _Nullable) attachmentWithMessage: (SCGPushMessage* _Nonnull) message
+- (SCGPushAttachment* _Nullable) loadAttachmentForMessage: (SCGPushMessage* _Nonnull) message
 {
     SCGPushAttachment* attachment;
+
+    if( message.attachmentId.length ) {
+        [self.contextGuard lock];
+        attachment = [self loadAttachmentWithId: message.attachmentId];
+        [self.contextGuard unlock];
+    }
+    
+    return attachment;
+}
+
+- (BOOL) updateAttachment: (SCGPushAttachment* _Nonnull) attachment
+{
+    __block BOOL fOk = NO;
     
     [self.contextGuard lock];
-    // TODO: Fetch attachment by message here
+    
+    do {
+        
+        if ( nil == self.managedObjectContext) {
+            NSLog(@"Error: context not initialzed");
+            break;
+        }
+        
+        NSFetchRequest* request = [NSFetchRequest fetchRequestWithEntityName: @"Attachment"];
+        request.predicate = [NSPredicate predicateWithFormat:@"identifier == %@", attachment.identifier];
+        
+        NSError* error;
+        NSArray *fetched = [self.managedObjectContext executeFetchRequest:request error:&error];
+        
+        if (error != nil || fetched.count == 0) {
+            NSLog(@"Error: cannot load attachment with id: %@",
+                  attachment.identifier);
+            break;
+        }
+        
+        NSManagedObject* managed = fetched[0];
+        
+        [managed setValue:@(attachment.state) forKey:@"state"];
+        [managed setValue:@(attachment.retryCount) forKey:@"retryCount"];
+        if (attachment.contentType.length)
+            [managed setValue: attachment.contentType forKey:@"contentType"];
+        if (attachment.data)
+            [managed setValue:attachment.data forKey:@"data"];
+        
+        [self.managedObjectContext performBlockAndWait:^{
+            
+            NSError* saveError = nil;
+            BOOL fOk = [self.managedObjectContext save: &saveError];
+            
+            if (!fOk) {
+                NSLog(@"Error: failed to update attachment '%@'",
+                      saveError ? saveError.localizedDescription : @"Unspecified error");
+            } else {
+                NSLog(@"Success: updated attachment '%@'",
+                      attachment.identifier);
+            }
+        }];
+        
+    } while (false);
+    
+    [self.contextGuard unlock];
+ 
+    return fOk;
+}
+
+- (SCGPushAttachment* _Nullable) createAttachmentWithId: (NSString*) attachmentId
+{
+    SCGPushAttachment* attachment;
+    [self.contextGuard lock];
+    
+    do {
+        
+        if ( nil == self.managedObjectContext) {
+            NSLog(@"Error: context not initialzed");
+            break;
+        }
+        
+        if ([self isAttachmentWithIdExist: attachmentId]) {
+            NSLog(@"Warning: attachment with the specified id already exist: %@",
+                  attachmentId);
+            break;
+        }
+
+        NSFetchRequest* request = [NSFetchRequest fetchRequestWithEntityName: @"Message"];
+        request.predicate = [NSPredicate predicateWithFormat:@"attachmentId == %@", attachmentId];
+        
+        NSError* error;
+        NSArray *fetchedMessages = [self.managedObjectContext executeFetchRequest:request error:&error];
+        
+        if (error != nil || fetchedMessages.count == 0) {
+            NSLog(@"Error: cannot save attachment because message with this attachmentId is missing: %@",
+                  attachmentId);
+            break;
+        }
+        
+        NSManagedObject* message = fetchedMessages[0];
+        NSManagedObject* managed =
+        [NSEntityDescription insertNewObjectForEntityForName: @"Attachment"
+                                      inManagedObjectContext: self.managedObjectContext];
+        
+        [managed setValue:attachmentId forKey:@"identifier"];
+        [managed setValue:@(SCGPushAttachmentDownloadNotStarted) forKey:@"state"];
+        [managed setValue:message forKey:@"attachment_message"];
+        
+        [self.managedObjectContext performBlockAndWait:^{
+            
+            NSError* saveError = nil;
+            BOOL fOk = [self.managedObjectContext save: &saveError];
+            
+            if (!fOk) {
+                NSLog(@"Error: failed to save attachment '%@'",
+                      saveError ? saveError.localizedDescription : @"Unspecified error");
+            } else {
+                NSLog(@"Success: saved new attachment '%@'",
+                      attachmentId);
+            }
+        }];
+        
+    } while (false);
+    
     [self.contextGuard unlock];
     
     return attachment;
 }
-*/
 
 @end

@@ -23,4 +23,8 @@
     return self;
 }
 
+-(BOOL)hasAttachment {
+    return (self.attachmentId.length > 0);
+}
+
 @end
