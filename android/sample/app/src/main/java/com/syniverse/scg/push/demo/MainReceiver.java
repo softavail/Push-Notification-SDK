@@ -57,8 +57,10 @@ public class MainReceiver extends ScgPushReceiver {
                     "but ScgClient was not initialized, so message was not handled.");
             return;
         }
-
         deliveryReport(messageId);
+        if (message.isInbox()) {
+            return;
+        };
 
         final String msg = message.getBody();
 

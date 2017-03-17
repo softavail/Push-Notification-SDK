@@ -20,6 +20,7 @@ import com.syniverse.scg.push.sdk.ScgMessage;
 import com.syniverse.scg.push.sdk.ScgState;
 
 import java.util.ArrayList;
+import java.util.List;
 
 
 /**
@@ -27,8 +28,9 @@ import java.util.ArrayList;
  */
 class MessageAdapter extends RecyclerView.Adapter<MessageAdapter.MessageViewHolder> implements View.OnClickListener {
 
-    private final ArrayList<ScgMessage> dataset = new ArrayList<>();
+    private List<ScgMessage> dataset = new ArrayList<>();
     private final Context context;
+    private boolean isInboxList;
 
     MessageAdapter(Context context) {
         this.context = context;
@@ -52,8 +54,10 @@ class MessageAdapter extends RecyclerView.Adapter<MessageAdapter.MessageViewHold
                         }
                     }).show();
                 } else {
-                    dataset.remove(holder.getAdapterPosition());
-                    notifyItemRemoved(holder.getAdapterPosition());
+                    if (!isInboxList) {
+                        dataset.remove(holder.getAdapterPosition());
+                        notifyItemRemoved(holder.getAdapterPosition());
+                    }
                     Snackbar.make(v, String.format("Success (%s): %s", code, message), Snackbar.LENGTH_INDEFINITE).show();
                 }
             }
@@ -118,7 +122,14 @@ class MessageAdapter extends RecyclerView.Adapter<MessageAdapter.MessageViewHold
     }
 
     void addMessage(ScgMessage msg) {
-        dataset.add(msg);
+        if (isInboxList) {
+            dataset.add(msg);
+        }
+        notifyItemInserted(dataset.size() - 1);
+    }
+
+    void setMessgaes(List<ScgMessage> msgs, boolean isInbox) {
+        dataset = msgs;
         notifyDataSetChanged();
     }
 

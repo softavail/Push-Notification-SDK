@@ -77,7 +77,7 @@ public class ScgMessage implements Parcelable {
     }
 
     public boolean isInbox() {
-        return !"false".equalsIgnoreCase(data.getString(MESSAGE_SHOW_NOTIFICATION));
+        return "false".equalsIgnoreCase(data.getString(MESSAGE_SHOW_NOTIFICATION));
     }
 
     public long getReceivedTimeUtc() {
@@ -100,7 +100,7 @@ public class ScgMessage implements Parcelable {
     }
 
     protected ScgMessage(Parcel in) {
-        this.data = in.readBundle();
+        this.data = in.readBundle(getClass().getClassLoader());
     }
 
     public static final Parcelable.Creator<ScgMessage> CREATOR = new Parcelable.Creator<ScgMessage>() {

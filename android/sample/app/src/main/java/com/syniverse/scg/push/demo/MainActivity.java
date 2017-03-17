@@ -8,6 +8,7 @@ import android.os.Bundle;
 import android.os.Handler;
 import android.preference.PreferenceManager;
 import android.support.design.widget.Snackbar;
+import android.support.design.widget.TabLayout;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
@@ -28,6 +29,9 @@ import com.syniverse.scg.push.sdk.ScgMessage;
 import com.syniverse.scg.push.sdk.ScgPushReceiver;
 import com.syniverse.scg.push.sdk.ScgState;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import io.fabric.sdk.android.Fabric;
 
 
@@ -45,6 +49,9 @@ public class MainActivity extends AppCompatActivity implements ScgCallback {
     private EditText accessToken;
     private TextView pushToken;
     private MessageAdapter adapter;
+    private TabLayout messagesTabs;
+
+    private List<ScgMessage> pushMessages = new ArrayList<>();
 
     protected SharedPreferences pref;
 
@@ -80,6 +87,25 @@ public class MainActivity extends AppCompatActivity implements ScgCallback {
 
         adapter = new MessageAdapter(this);
 
+        messagesTabs = (TabLayout) findViewById(R.id.tabsMessages);
+        initSelectedTab();
+        messagesTabs.addOnTabSelectedListener(new TabLayout.OnTabSelectedListener() {
+            @Override
+            public void onTabSelected(TabLayout.Tab tab) {
+                initSelectedTab();
+            }
+
+            @Override
+            public void onTabUnselected(TabLayout.Tab tab) {
+
+            }
+
+            @Override
+            public void onTabReselected(TabLayout.Tab tab) {
+
+            }
+        });
+
         accessToken = (EditText) findViewById(R.id.access);
         pushToken = (TextView) findViewById(R.id.token);
 
@@ -107,6 +133,14 @@ public class MainActivity extends AppCompatActivity implements ScgCallback {
         }
 
         onNewIntent(getIntent());
+    }
+
+    private void initSelectedTab() {
+        if (messagesTabs.getSelectedTabPosition() == 0) {
+            adapter.setMessgaes(pushMessages, false);
+        } else {
+            adapter.setMessgaes(ScgClient.getInstance().getAllInboxMessages(), true);
+        }
     }
 
     @Override
@@ -239,7 +273,15 @@ public class MainActivity extends AppCompatActivity implements ScgCallback {
             }, 3141);
         }
 
-        adapter.addMessage(message);
+        if (!message.isInbox()) {
+            pushMessages.add(message);
+            //if push messages selected
+            if (messagesTabs.getSelectedTabPosition() == 0) {
+                adapter.addMessage(message);
+            }
+        } else if (messagesTabs.getSelectedTabPosition() == 1) {
+            adapter.addMessage(message);
+        }
     }
 
     public void saveAccessToken(View view) {

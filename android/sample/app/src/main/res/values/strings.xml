@@ -1,3 +1,5 @@
 <resources>
     <string name="app_name">SCG Push Sample</string>
+    <string name="general">General</string>
+    <string name="inbox">Inbox</string>
 </resources>
