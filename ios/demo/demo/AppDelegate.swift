@@ -96,16 +96,9 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         
         for i in 0..<deviceToken.count {
             tokenString += String(format: "%02.2hhx", arguments: [tokenChars[i]])
-            
         }
-        (window?.rootViewController!.view.viewWithTag(9) as! UILabel).text = tokenString
         
-        
-        SCGPush.sharedInstance().registerToken(tokenString, withCompletionHandler: { (token) in
-            
-        }) { (error) in
-            
-        }
+        UserDefaults.standard.set(tokenString, forKey: "apnTokenString")
     }
     
     func application(_ application: UIApplication, didFailToRegisterForRemoteNotificationsWithError error: Error) {

@@ -196,9 +196,9 @@ static NSString* const _dbName = @"PushInbox.sqlite";
 // This method must be called ninside lock/unlock
 - (BOOL) isMessageWithIdExist: (NSString*) messageId
 {
-    id value = [self.messagesIndex objectForKey:messageId];
+    NSManagedObjectID* managedId = (NSManagedObjectID*) [self.messagesIndex objectForKey:messageId];
     
-    return (nil != value);
+    return (nil != managedId);
 }
 
 // This method must be called ninside lock/unlock
@@ -440,28 +440,28 @@ static NSString* const _dbName = @"PushInbox.sqlite";
                   (long)self.messages.count);
             break;
         }
-
-        NSString* messageId = (NSString*) [self.messages objectAtIndex: index];
-        if (![self isMessageWithIdExist: messageId]) {
-            NSLog(@"Error: Object with specified id does not exist: %@",
-                  messageId);
-            break;
-        }
         
         [self.managedObjectContext performBlockAndWait:^{
-            NSManagedObjectID* objectId = [self.messagesIndex objectForKey: messageId];
+            NSManagedObjectID* objectId = self.messages[index];
             NSManagedObject* managed = [self.managedObjectContext objectWithID: objectId];
-            [self.managedObjectContext deleteObject: managed];
             
-            NSError* saveError = nil;
-            fOk = [self.managedObjectContext save: &saveError];
-            
-            if (!fOk) {
-                NSLog(@"Error: failed to delete message '%@'",
-                      saveError ? saveError.localizedDescription : @"Unspecified error");
+            if (nil != managed) {
+                NSString* messageId = (NSString*) [managed valueForKey:@"identifier"];
+                [self.managedObjectContext deleteObject: managed];
+                
+                NSError* saveError = nil;
+                fOk = [self.managedObjectContext save: &saveError];
+                
+                if (!fOk) {
+                    NSLog(@"Error: failed to delete message '%@'",
+                          saveError ? saveError.localizedDescription : @"Unspecified error");
+                } else {
+                    [self deleteMessageId: messageId];
+                }
             } else {
-                [self deleteMessageId: messageId];
+                NSLog(@"Error: object with id does not exists in db.");
             }
+            
         }];
         
     } while (false);
