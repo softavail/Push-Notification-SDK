@@ -85,7 +85,7 @@ final class ScgInboxDbHelper extends SQLiteOpenHelper {
         values.put(MESSAGE_APP_DATA, scgMessage.getAppData());
         values.put(MESSAGE_ATTACHMENT_ID, scgMessage.getAttachment());
         values.put(MESSAGE_DEEP_LINK, scgMessage.getDeepLink());
-        values.put(MESSAGE_SHOW_NOTIFICATION, String.valueOf(scgMessage.isInbox()));
+        values.put(MESSAGE_SHOW_NOTIFICATION, String.valueOf(!scgMessage.isInbox()));
         values.put(MESSAGE_TIME_RECEIVED, scgMessage.getReceivedTimeUtc());
 
         // Inserting Row
@@ -163,12 +163,28 @@ final class ScgInboxDbHelper extends SQLiteOpenHelper {
 
     private ScgMessage createMessageFromCursor(Cursor cursor) {
         Bundle bundle = new Bundle();
+
         bundle.putString(ScgMessage.MESSAGE_ID, cursor.getString(0));
-        bundle.putString(ScgMessage.MESSAGE_BODY, cursor.getString(1));
-        bundle.putString(ScgMessage.MESSAGE_APP_DATA, cursor.getString(2));
-        bundle.putString(ScgMessage.MESSAGE_ATTACHMENT_ID, cursor.getString(3));
-        bundle.putString(ScgMessage.MESSAGE_DEEP_LINK, cursor.getString(4));
-        bundle.putString(ScgMessage.MESSAGE_SHOW_NOTIFICATION, cursor.getString(5));
+        String value = cursor.getString(1);
+        if (value != null) {
+            bundle.putString(ScgMessage.MESSAGE_BODY, value);
+        }
+        value = cursor.getString(2);
+        if (value != null) {
+            bundle.putString(ScgMessage.MESSAGE_APP_DATA, value);
+        }
+        value = cursor.getString(3);
+        if (value != null) {
+            bundle.putString(ScgMessage.MESSAGE_ATTACHMENT_ID, value);
+        }
+        value = cursor.getString(4);
+        if (value != null) {
+            bundle.putString(ScgMessage.MESSAGE_DEEP_LINK, value);
+        }
+        value = cursor.getString(5);
+        if (value != null) {
+            bundle.putString(ScgMessage.MESSAGE_SHOW_NOTIFICATION, value);
+        }
         bundle.putLong(ScgMessage.MESSAGE_TIME_RECEIVED, cursor.getLong(6));
         return ScgMessage.from(bundle);
     }

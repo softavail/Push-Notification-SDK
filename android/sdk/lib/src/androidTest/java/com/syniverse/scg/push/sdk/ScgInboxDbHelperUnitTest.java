@@ -67,7 +67,7 @@ public class ScgInboxDbHelperUnitTest {
             bundle.putString(ScgMessage.MESSAGE_ID, String.valueOf(i));
             bundle.putString(ScgMessage.MESSAGE_BODY, "Body " + i);
             bundle.putLong(ScgMessage.MESSAGE_TIME_RECEIVED, 1000 + i * 1000);
-            bundle.putString(ScgMessage.MESSAGE_SHOW_NOTIFICATION, "false");
+            bundle.putString(ScgMessage.MESSAGE_SHOW_NOTIFICATION, "true");
             ScgMessage message = ScgMessage.from(bundle);
 
             mScgInboxDbHelper.addMessage(message);

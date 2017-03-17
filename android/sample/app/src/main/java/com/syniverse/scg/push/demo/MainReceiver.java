@@ -36,6 +36,12 @@ public class MainReceiver extends ScgPushReceiver {
 
     @Override
     protected void onPushTokenReceived(String token) {
+        if (!ScgClient.isInitialized()) {
+            Log.w(TAG, "onPushTokenReceived() called with: token = [" + token + "], " +
+                        "but ScgClient was not initialized, so message was not handled.");
+            return;
+        }
+
         ScgClient.getInstance().registerPushToken(token, new ScgCallback() {
             @Override
             public void onSuccess(int code, String message) {
@@ -122,7 +128,7 @@ public class MainReceiver extends ScgPushReceiver {
                         notificationBuilder.setStyle(new NotificationCompat.BigPictureStyle().bigPicture(getThumbnail(result)));
                     }
 
-                    notificationBuilder.addAction(0, "Attachment", PendingIntent.getActivity(context, 0, attachmentIntent, PendingIntent.FLAG_UPDATE_CURRENT));
+//                    notificationBuilder.addAction(0, "Attachment", PendingIntent.getActivity(context, 0, attachmentIntent, PendingIntent.FLAG_UPDATE_CURRENT));
                     notificationManager.notify(messageId.hashCode(), notificationBuilder.build());
                 }
 
