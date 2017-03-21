@@ -41,8 +41,12 @@ class MessageAdapter extends RecyclerView.Adapter<MessageAdapter.MessageViewHold
     public void onClick(final View v) {
 
         final MessageViewHolder holder = (MessageViewHolder) v.getTag();
+        int position = holder.getAdapterPosition();
+        if (position < 0) {
+            return;
+        }
+        final ScgMessage data = dataset.get(position);
         final View view = holder.itemView;
-        final ScgMessage data = dataset.get(holder.getAdapterPosition());
         final boolean isInbox = isInboxList;
         final ScgCallback result = new ScgCallback() {
             @Override

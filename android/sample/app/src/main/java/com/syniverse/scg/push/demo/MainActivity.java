@@ -17,6 +17,8 @@ import android.support.v7.widget.SwitchCompat;
 import android.support.v7.widget.Toolbar;
 import android.text.TextUtils;
 import android.view.LayoutInflater;
+import android.view.Menu;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.EditText;
 import android.widget.TextView;
@@ -33,6 +35,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import io.fabric.sdk.android.Fabric;
+import me.leolin.shortcutbadger.ShortcutBadger;
 
 
 public class MainActivity extends AppCompatActivity implements ScgCallback {
@@ -42,6 +45,7 @@ public class MainActivity extends AppCompatActivity implements ScgCallback {
     private static final String PREF_URL = "PREF_URL";
     private static final String PREF_APP_ID = "PREF_APP_ID";
     private static final String PREF_AUTH = "PREF_TOKEN";
+    public static final String PREF_BADGE_COUNT = "PREF_BADGE_COUNT";
 
     public static final String PREF_AUTO_DELIVERY = "PREF_AUTO_DELIVERY";
     public static final String PREF_AUTO_OPEN = "PREF_AUTO_OPEN";
@@ -50,6 +54,7 @@ public class MainActivity extends AppCompatActivity implements ScgCallback {
     private TextView pushToken;
     private MessageAdapter adapter;
     private TabLayout messagesTabs;
+    private MenuItem menuResetBadge;
 
     private List<ScgMessage> pushMessages = new ArrayList<>();
 
@@ -143,6 +148,74 @@ public class MainActivity extends AppCompatActivity implements ScgCallback {
         }
     }
 
+    private void initBadgeCount() {
+        int badge = pref.getInt(PREF_BADGE_COUNT, -1);
+
+        if (badge > 0) {
+            ShortcutBadger.applyCount(this, badge);
+        } else {
+            ShortcutBadger.removeCount(this);
+        }
+        setBadgeCountMenuItem(badge);
+    }
+
+    private void setBadgeCountMenuItem(int count) {
+        if (menuResetBadge != null) {
+            menuResetBadge.setVisible(count > 0);
+            menuResetBadge.setEnabled(count > 0);
+        }
+    }
+
+    public boolean onCreateOptionsMenu(Menu menu) {
+        menuResetBadge = menu.add(R.string.menu_reset_badges_count);
+        if (pref == null || pref.getInt(PREF_BADGE_COUNT, -1) <= 0) {
+            menuResetBadge.setVisible(false);
+            menuResetBadge.setEnabled(false);
+        }
+
+        return true;
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        if (item == menuResetBadge) {
+            onResetBadgesCount(item.getActionView());
+            return true;
+        }
+
+        return super.onOptionsItemSelected(item);
+    }
+
+    private void onResetBadgesCount(final View view) {
+        final String token = pushToken.getText().toString();
+
+        if (!TextUtils.isEmpty(token)) {
+            ScgClient.getInstance().resetBadgesCounter(token, new ScgCallback() {
+                @Override
+                public void onSuccess(int code, String message) {
+                    if (code >= 200 && code < 300) {
+                        resetBadgeCount();
+                    }
+
+                    MainActivity.this.onSuccess(code, message);
+                }
+
+                @Override
+                public void onFailed(int code, String message) {
+                    MainActivity.this.onFailed(code, message);
+                }
+            });
+        } else {
+            Snackbar.make(view, "Push token is null or invalid", Snackbar.LENGTH_LONG).show();
+        }
+    }
+
+    private void resetBadgeCount() {
+        pref.edit().putInt(PREF_BADGE_COUNT, 0).apply();
+        ShortcutBadger.removeCount(this);
+        setBadgeCountMenuItem(0);
+    }
+
     @Override
     protected void onNewIntent(Intent intent) {
         super.onNewIntent(intent);
@@ -150,6 +223,7 @@ public class MainActivity extends AppCompatActivity implements ScgCallback {
 
         if (getIntent().hasExtra(MainReceiver.MESSAGE_ID))
             handleMessageReceive(getIntent().getStringExtra(MainReceiver.MESSAGE_ID), (ScgMessage) getIntent().getParcelableExtra(MainReceiver.MESSAGE));
+
     }
 
     @Override
@@ -159,6 +233,8 @@ public class MainActivity extends AppCompatActivity implements ScgCallback {
         filter.addAction(ScgPushReceiver.ACTION_PUSH_TOKEN_RECEIVED);
         filter.setPriority(1);
         registerReceiver(receiver, filter);
+
+        initBadgeCount();
     }
 
     @Override
@@ -259,6 +335,10 @@ public class MainActivity extends AppCompatActivity implements ScgCallback {
     }
 
     private void handleMessageReceive(final String messageId, ScgMessage message) {
+        int badgeCount = message.getBadge();
+        if (badgeCount >= 0) {
+            setBadgeCountMenuItem(badgeCount);
+        }
 
         if (pref.getBoolean(PREF_AUTO_DELIVERY, true)) {
             reportState(messageId, ScgState.DELIVERED);

@@ -24,6 +24,8 @@ import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.InputStream;
 
+import me.leolin.shortcutbadger.ShortcutBadger;
+
 /**
  * Created by lekov on 7/7/16.
  */
@@ -57,6 +59,7 @@ public class MainReceiver extends ScgPushReceiver {
 
     @Override
     protected void onMessageReceived(final String messageId, final ScgMessage message) {
+        checkBadgeCount(message);
 
         if (!ScgClient.isInitialized()) {
             Log.w(TAG, "onMessageReceived() called with: messageId = [" + messageId + "], message = [" + message + "] " +
@@ -142,6 +145,22 @@ public class MainReceiver extends ScgPushReceiver {
         }
 
         abortBroadcast();
+    }
+
+    private void checkBadgeCount(ScgMessage message) {
+        if (message != null) {
+            int badge = message.getBadge();
+            if (badge > -1) {
+                if (badge == 0) {
+                    ShortcutBadger.removeCount(context);
+                } else {
+                    ShortcutBadger.applyCount(context, badge);
+                }
+
+                SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(context);
+                prefs.edit().putInt(MainActivity.PREF_BADGE_COUNT, badge).apply();
+            }
+        }
     }
 
     private Bitmap getThumbnail(Uri uri) {

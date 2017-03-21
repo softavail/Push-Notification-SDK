@@ -21,6 +21,7 @@ public class ScgMessage implements Parcelable {
     static final String MESSAGE_ATTACHMENT_ID = "scg-attachment-id";
     static final String MESSAGE_SHOW_NOTIFICATION = "show-notification";
     static final String MESSAGE_TIME_RECEIVED = "received_time";
+    static final String MESSAGE_BADGE = "badge";
 
     private final Bundle data;
 
@@ -82,6 +83,21 @@ public class ScgMessage implements Parcelable {
 
     public long getReceivedTimeUtc() {
         return data.getLong(MESSAGE_TIME_RECEIVED);
+    }
+
+    public int getBadge() {
+        if (!data.containsKey(MESSAGE_BADGE)) {
+            return -1;
+        }
+
+        int badge = 0;
+        try {
+            badge = Integer.parseInt(data.getString(MESSAGE_BADGE));
+        } catch (Exception e) {
+            badge = -1;
+        }
+
+        return badge;
     }
 
     @Override

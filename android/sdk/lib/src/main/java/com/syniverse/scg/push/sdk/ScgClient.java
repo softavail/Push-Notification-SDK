@@ -306,6 +306,44 @@ public class ScgClient {
         }, delay);
     }
 
+    /**
+     * Reset Badges Counter
+     *
+     * @param pushToken The device push token
+     * @param result    Callback getting the result of the register call
+     */
+    public synchronized void resetBadgesCounter(String pushToken, ScgCallback result) {
+        resetBadgesCounter(pushToken, result, 0, mInitialDelay);
+    }
+
+    private void resetBadgesCounter(final String pushToken, final ScgCallback result, final int retryCount, final long delay) {
+        if (pushToken == null) return;
+
+        final RegisterRequest request = new RegisterRequest(fAppId, pushToken);
+
+        new Handler(Looper.myLooper()).postDelayed(new Runnable() {
+            @Override
+            public void run() {
+                mService.resetBadgesCounter(request).enqueue(new Callback<ResponseBody>() {
+                    @Override
+                    public void onResponse(Call<ResponseBody> call, retrofit2.Response<ResponseBody> response) {
+                        if (response.code() == 503 && retryCount < mRetryCount) {
+                            Log.d(TAG, "resetBadgesCounter: 503 - retrying (" + retryCount + ")");
+                            resetBadgesCounter(pushToken, result, retryCount + 1, delay * 2);
+                        } else {
+                            sendResult(response, result);
+                        }
+                    }
+
+                    @Override
+                    public void onFailure(Call<ResponseBody> call, Throwable t) {
+                        result.onFailed(-1, t.getMessage());
+                    }
+                });
+            }
+        }, delay);
+    }
+
     public synchronized void resolveTrackedLink(String url, final ScgCallback result) {
 
         final Request.Builder r = new Request.Builder()

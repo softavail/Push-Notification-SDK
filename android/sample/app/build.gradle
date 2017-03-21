@@ -54,7 +54,6 @@ def getDate() {
 dependencies {
     compile 'com.android.support:appcompat-v7:25.0.1'
     compile 'com.android.support:design:25.0.1'
-    //    http://stackoverflow.com/a/36931247
     compile('com.syniverse.scg:push-sdk:1.3.0@aar') {
         transitive = true
     }

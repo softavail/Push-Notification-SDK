@@ -62,4 +62,11 @@ interface ScgRestService {
     @Streaming
     @GET("attachment/{message_id}/{attachment_id}")
     Call<ResponseBody> downloadAttachment(@Path("message_id") String messageId, @Path("attachment_id") String attachment_id);
+
+    @Headers({
+            "Accept:application/json",
+            "Content-Type:application/json"
+    })
+    @POST("push_tokens/reset_badges_counter")
+    Call<ResponseBody> resetBadgesCounter(@Body RegisterRequest request);
 }
