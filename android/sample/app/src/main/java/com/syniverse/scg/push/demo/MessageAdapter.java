@@ -54,7 +54,7 @@ class MessageAdapter extends RecyclerView.Adapter<MessageAdapter.MessageViewHold
                         return;
                     }
 
-                    Snackbar.make(view, "Resolved URL successful", Snackbar.LENGTH_INDEFINITE).setAction("Open", new View.OnClickListener() {
+                    Snackbar.make(view, "Resolved URL successful", Snackbar.LENGTH_LONG).setAction("Open", new View.OnClickListener() {
                         @Override
                         public void onClick(View view) {
                             Intent intent = new Intent(Intent.ACTION_VIEW, Uri.parse(message));
@@ -76,9 +76,9 @@ class MessageAdapter extends RecyclerView.Adapter<MessageAdapter.MessageViewHold
                     }
                     String text = String.format("Success (%s): %s", code, message);
                     if (view != null && view.getContext() != null && view.isShown()) {
-                        Snackbar.make(view, text, Snackbar.LENGTH_INDEFINITE).show();
+                        Snackbar.make(view, text, Snackbar.LENGTH_LONG).show();
                     } else {
-                        Toast.makeText(context, text, Toast.LENGTH_SHORT).show();
+                        Toast.makeText(context, text, Toast.LENGTH_LONG).show();
                     }
                 }
             }
@@ -87,9 +87,9 @@ class MessageAdapter extends RecyclerView.Adapter<MessageAdapter.MessageViewHold
             public void onFailed(int code, String message) {
                 String text = String.format("Failed (%s): %s", code, message);
                 if (view != null && view.getContext() != null && view.isShown()) {
-                    Snackbar.make(view, text, Snackbar.LENGTH_INDEFINITE).show();
+                    Snackbar.make(view, text, Snackbar.LENGTH_LONG).show();
                 } else {
-                    Toast.makeText(context, text, Toast.LENGTH_SHORT).show();
+                    Toast.makeText(context, text, Toast.LENGTH_LONG).show();
                 }
             }
         };

@@ -230,7 +230,7 @@ public class MainActivity extends AppCompatActivity implements ScgCallback {
         if (!TextUtils.isEmpty(token)) {
             ScgClient.getInstance().registerPushToken(token, this);
         } else {
-            Snackbar.make(view, "Push token is null or invalid", Snackbar.LENGTH_INDEFINITE).show();
+            Snackbar.make(view, "Push token is null or invalid", Snackbar.LENGTH_LONG).show();
         }
     }
 
@@ -240,7 +240,7 @@ public class MainActivity extends AppCompatActivity implements ScgCallback {
         if (!TextUtils.isEmpty(token)) {
             ScgClient.getInstance().unregisterPushToken(token, this);
         } else {
-            Snackbar.make(view, "Push token is null or invalid", Snackbar.LENGTH_INDEFINITE).show();
+            Snackbar.make(view, "Push token is null or invalid", Snackbar.LENGTH_LONG).show();
         }
     }
 
@@ -250,12 +250,12 @@ public class MainActivity extends AppCompatActivity implements ScgCallback {
 
     @Override
     public void onSuccess(int code, String message) {
-        Snackbar.make(pushToken, String.format("Success (%s): %s", code, message), Snackbar.LENGTH_INDEFINITE).show();
+        Snackbar.make(pushToken, String.format("Success (%s): %s", code, message), Snackbar.LENGTH_LONG).show();
     }
 
     @Override
     public void onFailed(int code, String message) {
-        Snackbar.make(pushToken, String.format("Failed (%s): %s", code, message), Snackbar.LENGTH_INDEFINITE).show();
+        Snackbar.make(pushToken, String.format("Failed (%s): %s", code, message), Snackbar.LENGTH_LONG).show();
     }
 
     private void handleMessageReceive(final String messageId, ScgMessage message) {
