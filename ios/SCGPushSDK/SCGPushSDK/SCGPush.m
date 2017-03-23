@@ -292,9 +292,11 @@ static SCGPush *_sharedInstance = nil;
                     
                     NSString* redirectLocation = httpResponse.allHeaderFields[@"Location"];
                     if (nil != redirectLocation) {
-                        [self.delegate resolveTrackedLinkDidSuccess:redirectLocation withrequest:request];
+                        if ([self.delegate respondsToSelector:@selector(resolveTrackedLinkDidSuccess:withrequest:)])
+                             [self.delegate resolveTrackedLinkDidSuccess:redirectLocation withrequest:request];
                     } else {
-                        [self.delegate resolveTrackedLinkHasNotRedirect:request];
+                        if ([self.delegate respondsToSelector:@selector(resolveTrackedLinkHasNotRedirect:)])
+                             [self.delegate resolveTrackedLinkHasNotRedirect:request];
                     }
                 }
             }
@@ -302,7 +304,8 @@ static SCGPush *_sharedInstance = nil;
             default:
             {
                 if (self.delegate != nil) {
-                    [self.delegate resolveTrackedLinkHasNotRedirect:request];
+                    if ([self.delegate respondsToSelector:@selector(resolveTrackedLinkHasNotRedirect:)])
+                        [self.delegate resolveTrackedLinkHasNotRedirect:request];
                 }
             }
                 break;
