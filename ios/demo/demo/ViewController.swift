@@ -17,7 +17,36 @@ class ViewController: UIViewController {
     
     @IBOutlet weak var settingsButton: UIBarButtonItem!
     @IBOutlet weak var registerButton: UIButton!
+    @IBOutlet weak var inboxButton: UIButton!
+    @IBOutlet weak var resetBadge: UIButton!
+    
     var baseURL:String = ""
+    var isUserRegistered: Bool = false
+    var isRegistering: Bool = false
+    var isResetting: Bool = false
+    
+    func updateUI() {
+        self.inboxButton.isHidden = !self.isUserRegistered
+        self.resetBadge.isHidden = !self.isUserRegistered
+        if isUserRegistered {
+            self.registerButton.setTitle("Unregister", for: .normal)
+            
+        }
+        else {
+            self.registerButton.setTitle("Register", for: .normal)
+        }
+        
+        if(isRegistering || isResetting) {
+            self.enableAllButtons(false)
+            self.activityIndicator.startAnimating()
+//            self.activityIndicator.isHidden = false
+        }
+        else {
+            self.enableAllButtons(true)
+            self.activityIndicator.stopAnimating()
+//            self.activityIndicator.isHidden = true
+        }
+    }
     
     override func viewWillAppear(_ animated: Bool) {
         self.enableAllButtons(true)
@@ -26,7 +55,23 @@ class ViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         
+        self.activityIndicator.hidesWhenStopped = true
+        
         self.activityIndicator.isHidden = true
+        self.registerButton.contentHorizontalAlignment = .center
+        
+        self.registerButton.layer.cornerRadius = 10
+        self.registerButton.layer.borderWidth = 1
+        self.registerButton.layer.borderColor = UIColor.blue.cgColor
+        
+        self.inboxButton.layer.cornerRadius = 10
+        self.inboxButton.layer.borderWidth = 1
+        self.inboxButton.layer.borderColor = UIColor.blue.cgColor
+        
+        self.resetBadge.layer.cornerRadius = 10
+        self.resetBadge.layer.borderWidth = 1
+        self.resetBadge.layer.borderColor = UIColor.blue.cgColor
+        
         let defauts = UserDefaults.standard
 
         if (defauts.object(forKey: "appid") == nil) {
@@ -63,7 +108,7 @@ class ViewController: UIViewController {
 //        SCGPush.instance.callbackURI = "http://192.168.1.197:8080/scg-dra/proxy"
 //        SCGPush.instance.callbackURI = "http://95.158.130.102:8080/scg-dra/proxy/"
         
-        
+        self.updateUI()
     }
 
     override func didReceiveMemoryWarning() {
@@ -94,45 +139,85 @@ class ViewController: UIViewController {
         accessTokenField.resignFirstResponder()
 //        baseURIField.resignFirstResponder()
         appIDField.resignFirstResponder()
-        DispatchQueue.main.async {
-            self.enableAllButtons(false)
-            self.activityIndicator.isHidden = false
-            self.activityIndicator.startAnimating()
-        }
+        
+        
+        
+        
         let token: String = UserDefaults.standard.string(forKey: "apnTokenString")!
         debugPrint("token: \(token)")
-        
-        SCGPush.sharedInstance().registerToken(token, withCompletionHandler: { (registeredToken) in
-            //self.showAlert ("Success", mess: "You successfully register the token.")
+        if(!self.isUserRegistered) {
             
-            DispatchQueue.main.async {
-                self.activityIndicator.stopAnimating()
-                self.activityIndicator.hidesWhenStopped = true
-                self.enableAllButtons(true)
-                self.performSegue(withIdentifier: "loginCompleteSegue", sender: nil)
+            self.isRegistering = true
+            self.updateUI()
+            
+            SCGPush.sharedInstance().registerToken(token, withCompletionHandler: { (registeredToken) in
+                //self.showAlert ("Success", mess: "You successfully register the token.")
+                
+                self.isRegistering = false
+                self.isUserRegistered = true
+                DispatchQueue.main.async {
+                    self.updateUI()
+                }
+            }) { (error) in
+                
+                self.isRegistering = false
+                self.isUserRegistered = false
+                
+                self.showAlert ("Error", mess: (error?.localizedDescription)!)
+                DispatchQueue.main.async {
+                    self.updateUI()
+                }
             }
-        }) { (error) in
-            self.showAlert ("Error", mess: (error?.localizedDescription)!)
-            DispatchQueue.main.async {
-                self.activityIndicator.stopAnimating()
-                self.activityIndicator.hidesWhenStopped = true
-                self.enableAllButtons(true)
+        }
+        else {
+            
+            self.isRegistering = true
+            self.updateUI()
+            
+            SCGPush.sharedInstance().unregisterPushToken(token, withCompletionHandler: { (registeredToken) in
+                //self.showAlert ("Success", mess: "You successfully register the token.")
+                
+                self.isRegistering = false
+                self.isUserRegistered = false
+                DispatchQueue.main.async {
+                    self.updateUI()
+                }
+            }) { (error) in
+                //self.showAlert ("Error", mess: (error?.localizedDescription)!)
+                self.isRegistering = false
+                self.isUserRegistered = false
+                DispatchQueue.main.async {
+                    self.updateUI()
+                }
             }
         }
     }
     
-    @IBAction func unregisterToken(_ sender: AnyObject) {
-        accessTokenField.resignFirstResponder()
-//        baseURIField.resignFirstResponder()
-        appIDField.resignFirstResponder()
-        /*
-        SCGPush.sharedInstance().unregisterPushToken({
-                self.showAlert ("Success", mess: "You successfully unregister the token.")
-            }) { (error) in
-                self.showAlert ("Error", mess: (error?.localizedDescription)!)
-        }
- */
+
+    
+    @IBAction func didPressInboxButton(_ sender: UIButton) {
+        self.performSegue(withIdentifier: "loginCompleteSegue", sender: nil)
+        
     }
+
+    @IBAction func didPressResetBadgeButton(_ sender: UIButton) {
+        let token: String = UserDefaults.standard.string(forKey: "apnTokenString")!
+        self.isResetting = true
+        self.updateUI()
+        SCGPush.sharedInstance().resetBadge(forPushToken: token) { (success, error) in
+            self.isResetting = false
+            DispatchQueue.main.async {
+                self.updateUI()
+            }
+            
+            if(success) {
+                DispatchQueue.main.async {
+                    UIApplication.shared.applicationIconBadgeNumber = 0
+                }
+            }
+        }
+    }
+    
     
     func showAlert(_ title:String, mess:String){
         OperationQueue.main.addOperation {
@@ -150,6 +235,8 @@ class ViewController: UIViewController {
             self.appIDField.isEnabled = enable
             self.registerButton.isEnabled = enable
             self.settingsButton.isEnabled = enable
+            self.inboxButton.isEnabled = enable
+            self.resetBadge.isEnabled = enable
         }
     }
 
