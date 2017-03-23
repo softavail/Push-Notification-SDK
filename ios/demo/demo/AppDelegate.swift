@@ -109,8 +109,6 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     
     
     func application(_ application: UIApplication, didReceiveRemoteNotification userInfo: [AnyHashable : Any], fetchCompletionHandler completionHandler: @escaping (UIBackgroundFetchResult) -> Void) {
-        
-        application.applicationIconBadgeNumber =  0;
 
         let aps:NSDictionary? = userInfo["aps"] as? NSDictionary
         
@@ -125,37 +123,22 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
                     return
                 }
             }
-        }
-        
-        let rootController:ViewController = window?.rootViewController! as! ViewController
-        
-        if let alertMessage = aps?["alert"] as? String {
-            print("my messages : \(alertMessage)")
-            (rootController.view.viewWithTag(10) as! UILabel).text = alertMessage
-        }
-        
-        if let url:String = userInfo["deep_link"] as? String
-        {
-            SCGPush.sharedInstance().resolveTrackedLink(url)
-        }
-        
-        
-        if let appdata = userInfo["app_data"] as? String {
-            rootController.logField.text = rootController.logField.text.appending("AppData: \(appdata)\n")
-        }
-        
-        if ((window?.rootViewController!.view.viewWithTag(24) as! UISwitch).isOn) {
-            if (UserDefaults.standard.bool(forKey: "reporton")) {
-                if let messageID:String = userInfo["scg-message-id"] as? String
-                {
-                    SCGPush.sharedInstance().reportStatus(withMessageId: messageID, andMessageState: MessageState.read, completionBlock: {
-                        self.showAlert ("Success", mess: "You successfully send interactionConfirmation.")
-                    }, failureBlock: { (error) in
-                        self.showAlert ("Error", mess: (error?.localizedDescription)!)
-                    })
+            else {
+                
+                if (UserDefaults.standard.bool(forKey: "reporton")) {
+                    if let messageID:String = userInfo["scg-message-id"] as? String
+                    {
+                        SCGPush.sharedInstance().reportStatus(withMessageId: messageID, andMessageState: MessageState.read, completionBlock: {
+                            debugPrint("You successfully send interaction Confirmation.")
+                        }, failureBlock: { (error) in
+                            debugPrint("Error reportStatus: \(error?.localizedDescription)")
+                        })
+                    }
                 }
             }
         }
+        
+        
     }
     
     func showAlert(_ title:String, mess:String){
