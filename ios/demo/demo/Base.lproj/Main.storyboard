@@ -164,11 +164,12 @@
                                 </connections>
                             </textField>
                             <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="2gJ-bF-loD">
-                                <rect key="frame" x="154" y="312" width="66" height="32"/>
+                                <rect key="frame" x="133" y="312" width="111" height="32"/>
                                 <constraints>
-                                    <constraint firstAttribute="width" constant="66" id="7PX-SA-Cod"/>
+                                    <constraint firstAttribute="width" constant="111" id="7PX-SA-Cod"/>
                                     <constraint firstAttribute="height" constant="32" id="Y0T-pQ-pLY"/>
                                 </constraints>
+                                <fontDescription key="fontDescription" type="system" pointSize="18"/>
                                 <state key="normal" title="Register"/>
                                 <connections>
                                     <action selector="registerToken:" destination="BYZ-38-t0r" eventType="touchUpInside" id="76B-fq-GBL"/>
@@ -183,6 +184,9 @@
                                 <color key="textColor" red="0.0" green="0.0" blue="0.0" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                 <nil key="highlightedColor"/>
                             </label>
+                            <activityIndicatorView opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="750" verticalHuggingPriority="750" style="gray" translatesAutoresizingMaskIntoConstraints="NO" id="MSa-QM-TyG">
+                                <rect key="frame" x="177" y="284" width="20" height="20"/>
+                            </activityIndicatorView>
                             <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Access token:" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="xhD-mp-Jt8">
                                 <rect key="frame" x="16" y="118" width="110" height="21"/>
                                 <fontDescription key="fontDescription" type="system" pointSize="17"/>
@@ -206,20 +210,38 @@
                                     <action selector="textFieldChanged:" destination="BYZ-38-t0r" eventType="editingChanged" id="j3l-ns-S16"/>
                                 </connections>
                             </textField>
-                            <activityIndicatorView opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="750" verticalHuggingPriority="750" style="gray" translatesAutoresizingMaskIntoConstraints="NO" id="MSa-QM-TyG">
-                                <rect key="frame" x="177" y="284" width="20" height="20"/>
-                            </activityIndicatorView>
+                            <button opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="249" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="GDG-JH-l2z">
+                                <rect key="frame" x="243" y="421" width="116" height="34"/>
+                                <fontDescription key="fontDescription" type="system" pointSize="18"/>
+                                <state key="normal" title="Reset Badge"/>
+                                <connections>
+                                    <action selector="didPressResetBadgeButton:" destination="BYZ-38-t0r" eventType="touchUpInside" id="0rj-tE-rxh"/>
+                                </connections>
+                            </button>
+                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="bfn-70-h2v">
+                                <rect key="frame" x="16" y="421" width="93" height="34"/>
+                                <fontDescription key="fontDescription" type="system" pointSize="18"/>
+                                <state key="normal" title="Go to Inbox"/>
+                                <connections>
+                                    <action selector="didPressInboxButton:" destination="BYZ-38-t0r" eventType="touchUpInside" id="w0C-9y-3va"/>
+                                </connections>
+                            </button>
                         </subviews>
                         <color key="backgroundColor" red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                         <constraints>
                             <constraint firstItem="AuH-1A-tJY" firstAttribute="top" secondItem="896-KQ-Not" secondAttribute="bottom" constant="20" id="1fV-qc-GsW"/>
+                            <constraint firstItem="GDG-JH-l2z" firstAttribute="trailing" secondItem="8bC-Xf-vdC" secondAttribute="trailingMargin" id="27q-w2-Guh"/>
                             <constraint firstItem="896-KQ-Not" firstAttribute="top" secondItem="xhD-mp-Jt8" secondAttribute="bottom" constant="8" id="5ax-DV-AdZ"/>
+                            <constraint firstItem="GDG-JH-l2z" firstAttribute="top" secondItem="2gJ-bF-loD" secondAttribute="bottom" constant="77" id="9KA-fB-K0d"/>
+                            <constraint firstItem="bfn-70-h2v" firstAttribute="top" secondItem="2gJ-bF-loD" secondAttribute="bottom" constant="77" id="9MQ-Be-TiM"/>
                             <constraint firstItem="MSa-QM-TyG" firstAttribute="top" secondItem="wZe-FZ-AWB" secondAttribute="bottom" constant="28" id="ADB-fo-etY"/>
                             <constraint firstItem="896-KQ-Not" firstAttribute="trailing" secondItem="8bC-Xf-vdC" secondAttribute="trailingMargin" id="Evr-8e-fAT"/>
+                            <constraint firstItem="GDG-JH-l2z" firstAttribute="leading" relation="lessThanOrEqual" secondItem="bfn-70-h2v" secondAttribute="trailing" constant="134" id="Gpa-bN-Xbs"/>
                             <constraint firstAttribute="trailingMargin" secondItem="xhD-mp-Jt8" secondAttribute="trailing" constant="233" id="Hvq-T1-uyw"/>
                             <constraint firstItem="MSa-QM-TyG" firstAttribute="leading" secondItem="8bC-Xf-vdC" secondAttribute="leadingMargin" constant="161" id="Igr-6x-8ZT"/>
                             <constraint firstItem="AuH-1A-tJY" firstAttribute="leading" secondItem="8bC-Xf-vdC" secondAttribute="leadingMargin" id="LDE-Ri-h1w"/>
                             <constraint firstItem="xhD-mp-Jt8" firstAttribute="leading" secondItem="8bC-Xf-vdC" secondAttribute="leadingMargin" id="LMG-zs-xao"/>
+                            <constraint firstItem="bfn-70-h2v" firstAttribute="leading" secondItem="8bC-Xf-vdC" secondAttribute="leadingMargin" id="Mn7-2f-BKy"/>
                             <constraint firstAttribute="trailingMargin" secondItem="MSa-QM-TyG" secondAttribute="trailing" constant="162" id="QGz-Hv-S8y"/>
                             <constraint firstAttribute="trailingMargin" secondItem="AuH-1A-tJY" secondAttribute="trailing" constant="233" id="R6T-8r-XC4"/>
                             <constraint firstItem="qjy-0G-biH" firstAttribute="top" secondItem="y3c-jy-aDJ" secondAttribute="bottom" constant="10" id="R8k-f2-yK0"/>
@@ -229,7 +251,7 @@
                             <constraint firstItem="wZe-FZ-AWB" firstAttribute="top" secondItem="896-KQ-Not" secondAttribute="bottom" constant="49" id="iAZ-Fw-YxH"/>
                             <constraint firstItem="qjy-0G-biH" firstAttribute="leading" secondItem="8bC-Xf-vdC" secondAttribute="leadingMargin" constant="84" id="j1E-Th-Kpv"/>
                             <constraint firstItem="wZe-FZ-AWB" firstAttribute="leading" secondItem="8bC-Xf-vdC" secondAttribute="leadingMargin" id="rg1-2R-D12"/>
-                            <constraint firstItem="2gJ-bF-loD" firstAttribute="leading" secondItem="8bC-Xf-vdC" secondAttribute="leadingMargin" constant="138" id="sMt-65-q3e"/>
+                            <constraint firstItem="2gJ-bF-loD" firstAttribute="leading" secondItem="8bC-Xf-vdC" secondAttribute="leadingMargin" constant="117" id="sMt-65-q3e"/>
                             <constraint firstItem="xhD-mp-Jt8" firstAttribute="top" secondItem="qjy-0G-biH" secondAttribute="bottom" constant="2" id="u4M-NA-kMz"/>
                         </constraints>
                     </view>
@@ -244,7 +266,9 @@
                         <outlet property="accessTokenField" destination="896-KQ-Not" id="qCn-0X-LBd"/>
                         <outlet property="activityIndicator" destination="MSa-QM-TyG" id="V7u-wX-XPl"/>
                         <outlet property="appIDField" destination="wZe-FZ-AWB" id="eEs-4e-vjy"/>
+                        <outlet property="inboxButton" destination="bfn-70-h2v" id="McM-my-CtE"/>
                         <outlet property="registerButton" destination="2gJ-bF-loD" id="MO2-Cu-DsF"/>
+                        <outlet property="resetBadge" destination="GDG-JH-l2z" id="5dW-xV-vyR"/>
                         <outlet property="settingsButton" destination="H3N-7M-bp4" id="bjB-VB-unZ"/>
                         <segue destination="UwP-Z6-hk5" kind="show" identifier="loginCompleteSegue" id="2vB-I4-v4e"/>
                     </connections>
