@@ -38,6 +38,10 @@ typedef NS_ENUM(NSInteger, MessageState) {
      withCompletionHandler:( void (^ _Nullable)(NSString * _Nullable token)) completionBlock
               failureBlock:( void (^ _Nullable)(NSError * _Nullable error)) failureBlock;
 
+- (void) unregisterPushToken:( NSString* _Nonnull) pushToken
+       withCompletionHandler:( void (^ _Nullable)(NSString * _Nullable token)) completionBlock
+                failureBlock:( void (^ _Nullable)(NSError * _Nullable error)) failureBlock;
+
 - (void) reportStatusWithMessageId: ( NSString* _Nonnull) messageId
                    andMessageState: ( MessageState ) state
                    completionBlock: ( void(^ _Nullable)()    ) completionBlock
