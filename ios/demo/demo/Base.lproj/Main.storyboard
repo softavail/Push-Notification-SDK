@@ -323,16 +323,7 @@
                             <outlet property="delegate" destination="UwP-Z6-hk5" id="T0W-l5-n7e"/>
                         </connections>
                     </tableView>
-                    <navigationItem key="navigationItem" title="Messages" id="K2f-tK-Car">
-                        <barButtonItem key="leftBarButtonItem" title="Back" id="2vk-bb-oLr">
-                            <connections>
-                                <action selector="didPressLogOutButton:" destination="UwP-Z6-hk5" id="jiN-eJ-dff"/>
-                            </connections>
-                        </barButtonItem>
-                    </navigationItem>
-                    <connections>
-                        <outlet property="logOutButton" destination="2vk-bb-oLr" id="XIt-tc-L17"/>
-                    </connections>
+                    <navigationItem key="navigationItem" title="Messages" id="K2f-tK-Car"/>
                 </tableViewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="gvx-Oj-pV6" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>

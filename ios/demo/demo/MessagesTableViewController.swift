@@ -13,7 +13,7 @@ import MobileCoreServices
 
 class MessagesTableViewController: UITableViewController, QLPreviewControllerDataSource {
 
-    @IBOutlet weak var logOutButton: UIBarButtonItem!
+//    @IBOutlet weak var logOutButton: UIBarButtonItem!
     let formatter: DateFormatter = DateFormatter()
 
     override func viewDidLoad() {
@@ -166,10 +166,10 @@ class MessagesTableViewController: UITableViewController, QLPreviewControllerDat
 //            }
 //        }
 //    }
-    @IBAction func didPressLogOutButton(_ sender: UIBarButtonItem) {
-        
-        _ = navigationController?.popViewController(animated: true)
-    }
+//    @IBAction func didPressLogOutButton(_ sender: UIBarButtonItem) {
+//        
+//        _ = navigationController?.popViewController(animated: true)
+//    }
 
     // MARK: Preview
     func numberOfPreviewItems(in controller: QLPreviewController) -> Int {
