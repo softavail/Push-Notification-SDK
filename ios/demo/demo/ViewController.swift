@@ -9,7 +9,7 @@
 import UIKit
 import SCGPushSDK
 
-class ViewController: UIViewController, SCGPushSDK.SCGPushDelegate {
+class ViewController: UIViewController {
 
     @IBOutlet weak var accessTokenField: UITextField!
     @IBOutlet weak var appIDField: UITextField!
@@ -152,5 +152,20 @@ class ViewController: UIViewController, SCGPushSDK.SCGPushDelegate {
             self.settingsButton.isEnabled = enable
         }
     }
+
 }
 
+
+extension ViewController: SCGPushSDK.SCGPushDelegate {
+    func resolveTrackedLinkDidSuccess(_ redirectLocation: String!, withrequest request: URLRequest!) {
+        DispatchQueue.main.async {
+            debugPrint("RedirectionLocation: \(redirectLocation)\n")
+        }
+    }
+    
+    func resolveTrackedLinkHasNotRedirect(_ request: URLRequest!) {
+        DispatchQueue.main.async {
+            debugPrint("RedirectionLocation: None\n")
+        }
+    }
+}

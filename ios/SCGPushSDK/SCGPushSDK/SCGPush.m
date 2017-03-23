@@ -493,6 +493,87 @@ static SCGPush *_sharedInstance = nil;
     [downloadTask resume];
 }
 
+- (void) resetBadgeForPushToken: (NSString* _Nonnull) pushToken
+                 ompletionBlock: (void(^_Nullable)(BOOL success, NSError* _Nullable error)) completionBlock
+{
+    if (nil == pushToken) {
+        if (completionBlock) {
+            NSError* error = [NSError errorWithDomain: @"SCGPush" code: 1 userInfo: nil];
+            completionBlock(NO, error);
+        }
+        return;
+    }
+    
+    NSURLSessionConfiguration* configuration = [NSURLSessionConfiguration defaultSessionConfiguration];
+    NSURLSession* session = [NSURLSession sessionWithConfiguration: configuration];
+    NSString* urlString = [NSString stringWithFormat: @"%@/push_tokens/reset_badges_counter",
+                           self.callbackURI];
+    NSURL* url = [NSURL URLWithString: urlString];
+    if (nil == url) {
+        if (completionBlock) {
+            NSError* error = [NSError errorWithDomain: @"SCGPush" code: 2 userInfo: nil];
+            completionBlock(NO, error);
+        }
+        return;
+    }
+    
+    NSLog(@"Debug: [SCGPush] URL: %@", url.absoluteString);
+    
+    NSMutableURLRequest* request = [NSMutableURLRequest requestWithURL: url];
+    request.HTTPMethod = @"POST";
+    request.timeoutInterval = 30;
+    
+    [request addValue:@"application/json" forHTTPHeaderField:@"Content-Type"];
+    NSString* bearer = [NSString stringWithFormat:@"Bearer %@", self.accessToken];
+    [request addValue: bearer forHTTPHeaderField:@"Authorization"];
+    NSError* jsonError = nil;
+    NSDictionary* params = @{@"app_id": self.appID,
+                             @"type": @"APN",
+                             @"token": pushToken};
+    NSData* jsonData = [NSJSONSerialization dataWithJSONObject:params options:0 error: &jsonError];
+    if (nil == jsonData) {
+        if (completionBlock) {
+            completionBlock(NO, jsonError);
+        }
+        return;
+    }
+    
+    request.HTTPBody = jsonData;
+    
+    NSURLSessionDataTask* dataTask =
+    [session dataTaskWithRequest:request completionHandler:^(NSData * _Nullable data, NSURLResponse * _Nullable response, NSError * _Nullable error) {
+        NSHTTPURLResponse* httpResponse = (NSHTTPURLResponse*) response;
+        if (error != nil) {
+            if (completionBlock) {
+                completionBlock(NO, error);
+            }
+            return;
+        }
+        
+        switch (httpResponse.statusCode) {
+            case 200:
+            case 204:
+            {
+                if (completionBlock != nil) {
+                    completionBlock(YES, nil);
+                }
+            }
+                break;
+            default:
+            {
+                if (completionBlock) {
+                    NSError* error = [NSError errorWithDomain: @"SCGPush" code: httpResponse.statusCode userInfo: nil];
+                    completionBlock(NO, error);
+                }
+            }
+                break;
+                
+        }
+    }];
+    
+    [dataTask resume];
+}
+
 // MARK: - Save Device Token
 - (void) saveDeviceToken: (NSString* _Nonnull) token
 {

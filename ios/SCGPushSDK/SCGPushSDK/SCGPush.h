@@ -50,6 +50,9 @@ typedef NS_ENUM(NSInteger, MessageState) {
                      completionBlock:(void(^_Nullable)(NSURL* _Nonnull contentUrl, NSString* _Nonnull contentType))completionBlock
                         failureBlock:(void(^_Nullable)(NSError* _Nullable error))failureBlock;
 
+- (void) resetBadgeForPushToken: (NSString* _Nonnull) pushToken
+                 ompletionBlock: (void(^_Nullable)(BOOL success, NSError* _Nullable error)) completionBlock;
+
 
 //MARK: - PushInbox
 - (BOOL) pushToInbox: (NSDictionary* _Nonnull) payload;

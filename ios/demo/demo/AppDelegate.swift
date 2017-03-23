@@ -30,10 +30,26 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
             debugPrint("NO CRASHLYTICS")
         #endif
 
-        let settings = UIUserNotificationSettings(types: [.alert, .badge, .sound], categories: nil)
+        if #available(iOS 10.0, *) {
+            // use the feature only available in iOS 10
+            let center = UNUserNotificationCenter.current()
+
+            center.requestAuthorization(options: [.badge, .alert , .sound]) { (granted, error) in
+                if granted {
+                    application.registerForRemoteNotifications()
+                }
+                
+                if error != nil {
+                    print(error?.localizedDescription ?? "Unknown")
+                }
+            }
+        } else {
+
+            // or use some work around
+            let settings = UIUserNotificationSettings(types: [.alert, .badge, .sound], categories: nil)
+            application.registerUserNotificationSettings(settings)
+        }
         
-        application.registerUserNotificationSettings(settings)
-        application.registerForRemoteNotifications()
         
         let savedToken:String? = UserDefaults.standard.string(forKey: "token")
         let savedAppid:String? = UserDefaults.standard.string(forKey: "appid")
@@ -82,10 +98,6 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 
     func application(_ application: UIApplication, didRegister notificationSettings: UIUserNotificationSettings) {
         if notificationSettings.types != UIUserNotificationType() {
-            if #available(iOS 10.0, *) {
-                UNUserNotificationCenter.current().requestAuthorization(options:[.badge, .alert, .sound]){ (granted, error) in }
-            }
-            
             application.registerForRemoteNotifications()
         }
     }
@@ -112,30 +124,73 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 
         let aps:NSDictionary? = userInfo["aps"] as? NSDictionary
         
+        let sn:Bool? = userInfo["show-notification"] as? Bool
+        
         if aps != nil {
             if let silent:Int = aps?["content-available"] as? Int {
                 
                 if silent == 1 {
-                    debugPrint("pushing to inbox")
-                    SCGPush.sharedInstance().push(toInbox: userInfo)
+                    
+                    // check badge value
+                    let badge:Int? = aps?["badge"] as? Int
+                    
+                    if badge != nil {
+                        debugPrint("set badge number to \(badge!)")
+                        application.applicationIconBadgeNumber = badge!
+                    }
+                    
+                    if sn != nil && sn! == true {
+                        debugPrint("showing notification")
+                        showNotification(userInfo)
+                    } else {
+                        debugPrint("pushing to inbox")
+                        SCGPush.sharedInstance().push(toInbox: userInfo)
+                    }
                     
                     completionHandler(UIBackgroundFetchResult.newData)
                     return
                 }
             }
             else {
-                
+            
+                if let url:String = userInfo["deep_link"] as? String
+                {
+                    SCGPush.sharedInstance().resolveTrackedLink(url)
+                }
+
                 if (UserDefaults.standard.bool(forKey: "reporton")) {
                     if let messageID:String = userInfo["scg-message-id"] as? String
                     {
                         SCGPush.sharedInstance().reportStatus(withMessageId: messageID, andMessageState: MessageState.read, completionBlock: {
-                            debugPrint("You successfully send interaction Confirmation.")
+                            debugPrint("Successfully reportStatus  withMessageId: \(messageID)")
                         }, failureBlock: { (error) in
-                            debugPrint("Error reportStatus: \(error?.localizedDescription)")
+                            debugPrint("Error reportStatus  withMessageId: \(messageID), error: \((error?.localizedDescription)!)")
                         })
                     }
                 }
             }
+        }
+    }
+    
+    func showNotification(_ userInfo: [AnyHashable : Any]) -> Void {
+        if #available(iOS 10.0, *) {
+            let content = UNMutableNotificationContent()
+            content.body = (userInfo["body"] as! String?)!
+            let request = UNNotificationRequest(identifier: (userInfo["scg-message-id"] as! String?)!, content: content, trigger: nil)
+            UNUserNotificationCenter.current().add(request) { error in
+                UNUserNotificationCenter.current().delegate = self
+                if (error != nil){
+                    //handle here
+                }
+            }
+        } else {
+            // show notificaiton locally
+            let localNotification = UILocalNotification()
+            localNotification.alertBody = userInfo["body"] as! String?
+            localNotification.fireDate = Date().addingTimeInterval(1)
+            localNotification.userInfo = userInfo
+            
+            UIApplication.shared.scheduleLocalNotification(localNotification)
         }
         
         
@@ -149,4 +204,16 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         }
     }
 }
+
+@available(iOS 10.0, *)
+extension AppDelegate: UNUserNotificationCenterDelegate {
+    public func userNotificationCenter(_ center: UNUserNotificationCenter, willPresent notification: UNNotification, withCompletionHandler completionHandler: @escaping (UNNotificationPresentationOptions) -> Swift.Void) {
+        completionHandler( [.alert, .badge, .sound])
+    }
+    
+    public func userNotificationCenter(_ center: UNUserNotificationCenter, didReceive response: UNNotificationResponse, withCompletionHandler completionHandler: @escaping () -> Swift.Void) {
+        print("Tapped in notification")
+    }
+}
+
 
