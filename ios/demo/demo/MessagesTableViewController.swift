@@ -13,6 +13,8 @@ import MobileCoreServices
 
 class MessagesTableViewController: UITableViewController, QLPreviewControllerDataSource {
 
+    @IBOutlet weak var logOutButton: UIBarButtonItem!
+    let formatter: DateFormatter = DateFormatter()
 
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -26,15 +28,10 @@ class MessagesTableViewController: UITableViewController, QLPreviewControllerDat
 
         // Uncomment the following line to display an Edit button in the navigation bar for this view controller.
         // self.navigationItem.rightBarButtonItem = self.editButtonItem()
+        let nib = UINib.init(nibName: "NotificationTableViewCell", bundle: nil)
+        self.tableView.register(nib, forCellReuseIdentifier: "NotificationCell")
     }
-    
-    override func viewWillDisappear(_ animated : Bool) {
-        super.viewWillDisappear(animated)
-        
-        if (self.isMovingFromParentViewController){
-            debugPrint("LogOutAlaBala")
-        }
-    }
+
 
     override func didReceiveMemoryWarning() {
         super.didReceiveMemoryWarning()
@@ -54,11 +51,17 @@ class MessagesTableViewController: UITableViewController, QLPreviewControllerDat
     }
     
     override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        let cell = tableView.dequeueReusableCell(withIdentifier: "myCell", for: indexPath)
+        let cell:NotificationTableViewCell = tableView.dequeueReusableCell(withIdentifier: "NotificationCell", for: indexPath) as! NotificationTableViewCell
         
         let message:SCGPushMessage = SCGPush.sharedInstance().message(at: UInt(indexPath.row))!
         
-        cell.textLabel?.text = message.body!
+        self.formatter.dateStyle = .medium
+        self.formatter.timeStyle = .medium
+        self.formatter.locale = Locale(identifier: "en_US")
+        
+        cell.labelBody.text = message.body!
+        cell.labelDate.text = self.formatter.string(from: message.created)
+        //debugPrint(message.created)
         
         // Configure the cell...
 
@@ -120,9 +123,6 @@ class MessagesTableViewController: UITableViewController, QLPreviewControllerDat
             if (SCGPush.sharedInstance().deleteMessage(at: UInt(indexPath.row))) {
                 tableView.deleteRows(at: [indexPath], with: .fade)
             }
-            //tableView.deleteRows(at: [indexPath], with: .fade)
-            //tableView.reloadData()
-            
             
         } else if editingStyle == .insert {
             // Create a new instance of the appropriate class, insert it into the array, and add a new row to the table view
@@ -166,6 +166,10 @@ class MessagesTableViewController: UITableViewController, QLPreviewControllerDat
 //            }
 //        }
 //    }
+    @IBAction func didPressLogOutButton(_ sender: UIBarButtonItem) {
+        
+        _ = navigationController?.popViewController(animated: true)
+    }
 
     // MARK: Preview
     func numberOfPreviewItems(in controller: QLPreviewController) -> Int {

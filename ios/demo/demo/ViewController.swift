@@ -11,18 +11,22 @@ import SCGPushSDK
 
 class ViewController: UIViewController, SCGPushSDK.SCGPushDelegate {
 
-    @IBOutlet weak var purePushTokenLabel: UILabel!
     @IBOutlet weak var accessTokenField: UITextField!
-    @IBOutlet weak var baseURIField: UITextField!
     @IBOutlet weak var appIDField: UITextField!
-    @IBOutlet weak var logField: UITextView!
-    @IBOutlet weak var reportSwith: UISwitch!
+    @IBOutlet weak var activityIndicator: UIActivityIndicatorView!
     
+    @IBOutlet weak var settingsButton: UIBarButtonItem!
+    @IBOutlet weak var registerButton: UIButton!
     var baseURL:String = ""
+    
+    override func viewWillAppear(_ animated: Bool) {
+        self.enableAllButtons(true)
+    }
     
     override func viewDidLoad() {
         super.viewDidLoad()
         
+        self.activityIndicator.isHidden = true
         let defauts = UserDefaults.standard
 
         if (defauts.object(forKey: "appid") == nil) {
@@ -83,26 +87,37 @@ class ViewController: UIViewController, SCGPushSDK.SCGPushDelegate {
 //        }
     }
 
-    
-    @IBAction func clipboard(_ sender: AnyObject) {
-        UIPasteboard.general.string = purePushTokenLabel.text
-    }
+
     
     
     @IBAction func registerToken(_ sender: AnyObject) {
         accessTokenField.resignFirstResponder()
 //        baseURIField.resignFirstResponder()
         appIDField.resignFirstResponder()
-        
-        let token: String = "alabala";
+        DispatchQueue.main.async {
+            self.enableAllButtons(false)
+            self.activityIndicator.isHidden = false
+            self.activityIndicator.startAnimating()
+        }
+        let token: String = UserDefaults.standard.string(forKey: "apnTokenString")!
+        debugPrint("token: \(token)")
         
         SCGPush.sharedInstance().registerToken(token, withCompletionHandler: { (registeredToken) in
             //self.showAlert ("Success", mess: "You successfully register the token.")
+            
             DispatchQueue.main.async {
+                self.activityIndicator.stopAnimating()
+                self.activityIndicator.hidesWhenStopped = true
+                self.enableAllButtons(true)
                 self.performSegue(withIdentifier: "loginCompleteSegue", sender: nil)
             }
         }) { (error) in
             self.showAlert ("Error", mess: (error?.localizedDescription)!)
+            DispatchQueue.main.async {
+                self.activityIndicator.stopAnimating()
+                self.activityIndicator.hidesWhenStopped = true
+                self.enableAllButtons(true)
+            }
         }
     }
     
@@ -119,10 +134,6 @@ class ViewController: UIViewController, SCGPushSDK.SCGPushDelegate {
  */
     }
     
-    @IBAction func reportSwitchAction(_ sender: UISwitch) {
-        UserDefaults.standard.set(sender.isOn, forKey: "reporton")
-    }
-    
     func showAlert(_ title:String, mess:String){
         OperationQueue.main.addOperation {
             let alert = UIAlertController(title: title, message: mess, preferredStyle: UIAlertControllerStyle.alert)
@@ -133,9 +144,12 @@ class ViewController: UIViewController, SCGPushSDK.SCGPushDelegate {
         }
     }
     
-    func resolveTrackedLinkDidSuccess(redirectLocation: String, request: URLRequest) {
+    func enableAllButtons(_ enable: Bool) {
         DispatchQueue.main.async {
-            self.logField.text = self.logField.text.appending("RedirectionLocation: \(redirectLocation)\n")
+            self.accessTokenField.isEnabled = enable
+            self.appIDField.isEnabled = enable
+            self.registerButton.isEnabled = enable
+            self.settingsButton.isEnabled = enable
         }
     }
 }

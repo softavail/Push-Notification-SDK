@@ -13,8 +13,6 @@ class SettingsViewController: UIViewController, SCGPushSDK.SCGPushDelegate {
     @IBOutlet weak var baseUriTextField: UITextField!
     @IBOutlet weak var interactionReportLabel: UILabel!
     @IBOutlet weak var interactionReportSwitch: UISwitch!
-    @IBOutlet weak var logLabel: UILabel!
-    @IBOutlet weak var logTextView: UITextView!
     @IBOutlet weak var tokenLabel: UILabel!
     @IBOutlet weak var clipboardButton: UIButton!
 
@@ -36,12 +34,10 @@ class SettingsViewController: UIViewController, SCGPushSDK.SCGPushDelegate {
         }
         
         baseUriTextField.text = defauts.string(forKey: "baseurl")
+        tokenLabel.text = defauts.string(forKey: "apnTokenString")
         
         SCGPush.sharedInstance().callbackURI = baseUriTextField.text!
-        
-        
-        logTextView.layer.borderColor = UIColor.black.cgColor
-        logTextView.layer.borderWidth = 1
+
 
         // Do any additional setup after loading the view.
     }
@@ -63,13 +59,10 @@ class SettingsViewController: UIViewController, SCGPushSDK.SCGPushDelegate {
     }
     
     
-    
-    
-    func resolveTrackedLinkDidSuccess(redirectLocation: String, request: URLRequest) {
-        DispatchQueue.main.async {
-            self.logTextView.text = self.logTextView.text.appending("RedirectionLocation: \(redirectLocation)\n")
-        }
+    @IBAction func didPressCopyButton(_ sender: UIButton) {
+        UIPasteboard.general.string = tokenLabel.text
     }
+    
 
     /*
     // MARK: - Navigation
