@@ -193,7 +193,10 @@ class ViewController: UIViewController {
         }
     }
     
+
+    
     @IBAction func didPressInboxButton(_ sender: UIButton) {
+        self.performSegue(withIdentifier: "loginCompleteSegue", sender: nil)
         
     }
 
