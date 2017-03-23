@@ -174,15 +174,23 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     
     func showNotification(_ userInfo: [AnyHashable : Any]) -> Void {
         if #available(iOS 10.0, *) {
-            let content = UNMutableNotificationContent()
-            content.body = (userInfo["body"] as! String?)!
-            let request = UNNotificationRequest(identifier: (userInfo["scg-message-id"] as! String?)!, content: content, trigger: nil)
-            UNUserNotificationCenter.current().add(request) { error in
-                UNUserNotificationCenter.current().delegate = self
-                if (error != nil){
-                    //handle here
+
+            let body: String = (userInfo["body"] as? String)!
+            
+            if let attachmentID = userInfo["scg-attachment-id"] as? String, let messageID = userInfo["scg-message-id"] as? String {
+                showMediaNotification(body, messageID: attachmentID, attachmentID: messageID)
+            } else {
+                let content = UNMutableNotificationContent()
+                content.body = body
+                let request = UNNotificationRequest(identifier: (userInfo["scg-message-id"] as! String?)!, content: content, trigger: nil)
+                UNUserNotificationCenter.current().add(request) { error in
+                    UNUserNotificationCenter.current().delegate = self
+                    if (error != nil){
+                        //handle here
+                    }
                 }
             }
+
         } else {
             // show notificaiton locally
             let localNotification = UILocalNotification()
@@ -194,6 +202,45 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         }
         
         
+    }
+    
+    @available( iOS 10.0, *)
+    func showMediaNotification(_ title: String, messageID: String, attachmentID: String) {
+        
+        SCGPush.sharedInstance().loadAttachment(withMessageId: messageID, andAttachmentId: attachmentID,
+                                                completionBlock: { (contentUrl, contentType) in
+                                                    debugPrint("loadAttachment \(attachmentID) succeeded")
+                                                    let content = UNMutableNotificationContent()
+                                                    content.body = title
+                                                    
+                                                    let attachment = try? UNNotificationAttachment(identifier: attachmentID,
+                                                                                                   url: contentUrl,
+                                                                                                   options: [:])
+                                                    
+                                                    if let attachment = attachment {
+                                                        content.attachments.append(attachment)
+                                                    }
+
+                                                    let request = UNNotificationRequest(identifier: messageID, content: content, trigger: nil)
+                                                    UNUserNotificationCenter.current().add(request) { error in
+                                                        UNUserNotificationCenter.current().delegate = self
+                                                        if (error != nil){
+                                                        //handle here
+                                                        }
+                                                }
+        },
+                                                failureBlock: { (error) in
+                                                    debugPrint("loadAttachment \(attachmentID) failer with error \(error?.localizedDescription)")
+                                                    let content = UNMutableNotificationContent()
+                                                    content.body = title
+                                                    let request = UNNotificationRequest(identifier: messageID, content: content, trigger: nil)
+                                                    UNUserNotificationCenter.current().add(request) { error in
+                                                        UNUserNotificationCenter.current().delegate = self
+                                                        if (error != nil){
+                                                            //handle here
+                                                        }
+                                                    }
+        })
     }
     
     func showAlert(_ title:String, mess:String){
@@ -213,6 +260,7 @@ extension AppDelegate: UNUserNotificationCenterDelegate {
     
     public func userNotificationCenter(_ center: UNUserNotificationCenter, didReceive response: UNNotificationResponse, withCompletionHandler completionHandler: @escaping () -> Swift.Void) {
         print("Tapped in notification")
+        completionHandler()
     }
 }
 
