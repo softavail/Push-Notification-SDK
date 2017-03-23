@@ -7,58 +7,100 @@
 //
 
 import UIKit
-import SCGPush
+import SCGPushSDK
 
-class ViewController: UIViewController, SCGPushDelegate {
+class ViewController: UIViewController {
 
-    @IBOutlet weak var purePushTokenLabel: UILabel!
     @IBOutlet weak var accessTokenField: UITextField!
-    @IBOutlet weak var baseURIField: UITextField!
     @IBOutlet weak var appIDField: UITextField!
-    @IBOutlet weak var logField: UITextView!
-    @IBOutlet weak var reportSwith: UISwitch!
+    @IBOutlet weak var activityIndicator: UIActivityIndicatorView!
+    
+    @IBOutlet weak var settingsButton: UIBarButtonItem!
+    @IBOutlet weak var registerButton: UIButton!
+    @IBOutlet weak var inboxButton: UIButton!
+    @IBOutlet weak var resetBadge: UIButton!
     
     var baseURL:String = ""
+    var isUserRegistered: Bool = false
+    var isRegistering: Bool = false
+    var isResetting: Bool = false
+    
+    func updateUI() {
+        self.inboxButton.isHidden = !self.isUserRegistered
+        self.resetBadge.isHidden = !self.isUserRegistered
+        if isUserRegistered {
+            self.registerButton.setTitle("Unregister", for: .normal)
+            
+        }
+        else {
+            self.registerButton.setTitle("Register", for: .normal)
+        }
+        
+        if(isRegistering || isResetting) {
+            self.enableAllButtons(false)
+            self.activityIndicator.startAnimating()
+//            self.activityIndicator.isHidden = false
+        }
+        else {
+            self.enableAllButtons(true)
+            self.activityIndicator.stopAnimating()
+//            self.activityIndicator.isHidden = true
+        }
+    }
+    
+    override func viewWillAppear(_ animated: Bool) {
+        self.enableAllButtons(true)
+    }
     
     override func viewDidLoad() {
         super.viewDidLoad()
         
+        self.activityIndicator.hidesWhenStopped = true
+        
+        self.activityIndicator.isHidden = true
+        self.registerButton.contentHorizontalAlignment = .center
+        
+        self.registerButton.layer.cornerRadius = 10
+        self.registerButton.layer.borderWidth = 1
+        self.registerButton.layer.borderColor = UIColor.blue.cgColor
+        
+        self.inboxButton.layer.cornerRadius = 10
+        self.inboxButton.layer.borderWidth = 1
+        self.inboxButton.layer.borderColor = UIColor.blue.cgColor
+        
+        self.resetBadge.layer.cornerRadius = 10
+        self.resetBadge.layer.borderWidth = 1
+        self.resetBadge.layer.borderColor = UIColor.blue.cgColor
+        
         let defauts = UserDefaults.standard
-        print (defauts.object(forKey: "baseurl"))
-        if (defauts.object(forKey: "baseurl") == nil) {
-            defauts.set("http://192.168.1.197:8080/scg-dra/proxy", forKey: "baseurl")
-            
-        }
+
         if (defauts.object(forKey: "appid") == nil) {
-            defauts.set("com.syniverse.push_demo", forKey: "appid")
+            defauts.set("", forKey: "appid")
         }
+        
         if (defauts.object(forKey: "token") != nil) {
             accessTokenField.text = defauts.string(forKey: "token")
         }
         else {
             accessTokenField.text = ""
         }
-        if (defauts.object(forKey: "reporton") != nil) {
-            reportSwith.isOn = defauts.bool(forKey: "reporton")
-        }
-        else {
-            reportSwith.isOn = true
-            defauts.set(true, forKey: "reporton")
-        }
+//        if (defauts.object(forKey: "reporton") != nil) {
+//            reportSwith.isOn = defauts.bool(forKey: "reporton")
+//        }
+//        else {
+//            reportSwith.isOn = true
+//            defauts.set(true, forKey: "reporton")
+//        }
         
-        baseURIField.text = defauts.string(forKey: "baseurl")
+        //baseURIField.text = defauts.string(forKey: "baseurl")
         appIDField.text = defauts.string(forKey: "appid")
         
-        SCGPush.shared.groupBundle = "group.com.syniverse.scg.push.demo"
-        SCGPush.shared.callbackURI = baseURIField.text!
-        SCGPush.shared.appID = appIDField.text!
-        SCGPush.shared.accessToken = accessTokenField.text!
-
-        SCGPush.shared.delegate = self
+        SCGPush.sharedInstance().delegate = self
+        //SCGPush.shared.delegate = self
 //        SCGPush.shared.resolveTrackedLink("https://app.partners1993.com:8088/scg-link/5idWpd")
         
-        logField.layer.borderColor = UIColor.black.cgColor
-        logField.layer.borderWidth = 1
+//        logField.layer.borderColor = UIColor.black.cgColor
+//        logField.layer.borderWidth = 1
         //SLAV
 //        SCGPush.instance.groupBundle = "group.com.syniverse.scg.push.demo"
 //        SCGPush.instance.accessToken = "DQHlNta2J2QGHFHkI44Ei"
@@ -66,7 +108,7 @@ class ViewController: UIViewController, SCGPushDelegate {
 //        SCGPush.instance.callbackURI = "http://192.168.1.197:8080/scg-dra/proxy"
 //        SCGPush.instance.callbackURI = "http://95.158.130.102:8080/scg-dra/proxy/"
         
-        
+        self.updateUI()
     }
 
     override func didReceiveMemoryWarning() {
@@ -77,51 +119,105 @@ class ViewController: UIViewController, SCGPushDelegate {
     @IBAction func textFieldChanged(_ sender: UITextField) {
         let defauts = UserDefaults.standard
         if (sender.tag == 7){
-            SCGPush.shared.accessToken = accessTokenField.text!
+            SCGPush.sharedInstance().accessToken = accessTokenField.text!
             defauts.set(accessTokenField.text!, forKey: "token")
         }
         if (sender.tag == 8){
-            SCGPush.shared.appID = appIDField.text!
+            SCGPush.sharedInstance().appID = appIDField.text!
             defauts.set(appIDField.text!, forKey: "appid")
         }
-        if (sender.tag == 9) {
-            SCGPush.shared.callbackURI = baseURIField.text!
-            defauts.set(baseURIField.text!, forKey: "baseurl")
-        }
+//        if (sender.tag == 9) {
+//            SCGPush.sharedInstance().callbackURI = baseURIField.text!
+//            defauts.set(baseURIField.text!, forKey: "baseurl")
+//        }
     }
-    
-    @IBAction func clipboard(_ sender: AnyObject) {
-        UIPasteboard.general.string = purePushTokenLabel.text
-    }
+
+
     
     
     @IBAction func registerToken(_ sender: AnyObject) {
         accessTokenField.resignFirstResponder()
-        baseURIField.resignFirstResponder()
+//        baseURIField.resignFirstResponder()
         appIDField.resignFirstResponder()
         
-        SCGPush.shared.registerPushToken({
-                self.showAlert ("Success", mess: "You successfully register the token.")
+        
+        
+        
+        let token: String = UserDefaults.standard.string(forKey: "apnTokenString")!
+        debugPrint("token: \(token)")
+        if(!self.isUserRegistered) {
+            
+            self.isRegistering = true
+            self.updateUI()
+            
+            SCGPush.sharedInstance().registerToken(token, withCompletionHandler: { (registeredToken) in
+                //self.showAlert ("Success", mess: "You successfully register the token.")
+                
+                self.isRegistering = false
+                self.isUserRegistered = true
+                DispatchQueue.main.async {
+                    self.updateUI()
+                }
             }) { (error) in
+                
+                self.isRegistering = false
+                self.isUserRegistered = false
+                
                 self.showAlert ("Error", mess: (error?.localizedDescription)!)
+                DispatchQueue.main.async {
+                    self.updateUI()
+                }
+            }
+        }
+        else {
+            
+            self.isRegistering = true
+            self.updateUI()
+            
+            SCGPush.sharedInstance().unregisterPushToken(token, withCompletionHandler: { (registeredToken) in
+                //self.showAlert ("Success", mess: "You successfully register the token.")
+                
+                self.isRegistering = false
+                self.isUserRegistered = false
+                DispatchQueue.main.async {
+                    self.updateUI()
+                }
+            }) { (error) in
+                //self.showAlert ("Error", mess: (error?.localizedDescription)!)
+                self.isRegistering = false
+                self.isUserRegistered = false
+                DispatchQueue.main.async {
+                    self.updateUI()
+                }
+            }
         }
     }
     
-    @IBAction func unregisterToken(_ sender: AnyObject) {
-        accessTokenField.resignFirstResponder()
-        baseURIField.resignFirstResponder()
-        appIDField.resignFirstResponder()
+
+    
+    @IBAction func didPressInboxButton(_ sender: UIButton) {
+        self.performSegue(withIdentifier: "loginCompleteSegue", sender: nil)
         
-        SCGPush.shared.unregisterPushToken({
-                self.showAlert ("Success", mess: "You successfully unregister the token.")
-            }) { (error) in
-                self.showAlert ("Error", mess: (error?.localizedDescription)!)
+    }
+
+    @IBAction func didPressResetBadgeButton(_ sender: UIButton) {
+        let token: String = UserDefaults.standard.string(forKey: "apnTokenString")!
+        self.isResetting = true
+        self.updateUI()
+        SCGPush.sharedInstance().resetBadge(forPushToken: token) { (success, error) in
+            self.isResetting = false
+            DispatchQueue.main.async {
+                self.updateUI()
+            }
+            
+            if(success) {
+                DispatchQueue.main.async {
+                    UIApplication.shared.applicationIconBadgeNumber = 0
+                }
+            }
         }
     }
     
-    @IBAction func reportSwitchAction(_ sender: UISwitch) {
-        UserDefaults.standard.set(sender.isOn, forKey: "reporton")
-    }
     
     func showAlert(_ title:String, mess:String){
         OperationQueue.main.addOperation {
@@ -133,10 +229,30 @@ class ViewController: UIViewController, SCGPushDelegate {
         }
     }
     
-    func resolveTrackedLinkDidSuccess(redirectLocation: String, request: URLRequest) {
+    func enableAllButtons(_ enable: Bool) {
         DispatchQueue.main.async {
-            self.logField.text = self.logField.text.appending("RedirectionLocation: \(redirectLocation)\n")
+            self.accessTokenField.isEnabled = enable
+            self.appIDField.isEnabled = enable
+            self.registerButton.isEnabled = enable
+            self.settingsButton.isEnabled = enable
+            self.inboxButton.isEnabled = enable
+            self.resetBadge.isEnabled = enable
+        }
+    }
+
+}
+
+
+extension ViewController: SCGPushSDK.SCGPushDelegate {
+    func resolveTrackedLinkDidSuccess(_ redirectLocation: String!, withrequest request: URLRequest!) {
+        DispatchQueue.main.async {
+            debugPrint("RedirectionLocation: \(redirectLocation)\n")
+        }
+    }
+    
+    func resolveTrackedLinkHasNotRedirect(_ request: URLRequest!) {
+        DispatchQueue.main.async {
+            debugPrint("RedirectionLocation: None\n")
         }
     }
 }
-
