@@ -23,6 +23,9 @@ static SCGPush *_sharedInstance = nil;
 @property (nonatomic, copy, nonnull) NSString* accessTokenInternal;
 @property (nonatomic, copy, nonnull) NSString* callbackURIInternal;
 @property (nonatomic, copy, nonnull) NSString* appIDInternal;
+@property (nonatomic, assign) NSInteger maxRetryCount;
+@property (nonatomic, assign) int64_t retryDelay; /*in millis*/
+
 
 @end
 
@@ -55,6 +58,8 @@ static SCGPush *_sharedInstance = nil;
         self.accessTokenInternal = @"";
         self.appIDInternal = @"";
         self.callbackURIInternal = @"";
+        self.maxRetryCount = 3;
+        self.retryDelay = 200;
     }
     
     return self;
@@ -78,6 +83,69 @@ static SCGPush *_sharedInstance = nil;
 
 
 //MARK: - Push Token
+
+- (void) registerPushToken:( NSString* _Nonnull) pushToken
+                   session:( NSURLSession* _Nonnull) session
+                   request:( NSURLRequest* _Nonnull) request
+                retryCount:( NSInteger ) retryCount
+     withCompletionHandler:( void (^)(NSString * _Nullable token)) completionBlock
+              failureBlock:( void (^)(NSError * _Nullable error)) failureBlock
+{
+    NSURLSessionDataTask* dataTask =
+    [session dataTaskWithRequest:request completionHandler:^(NSData * _Nullable data, NSURLResponse * _Nullable response, NSError * _Nullable error) {
+        NSHTTPURLResponse* httpResponse = (NSHTTPURLResponse*) response;
+        if (error != nil) {
+            if (failureBlock) {
+                failureBlock(error);
+            }
+            return;
+        }
+        
+        switch (httpResponse.statusCode) {
+            case 503:
+            {
+                if (retryCount < self.maxRetryCount ) {
+                    NSLog(@"Retry registerPushToken: %d", (int)(retryCount+1));
+                    int64_t nsec = self.retryDelay * NSEC_PER_MSEC;
+                    dispatch_queue_t global_default = dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT,0);
+                    dispatch_after(dispatch_time(DISPATCH_TIME_NOW, nsec), global_default, ^{
+                        [self registerPushToken:pushToken
+                                        session:session
+                                        request:request
+                                     retryCount:(retryCount+1)
+                          withCompletionHandler:completionBlock
+                                   failureBlock:failureBlock];
+                    });
+                } else {
+                    if (failureBlock) {
+                        NSError* error = [NSError errorWithDomain: @"SCGPush" code: httpResponse.statusCode userInfo: nil];
+                        failureBlock(error);
+                    }
+                }
+            }
+                break;
+            case 200:
+            case 204:
+            {
+                if (completionBlock != nil) {
+                    completionBlock(pushToken);
+                }
+            }
+                break;
+            default:
+            {
+                if (failureBlock) {
+                    NSError* error = [NSError errorWithDomain: @"SCGPush" code: httpResponse.statusCode userInfo: nil];
+                    failureBlock(error);
+                }
+            }
+                break;
+                
+        }
+    }];
+    
+    [dataTask resume];
+}
 
 - (void) registerPushToken:( NSString* _Nonnull) pushToken
      withCompletionHandler:( void (^)(NSString * _Nullable token)) completionBlock
@@ -128,6 +196,22 @@ static SCGPush *_sharedInstance = nil;
     
     request.HTTPBody = jsonData;
 
+    [self registerPushToken:pushToken
+                    session:session
+                    request:request
+                 retryCount:0
+      withCompletionHandler:completionBlock
+               failureBlock:failureBlock];
+}
+
+
+- (void) unregisterPushToken:( NSString* _Nonnull) pushToken
+                     session:( NSURLSession* _Nonnull) session
+                     request:( NSURLRequest* _Nonnull) request
+                  retryCount:( NSInteger ) retryCount
+       withCompletionHandler:( void (^)(NSString * _Nullable token)) completionBlock
+                failureBlock:( void (^)(NSError * _Nullable error)) failureBlock
+{
     NSURLSessionDataTask* dataTask =
     [session dataTaskWithRequest:request completionHandler:^(NSData * _Nullable data, NSURLResponse * _Nullable response, NSError * _Nullable error) {
         NSHTTPURLResponse* httpResponse = (NSHTTPURLResponse*) response;
@@ -137,8 +221,30 @@ static SCGPush *_sharedInstance = nil;
             }
             return;
         }
-
+        
         switch (httpResponse.statusCode) {
+            case 503:
+            {
+                if (retryCount < self.maxRetryCount ) {
+                    NSLog(@"Retry unregisterPushToken: %d", (int)(retryCount+1));
+                    int64_t nsec = self.retryDelay * NSEC_PER_MSEC;
+                    dispatch_queue_t global_default = dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT,0);
+                    dispatch_after(dispatch_time(DISPATCH_TIME_NOW, nsec), global_default, ^{
+                        [self unregisterPushToken:pushToken
+                                          session:session
+                                          request:request
+                                       retryCount:(retryCount+1)
+                            withCompletionHandler:completionBlock
+                                     failureBlock:failureBlock];
+                    });
+                } else {
+                    if (failureBlock) {
+                        NSError* error = [NSError errorWithDomain: @"SCGPush" code: httpResponse.statusCode userInfo: nil];
+                        failureBlock(error);
+                    }
+                }
+            }
+                break;
             case 200:
             case 204:
             {
@@ -158,7 +264,7 @@ static SCGPush *_sharedInstance = nil;
                 
         }
     }];
-
+    
     [dataTask resume];
 }
 
@@ -210,39 +316,13 @@ static SCGPush *_sharedInstance = nil;
     }
     
     request.HTTPBody = jsonData;
-    
-    NSURLSessionDataTask* dataTask =
-    [session dataTaskWithRequest:request completionHandler:^(NSData * _Nullable data, NSURLResponse * _Nullable response, NSError * _Nullable error) {
-        NSHTTPURLResponse* httpResponse = (NSHTTPURLResponse*) response;
-        if (error != nil) {
-            if (failureBlock) {
-                failureBlock(error);
-            }
-            return;
-        }
-        
-        switch (httpResponse.statusCode) {
-            case 200:
-            case 204:
-            {
-                if (completionBlock != nil) {
-                    completionBlock(pushToken);
-                }
-            }
-                break;
-            default:
-            {
-                if (failureBlock) {
-                    NSError* error = [NSError errorWithDomain: @"SCGPush" code: httpResponse.statusCode userInfo: nil];
-                    failureBlock(error);
-                }
-            }
-                break;
-                
-        }
-    }];
-    
-    [dataTask resume];
+
+    [self unregisterPushToken:pushToken
+                      session:session
+                      request:request
+                   retryCount:0
+        withCompletionHandler:completionBlock
+                 failureBlock:failureBlock];
 }
 
 // MARK: - Report Status
