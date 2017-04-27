@@ -3,7 +3,7 @@
     xmlns:tools="http://schemas.android.com/tools">
 
     <data>
-
+        <import type="android.view.View"/>
         <variable
             name="message"
             type="com.syniverse.scg.push.sdk.ScgMessage" />
@@ -120,6 +120,15 @@
                     android:layout_weight="1"
                     android:enabled="@{message.hasDeepLink()}"
                     android:text="Deeplink" />
+
+                <Button
+                    android:id="@+id/messageDelete"
+                    style="@style/Widget.AppCompat.Button.Colored"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:visibility="@{message.isInbox() ? View.VISIBLE : View.GONE}"
+                    android:text="@string/delete" />
 
             </LinearLayout>
         </LinearLayout>

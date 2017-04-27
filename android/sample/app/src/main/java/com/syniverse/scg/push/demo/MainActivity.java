@@ -8,6 +8,7 @@ import android.os.Bundle;
 import android.os.Handler;
 import android.preference.PreferenceManager;
 import android.support.design.widget.Snackbar;
+import android.support.design.widget.TabLayout;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
@@ -16,6 +17,8 @@ import android.support.v7.widget.SwitchCompat;
 import android.support.v7.widget.Toolbar;
 import android.text.TextUtils;
 import android.view.LayoutInflater;
+import android.view.Menu;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.EditText;
 import android.widget.TextView;
@@ -28,7 +31,11 @@ import com.syniverse.scg.push.sdk.ScgMessage;
 import com.syniverse.scg.push.sdk.ScgPushReceiver;
 import com.syniverse.scg.push.sdk.ScgState;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import io.fabric.sdk.android.Fabric;
+import me.leolin.shortcutbadger.ShortcutBadger;
 
 
 public class MainActivity extends AppCompatActivity implements ScgCallback {
@@ -38,6 +45,7 @@ public class MainActivity extends AppCompatActivity implements ScgCallback {
     private static final String PREF_URL = "PREF_URL";
     private static final String PREF_APP_ID = "PREF_APP_ID";
     private static final String PREF_AUTH = "PREF_TOKEN";
+    public static final String PREF_BADGE_COUNT = "PREF_BADGE_COUNT";
 
     public static final String PREF_AUTO_DELIVERY = "PREF_AUTO_DELIVERY";
     public static final String PREF_AUTO_OPEN = "PREF_AUTO_OPEN";
@@ -45,6 +53,10 @@ public class MainActivity extends AppCompatActivity implements ScgCallback {
     private EditText accessToken;
     private TextView pushToken;
     private MessageAdapter adapter;
+    private TabLayout messagesTabs;
+    private MenuItem menuResetBadge;
+
+    private List<ScgMessage> pushMessages = new ArrayList<>();
 
     protected SharedPreferences pref;
 
@@ -80,6 +92,25 @@ public class MainActivity extends AppCompatActivity implements ScgCallback {
 
         adapter = new MessageAdapter(this);
 
+        messagesTabs = (TabLayout) findViewById(R.id.tabsMessages);
+        initSelectedTab();
+        messagesTabs.addOnTabSelectedListener(new TabLayout.OnTabSelectedListener() {
+            @Override
+            public void onTabSelected(TabLayout.Tab tab) {
+                initSelectedTab();
+            }
+
+            @Override
+            public void onTabUnselected(TabLayout.Tab tab) {
+
+            }
+
+            @Override
+            public void onTabReselected(TabLayout.Tab tab) {
+
+            }
+        });
+
         accessToken = (EditText) findViewById(R.id.access);
         pushToken = (TextView) findViewById(R.id.token);
 
@@ -109,6 +140,82 @@ public class MainActivity extends AppCompatActivity implements ScgCallback {
         onNewIntent(getIntent());
     }
 
+    private void initSelectedTab() {
+        if (messagesTabs.getSelectedTabPosition() == 0) {
+            adapter.setMessgaes(pushMessages, false);
+        } else {
+            adapter.setMessgaes(ScgClient.getInstance().getAllInboxMessages(), true);
+        }
+    }
+
+    private void initBadgeCount() {
+        int badge = pref.getInt(PREF_BADGE_COUNT, -1);
+
+        if (badge > 0) {
+            ShortcutBadger.applyCount(this, badge);
+        } else {
+            ShortcutBadger.removeCount(this);
+        }
+        setBadgeCountMenuItem(badge);
+    }
+
+    private void setBadgeCountMenuItem(int count) {
+        if (menuResetBadge != null) {
+            menuResetBadge.setVisible(count > 0);
+            menuResetBadge.setEnabled(count > 0);
+        }
+    }
+
+    public boolean onCreateOptionsMenu(Menu menu) {
+        menuResetBadge = menu.add(R.string.menu_reset_badges_count);
+        if (pref == null || pref.getInt(PREF_BADGE_COUNT, -1) <= 0) {
+            menuResetBadge.setVisible(false);
+            menuResetBadge.setEnabled(false);
+        }
+
+        return true;
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        if (item == menuResetBadge) {
+            onResetBadgesCount(item.getActionView());
+            return true;
+        }
+
+        return super.onOptionsItemSelected(item);
+    }
+
+    private void onResetBadgesCount(final View view) {
+        final String token = pushToken.getText().toString();
+
+        if (!TextUtils.isEmpty(token)) {
+            ScgClient.getInstance().resetBadgesCounter(token, new ScgCallback() {
+                @Override
+                public void onSuccess(int code, String message) {
+                    if (code >= 200 && code < 300) {
+                        resetBadgeCount();
+                    }
+
+                    MainActivity.this.onSuccess(code, message);
+                }
+
+                @Override
+                public void onFailed(int code, String message) {
+                    MainActivity.this.onFailed(code, message);
+                }
+            });
+        } else {
+            Snackbar.make(view, "Push token is null or invalid", Snackbar.LENGTH_LONG).show();
+        }
+    }
+
+    private void resetBadgeCount() {
+        pref.edit().putInt(PREF_BADGE_COUNT, 0).apply();
+        ShortcutBadger.removeCount(this);
+        setBadgeCountMenuItem(0);
+    }
+
     @Override
     protected void onNewIntent(Intent intent) {
         super.onNewIntent(intent);
@@ -116,6 +223,7 @@ public class MainActivity extends AppCompatActivity implements ScgCallback {
 
         if (getIntent().hasExtra(MainReceiver.MESSAGE_ID))
             handleMessageReceive(getIntent().getStringExtra(MainReceiver.MESSAGE_ID), (ScgMessage) getIntent().getParcelableExtra(MainReceiver.MESSAGE));
+
     }
 
     @Override
@@ -125,6 +233,8 @@ public class MainActivity extends AppCompatActivity implements ScgCallback {
         filter.addAction(ScgPushReceiver.ACTION_PUSH_TOKEN_RECEIVED);
         filter.setPriority(1);
         registerReceiver(receiver, filter);
+
+        initBadgeCount();
     }
 
     @Override
@@ -196,7 +306,7 @@ public class MainActivity extends AppCompatActivity implements ScgCallback {
         if (!TextUtils.isEmpty(token)) {
             ScgClient.getInstance().registerPushToken(token, this);
         } else {
-            Snackbar.make(view, "Push token is null or invalid", Snackbar.LENGTH_INDEFINITE).show();
+            Snackbar.make(view, "Push token is null or invalid", Snackbar.LENGTH_LONG).show();
         }
     }
 
@@ -206,7 +316,7 @@ public class MainActivity extends AppCompatActivity implements ScgCallback {
         if (!TextUtils.isEmpty(token)) {
             ScgClient.getInstance().unregisterPushToken(token, this);
         } else {
-            Snackbar.make(view, "Push token is null or invalid", Snackbar.LENGTH_INDEFINITE).show();
+            Snackbar.make(view, "Push token is null or invalid", Snackbar.LENGTH_LONG).show();
         }
     }
 
@@ -216,15 +326,19 @@ public class MainActivity extends AppCompatActivity implements ScgCallback {
 
     @Override
     public void onSuccess(int code, String message) {
-        Snackbar.make(pushToken, String.format("Success (%s): %s", code, message), Snackbar.LENGTH_INDEFINITE).show();
+        Snackbar.make(pushToken, String.format("Success (%s): %s", code, message), Snackbar.LENGTH_LONG).show();
     }
 
     @Override
     public void onFailed(int code, String message) {
-        Snackbar.make(pushToken, String.format("Failed (%s): %s", code, message), Snackbar.LENGTH_INDEFINITE).show();
+        Snackbar.make(pushToken, String.format("Failed (%s): %s", code, message), Snackbar.LENGTH_LONG).show();
     }
 
     private void handleMessageReceive(final String messageId, ScgMessage message) {
+        int badgeCount = message.getBadge();
+        if (badgeCount >= 0) {
+            setBadgeCountMenuItem(badgeCount);
+        }
 
         if (pref.getBoolean(PREF_AUTO_DELIVERY, true)) {
             reportState(messageId, ScgState.DELIVERED);
@@ -239,7 +353,15 @@ public class MainActivity extends AppCompatActivity implements ScgCallback {
             }, 3141);
         }
 
-        adapter.addMessage(message);
+        if (!message.isInbox()) {
+            pushMessages.add(message);
+            //if push messages selected
+            if (messagesTabs.getSelectedTabPosition() == 0) {
+                adapter.addMessage(message);
+            }
+        } else if (messagesTabs.getSelectedTabPosition() == 1) {
+            adapter.addMessage(message);
+        }
     }
 
     public void saveAccessToken(View view) {

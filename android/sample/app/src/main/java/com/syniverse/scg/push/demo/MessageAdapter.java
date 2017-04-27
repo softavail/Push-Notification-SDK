@@ -12,6 +12,7 @@ import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Toast;
 
 import com.syniverse.scg.push.demo.databinding.MessageItemBinding;
 import com.syniverse.scg.push.sdk.ScgCallback;
@@ -20,6 +21,7 @@ import com.syniverse.scg.push.sdk.ScgMessage;
 import com.syniverse.scg.push.sdk.ScgState;
 
 import java.util.ArrayList;
+import java.util.List;
 
 
 /**
@@ -27,8 +29,9 @@ import java.util.ArrayList;
  */
 class MessageAdapter extends RecyclerView.Adapter<MessageAdapter.MessageViewHolder> implements View.OnClickListener {
 
-    private final ArrayList<ScgMessage> dataset = new ArrayList<>();
+    private List<ScgMessage> dataset = new ArrayList<>();
     private final Context context;
+    private boolean isInboxList;
 
     MessageAdapter(Context context) {
         this.context = context;
@@ -38,29 +41,60 @@ class MessageAdapter extends RecyclerView.Adapter<MessageAdapter.MessageViewHold
     public void onClick(final View v) {
 
         final MessageViewHolder holder = (MessageViewHolder) v.getTag();
-        final ScgMessage data = dataset.get(holder.getAdapterPosition());
+        int position = holder.getAdapterPosition();
+        if (position < 0) {
+            return;
+        }
+        final ScgMessage data = dataset.get(position);
+        final View view = holder.itemView;
+        final boolean isInbox = isInboxList;
         final ScgCallback result = new ScgCallback() {
             @Override
             public void onSuccess(final int code, final String message) {
 
                 // Redirect
                 if (code > 300 && code < 400) {
-                    Snackbar.make(v, "Resolved URL successful", Snackbar.LENGTH_INDEFINITE).setAction("Open", new View.OnClickListener() {
+                    if (view == null || view.getContext() == null || !view.isShown()) {
+                        return;
+                    }
+
+                    Snackbar.make(view, "Resolved URL successful", Snackbar.LENGTH_LONG).setAction("Open", new View.OnClickListener() {
                         @Override
                         public void onClick(View view) {
-                            context.startActivity(new Intent(Intent.ACTION_VIEW, Uri.parse(message)));
+                            Intent intent = new Intent(Intent.ACTION_VIEW, Uri.parse(message));
+
+                            if (intent.resolveActivity(context.getPackageManager()) == null) {
+                                new AlertDialog.Builder(context).setTitle(R.string.error)
+                                        .setMessage(context.getString(R.string.alert_cannot_handle_url_, message))
+                                        .show();
+                            } else {
+                                context.startActivity(intent);
+                            }
+
                         }
                     }).show();
                 } else {
-                    dataset.remove(holder.getAdapterPosition());
-                    notifyItemRemoved(holder.getAdapterPosition());
-                    Snackbar.make(v, String.format("Success (%s): %s", code, message), Snackbar.LENGTH_INDEFINITE).show();
+                    if (!isInbox) {
+                        dataset.remove(holder.getAdapterPosition());
+                        notifyItemRemoved(holder.getAdapterPosition());
+                    }
+                    String text = String.format("Success (%s): %s", code, message);
+                    if (view != null && view.getContext() != null && view.isShown()) {
+                        Snackbar.make(view, text, Snackbar.LENGTH_LONG).show();
+                    } else {
+                        Toast.makeText(context, text, Toast.LENGTH_LONG).show();
+                    }
                 }
             }
 
             @Override
             public void onFailed(int code, String message) {
-                Snackbar.make(v, String.format("Failed (%s): %s", code, message), Snackbar.LENGTH_INDEFINITE).show();
+                String text = String.format("Failed (%s): %s", code, message);
+                if (view != null && view.getContext() != null && view.isShown()) {
+                    Snackbar.make(view, text, Snackbar.LENGTH_LONG).show();
+                } else {
+                    Toast.makeText(context, text, Toast.LENGTH_LONG).show();
+                }
             }
         };
 
@@ -108,9 +142,14 @@ class MessageAdapter extends RecyclerView.Adapter<MessageAdapter.MessageViewHold
                     @Override
                     protected void onFailed(int code, String error) {
                         progress.dismiss();
-                        progress = new AlertDialog.Builder(context).setTitle("Error").setMessage(error).show();
+                        progress = new AlertDialog.Builder(context).setTitle(R.string.error).setMessage(error).show();
                     }
                 }.execute(data.getId(), data.getAttachment());
+                break;
+            case R.id.messageDelete:
+                ScgClient.getInstance().deleteInboxMessageAtIndex(holder.getAdapterPosition());
+                dataset.remove(holder.getAdapterPosition());
+                notifyItemRemoved(holder.getAdapterPosition());
                 break;
         }
 
@@ -118,7 +157,15 @@ class MessageAdapter extends RecyclerView.Adapter<MessageAdapter.MessageViewHold
     }
 
     void addMessage(ScgMessage msg) {
-        dataset.add(msg);
+        if (isInboxList) {
+            dataset.add(msg);
+        }
+        notifyItemInserted(dataset.size() - 1);
+    }
+
+    void setMessgaes(List<ScgMessage> msgs, boolean isInbox) {
+        isInboxList = isInbox;
+        dataset = msgs;
         notifyDataSetChanged();
     }
 
@@ -148,6 +195,9 @@ class MessageAdapter extends RecyclerView.Adapter<MessageAdapter.MessageViewHold
 
         holder.binding.messageDeeplink.setOnClickListener(this);
         holder.binding.messageDeeplink.setTag(holder);
+
+        holder.binding.messageDelete.setOnClickListener(this);
+        holder.binding.messageDelete.setTag(holder);
     }
 
     @Override

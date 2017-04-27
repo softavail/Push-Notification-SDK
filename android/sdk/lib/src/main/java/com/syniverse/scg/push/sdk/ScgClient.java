@@ -18,6 +18,7 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
+import java.util.List;
 
 import okhttp3.Interceptor;
 import okhttp3.OkHttpClient;
@@ -47,6 +48,7 @@ public class ScgClient {
     private ScgRestService mService;
 
     private static ScgClient sInstance;
+    private Context mContext;
     private String mAuthToken;
 
     private int mRetryCount;
@@ -57,6 +59,7 @@ public class ScgClient {
         fAppId = appId;
         fApiUrl = rootUrl;
         mService = getService();
+        mContext = application;
 
         mRetryCount = (retryCount >= 0) ? retryCount : DEFAULT_RETRY_COUNT;
         mInitialDelay = (initialDelay >= 0) ? initialDelay : DEFAULT_RETRY_DELAY;
@@ -303,6 +306,44 @@ public class ScgClient {
         }, delay);
     }
 
+    /**
+     * Reset Badges Counter
+     *
+     * @param pushToken The device push token
+     * @param result    Callback getting the result of the register call
+     */
+    public synchronized void resetBadgesCounter(String pushToken, ScgCallback result) {
+        resetBadgesCounter(pushToken, result, 0, mInitialDelay);
+    }
+
+    private void resetBadgesCounter(final String pushToken, final ScgCallback result, final int retryCount, final long delay) {
+        if (pushToken == null) return;
+
+        final RegisterRequest request = new RegisterRequest(fAppId, pushToken);
+
+        new Handler(Looper.myLooper()).postDelayed(new Runnable() {
+            @Override
+            public void run() {
+                mService.resetBadgesCounter(request).enqueue(new Callback<ResponseBody>() {
+                    @Override
+                    public void onResponse(Call<ResponseBody> call, retrofit2.Response<ResponseBody> response) {
+                        if (response.code() == 503 && retryCount < mRetryCount) {
+                            Log.d(TAG, "resetBadgesCounter: 503 - retrying (" + retryCount + ")");
+                            resetBadgesCounter(pushToken, result, retryCount + 1, delay * 2);
+                        } else {
+                            sendResult(response, result);
+                        }
+                    }
+
+                    @Override
+                    public void onFailure(Call<ResponseBody> call, Throwable t) {
+                        result.onFailed(-1, t.getMessage());
+                    }
+                });
+            }
+        }, delay);
+    }
+
     public synchronized void resolveTrackedLink(String url, final ScgCallback result) {
 
         final Request.Builder r = new Request.Builder()
@@ -357,6 +398,29 @@ public class ScgClient {
         return FirebaseInstanceId.getInstance().getToken();
     }
 
+    public int getInboxMessagesCount() {
+        return ScgInboxDbHelper.getInstance(mContext).getMessagesCount();
+    }
+
+    public ScgMessage getInboxMessageAtIndex(int index) {
+        return ScgInboxDbHelper.getInstance(mContext).getMessage(index);
+    }
+
+    public List<ScgMessage> getAllInboxMessages() {
+        return ScgInboxDbHelper.getInstance(mContext).getAllMessages();
+    }
+
+    public void deleteAllInboxMessages() {
+        ScgInboxDbHelper.getInstance(mContext).deleteAllMessages();
+    }
+
+    public void deleteInboxMessage(String messageId) {
+        ScgInboxDbHelper.getInstance(mContext).deleteMessage(messageId);
+    }
+
+    public void deleteInboxMessageAtIndex(int index) {
+        ScgInboxDbHelper.getInstance(mContext).deleteMessage(index);
+    }
 
     /**
      * Download attachment async

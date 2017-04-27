@@ -57,6 +57,25 @@
             android:layout_gravity="center_horizontal"
             android:text="Messages" />
 
+        <android.support.design.widget.TabLayout
+            android:id="@+id/tabsMessages"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+
+            <android.support.design.widget.TabItem
+                android:id="@+id/tabGeneral"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/general" />
+
+            <android.support.design.widget.TabItem
+                android:id="@+id/tabInbox"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/inbox" />
+
+        </android.support.design.widget.TabLayout>
+
         <android.support.v7.widget.RecyclerView
             android:id="@+id/messages"
             android:layout_width="match_parent"

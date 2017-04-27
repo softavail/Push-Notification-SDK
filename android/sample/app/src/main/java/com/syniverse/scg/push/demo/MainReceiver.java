@@ -24,6 +24,8 @@ import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.InputStream;
 
+import me.leolin.shortcutbadger.ShortcutBadger;
+
 /**
  * Created by lekov on 7/7/16.
  */
@@ -36,6 +38,12 @@ public class MainReceiver extends ScgPushReceiver {
 
     @Override
     protected void onPushTokenReceived(String token) {
+        if (!ScgClient.isInitialized()) {
+            Log.w(TAG, "onPushTokenReceived() called with: token = [" + token + "], " +
+                        "but ScgClient was not initialized, so message was not handled.");
+            return;
+        }
+
         ScgClient.getInstance().registerPushToken(token, new ScgCallback() {
             @Override
             public void onSuccess(int code, String message) {
@@ -51,14 +59,17 @@ public class MainReceiver extends ScgPushReceiver {
 
     @Override
     protected void onMessageReceived(final String messageId, final ScgMessage message) {
+        checkBadgeCount(message);
 
         if (!ScgClient.isInitialized()) {
             Log.w(TAG, "onMessageReceived() called with: messageId = [" + messageId + "], message = [" + message + "] " +
                     "but ScgClient was not initialized, so message was not handled.");
             return;
         }
-
         deliveryReport(messageId);
+        if (message.isInbox()) {
+            return;
+        };
 
         final String msg = message.getBody();
 
@@ -120,7 +131,7 @@ public class MainReceiver extends ScgPushReceiver {
                         notificationBuilder.setStyle(new NotificationCompat.BigPictureStyle().bigPicture(getThumbnail(result)));
                     }
 
-                    notificationBuilder.addAction(0, "Attachment", PendingIntent.getActivity(context, 0, attachmentIntent, PendingIntent.FLAG_UPDATE_CURRENT));
+//                    notificationBuilder.addAction(0, "Attachment", PendingIntent.getActivity(context, 0, attachmentIntent, PendingIntent.FLAG_UPDATE_CURRENT));
                     notificationManager.notify(messageId.hashCode(), notificationBuilder.build());
                 }
 
@@ -134,6 +145,22 @@ public class MainReceiver extends ScgPushReceiver {
         }
 
         abortBroadcast();
+    }
+
+    private void checkBadgeCount(ScgMessage message) {
+        if (message != null) {
+            int badge = message.getBadge();
+            if (badge > -1) {
+                if (badge == 0) {
+                    ShortcutBadger.removeCount(context);
+                } else {
+                    ShortcutBadger.applyCount(context, badge);
+                }
+
+                SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(context);
+                prefs.edit().putInt(MainActivity.PREF_BADGE_COUNT, badge).apply();
+            }
+        }
     }
 
     private Bitmap getThumbnail(Uri uri) {

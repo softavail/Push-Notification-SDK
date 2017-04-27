@@ -1,3 +1,9 @@
 <resources>
     <string name="app_name">SCG Push Sample</string>
+    <string name="general">General</string>
+    <string name="inbox">Inbox</string>
+    <string name="delete">Delete</string>
+    <string name="error">Error</string>
+    <string name="alert_cannot_handle_url_">No application can handle: %1$s</string>
+    <string name="menu_reset_badges_count">Reset Badge Count</string>
 </resources>
