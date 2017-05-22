@@ -16,15 +16,20 @@
 
 static SCGPush *_sharedInstance = nil;
 
+NSInteger const DEFAULT_MAX_RETRY_COUNT = 3;
+int64_t const DEFAULT_RETRY_DELAY = 200;
+NSInteger const DEFAULT_REQUEST_TIMEOUT_INTERVAL = 30;
+
 @interface SCGPush()
+
 @property (nonatomic, strong) HttpRedirectDecisionMaker* redirectDecisionMaker;
 @property (nonatomic, strong) SCGPushCoreDataManager* coreDataManager;
 
 @property (nonatomic, copy, nonnull) NSString* accessTokenInternal;
 @property (nonatomic, copy, nonnull) NSString* callbackURIInternal;
 @property (nonatomic, copy, nonnull) NSString* appIDInternal;
-@property (nonatomic, assign) NSInteger maxRetryCount;
-@property (nonatomic, assign) int64_t retryDelay; /*in millis*/
+@property (nonatomic, assign)        NSInteger maxRetryCount;
+@property (nonatomic, assign)        int64_t retryDelay; /*in millis*/
 
 
 @end
@@ -58,8 +63,8 @@ static SCGPush *_sharedInstance = nil;
         self.accessTokenInternal = @"";
         self.appIDInternal = @"";
         self.callbackURIInternal = @"";
-        self.maxRetryCount = 3;
-        self.retryDelay = 200;
+        self.maxRetryCount = DEFAULT_MAX_RETRY_COUNT;
+        self.retryDelay = DEFAULT_RETRY_DELAY;
     }
     
     return self;
@@ -177,7 +182,7 @@ static SCGPush *_sharedInstance = nil;
     
     NSMutableURLRequest* request = [NSMutableURLRequest requestWithURL: url];
     request.HTTPMethod = @"POST";
-    request.timeoutInterval = 30;
+    request.timeoutInterval = DEFAULT_REQUEST_TIMEOUT_INTERVAL;
 
     [request addValue:@"application/json" forHTTPHeaderField:@"Content-Type"];
     NSString* bearer = [NSString stringWithFormat:@"Bearer %@", self.accessToken];
@@ -298,7 +303,7 @@ static SCGPush *_sharedInstance = nil;
     
     NSMutableURLRequest* request = [NSMutableURLRequest requestWithURL: url];
     request.HTTPMethod = @"POST";
-    request.timeoutInterval = 30;
+    request.timeoutInterval = DEFAULT_REQUEST_TIMEOUT_INTERVAL;
     
     [request addValue:@"application/json" forHTTPHeaderField:@"Content-Type"];
     NSString* bearer = [NSString stringWithFormat:@"Bearer %@", self.accessToken];
@@ -387,12 +392,29 @@ static SCGPush *_sharedInstance = nil;
     
     NSMutableURLRequest* request = [NSMutableURLRequest requestWithURL: url];
     request.HTTPMethod = @"POST";
-    request.timeoutInterval = 30;
+    request.timeoutInterval = DEFAULT_REQUEST_TIMEOUT_INTERVAL;
     
     [request addValue:@"application/json" forHTTPHeaderField:@"Content-Type"];
     NSString* bearer = [NSString stringWithFormat:@"Bearer %@", self.accessToken];
     [request addValue: bearer forHTTPHeaderField:@"Authorization"];
 
+    [self reportStatusWithMessageId:messageId
+                    andMessageState:state
+                            session:session
+                            request:request
+                         retryCount:0
+                    completionBlock:completionBlock
+                       failureBlock:failureBlock];
+}
+
+- (void) reportStatusWithMessageId: ( NSString* _Nonnull) messageId
+                   andMessageState: ( MessageState ) state
+                           session: ( NSURLSession* _Nonnull) session
+                           request: ( NSURLRequest* _Nonnull) request
+                        retryCount: ( NSInteger ) retryCount
+                   completionBlock: ( void(^ _Nullable)()    ) completionBlock
+                     failureBlock : ( void(^ _Nullable) (NSError* _Nullable error)) failureBlock
+{
     NSURLSessionDataTask* dataTask =
     [session dataTaskWithRequest:request completionHandler:^(NSData * _Nullable data, NSURLResponse * _Nullable response, NSError * _Nullable error) {
         NSHTTPURLResponse* httpResponse = (NSHTTPURLResponse*) response;
@@ -404,6 +426,29 @@ static SCGPush *_sharedInstance = nil;
         }
         
         switch (httpResponse.statusCode) {
+            case 503:
+            {
+                if (retryCount < self.maxRetryCount ) {
+                    NSLog(@"Retry reportStatusWithMessageId: %d", (int)(retryCount+1));
+                    int64_t nsec = self.retryDelay * NSEC_PER_MSEC;
+                    dispatch_queue_t global_default = dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT,0);
+                    dispatch_after(dispatch_time(DISPATCH_TIME_NOW, nsec), global_default, ^{
+                        [self reportStatusWithMessageId:messageId
+                                        andMessageState:state
+                                                session:session
+                                                request:request
+                                             retryCount:retryCount+1
+                                        completionBlock:completionBlock
+                                           failureBlock:failureBlock];
+                    });
+                } else {
+                    if (failureBlock) {
+                        NSError* error = [NSError errorWithDomain: @"SCGPush" code: httpResponse.statusCode userInfo: nil];
+                        failureBlock(error);
+                    }
+                }
+            }
+                break;
             case 200:
             case 204:
             {
@@ -437,8 +482,19 @@ static SCGPush *_sharedInstance = nil;
     
     NSMutableURLRequest* request = [NSMutableURLRequest requestWithURL: url];
     request.HTTPMethod = @"HEAD";
-    request.timeoutInterval = 30;
+    request.timeoutInterval = DEFAULT_REQUEST_TIMEOUT_INTERVAL;
     
+    [self resolveTrackedLink:urlString
+                     session:session
+                     request:request
+                  retryCount:0];
+}
+
+- (void) resolveTrackedLink: (NSString* _Nonnull) urlString
+                    session: ( NSURLSession* _Nonnull) session
+                    request: ( NSURLRequest* _Nonnull) request
+                 retryCount: ( NSInteger ) retryCount
+{
     NSURLSessionDataTask* dataTask =
     [session dataTaskWithRequest:request completionHandler:^(NSData * _Nullable data, NSURLResponse * _Nullable response, NSError * _Nullable error) {
         NSHTTPURLResponse* httpResponse = (NSHTTPURLResponse*) response;
@@ -447,6 +503,26 @@ static SCGPush *_sharedInstance = nil;
         }
         
         switch (httpResponse.statusCode) {
+            case 503:
+            {
+                if (retryCount < self.maxRetryCount ) {
+                    NSLog(@"Retry resolveTrackedLink: %d", (int)(retryCount+1));
+                    int64_t nsec = self.retryDelay * NSEC_PER_MSEC;
+                    dispatch_queue_t global_default = dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT,0);
+                    dispatch_after(dispatch_time(DISPATCH_TIME_NOW, nsec), global_default, ^{
+                        [self resolveTrackedLink:urlString
+                                         session:session
+                                         request:request
+                                      retryCount:retryCount+1];
+                    });
+                } else {
+                    if (self.delegate != nil) {
+                        if ([self.delegate respondsToSelector:@selector(resolveTrackedLinkHasNotRedirect:)])
+                            [self.delegate resolveTrackedLinkHasNotRedirect:request];
+                    }
+                }
+            }
+                break;
             case 300:
             case 301:
             case 307:
@@ -456,10 +532,10 @@ static SCGPush *_sharedInstance = nil;
                     NSString* redirectLocation = httpResponse.allHeaderFields[@"Location"];
                     if (nil != redirectLocation) {
                         if ([self.delegate respondsToSelector:@selector(resolveTrackedLinkDidSuccess:withrequest:)])
-                             [self.delegate resolveTrackedLinkDidSuccess:redirectLocation withrequest:request];
+                            [self.delegate resolveTrackedLinkDidSuccess:redirectLocation withrequest:request];
                     } else {
                         if ([self.delegate respondsToSelector:@selector(resolveTrackedLinkHasNotRedirect:)])
-                             [self.delegate resolveTrackedLinkHasNotRedirect:request];
+                            [self.delegate resolveTrackedLinkHasNotRedirect:request];
                     }
                 }
             }
@@ -476,11 +552,9 @@ static SCGPush *_sharedInstance = nil;
     }];
     
     [dataTask resume];
-
 }
 
 // MARK: - Load Attachment
-
 - (NSString*) translateContentTypeHeader: (NSHTTPURLResponse* _Nonnull) httpResponse
 {
     NSString* translatedContentType = @"";
@@ -535,7 +609,7 @@ static SCGPush *_sharedInstance = nil;
     NSLog(@"Debug: [SCGPush] URL: %@", url.absoluteString);
     NSMutableURLRequest* request = [NSMutableURLRequest requestWithURL: url];
     request.HTTPMethod = @"GET";
-    request.timeoutInterval = 30;
+    request.timeoutInterval = DEFAULT_REQUEST_TIMEOUT_INTERVAL;
     
     NSString* bearer = [NSString stringWithFormat:@"Bearer %@", self.accessToken];
     [request addValue: bearer forHTTPHeaderField:@"Authorization"];
@@ -581,10 +655,10 @@ static SCGPush *_sharedInstance = nil;
     [downloadTask resume];
 }
 
-- (void) loadAttachmentWithMessageId:(NSString* _Nonnull) messageId
-                     andAttachmentId:(NSString* _Nonnull) attachmentId
-                     completionBlock:(void(^_Nullable)(NSURL* _Nonnull contentUrl, NSString* _Nonnull contentType))completionBlock
-                        failureBlock:(void(^_Nullable)(NSError* _Nullable error))failureBlock
+- (void) loadAttachmentWithMessageId: (NSString* _Nonnull) messageId
+                     andAttachmentId: (NSString* _Nonnull) attachmentId
+                     completionBlock: (void(^_Nullable)(NSURL* _Nonnull contentUrl, NSString* _Nonnull contentType))completionBlock
+                        failureBlock: (void(^_Nullable)(NSError* _Nullable error))failureBlock
 {
     NSLog(@"Debug: [SCGPush] '<%p>', will load attachment '%@' for message '%@'",
           self,
@@ -601,11 +675,26 @@ static SCGPush *_sharedInstance = nil;
     NSLog(@"Debug: [SCGPush] URL: %@", url.absoluteString);
     NSMutableURLRequest* request = [NSMutableURLRequest requestWithURL: url];
     request.HTTPMethod = @"GET";
-    request.timeoutInterval = 30;
+    request.timeoutInterval = DEFAULT_REQUEST_TIMEOUT_INTERVAL;
 
     NSString* bearer = [NSString stringWithFormat:@"Bearer %@", self.accessToken];
     [request addValue: bearer forHTTPHeaderField:@"Authorization"];
 
+    [self loadAttachmentWithURL:url
+                        session:session
+                        request:request
+                     retryCount:0
+                completionBlock:completionBlock
+                   failureBlock:failureBlock];
+}
+
+- (void) loadAttachmentWithURL: ( NSURL* _Nonnull) url
+                       session: ( NSURLSession* _Nonnull) session
+                       request: ( NSURLRequest* _Nonnull) request
+                    retryCount: ( NSInteger ) retryCount
+               completionBlock: ( void(^_Nullable)(NSURL* _Nonnull contentUrl, NSString* _Nonnull contentType))completionBlock
+                  failureBlock: ( void(^_Nullable)(NSError* _Nullable error))failureBlock
+{
     NSURLSessionDownloadTask* downloadTask =
     [session downloadTaskWithRequest:request completionHandler:^(NSURL * _Nullable location,
                                                                  NSURLResponse * _Nullable response,
@@ -632,8 +721,30 @@ static SCGPush *_sharedInstance = nil;
             [[NSFileManager defaultManager] moveItemAtURL:location toURL:tmpUrl error:nil];
             contentUrl = tmpUrl;
         }
-
+        
         switch (httpResponse.statusCode) {
+            case 503:
+            {
+                if (retryCount < self.maxRetryCount ) {
+                    NSLog(@"Retry loadAttachmentWithMessageId: %d", (int)(retryCount+1));
+                    int64_t nsec = self.retryDelay * NSEC_PER_MSEC;
+                    dispatch_queue_t global_default = dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT,0);
+                    dispatch_after(dispatch_time(DISPATCH_TIME_NOW, nsec), global_default, ^{
+                        [self loadAttachmentWithURL:url
+                                            session:session
+                                            request:request
+                                         retryCount:retryCount+1
+                                    completionBlock:completionBlock
+                                       failureBlock:failureBlock];
+                    });
+                } else {
+                    if (failureBlock) {
+                        NSError* error = [NSError errorWithDomain: @"SCGPush" code: httpResponse.statusCode userInfo: nil];
+                        failureBlock(error);
+                    }
+                }
+            }
+                break;
             case 200:
             case 204:
             {
@@ -656,8 +767,9 @@ static SCGPush *_sharedInstance = nil;
     [downloadTask resume];
 }
 
+// MARK: - Reset Badge
 - (void) resetBadgeForPushToken: (NSString* _Nonnull) pushToken
-                 ompletionBlock: (void(^_Nullable)(BOOL success, NSError* _Nullable error)) completionBlock
+                completionBlock: (void(^_Nullable)(BOOL success, NSError* _Nullable error)) completionBlock
 {
     if (nil == pushToken) {
         if (completionBlock) {
@@ -684,7 +796,7 @@ static SCGPush *_sharedInstance = nil;
     
     NSMutableURLRequest* request = [NSMutableURLRequest requestWithURL: url];
     request.HTTPMethod = @"POST";
-    request.timeoutInterval = 30;
+    request.timeoutInterval = DEFAULT_REQUEST_TIMEOUT_INTERVAL;
     
     [request addValue:@"application/json" forHTTPHeaderField:@"Content-Type"];
     NSString* bearer = [NSString stringWithFormat:@"Bearer %@", self.accessToken];
@@ -703,6 +815,19 @@ static SCGPush *_sharedInstance = nil;
     
     request.HTTPBody = jsonData;
     
+    [self resetBadgeForPushToken:pushToken
+                         session:session
+                         request:request
+                      retryCount:0
+                 completionBlock:completionBlock];
+}
+
+- (void) resetBadgeForPushToken: (NSString* _Nonnull) pushToken
+                        session: ( NSURLSession* _Nonnull) session
+                        request: ( NSURLRequest* _Nonnull) request
+                     retryCount: ( NSInteger ) retryCount
+                completionBlock: (void(^_Nullable)(BOOL success, NSError* _Nullable error)) completionBlock
+{
     NSURLSessionDataTask* dataTask =
     [session dataTaskWithRequest:request completionHandler:^(NSData * _Nullable data, NSURLResponse * _Nullable response, NSError * _Nullable error) {
         NSHTTPURLResponse* httpResponse = (NSHTTPURLResponse*) response;
@@ -714,6 +839,27 @@ static SCGPush *_sharedInstance = nil;
         }
         
         switch (httpResponse.statusCode) {
+            case 503:
+            {
+                if (retryCount < self.maxRetryCount ) {
+                    NSLog(@"Retry resetBadgeForPushToken: %d", (int)(retryCount+1));
+                    int64_t nsec = self.retryDelay * NSEC_PER_MSEC;
+                    dispatch_queue_t global_default = dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT,0);
+                    dispatch_after(dispatch_time(DISPATCH_TIME_NOW, nsec), global_default, ^{
+                        [self resetBadgeForPushToken:pushToken
+                                             session:session
+                                             request:request
+                                          retryCount:retryCount+1
+                                     completionBlock:completionBlock];
+                    });
+                } else {
+                    if (completionBlock) {
+                        NSError* error = [NSError errorWithDomain: @"SCGPush" code: httpResponse.statusCode userInfo: nil];
+                        completionBlock(NO, error);
+                    }
+                }
+            }
+                break;
             case 200:
             case 204:
             {
@@ -820,6 +966,7 @@ static SCGPush *_sharedInstance = nil;
     return [self.coreDataManager deleteAllMessages];
 }
 
+//MARK: - Load Attachment
 - (void) loadAttachmentForMessage: (SCGPushMessage* _Nonnull) message
                   completionBlock: (void(^ _Nullable) (SCGPushAttachment* _Nonnull attachment)) completionBlock
                      failureBlock: (void(^ _Nullable) (NSError* _Nullable error)) failureBlock
