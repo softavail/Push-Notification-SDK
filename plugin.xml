@@ -6,7 +6,7 @@
     
     <name>SCGPush</name>
     <description>SCGPush description</description>
-    <author>SCG</author>
+    <author>Syniverse</author>
     <license>Apache 2.0</license>
     <keywords>cordova,scg,push notification</keywords>
     <repo></repo>
@@ -43,5 +43,17 @@
         <header-file src="ios/SCGPushSDK/SCGPushMessage.h" />
         <source-file src="ios/SCGPushSDK/SCGPushMessage.m" />
         <header-file src="ios/SCGPushSDK/SCGPushSDK.h" />
+    </platform>
+    
+    
+    
+    <platform name="android">
+        <config-file target="config.xml" parent="/*">
+            <feature name="SCGPush">
+                <param name="android-package" value="SCGPush"/>
+            </feature>
+        </config-file>
+        <source-file src="src/android/com/moduscreate/plugin/ModusEcho.java"
+        target-dir="src/com/moduscreate/plugin" />
     </platform>
 </plugin>
