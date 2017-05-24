@@ -1,0 +1,18 @@
+{
+    "cordova-plugin-whitelist": {
+        "source": {
+            "type": "registry",
+            "id": "cordova-plugin-whitelist@1"
+        },
+        "is_top_level": true,
+        "variables": {}
+    },
+    "cordova-plugin-scg-push": {
+        "source": {
+            "type": "local",
+            "path": "/Users/lekov/Workspace/scg-push-sdk/android/cordova-sample/node_modules/cordova-plugin-scg-push"
+        },
+        "is_top_level": true,
+        "variables": {}
+    }
+}
