@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<plugin xmlns="http://apache.org/cordova/ns/plugins/1.0"
+    xmlns:android="http://schemas.android.com/apk/res/android"
+        id="cordova-plugin-scg-push" version="1.4.0">
+    <name>SCG Push</name>
+    <description>SCG Push Notification SDK Cordova Plugin</description>
+    <author>Asen Lekov</author>
+    <keywords>cordova,scg,push,notifications,sdk</keywords>
+
+    <js-module src="www/scg-push.js" name="ScgPush">
+        <clobbers target="scg.push" />
+    </js-module>
+
+    <!-- android -->
+    <platform name="android">
+        <framework src="com.google.firebase:firebase-messaging:9.8.0" />
+        <framework src="com.google.code.gson:gson:2.8.0" />
+        <framework src="src/android/scg-build.gradle" custom="true" type="gradleReference" />
+        <source-file src="src/android/com/syniverse/scg/push/CordovaScgClient.java" target-dir="src/com/syniverse/scg/push" />
+        <resource-file src="src/android/scg-lib_1.3.0.aar" target="libs/scg-lib_1.3.0.aar"/>
+
+        <config-file target="res/xml/config.xml" parent="/*">
+          <feature name="ScgPush">
+            <param name="android-package" value="com.syniverse.scg.push.CordovaScgClient"/>
+            <param name="onload" value="true" />
+          </feature>
+        </config-file>
+
+        <config-file target="AndroidManifest.xml" parent="/manifest/application">
+          <service android:name="com.syniverse.scg.push.sdk.ScgMessagingService">
+              <intent-filter>
+                  <action android:name="com.google.firebase.MESSAGING_EVENT" />
+              </intent-filter>
+          </service>
+          <service android:name="com.syniverse.scg.push.sdk.ScgInstanceIdService">
+              <intent-filter>
+                  <action android:name="com.google.firebase.INSTANCE_ID_EVENT" />
+              </intent-filter>
+          </service>
+        </config-file>
+
+        <config-file target="AndroidManifest.xml" parent="/manifest">
+          <uses-permission android:name="android.permission.INTERNET" />
+          <uses-permission android:name="android.permission.WAKE_LOCK" />
+        </config-file>
+    </platform>
+</plugin>
