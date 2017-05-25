@@ -1,7 +1,0 @@
-<?xml version='1.0' encoding='utf-8'?>
-<plugin id="com-moduscreate-plugins-echo" version="0.0.1" xmlns="http://apache.org/cordova/ns/plugins/1.0" xmlns:android="http://schemas.android.com/apk/res/android">
-    <name>SCGPush</name>
-    <js-module name="SCGPush" src="www/SCGPush.js">
-        <clobbers target="cordova.plugins.SCGPush" />
-    </js-module>
-</plugin>
