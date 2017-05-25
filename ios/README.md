@@ -323,7 +323,57 @@ With this functionality you can present an image, an animated image, a video or 
 > Swift
 ```swift
     SCGPush.shared.groupBundle = "your.group.bundel.identifier"
-    SSCGPush.instance.appID = "your app id"
+    SCGPush.instance.appID = "your app id"
     SCGPush.instance.callbackURI = "http://example.com"
 ```
 
+# Push inbox
+
+You can manage your inbox which represent locally saved messages by the `SCGPush` methods:
+1. Push message to inbox
+> Swift
+```swift
+    open func push(toInbox payload: [AnyHashable : Any]) -> Bool
+```
+
+2. Get number of inbox messages
+> Swift
+```swift
+    open func numberOfMessages() -> UInt
+```
+
+3. Get message at specified index
+> Swift
+```swift
+    open func message(at index: UInt) -> SCGPushMessage?
+```
+
+4. Delete inbox message
+> Swift
+```swift
+    open func delete(_ message: SCGPushMessage) -> Bool
+```
+
+5. Delete inbox message by index
+> Swift
+```swift
+    open func deleteMessage(at index: UInt) -> Bool
+```
+
+6. Delete all inbox messages
+> Swift
+```swift
+    open func deleteAllMessages() -> Bool
+```
+
+7. Load attachment for inbox message ( 
+> Swift
+```swift
+    open func loadAttachment(for message: SCGPushMessage, completionBlock: ((SCGPushAttachment) -> Swift.Void)?, failureBlock: ((Error?) -> Swift.Void)? = nil)
+```
+
+8. Get attachment for inbox message
+> Swift
+```swift
+    open func getAttachmentFor(_ message: SCGPushMessage) -> SCGPushAttachment?
+```
