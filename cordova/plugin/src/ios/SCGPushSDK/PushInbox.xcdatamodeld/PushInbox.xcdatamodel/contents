@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<model type="com.apple.IDECoreDataModeler.DataModel" documentVersion="1.0" lastSavedToolsVersion="11759" systemVersion="16D32" minimumToolsVersion="Automatic" sourceLanguage="Swift" userDefinedModelVersionIdentifier="">
+    <entity name="Attachment" representedClassName="" syncable="YES">
+        <attribute name="contentType" optional="YES" attributeType="String" syncable="YES"/>
+        <attribute name="data" optional="YES" attributeType="Binary" allowsExternalBinaryDataStorage="YES" syncable="YES"/>
+        <attribute name="identifier" attributeType="String" indexed="YES" syncable="YES"/>
+        <attribute name="retryCount" optional="YES" attributeType="Integer 16" defaultValueString="0" usesScalarValueType="YES" syncable="YES"/>
+        <attribute name="state" optional="YES" attributeType="Integer 16" defaultValueString="0" usesScalarValueType="YES" syncable="YES"/>
+        <relationship name="attachment_message" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="Message" inverseName="message_attachment" inverseEntity="Message" syncable="YES"/>
+    </entity>
+    <entity name="Message" representedClassName="" syncable="YES">
+        <attribute name="attachmentId" optional="YES" attributeType="String" syncable="YES"/>
+        <attribute name="body" optional="YES" attributeType="String" syncable="YES"/>
+        <attribute name="created" attributeType="Date" usesScalarValueType="NO" indexed="YES" syncable="YES"/>
+        <attribute name="deepLink" optional="YES" attributeType="String" syncable="YES"/>
+        <attribute name="identifier" attributeType="String" indexed="YES" syncable="YES"/>
+        <attribute name="showNotification" optional="YES" attributeType="Boolean" usesScalarValueType="YES" syncable="YES"/>
+        <relationship name="message_attachment" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="Attachment" inverseName="attachment_message" inverseEntity="Attachment" syncable="YES"/>
+    </entity>
+    <elements>
+        <element name="Message" positionX="-486" positionY="-414" width="128" height="148"/>
+        <element name="Attachment" positionX="-209" positionY="-252" width="128" height="133"/>
+    </elements>
+</model>

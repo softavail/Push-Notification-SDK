@@ -34,7 +34,6 @@
 		5BF52A451E76D488008DEE80 /* SCGPush.m in Sources */ = {isa = PBXBuildFile; fileRef = 5BF52A431E76D488008DEE80 /* SCGPush.m */; };
 		5BF52A461E76D488008DEE80 /* SCGPush.m in Sources */ = {isa = PBXBuildFile; fileRef = 5BF52A431E76D488008DEE80 /* SCGPush.m */; };
 		5BF52A491E76E01C008DEE80 /* SCGPushDelegate.h in Headers */ = {isa = PBXBuildFile; fileRef = 5BF52A481E76E01C008DEE80 /* SCGPushDelegate.h */; settings = {ATTRIBUTES = (Public, ); }; };
-		F71C9B4F1ED4C6E700DE1F52 /* libCordova.a in Frameworks */ = {isa = PBXBuildFile; fileRef = F71C9B4A1ED4C6C200DE1F52 /* libCordova.a */; };
 		F7FCBCF11ED48880009BF3B4 /* SCGPushCordova.h in Headers */ = {isa = PBXBuildFile; fileRef = F7FCBCEF1ED48880009BF3B4 /* SCGPushCordova.h */; };
 		F7FCBCF21ED48880009BF3B4 /* SCGPushCordova.m in Sources */ = {isa = PBXBuildFile; fileRef = F7FCBCF01ED48880009BF3B4 /* SCGPushCordova.m */; };
 /* End PBXBuildFile section */
@@ -47,26 +46,19 @@
 			remoteGlobalIDString = 5BF52A261E76D251008DEE80;
 			remoteInfo = SCGPushSDK;
 		};
-		F71C9B491ED4C6C200DE1F52 /* PBXContainerItemProxy */ = {
+		F7FC6E1F1ED6E04100018EE1 /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
-			containerPortal = F71C9B441ED4C6C200DE1F52 /* CordovaLib.xcodeproj */;
+			containerPortal = F7FC6E1A1ED6E04100018EE1 /* CordovaLib.xcodeproj */;
 			proxyType = 2;
 			remoteGlobalIDString = 68A32D7114102E1C006B237C;
 			remoteInfo = CordovaLib;
 		};
-		F71C9B4B1ED4C6C200DE1F52 /* PBXContainerItemProxy */ = {
+		F7FC6E211ED6E04100018EE1 /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
-			containerPortal = F71C9B441ED4C6C200DE1F52 /* CordovaLib.xcodeproj */;
+			containerPortal = F7FC6E1A1ED6E04100018EE1 /* CordovaLib.xcodeproj */;
 			proxyType = 2;
 			remoteGlobalIDString = C0C01EB21E3911D50056E6CB;
 			remoteInfo = Cordova;
-		};
-		F71C9B4D1ED4C6E300DE1F52 /* PBXContainerItemProxy */ = {
-			isa = PBXContainerItemProxy;
-			containerPortal = F71C9B441ED4C6C200DE1F52 /* CordovaLib.xcodeproj */;
-			proxyType = 1;
-			remoteGlobalIDString = D2AAC07D0554694100DB518D;
-			remoteInfo = CordovaLib;
 		};
 /* End PBXContainerItemProxy section */
 
@@ -94,7 +86,7 @@
 		5BF52A421E76D488008DEE80 /* SCGPush.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SCGPush.h; sourceTree = "<group>"; };
 		5BF52A431E76D488008DEE80 /* SCGPush.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SCGPush.m; sourceTree = "<group>"; };
 		5BF52A481E76E01C008DEE80 /* SCGPushDelegate.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SCGPushDelegate.h; sourceTree = "<group>"; };
-		F71C9B441ED4C6C200DE1F52 /* CordovaLib.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = CordovaLib.xcodeproj; path = ../../cordova/SCGPushProject/platforms/ios/CordovaLib/CordovaLib.xcodeproj; sourceTree = "<group>"; };
+		F7FC6E1A1ED6E04100018EE1 /* CordovaLib.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = CordovaLib.xcodeproj; path = "../../cordova-sample/platforms/ios/CordovaLib/CordovaLib.xcodeproj"; sourceTree = "<group>"; };
 		F7FCBCEF1ED48880009BF3B4 /* SCGPushCordova.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SCGPushCordova.h; sourceTree = "<group>"; };
 		F7FCBCF01ED48880009BF3B4 /* SCGPushCordova.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SCGPushCordova.m; sourceTree = "<group>"; };
 /* End PBXFileReference section */
@@ -104,7 +96,6 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				F71C9B4F1ED4C6E700DE1F52 /* libCordova.a in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -122,7 +113,7 @@
 		5BF52A1D1E76D251008DEE80 = {
 			isa = PBXGroup;
 			children = (
-				F71C9B441ED4C6C200DE1F52 /* CordovaLib.xcodeproj */,
+				F7FC6E1A1ED6E04100018EE1 /* CordovaLib.xcodeproj */,
 				5BF52A291E76D251008DEE80 /* SCGPushSDK */,
 				5BF52A341E76D251008DEE80 /* SCGPushSDKTests */,
 				5BF52A281E76D251008DEE80 /* Products */,
@@ -175,11 +166,11 @@
 			path = SCGPushSDKTests;
 			sourceTree = "<group>";
 		};
-		F71C9B451ED4C6C200DE1F52 /* Products */ = {
+		F7FC6E1B1ED6E04100018EE1 /* Products */ = {
 			isa = PBXGroup;
 			children = (
-				F71C9B4A1ED4C6C200DE1F52 /* libCordova.a */,
-				F71C9B4C1ED4C6C200DE1F52 /* Cordova.framework */,
+				F7FC6E201ED6E04100018EE1 /* libCordova.a */,
+				F7FC6E221ED6E04100018EE1 /* Cordova.framework */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -220,7 +211,6 @@
 			buildRules = (
 			);
 			dependencies = (
-				F71C9B4E1ED4C6E300DE1F52 /* PBXTargetDependency */,
 			);
 			name = SCGPushSDK;
 			productName = SCGPushSDK;
@@ -280,8 +270,8 @@
 			projectDirPath = "";
 			projectReferences = (
 				{
-					ProductGroup = F71C9B451ED4C6C200DE1F52 /* Products */;
-					ProjectRef = F71C9B441ED4C6C200DE1F52 /* CordovaLib.xcodeproj */;
+					ProductGroup = F7FC6E1B1ED6E04100018EE1 /* Products */;
+					ProjectRef = F7FC6E1A1ED6E04100018EE1 /* CordovaLib.xcodeproj */;
 				},
 			);
 			projectRoot = "";
@@ -293,18 +283,18 @@
 /* End PBXProject section */
 
 /* Begin PBXReferenceProxy section */
-		F71C9B4A1ED4C6C200DE1F52 /* libCordova.a */ = {
+		F7FC6E201ED6E04100018EE1 /* libCordova.a */ = {
 			isa = PBXReferenceProxy;
 			fileType = archive.ar;
 			path = libCordova.a;
-			remoteRef = F71C9B491ED4C6C200DE1F52 /* PBXContainerItemProxy */;
+			remoteRef = F7FC6E1F1ED6E04100018EE1 /* PBXContainerItemProxy */;
 			sourceTree = BUILT_PRODUCTS_DIR;
 		};
-		F71C9B4C1ED4C6C200DE1F52 /* Cordova.framework */ = {
+		F7FC6E221ED6E04100018EE1 /* Cordova.framework */ = {
 			isa = PBXReferenceProxy;
 			fileType = wrapper.framework;
 			path = Cordova.framework;
-			remoteRef = F71C9B4B1ED4C6C200DE1F52 /* PBXContainerItemProxy */;
+			remoteRef = F7FC6E211ED6E04100018EE1 /* PBXContainerItemProxy */;
 			sourceTree = BUILT_PRODUCTS_DIR;
 		};
 /* End PBXReferenceProxy section */
@@ -365,11 +355,6 @@
 			isa = PBXTargetDependency;
 			target = 5BF52A261E76D251008DEE80 /* SCGPushSDK */;
 			targetProxy = 5BF52A321E76D251008DEE80 /* PBXContainerItemProxy */;
-		};
-		F71C9B4E1ED4C6E300DE1F52 /* PBXTargetDependency */ = {
-			isa = PBXTargetDependency;
-			name = CordovaLib;
-			targetProxy = F71C9B4D1ED4C6E300DE1F52 /* PBXContainerItemProxy */;
 		};
 /* End PBXTargetDependency section */
 
