@@ -11,7 +11,32 @@ import QuickLook
 import SCGPushSDK
 import MobileCoreServices
 
-class MessagesTableViewController: UITableViewController, QLPreviewControllerDataSource {
+class MessagesTableViewController: UITableViewController, QLPreviewControllerDataSource, NotificationTableViewCellDelegate {
+    
+    func didClickDelivery(cell: UITableViewCell) {
+        
+    }
+    
+    func didClickRead(cell:UITableViewCell) {
+        
+    }
+    
+    func didClickThru(cell:UITableViewCell) {
+        
+    }
+    
+    func didClickDelete(cell:UITableViewCell) {
+        
+    }
+    
+    func didClickDeepLink(cell:UITableViewCell) {
+        
+    }
+    
+    func didClickAttachment(cell:UITableViewCell) {
+        
+    }
+
 
 //    @IBOutlet weak var logOutButton: UIBarButtonItem!
     let formatter: DateFormatter = DateFormatter()
@@ -59,6 +84,7 @@ class MessagesTableViewController: UITableViewController, QLPreviewControllerDat
         self.formatter.timeStyle = .medium
         self.formatter.locale = Locale(identifier: "en_US")
         
+        cell.delegate = self
         cell.labelBody.text = message.body!
         cell.labelDate.text = self.formatter.string(from: message.created)
         //debugPrint(message.created)
@@ -67,6 +93,12 @@ class MessagesTableViewController: UITableViewController, QLPreviewControllerDat
 
         return cell
     }
+    
+    override func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
+        
+        return 137.0;
+    }
+
     
     override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         
