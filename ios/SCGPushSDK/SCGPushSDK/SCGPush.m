@@ -562,21 +562,31 @@ NSInteger const DEFAULT_REQUEST_TIMEOUT_INTERVAL = 30;
     
     if (contentType != nil) {
         if (NSOrderedSame == [contentType caseInsensitiveCompare: @"video/mpeg"]) {
-            translatedContentType = (NSString*) kUTTypeMPEG4;
+            translatedContentType = (NSString*) kUTTypeMPEG;
         } else if (NSOrderedSame == [contentType caseInsensitiveCompare: @"video/mp4"]) {
             translatedContentType = (NSString*) kUTTypeMPEG4;
-        } else if (NSOrderedSame == [contentType caseInsensitiveCompare: @"video/webm"]) {
-            translatedContentType = (NSString*) kUTTypeVideo;
-        } else if (NSOrderedSame == [contentType caseInsensitiveCompare: @"video/ogg"]) {
-            translatedContentType = (NSString*) kUTTypeVideo;
-        } else if (NSOrderedSame == [contentType caseInsensitiveCompare: @"audio/ogg"]) {
-            translatedContentType = (NSString*) kUTTypeAudio;
-        } else if (NSOrderedSame == [contentType caseInsensitiveCompare: @"audio/webm"]) {
-            translatedContentType = (NSString*) kUTTypeAudio;
-        } else if (NSOrderedSame == [contentType caseInsensitiveCompare: @"audio/mpeg"]) {
-            translatedContentType = (NSString*) kUTTypeAudio;
+        } else if (NSOrderedSame == [contentType caseInsensitiveCompare: @"video/x-msvideo"]) {
+            translatedContentType = (NSString*) kUTTypeAVIMovie;
+        } else if (NSOrderedSame == [contentType caseInsensitiveCompare: @"video/avi"]) {
+            translatedContentType = (NSString*) kUTTypeAVIMovie;
+        } else if (NSOrderedSame == [contentType caseInsensitiveCompare: @"video/quicktime"]) {
+            translatedContentType = (NSString*) kUTTypeQuickTimeMovie;
+        } else if (NSOrderedSame == [contentType caseInsensitiveCompare: @"audio/x-wav"]) {
+            translatedContentType = (NSString*) kUTTypeWaveformAudio;
+        } else if (NSOrderedSame == [contentType caseInsensitiveCompare: @"audio/aiff"]) {
+            translatedContentType = (NSString*) kUTTypeAudioInterchangeFileFormat;
+        } else if (NSOrderedSame == [contentType caseInsensitiveCompare: @"audio/x-aiff"]) {
+            translatedContentType = (NSString*) kUTTypeAudioInterchangeFileFormat;
+        } else if (NSOrderedSame == [contentType caseInsensitiveCompare: @"audio/mpeg3"]) {
+            translatedContentType = (NSString*) kUTTypeMP3;
         } else if (NSOrderedSame == [contentType caseInsensitiveCompare: @"audio/mp3"]) {
             translatedContentType = (NSString*) kUTTypeMP3;
+        } else if (NSOrderedSame == [contentType caseInsensitiveCompare: @"audio/x-mpeg-3"]) {
+            translatedContentType = (NSString*) kUTTypeMP3;
+        } else if (NSOrderedSame == [contentType caseInsensitiveCompare: @"audio/m4a"]) {
+            translatedContentType = (NSString*) kUTTypeMPEG4Audio;
+        } else if (NSOrderedSame == [contentType caseInsensitiveCompare: @"audio/mp4"]) {
+            translatedContentType = (NSString*) kUTTypeMPEG4Audio;
         } else if (NSOrderedSame == [contentType caseInsensitiveCompare: @"image/gif"]) {
             translatedContentType = (NSString*) kUTTypeGIF;
         } else if (NSOrderedSame == [contentType caseInsensitiveCompare: @"image/png"]) {
@@ -588,6 +598,38 @@ NSInteger const DEFAULT_REQUEST_TIMEOUT_INTERVAL = 30;
     
     return translatedContentType;
     
+}
+
+- (NSString*) contentTypeToExt: (NSString*) contentType {
+    NSString* ext = nil;
+    
+    if (NSOrderedSame == [contentType caseInsensitiveCompare: (NSString*) kUTTypeJPEG]) {
+        ext = @"jpg";
+    } else if (NSOrderedSame == [contentType caseInsensitiveCompare: (NSString*) kUTTypeGIF]) {
+        ext = @"gif";
+    } else if (NSOrderedSame == [contentType caseInsensitiveCompare: (NSString*) kUTTypePNG]) {
+        ext = @"png";
+    } else if (NSOrderedSame == [contentType caseInsensitiveCompare: (NSString*) kUTTypeMPEG4]) {
+        ext = @"mp4";
+    } else if (NSOrderedSame == [contentType caseInsensitiveCompare: (NSString*) kUTTypeAVIMovie]) {
+        ext = @"avi";
+    } else if (NSOrderedSame == [contentType caseInsensitiveCompare: (NSString*) kUTTypeQuickTimeMovie]) {
+        ext = @"mov";
+    } else if (NSOrderedSame == [contentType caseInsensitiveCompare: (NSString*) kUTTypeMPEG]) {
+        ext = @"mpg";
+    } else if (NSOrderedSame == [contentType caseInsensitiveCompare: (NSString*) kUTTypeMPEG2Video]) {
+        ext = @"mp2";
+    } else if (NSOrderedSame == [contentType caseInsensitiveCompare: (NSString*) kUTTypeMP3]) {
+        ext = @"mp3";
+    } else if (NSOrderedSame == [contentType caseInsensitiveCompare: (NSString*) kUTTypeAudioInterchangeFileFormat]) {
+        ext = @"aiff";
+    } else if (NSOrderedSame == [contentType caseInsensitiveCompare: (NSString*) kUTTypeWaveformAudio]) {
+        ext = @"wav";
+    } else if (NSOrderedSame == [contentType caseInsensitiveCompare: (NSString*) kUTTypeMPEG4Audio]) {
+        ext = @"m4a";
+    }
+    
+    return ext;
 }
 
 - (void) loadInboxAttachmentForMessage: (SCGPushMessage* _Nonnull) message
@@ -699,6 +741,8 @@ NSInteger const DEFAULT_REQUEST_TIMEOUT_INTERVAL = 30;
     [session downloadTaskWithRequest:request completionHandler:^(NSURL * _Nullable location,
                                                                  NSURLResponse * _Nullable response,
                                                                  NSError * _Nullable error) {
+        NSURL* contentUrl;
+        NSString* contentType;
         NSHTTPURLResponse* httpResponse = (NSHTTPURLResponse*) response;
         if (error != nil) {
             if (failureBlock) {
@@ -707,19 +751,20 @@ NSInteger const DEFAULT_REQUEST_TIMEOUT_INTERVAL = 30;
             return;
         }
         
-        NSURL* contentUrl;
-        NSString* contentType = [self translateContentTypeHeader: httpResponse];
-        
         if (nil != location ) {
             // Move temporary file to remove .tmp extension
-            NSString* tmpDirectory = NSTemporaryDirectory();
-            NSString*  tmpFile = [[@"file://" stringByAppendingString:tmpDirectory] stringByAppendingString:url.lastPathComponent];
-            NSURL* tmpUrl = [NSURL URLWithString:tmpFile];
-            if ([[NSFileManager defaultManager] fileExistsAtPath:tmpUrl.path isDirectory:nil])
-                [[NSFileManager defaultManager] removeItemAtURL:tmpUrl error:nil];
-            
-            [[NSFileManager defaultManager] moveItemAtURL:location toURL:tmpUrl error:nil];
-            contentUrl = tmpUrl;
+            contentType = [self translateContentTypeHeader: httpResponse];
+            NSString* ext = [self contentTypeToExt: contentType];
+            if (ext != nil) {
+                NSString* fileName = [[[NSUUID UUID] UUIDString] stringByAppendingPathExtension: ext];
+                NSString *path = [NSTemporaryDirectory() stringByAppendingPathComponent: fileName];
+                NSURL* tmpUrl = [NSURL fileURLWithPath: path];
+                if ([[NSFileManager defaultManager] fileExistsAtPath:tmpUrl.path isDirectory:nil])
+                    [[NSFileManager defaultManager] removeItemAtURL:tmpUrl error:nil];
+                
+                if([[NSFileManager defaultManager] moveItemAtURL:location toURL:tmpUrl error:nil])
+                    contentUrl = tmpUrl;
+            }
         }
         
         switch (httpResponse.statusCode) {
@@ -748,6 +793,9 @@ NSInteger const DEFAULT_REQUEST_TIMEOUT_INTERVAL = 30;
             case 200:
             case 204:
             {
+                NSLog(@"Debug: [SCGPush] '<%p>', successfully loaded url '%@'",
+                      self,
+                      url);
                 if (completionBlock != nil) {
                     completionBlock(contentUrl, contentType);
                 }
@@ -755,6 +803,11 @@ NSInteger const DEFAULT_REQUEST_TIMEOUT_INTERVAL = 30;
                 break;
             default:
             {
+                NSLog(@"Debug: [SCGPush] '<%p>', failed to load url '%@' code: '%ld'",
+                      self,
+                      url,
+                      (long)httpResponse.statusCode);
+                
                 if (failureBlock) {
                     NSError* error = [NSError errorWithDomain: @"SCGPush" code: httpResponse.statusCode userInfo: nil];
                     failureBlock(error);
