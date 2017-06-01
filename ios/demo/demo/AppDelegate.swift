@@ -34,6 +34,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
             // use the feature only available in iOS 10
             let center = UNUserNotificationCenter.current() as UNUserNotificationCenter
             setUNUserNotificationCenterDelegate(center)
+            setUNUserNotificationCenterCategroies();
             center.requestAuthorization(options: [.badge, .alert , .sound]) { (granted, error) in
                 if granted {
                     application.registerForRemoteNotifications()
@@ -46,10 +47,19 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         } else {
 
             // or use some work around
-            let settings = UIUserNotificationSettings(types: [.alert, .badge, .sound], categories: nil)
+            let categoryIncomingCall:UIMutableUserNotificationCategory = UIMutableUserNotificationCategory()
+            categoryIncomingCall.identifier = "categoryLink"
+            
+            let actionAnswer:UIMutableUserNotificationAction = UIMutableUserNotificationAction()
+            actionAnswer.identifier = "actionLink"
+            actionAnswer.title = "Link"
+            actionAnswer.activationMode = UIUserNotificationActivationMode.foreground
+            
+            categoryIncomingCall.setActions([actionAnswer], for: UIUserNotificationActionContext.default)
+            
+            let settings = UIUserNotificationSettings(types: [.alert, .badge, .sound], categories: [categoryIncomingCall])
             application.registerUserNotificationSettings(settings)
         }
-        
         
         let savedToken:String? = UserDefaults.standard.string(forKey: "token")
         let savedAppid:String? = UserDefaults.standard.string(forKey: "appid")
@@ -75,20 +85,24 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     }
 
     func applicationWillResignActive(_ application: UIApplication) {
+        debugPrint("applicationWillResignActive")
         // Sent when the application is about to move from active to inactive state. This can occur for certain types of temporary interruptions (such as an incoming phone call or SMS message) or when the user quits the application and it begins the transition to the background state.
         // Use this method to pause ongoing tasks, disable timers, and throttle down OpenGL ES frame rates. Games should use this method to pause the game.
     }
 
     func applicationDidEnterBackground(_ application: UIApplication) {
+        debugPrint("applicationDidEnterBackground")
         // Use this method to release shared resources, save user data, invalidate timers, and store enough application state information to restore your application to its current state in case it is terminated later.
         // If your application supports background execution, this method is called instead of applicationWillTerminate: when the user quits.
     }
 
     func applicationWillEnterForeground(_ application: UIApplication) {
+        debugPrint("applicationWillEnterForeground")
         // Called as part of the transition from the background to the inactive state; here you can undo many of the changes made on entering the background.
     }
 
     func applicationDidBecomeActive(_ application: UIApplication) {
+        debugPrint("applicationWillEnterForeground")
         // Restart any tasks that were paused (or not yet started) while the application was inactive. If the application was previously in the background, optionally refresh the user interface.
     }
 
@@ -141,18 +155,43 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
                     
                     if sn != nil && sn! == true {
                         debugPrint("showing notification")
-                        showNotification(userInfo)
+
+                        if (UserDefaults.standard.bool(forKey: "reporton")) {
+                            if let messageID:String = userInfo["scg-message-id"] as? String
+                            {
+                                SCGPush.sharedInstance().reportStatus(withMessageId: messageID, andMessageState: MessageState.delivered, completionBlock: {
+                                    debugPrint("Successfully reportStatus  withMessageId: \(messageID)")
+                                }, failureBlock: { (error) in
+                                    debugPrint("Error reportStatus  withMessageId: \(messageID), error: \((error?.localizedDescription)!)")
+                                })
+                            }
+                        }
+
+                        showSilentNotification(userInfo, fetchCompletionHandler: completionHandler)
+                        
                     } else {
                         debugPrint("pushing to inbox")
                         SCGPush.sharedInstance().push(toInbox: userInfo)
+
+                        if (UserDefaults.standard.bool(forKey: "reporton")) {
+                            if let messageID:String = userInfo["scg-message-id"] as? String
+                            {
+                                SCGPush.sharedInstance().reportStatus(withMessageId: messageID, andMessageState: MessageState.delivered, completionBlock: {
+                                    debugPrint("Successfully reportStatus  withMessageId: \(messageID)")
+                                    completionHandler(UIBackgroundFetchResult.newData)
+                                }, failureBlock: { (error) in
+                                    debugPrint("Error reportStatus  withMessageId: \(messageID), error: \((error?.localizedDescription)!)")
+                                    completionHandler(UIBackgroundFetchResult.failed)
+                                })
+                            } else {
+                                completionHandler(UIBackgroundFetchResult.newData)
+                            }
+                        } else {
+                            completionHandler(UIBackgroundFetchResult.newData)
+                        }
                     }
-                    
-                    completionHandler(UIBackgroundFetchResult.newData)
-                    return
                 }
-            }
-            else {
-            
+            } else {
                 if let url:String = userInfo["deep_link"] as? String
                 {
                     SCGPush.sharedInstance().resolveTrackedLink(url)
@@ -172,16 +211,51 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         }
     }
     
-    func showNotification(_ userInfo: [AnyHashable : Any]) -> Void {
+    func application(_ application: UIApplication,
+                     didReceive notification: UILocalNotification)
+    {
+        if let category = notification.category {
+            if category == "categoryLink" {
+                debugPrint("Tapped in notification with deep link")
+            }
+        }
+    }
+
+    func application(_ application: UIApplication,
+                     handleActionWithIdentifier identifier: String?,
+                     for notification: UILocalNotification,
+                     completionHandler: @escaping () -> Void)
+    {
+        if let category = notification.category {
+            if category == "categoryLink" {
+                if let action = identifier {
+                    if action == "actionLink" {
+                        debugPrint("Tapped in deep link")
+                        if let url:String = notification.userInfo?["deep_link"] as? String
+                        {
+                            debugPrint("Will resolve deep link")
+                            SCGPush.sharedInstance().resolveTrackedLink(url)
+                        }
+                    }
+                }
+            }
+        }
+    }
+    
+    func showSilentNotification(_ userInfo: [AnyHashable : Any],
+                                fetchCompletionHandler completionHandler: @escaping (UIBackgroundFetchResult) -> Void ) {
         if #available(iOS 10.0, *) {
 
             let body: String = (userInfo["body"] as? String)!
             
             if let messageID = userInfo["scg-message-id"] as? String {
                 if let attachmentID = userInfo["scg-attachment-id"] as? String {
-                    showMediaNotification(body, messageID: messageID, attachmentID: attachmentID)
+                    showMediaNotification(body, messageID: messageID, attachmentID: attachmentID,
+                                          userInfo: userInfo,
+                                          fetchCompletionHandler: completionHandler)
                 } else {
-                    showTextNotification(withMessageId: messageID, andBody: body)
+                    showTextNotification(withMessageId: messageID, andBody: body, userInfo: userInfo)
+                    completionHandler(UIBackgroundFetchResult.noData)
                 }
             }
         } else {
@@ -190,20 +264,31 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
             localNotification.alertBody = userInfo["body"] as! String?
             localNotification.fireDate = Date().addingTimeInterval(1)
             localNotification.userInfo = userInfo
+
+            if (userInfo["deep_link"] != nil) {
+                localNotification.category = "categoryLink"
+            }
             
             UIApplication.shared.scheduleLocalNotification(localNotification)
         }
     }
     
     @available( iOS 10.0, *)
-    func showMediaNotification(_ title: String, messageID: String, attachmentID: String) {
-        
+    func showMediaNotification(_ title: String, messageID: String, attachmentID: String,
+                               userInfo: [AnyHashable : Any],
+                               fetchCompletionHandler completionHandler: @escaping (UIBackgroundFetchResult) -> Void)
+    {
         SCGPush.sharedInstance().loadAttachment(withMessageId: messageID,
                                                 andAttachmentId: attachmentID,
                                                 completionBlock: { (contentUrl, contentType) in
                                                     debugPrint("loadAttachment \(attachmentID) succeeded")
                                                     let content = UNMutableNotificationContent()
                                                     content.body = title
+                                                    content.userInfo = userInfo
+                                                    
+                                                    if (userInfo["deep_link"] != nil) {
+                                                        content.categoryIdentifier = "categoryLink"
+                                                    }
                                                     
                                                     let attachment: UNNotificationAttachment?
                                                     
@@ -226,17 +311,25 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
                                                             debugPrint("failed to show notification with error: \(error?.localizedDescription ?? "Unknown")")
                                                         }
                                                     }
+                                                    completionHandler(UIBackgroundFetchResult.newData)
                                                 },
                                                 failureBlock: { (error) in
                                                     debugPrint("loadAttachment \(attachmentID) failed with error: \(error?.localizedDescription ?? "Unknown")")
-                                                    self.showTextNotification(withMessageId: messageID,  andBody: title)
+                                                    self.showTextNotification(withMessageId: messageID,  andBody: title, userInfo: userInfo)
+                                                    completionHandler(UIBackgroundFetchResult.failed)
                                                 })
     }
     
     @available( iOS 10.0, *)
-    func showTextNotification(withMessageId messageId: String, andBody body: String) {
+    func showTextNotification(withMessageId messageId: String, andBody body: String, userInfo: [AnyHashable : Any]) {
         let content = UNMutableNotificationContent()
         content.body = body
+        content.userInfo = userInfo
+        
+        if (userInfo["deep_link"] != nil) {
+            content.categoryIdentifier = "categoryLink"
+        }
+        
         let request = UNNotificationRequest(identifier: messageId, content: content, trigger: nil)
         UNUserNotificationCenter.current().add(request) { error in
             if (error != nil){
@@ -256,6 +349,16 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 
 @available(iOS 10.0, *)
 extension AppDelegate: UNUserNotificationCenterDelegate {
+    public func setUNUserNotificationCenterCategroies() {
+        // Add action.
+        let linkAction = UNNotificationAction(identifier: "actionLink", title: "Link", options: [UNNotificationActionOptions.foreground])
+        
+        // Create category.
+        let category = UNNotificationCategory(identifier: "categoryLink", actions: [linkAction], intentIdentifiers: [], options: [])
+        
+        UNUserNotificationCenter.current().setNotificationCategories([category])
+    }
+    
     public func setUNUserNotificationCenterDelegate(_ center: UNUserNotificationCenter) {
         center.delegate = self
     }
@@ -269,7 +372,20 @@ extension AppDelegate: UNUserNotificationCenterDelegate {
     }
     
     public func userNotificationCenter(_ center: UNUserNotificationCenter, didReceive response: UNNotificationResponse, withCompletionHandler completionHandler: @escaping () -> Swift.Void) {
-        debugPrint("Tapped in notification")
+        if (response.actionIdentifier == UNNotificationDefaultActionIdentifier) {
+            debugPrint("Tapped in notification")
+        } else if (response.actionIdentifier == "actionLink") {
+            debugPrint("Tapped in deep link")
+            
+            if let url:String = response.notification.request.content.userInfo["deep_link"] as? String
+            {
+                debugPrint("Will resolve deep link")
+                SCGPush.sharedInstance().resolveTrackedLink(url)
+            }
+        } else if (response.actionIdentifier == UNNotificationDismissActionIdentifier) {
+            debugPrint("dismissed notification")
+        }
+        
         completionHandler()
     }
 }
