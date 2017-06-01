@@ -106,6 +106,8 @@ NSInteger const DEFAULT_REQUEST_TIMEOUT_INTERVAL = 30;
             return;
         }
         
+        NSLog(@"Debug: [SCGPush] registerPushToken didReceiveResponse: %@", httpResponse.description);
+
         switch (httpResponse.statusCode) {
             case 503:
             {
@@ -178,8 +180,6 @@ NSInteger const DEFAULT_REQUEST_TIMEOUT_INTERVAL = 30;
         return;
     }
     
-    NSLog(@"Debug: [SCGPush] URL: %@", url.absoluteString);
-    
     NSMutableURLRequest* request = [NSMutableURLRequest requestWithURL: url];
     request.HTTPMethod = @"POST";
     request.timeoutInterval = DEFAULT_REQUEST_TIMEOUT_INTERVAL;
@@ -227,6 +227,8 @@ NSInteger const DEFAULT_REQUEST_TIMEOUT_INTERVAL = 30;
             return;
         }
         
+        NSLog(@"Debug: [SCGPush] unregisterPushToken didReceiveResponse: %@", httpResponse.description);
+
         switch (httpResponse.statusCode) {
             case 503:
             {
@@ -424,7 +426,9 @@ NSInteger const DEFAULT_REQUEST_TIMEOUT_INTERVAL = 30;
             }
             return;
         }
-        
+
+        NSLog(@"Debug: [SCGPush] reportStatus didReceiveResponse: %@", httpResponse.description);
+
         switch (httpResponse.statusCode) {
             case 503:
             {
@@ -502,6 +506,8 @@ NSInteger const DEFAULT_REQUEST_TIMEOUT_INTERVAL = 30;
             return;
         }
         
+        NSLog(@"Debug: [SCGPush] resolveTrackedLink didReceiveResponse: %@", httpResponse.description);
+
         switch (httpResponse.statusCode) {
             case 503:
             {
@@ -668,6 +674,9 @@ NSInteger const DEFAULT_REQUEST_TIMEOUT_INTERVAL = 30;
         }
 
         NSHTTPURLResponse* httpResponse = (NSHTTPURLResponse*) response;
+        
+        NSLog(@"Debug: [SCGPush] loadInboxAttachmentForMessage didReceiveResponse: %@", httpResponse.description);
+        
         if (httpResponse.statusCode >= 200 && httpResponse.statusCode < 300) {
             NSString* contentType = [self translateContentTypeHeader: httpResponse];
             
@@ -751,6 +760,8 @@ NSInteger const DEFAULT_REQUEST_TIMEOUT_INTERVAL = 30;
             return;
         }
         
+        NSLog(@"Debug: [SCGPush] loadAttachmentWithURL didReceiveResponse: %@", httpResponse.description);
+
         if (nil != location ) {
             // Move temporary file to remove .tmp extension
             contentType = [self translateContentTypeHeader: httpResponse];
@@ -891,6 +902,8 @@ NSInteger const DEFAULT_REQUEST_TIMEOUT_INTERVAL = 30;
             return;
         }
         
+        NSLog(@"Debug: [SCGPush] resetBadgeForPushToken didReceiveResponse: %@", httpResponse.description);
+
         switch (httpResponse.statusCode) {
             case 503:
             {
