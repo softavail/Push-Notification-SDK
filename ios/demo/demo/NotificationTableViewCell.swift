@@ -20,53 +20,25 @@ protocol NotificationTableViewCellDelegate: class {
 
 class NotificationTableViewCell: UITableViewCell {
 
-    @IBOutlet weak var buttonDelivery: UIButton!
-    @IBOutlet weak var buttonRead: UIButton!
-    @IBOutlet weak var buttonThru: UIButton!
-    @IBOutlet weak var buttonDelete: UIButton!
-    @IBOutlet weak var buttonDeepLink: UIButton!
-    @IBOutlet weak var buttonAttachment: UIButton!
     @IBOutlet weak var labelBody: UILabel!
     @IBOutlet weak var labelDate: UILabel!
-    @IBOutlet weak var constraintLabelDateTop: NSLayoutConstraint!
+    @IBOutlet weak var constraintTopSpaceToLabelDate: NSLayoutConstraint!
+    @IBOutlet weak var constraintVerticalSpaceFromDateToBody: NSLayoutConstraint!
+    @IBOutlet weak var constraintBottomSpaceToLabelBody: NSLayoutConstraint!
+    @IBOutlet weak var attachmentIndicatorView: UIImageView!
     
     weak var delegate:NotificationTableViewCellDelegate?
 
+    var message: SCGPushMessage?
     
     override func awakeFromNib() {
         super.awakeFromNib()
         
-        buttonDelivery.layer.cornerRadius = 5;
-        buttonDelivery.layer.masksToBounds = true;
-        buttonDelivery.layer.borderColor = UIColor.blue.cgColor;
-        buttonDelivery.layer.borderWidth = 0.5;
-
-        buttonAttachment.layer.cornerRadius = 5;
-        buttonAttachment.layer.masksToBounds = true;
-        buttonAttachment.layer.borderColor = UIColor.blue.cgColor;
-        buttonAttachment.layer.borderWidth = 0.5;
-
-        buttonDeepLink.layer.cornerRadius = 5;
-        buttonDeepLink.layer.masksToBounds = true;
-        buttonDeepLink.layer.borderColor = UIColor.blue.cgColor;
-        buttonDeepLink.layer.borderWidth = 0.5;
-
-        buttonDelete.layer.cornerRadius = 5;
-        buttonDelete.layer.masksToBounds = true;
-        buttonDelete.layer.borderColor = UIColor.blue.cgColor;
-        buttonDelete.layer.borderWidth = 0.5;
-
-        buttonThru.layer.cornerRadius = 5;
-        buttonThru.layer.masksToBounds = true;
-        buttonThru.layer.borderColor = UIColor.blue.cgColor;
-        buttonThru.layer.borderWidth = 0.5;
-
-        buttonRead.layer.cornerRadius = 5;
-        buttonRead.layer.masksToBounds = true;
-        buttonRead.layer.borderColor = UIColor.blue.cgColor;
-        buttonRead.layer.borderWidth = 0.5;
-
         // Initialization code
+        labelDate.backgroundColor = UIColor.clear
+        labelDate.numberOfLines = 1
+        
+        labelBody.numberOfLines = 0
     }
 
     override func setSelected(_ selected: Bool, animated: Bool) {
