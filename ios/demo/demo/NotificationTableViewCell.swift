@@ -8,15 +8,37 @@
 
 import UIKit
 
+protocol NotificationTableViewCellDelegate: class {
+    
+    func didClickDelivery(cell:UITableViewCell)
+    func didClickRead(cell:UITableViewCell)
+    func didClickThru(cell:UITableViewCell)
+    func didClickDelete(cell:UITableViewCell)
+    func didClickDeepLink(cell:UITableViewCell)
+    func didClickAttachment(cell:UITableViewCell)
+}
+
 class NotificationTableViewCell: UITableViewCell {
 
     @IBOutlet weak var labelBody: UILabel!
     @IBOutlet weak var labelDate: UILabel!
-    @IBOutlet weak var constraintLabelDateTop: NSLayoutConstraint!
-    @IBOutlet weak var constraintLabelBodyBottom: NSLayoutConstraint!
+    @IBOutlet weak var constraintTopSpaceToLabelDate: NSLayoutConstraint!
+    @IBOutlet weak var constraintVerticalSpaceFromDateToBody: NSLayoutConstraint!
+    @IBOutlet weak var constraintBottomSpaceToLabelBody: NSLayoutConstraint!
+    @IBOutlet weak var attachmentIndicatorView: UIImageView!
+    
+    weak var delegate:NotificationTableViewCellDelegate?
+
+    var message: SCGPushMessage?
+    
     override func awakeFromNib() {
         super.awakeFromNib()
+        
         // Initialization code
+        labelDate.backgroundColor = UIColor.clear
+        labelDate.numberOfLines = 1
+        
+        labelBody.numberOfLines = 0
     }
 
     override func setSelected(_ selected: Bool, animated: Bool) {
@@ -25,4 +47,33 @@ class NotificationTableViewCell: UITableViewCell {
         // Configure the view for the selected state
     }
     
+    @IBAction func onClickDelivery(_ sender: Any) {
+        
+        delegate?.didClickDelivery(cell: self)
+    }
+    
+    @IBAction func onClickDelete(_ sender: Any) {
+        
+        delegate?.didClickDelete(cell: self)
+    }
+    
+    @IBAction func onClickDeepLink(_ sender: Any) {
+        
+        delegate?.didClickDeepLink(cell: self)
+    }
+    
+    @IBAction func onClickThru(_ sender: Any) {
+        
+        delegate?.didClickThru(cell: self)
+    }
+    
+    @IBAction func onClickRead(_ sender: Any) {
+        
+        delegate?.didClickRead(cell: self)
+    }
+
+    @IBAction func onClickAttachment(_ sender: Any) {
+        
+        delegate?.didClickAttachment(cell: self)
+    }
 }

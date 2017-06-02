@@ -1,50 +1,62 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="11762" systemVersion="16D32" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" colorMatched="YES">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="12120" systemVersion="16F73" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" colorMatched="YES">
     <device id="retina4_7" orientation="portrait">
         <adaptation id="fullscreen"/>
     </device>
     <dependencies>
-        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="11757"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="12088"/>
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
     </dependencies>
     <objects>
         <placeholder placeholderIdentifier="IBFilesOwner" id="-1" userLabel="File's Owner"/>
         <placeholder placeholderIdentifier="IBFirstResponder" id="-2" customClass="UIResponder"/>
-        <tableViewCell contentMode="scaleToFill" selectionStyle="default" indentationWidth="10" id="KGk-i7-Jjw" customClass="NotificationTableViewCell" customModule="SCGPushDemo" customModuleProvider="target">
-            <rect key="frame" x="0.0" y="0.0" width="320" height="64"/>
+        <tableViewCell contentMode="scaleToFill" selectionStyle="default" indentationWidth="10" rowHeight="125" id="KGk-i7-Jjw" customClass="NotificationTableViewCell" customModule="SCGPushDemo" customModuleProvider="target">
+            <rect key="frame" x="0.0" y="0.0" width="338" height="75"/>
             <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
             <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="KGk-i7-Jjw" id="H2p-sc-9uM">
-                <rect key="frame" x="0.0" y="0.0" width="320" height="63"/>
+                <rect key="frame" x="0.0" y="0.0" width="338" height="75"/>
                 <autoresizingMask key="autoresizingMask"/>
                 <subviews>
-                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="252" verticalHuggingPriority="251" horizontalCompressionResistancePriority="751" text="9:15 PM" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="2k1-qa-CeN">
-                        <rect key="frame" x="274.5" y="10" width="35.5" height="11"/>
-                        <fontDescription key="fontDescription" type="system" pointSize="9"/>
+                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" horizontalCompressionResistancePriority="751" verticalCompressionResistancePriority="751" text="Monday" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="2k1-qa-CeN">
+                        <rect key="frame" x="281" y="15" width="42" height="13.5"/>
+                        <color key="backgroundColor" name="controlHighlightColor" catalog="System" colorSpace="catalog"/>
+                        <fontDescription key="fontDescription" style="UICTFontTextStyleCaption2"/>
                         <nil key="textColor"/>
                         <nil key="highlightedColor"/>
                     </label>
-                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Label" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="0nu-1x-p5N">
-                        <rect key="frame" x="10" y="10" width="259.5" height="43.5"/>
+                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" text="This is a message body" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="0nu-1x-p5N">
+                        <rect key="frame" x="15" y="38.5" width="308" height="21"/>
                         <fontDescription key="fontDescription" style="UICTFontTextStyleBody"/>
                         <nil key="textColor"/>
                         <nil key="highlightedColor"/>
                     </label>
+                    <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="attachmentIndicator" translatesAutoresizingMaskIntoConstraints="NO" id="N26-wb-zT9">
+                        <rect key="frame" x="15" y="13" width="16" height="16"/>
+                    </imageView>
                 </subviews>
                 <constraints>
-                    <constraint firstItem="0nu-1x-p5N" firstAttribute="leading" secondItem="H2p-sc-9uM" secondAttribute="leading" constant="10" id="Ize-eb-Sts"/>
-                    <constraint firstItem="0nu-1x-p5N" firstAttribute="top" secondItem="2k1-qa-CeN" secondAttribute="top" id="T7v-gI-fxX"/>
-                    <constraint firstItem="2k1-qa-CeN" firstAttribute="leading" secondItem="0nu-1x-p5N" secondAttribute="trailing" constant="5" id="d5d-i0-Suo"/>
-                    <constraint firstAttribute="trailing" secondItem="2k1-qa-CeN" secondAttribute="trailing" constant="10" id="el7-3x-m6A"/>
-                    <constraint firstItem="2k1-qa-CeN" firstAttribute="top" secondItem="H2p-sc-9uM" secondAttribute="top" constant="10" id="lQI-rZ-hTH"/>
-                    <constraint firstAttribute="bottom" secondItem="0nu-1x-p5N" secondAttribute="bottom" constant="10" id="vdl-58-AbU"/>
+                    <constraint firstItem="0nu-1x-p5N" firstAttribute="top" secondItem="2k1-qa-CeN" secondAttribute="bottom" constant="10" id="51a-6I-XGt"/>
+                    <constraint firstItem="2k1-qa-CeN" firstAttribute="top" secondItem="H2p-sc-9uM" secondAttribute="top" constant="15" id="Hg9-Ev-erV"/>
+                    <constraint firstItem="0nu-1x-p5N" firstAttribute="leading" secondItem="H2p-sc-9uM" secondAttribute="leading" constant="15" id="I1u-n3-iLI"/>
+                    <constraint firstItem="N26-wb-zT9" firstAttribute="bottom" secondItem="2k1-qa-CeN" secondAttribute="bottom" id="KRV-gk-Cp8"/>
+                    <constraint firstAttribute="trailing" secondItem="2k1-qa-CeN" secondAttribute="trailing" constant="15" id="Ldx-lf-RDB"/>
+                    <constraint firstAttribute="bottom" secondItem="0nu-1x-p5N" secondAttribute="bottom" constant="15" id="U2D-z3-8y3"/>
+                    <constraint firstAttribute="trailing" secondItem="0nu-1x-p5N" secondAttribute="trailing" constant="15" id="dyu-KI-laI"/>
+                    <constraint firstItem="N26-wb-zT9" firstAttribute="leading" secondItem="H2p-sc-9uM" secondAttribute="leading" constant="15" id="xjp-T2-fT0"/>
                 </constraints>
             </tableViewCellContentView>
             <connections>
-                <outlet property="constraintLabelBodyBottom" destination="vdl-58-AbU" id="J4C-5N-PIH"/>
-                <outlet property="constraintLabelDateTop" destination="lQI-rZ-hTH" id="h1m-0w-J5h"/>
+                <outlet property="attachmentIndicatorView" destination="N26-wb-zT9" id="TfM-UD-Jue"/>
+                <outlet property="constraintBottomSpaceToLabelBody" destination="U2D-z3-8y3" id="6fX-jz-5Ve"/>
+                <outlet property="constraintTopSpaceToLabelDate" destination="Hg9-Ev-erV" id="YMg-9r-Tvq"/>
+                <outlet property="constraintVerticalSpaceFromDateToBody" destination="51a-6I-XGt" id="4wl-o6-Q5z"/>
                 <outlet property="labelBody" destination="0nu-1x-p5N" id="QJS-tu-CtS"/>
                 <outlet property="labelDate" destination="2k1-qa-CeN" id="qIV-f5-l4a"/>
             </connections>
+            <point key="canvasLocation" x="-122" y="-38.5"/>
         </tableViewCell>
     </objects>
+    <resources>
+        <image name="attachmentIndicator" width="16" height="16"/>
+    </resources>
 </document>
