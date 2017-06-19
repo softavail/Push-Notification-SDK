@@ -15,8 +15,11 @@
     <platform name="android">
         <framework src="com.google.firebase:firebase-messaging:9.8.0" />
         <framework src="com.google.code.gson:gson:2.8.0" />
+        <framework src="com.squareup.retrofit2:retrofit:2.3.0" />
+        <framework src="com.squareup.retrofit2:converter-gson:2.3.0" />
         <framework src="src/android/scg-build.gradle" custom="true" type="gradleReference" />
         <source-file src="src/android/com/syniverse/scg/push/CordovaScgClient.java" target-dir="src/com/syniverse/scg/push" />
+        <source-file src="src/android/com/syniverse/scg/push/cordova/sample/MainReceiver.java" target-dir="src/com/syniverse/scg/push/cordova/sample" />
         <resource-file src="src/android/scg-lib_1.3.0.aar" target="libs/scg-lib_1.3.0.aar"/>
 
         <config-file target="res/xml/config.xml" parent="/*">
