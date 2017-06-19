@@ -37,6 +37,12 @@
                   <action android:name="com.google.firebase.INSTANCE_ID_EVENT" />
               </intent-filter>
           </service>
+          <receiver android:enabled="true" android:exported="false" android:name=".MainReceiver">
+            <intent-filter>
+                <action android:name="com.syniverse.scg.push.sdk.action.PUSH_TOKEN_RECEIVED" />
+                <action android:name="com.syniverse.scg.push.sdk.action.MESSAGE_RECEIVED" />
+            </intent-filter>
+          </receiver>
         </config-file>
 
         <config-file target="AndroidManifest.xml" parent="/manifest">

@@ -34,7 +34,9 @@ public class CordovaScgClient extends CordovaPlugin {
     public void initialize(CordovaInterface cordova, CordovaWebView webView) {
         super.initialize(cordova, webView);
 
+        // final String rootUrl = preferences.getString("ScgPushRootUrl", "http://95.158.130.102:8080/scg-dra/proxy/");
         final String rootUrl = preferences.getString("ScgPushRootUrl", null);
+        // final String appId = preferences.getString("ScgPushAppId", "3438755246859");
         final String appId = preferences.getString("ScgPushAppId", null);
         final int retryCount = preferences.getInteger("ScgPushRetryCount", 3);
         final long retryDelay = preferences.getInteger("ScgPushAppId", 2000);

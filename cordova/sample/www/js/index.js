@@ -28,6 +28,29 @@ var app = {
     // 'pause', 'resume', etc.
     onDeviceReady: function() {
         this.receivedEvent('deviceready');
+
+        // Use the lines below in order to test the implentation.
+        // Make the coresponding changes.
+/*
+        scg.push.authenticate('bwbkz5Kd9yBApIkSxbRav6', function(token) {
+            console.log('ok authenticate ' + token);
+        }, function(error) {
+            console.error('error authenticate ' + error);
+        });
+
+        scg.push.getToken(function(token) {
+            // save this server-side and use it to push notifications to this device
+            console.log('ok getToken ' + token);
+        }, function(error) {
+            console.error('error getToken ' + error);
+        });
+
+        scg.push.registerPushToken('eMpHyTGifK4:APA91bFcIpTy8OAR2OQs1D_qGoqBCAfnFeH_bl1_mqrUOSZ9TFCakwAHZGG5poNL4URQuTJq4ITcQxdjtrRkIzV4F5hriLE56tM_Y_jIwVWoE5e3jQELfq_5OD7GaZmdTzPuRIYcd0UC', function(token) {
+            console.log('ok registerPushToken ' + token);
+        }, function(error) {
+            console.error('error registerPushToken ' + error);
+        });
+*/
     },
 
     // Update DOM on a Received Event
