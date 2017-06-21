@@ -10,6 +10,9 @@
         "cordova-plugin-whitelist": {
             "PACKAGE_NAME": "com.syniverse.scg.push.cordova.sample"
         },
+        "cordova-plugin-console": {
+            "PACKAGE_NAME": "com.syniverse.scg.push.cordova.sample"
+        },
         "cordova-plugin-scg-push": {
             "PACKAGE_NAME": "com.syniverse.scg.push.cordova.sample"
         }

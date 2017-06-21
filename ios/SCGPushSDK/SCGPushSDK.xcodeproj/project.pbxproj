@@ -34,8 +34,6 @@
 		5BF52A451E76D488008DEE80 /* SCGPush.m in Sources */ = {isa = PBXBuildFile; fileRef = 5BF52A431E76D488008DEE80 /* SCGPush.m */; };
 		5BF52A461E76D488008DEE80 /* SCGPush.m in Sources */ = {isa = PBXBuildFile; fileRef = 5BF52A431E76D488008DEE80 /* SCGPush.m */; };
 		5BF52A491E76E01C008DEE80 /* SCGPushDelegate.h in Headers */ = {isa = PBXBuildFile; fileRef = 5BF52A481E76E01C008DEE80 /* SCGPushDelegate.h */; settings = {ATTRIBUTES = (Public, ); }; };
-		F7FCBCF11ED48880009BF3B4 /* SCGPushCordova.h in Headers */ = {isa = PBXBuildFile; fileRef = F7FCBCEF1ED48880009BF3B4 /* SCGPushCordova.h */; };
-		F7FCBCF21ED48880009BF3B4 /* SCGPushCordova.m in Sources */ = {isa = PBXBuildFile; fileRef = F7FCBCF01ED48880009BF3B4 /* SCGPushCordova.m */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -87,8 +85,6 @@
 		5BF52A431E76D488008DEE80 /* SCGPush.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SCGPush.m; sourceTree = "<group>"; };
 		5BF52A481E76E01C008DEE80 /* SCGPushDelegate.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SCGPushDelegate.h; sourceTree = "<group>"; };
 		F7FC6E1A1ED6E04100018EE1 /* CordovaLib.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = CordovaLib.xcodeproj; path = "../../cordova-sample/platforms/ios/CordovaLib/CordovaLib.xcodeproj"; sourceTree = "<group>"; };
-		F7FCBCEF1ED48880009BF3B4 /* SCGPushCordova.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SCGPushCordova.h; sourceTree = "<group>"; };
-		F7FCBCF01ED48880009BF3B4 /* SCGPushCordova.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SCGPushCordova.m; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -151,8 +147,6 @@
 				5B25EAFC1E7A92FF000D80A7 /* SCGPushError.h */,
 				5BF06B661E7BD94B00A9EE9D /* SCGPushErrorFactory.h */,
 				5BF06B681E7BDA6900A9EE9D /* SCGPushErrorFactory.m */,
-				F7FCBCEF1ED48880009BF3B4 /* SCGPushCordova.h */,
-				F7FCBCF01ED48880009BF3B4 /* SCGPushCordova.m */,
 			);
 			path = SCGPushSDK;
 			sourceTree = "<group>";
@@ -187,7 +181,6 @@
 				5BF52A381E76D251008DEE80 /* SCGPushSDK.h in Headers */,
 				5B25EAF81E7A91E7000D80A7 /* SCGPushBase.h in Headers */,
 				5B12CA521E79476E00B24546 /* SCGPushMessage.h in Headers */,
-				F7FCBCF11ED48880009BF3B4 /* SCGPushCordova.h in Headers */,
 				5B831B5F1E7822E200A53428 /* HttpRedirectDecisionMaker.h in Headers */,
 				5B12CA571E79478200B24546 /* SCGPushAttachment.h in Headers */,
 				5BF52A441E76D488008DEE80 /* SCGPush.h in Headers */,
@@ -324,7 +317,6 @@
 				5B25EAFA1E7A92ED000D80A7 /* SCGPushError.m in Sources */,
 				5B12CA531E79476E00B24546 /* SCGPushMessage.m in Sources */,
 				5B831B601E7822E200A53428 /* HttpRedirectDecisionMaker.m in Sources */,
-				F7FCBCF21ED48880009BF3B4 /* SCGPushCordova.m in Sources */,
 				5B12CA421E7934DB00B24546 /* PushInbox.xcdatamodeld in Sources */,
 				5B12CA4E1E7946C800B24546 /* SCGPushCoreDataManager.m in Sources */,
 				5B12CA581E79478200B24546 /* SCGPushAttachment.m in Sources */,

@@ -7,10 +7,18 @@
         "is_top_level": true,
         "variables": {}
     },
+    "cordova-plugin-console": {
+        "source": {
+            "type": "registry",
+            "id": "cordova-plugin-console"
+        },
+        "is_top_level": true,
+        "variables": {}
+    },
     "cordova-plugin-scg-push": {
         "source": {
             "type": "local",
-            "path": "../cordova"
+            "path": "/Users/SlavSarafski/Documents/SCGPush/scg-push-sdk/cordova/sample/node_modules/cordova-plugin-scg-push"
         },
         "is_top_level": true,
         "variables": {}

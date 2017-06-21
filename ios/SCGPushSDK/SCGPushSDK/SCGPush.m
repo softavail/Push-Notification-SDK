@@ -83,6 +83,8 @@ NSInteger const DEFAULT_REQUEST_TIMEOUT_INTERVAL = 30;
     
     [scgPush initializeInbox];
     
+    NSLog(@"Debug: [SCGPush] Successfully registered with access token :%@, appID: %@ and callbackURI: %@", accessToken, appId, callbackUri);
+    
     return scgPush;
 }
 

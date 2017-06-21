@@ -7,6 +7,9 @@
         "files": {}
     },
     "installed_plugins": {
+        "cordova-plugin-console": {
+            "PACKAGE_NAME": "com.syniverse.scg.push.cordova.sample"
+        },
         "cordova-plugin-whitelist": {
             "PACKAGE_NAME": "com.syniverse.scg.push.cordova.sample"
         },

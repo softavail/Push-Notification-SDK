@@ -7,7 +7,7 @@
 //
 
 #import "SCGPushCordova.h"
-#import "SCGPush.h"
+#import <SCGPushSDK/SCGPush.h>
 #import <Cordova/CDVPlugin.h>
 
 @implementation SCGPushCordova
@@ -37,6 +37,27 @@
                             appId:appID
                       callbackUri:callbackUri
                          delegate:nil];
+}
+
+- (void)cdv_start:(CDVInvokedUrlCommand *)command
+{
+    NSString* accessToken = [command.arguments objectAtIndex:0];
+    NSString* appId = [command.arguments objectAtIndex:1];
+    NSString* callbackUri = [command.arguments objectAtIndex:2];
+    
+    if (   accessToken != nil && [accessToken length] > 0
+        && appId != nil && [appId length] > 0
+        && callbackUri != nil && [callbackUri length] > 0) {
+        [SCGPush startWithAccessToken: accessToken
+                                appId: appId
+                          callbackUri: callbackUri
+                             delegate: nil];
+        CDVPluginResult* pluginResult = [CDVPluginResult resultWithStatus:CDVCommandStatus_OK];
+        [self.commandDelegate sendPluginResult:pluginResult callbackId:command.callbackId];
+    } else {
+        CDVPluginResult* pluginResult = [CDVPluginResult resultWithStatus:CDVCommandStatus_ERROR];
+        [self.commandDelegate sendPluginResult:pluginResult callbackId:command.callbackId];
+    }
 }
 
 - (void)cdv_registerPushToken:(CDVInvokedUrlCommand *)command

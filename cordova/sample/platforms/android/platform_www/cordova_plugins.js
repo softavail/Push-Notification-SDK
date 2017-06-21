@@ -13,6 +13,7 @@ module.exports.metadata =
 // TOP OF METADATA
 {
     "cordova-plugin-whitelist": "1.3.2",
+    "cordova-plugin-console": "1.0.7",
     "cordova-plugin-scg-push": "1.4.0"
 };
 // BOTTOM OF METADATA
