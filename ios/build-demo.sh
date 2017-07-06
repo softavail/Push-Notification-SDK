@@ -61,6 +61,8 @@ CL_RELEASE_NOTES="notes.txt"
 PRODUCT_NAME="SCGPushDemo"
 ADHOC_MOBILEPROVISION_NAME="SCGPushDemoAdHoc.mobileprovision"
 APPSTORE_MOBILEPROVISION_NAME="SCGPushDemoAppStore.mobileprovision"
+ADHOC_EXTENSION_MOBILEPROVISION_NAME="SCG_Push_Demo_Extension_AdHoc.mobileprovision"
+APPSTORE_EXTENSION_MOBILEPROVISION_NAME="SCG_Push_Demo_Extension_AppStore.mobileprovision"
 EXPORT_ADHOC_FLAG=0
 EXPORT_APPSTORE_FLAG=0
 
@@ -243,6 +245,7 @@ prepare()
 
     updateProvisioningProfileById $ADHOC_MOBILEPROVISION_NAME
     updateProvisioningProfileById $APPSTORE_MOBILEPROVISION_NAME
+    updateProvisioningProfileById $ADHOC_EXTENSION_MOBILEPROVISION_NAME
 }
 
 # build sources and make archive
