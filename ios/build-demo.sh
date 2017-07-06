@@ -4,7 +4,7 @@ SCRIPT_DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
 CURRENT_DIR="$(pwd)"
 
 # set archive base dir
-OPT_SCHEME="demo"
+OPT_SCHEME="SCGPushDemo"
 OPT_STRIPREVNUMDIR_FLAG=0
 
 OPT_ARCHIVE_BASE_DIR=
@@ -58,7 +58,7 @@ IPA_FILE_ADHOC=
 IPA_FILE_APPSTORE=
 DSYM_FILE=
 CL_RELEASE_NOTES="notes.txt"
-PRODUCT_NAME="demo"
+PRODUCT_NAME="SCGPushDemo"
 ADHOC_MOBILEPROVISION_NAME="SCGPushDemoAdHoc.mobileprovision"
 APPSTORE_MOBILEPROVISION_NAME="SCGPushDemoAppStore.mobileprovision"
 EXPORT_ADHOC_FLAG=0
@@ -67,7 +67,7 @@ EXPORT_APPSTORE_FLAG=0
 TEMP_DIR="$(pwd)/.temp"
 
 # application
-APP_NAME="demo"
+APP_NAME="SCGPushDemo"
 DSYM_NAME="${APP_NAME}.app.dSYM"
 
 XCODE_EXPORT_FORMAT="ipa"
