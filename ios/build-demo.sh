@@ -182,7 +182,7 @@ print_options()
 
 updateProvisioningProfileById()
 {
-    echo "Updating prov profile '$1' ..."
+    echo "Checking prov profile '$1' ..."
 
     local PROV_PROF_NAME=$1
     local DEST_PROV="${HOME}/Library/MobileDevice/Provisioning Profiles"
@@ -230,7 +230,7 @@ updateProvisioningProfileById()
         #echo "md5_src=$md5_src"
         #echo "md5_dst=$md5_dst"
         if [ $md5_src != $md5_dst ]; then
-            echo "Overwriting ${DEST_PROV_PROF} ..."
+            echo "Updating ${DEST_PROV_PROF} ..."
             cp "${SRC_PROV_PROF}" "${DEST_PROV_PROF}"
         fi
     fi
