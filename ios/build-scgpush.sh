@@ -127,12 +127,12 @@ build_install()
     xcodebuild -workspace ios.xcworkspace -scheme SCGPushSDK -configuration Release -jobs 8 clean install DSTROOT="${OPT_DST_DIR}" CONFIGURATION_BUILD_DIR="${OPT_DST_DIR}" REVISION_NUMBER=${REVISION_NUMBER} SKIP_INSTALL=NO
     check_failure "Error building: ${PRODUCT_NAME}"
 
-    # archive framework
-    zip -qr "${OPT_DST_DIR}/${FRAMEWORK_NAME}-${REVISION_NUMBER}.zip" "${OPT_DST_DIR}/${FRAMEWORK_NAME}"
-    zip -qr "${OPT_DST_DIR}/${FRAMEWORK_NAME}-${REVISION_NUMBER}.dSYM.zip" "${OPT_DST_DIR}/${FRAMEWORK_NAME}.dSYM"
-
-    echo "Cleaning up..."
+    # compress framework
+    #zip -qr "${OPT_DST_DIR}/${FRAMEWORK_NAME}-${REVISION_NUMBER}.zip" "${OPT_DST_DIR}/${FRAMEWORK_NAME}"
     #rm -rf "${OPT_DST_DIR}/${FRAMEWORK_NAME}"
+
+    # compress dSYM
+    zip -qr "${OPT_DST_DIR}/${FRAMEWORK_NAME}-${REVISION_NUMBER}.dSYM.zip" "${OPT_DST_DIR}/${FRAMEWORK_NAME}.dSYM"
     rm -rf "${OPT_DST_DIR}/${FRAMEWORK_NAME}.dSYM"
 }
 
