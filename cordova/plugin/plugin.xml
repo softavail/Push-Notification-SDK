@@ -65,8 +65,7 @@
                 <preference name="CallbackUri" value="" />
             </feature>
         </config-file>
-        <framework src="src/ios/SCGPushSDK.framework" custom="true" />
-        <framework src="CoreData.framework" />
+        <framework src="src/ios/SCGPushSDK.framework" custom="true" embed="true"/>
         <header-file src="src/ios/SCGPushSDK/SCGPushCordova.h" />
         <source-file src="src/ios/SCGPushSDK/SCGPushCordova.m" />
     </platform>
