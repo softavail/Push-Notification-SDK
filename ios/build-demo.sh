@@ -69,8 +69,7 @@ EXPORT_APPSTORE_FLAG=0
 TEMP_DIR="$(pwd)/.temp"
 
 # application
-APP_NAME="SCGPushDemo"
-DSYM_NAME="${APP_NAME}.app.dSYM"
+DSYM_NAME="${PRODUCT_NAME}.app.dSYM"
 
 XCODE_EXPORT_FORMAT="ipa"
 

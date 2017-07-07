@@ -39,9 +39,10 @@ else
     REVISION_NUMBER=$(git rev-list HEAD | wc -l | tr -d ' ')
 fi
 
-APP_FILE=
-DSYM_FILE=
-PRODUCT_NAME=SCGPush
+
+PRODUCT_NAME="SCGPushSDK"
+FRAMEWORK_NAME="${PRODUCT_NAME}.framework"
+DSYM_NAME="${FRAMEWORK_NAME}.dSYM"
 
 #exit batch script with error
 do_exit ()
@@ -123,8 +124,18 @@ build_install()
 {
     echo "Building ${PRODUCT_NAME} ... "
 
-    xcodebuild -workspace ios.xcworkspace -scheme SCGPushSDK -configuration Release -jobs 8 clean install DSTROOT="${OPT_DST_DIR}" REVISION_NUMBER=${REVISION_NUMBER} SKIP_INSTALL=NO
+    xcodebuild -workspace ios.xcworkspace -scheme SCGPushSDK -configuration Release -jobs 8 clean install DSTROOT="${OPT_DST_DIR}" CONFIGURATION_BUILD_DIR="${OPT_DST_DIR}" REVISION_NUMBER=${REVISION_NUMBER} SKIP_INSTALL=NO
     check_failure "Error building: ${PRODUCT_NAME}"
+
+    # archive framework
+    pushd "${OPT_DST_DIR}"
+    zip -qr "${FRAMEWORK_NAME}-${REVISION_NUMBER}.zip" "${FRAMEWORK_NAME}"
+    zip -qr "${FRAMEWORK_NAME}-${REVISION_NUMBER}.dSYM.zip" "${FRAMEWORK_NAME}.dSYM"
+
+    echo "Cleaning up..."
+    rm -rf "${FRAMEWORK_NAME}"
+    rm -rf "${FRAMEWORK_NAME}.dSYM"
+    popd
 }
 
 cleanup()
