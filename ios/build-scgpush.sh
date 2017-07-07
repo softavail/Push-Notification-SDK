@@ -123,7 +123,7 @@ build_install()
 {
     echo "Building ${PRODUCT_NAME} ... "
 
-	xcodebuild -workspace ios.xcworkspace -scheme SCGPush -configuration Release -jobs 8 clean install DSTROOT="${OPT_DST_DIR}" REVISION_NUMBER=${REVISION_NUMBER}
+    xcodebuild -workspace ios.xcworkspace -scheme SCGPushSDK -configuration Release -jobs 8 clean install DSTROOT="${OPT_DST_DIR}" REVISION_NUMBER=${REVISION_NUMBER} SKIP_INSTALL=NO
     check_failure "Error building: ${PRODUCT_NAME}"
 }
 
