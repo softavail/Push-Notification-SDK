@@ -128,14 +128,12 @@ build_install()
     check_failure "Error building: ${PRODUCT_NAME}"
 
     # archive framework
-    pushd "${OPT_DST_DIR}"
-    zip -qr "${FRAMEWORK_NAME}-${REVISION_NUMBER}.zip" "${FRAMEWORK_NAME}"
-    zip -qr "${FRAMEWORK_NAME}-${REVISION_NUMBER}.dSYM.zip" "${FRAMEWORK_NAME}.dSYM"
+    zip -qr "${OPT_DST_DIR}/${FRAMEWORK_NAME}-${REVISION_NUMBER}.zip" "${OPT_DST_DIR}/${FRAMEWORK_NAME}"
+    zip -qr "${OPT_DST_DIR}/${FRAMEWORK_NAME}-${REVISION_NUMBER}.dSYM.zip" "${OPT_DST_DIR}/${FRAMEWORK_NAME}.dSYM"
 
     echo "Cleaning up..."
-    rm -rf "${FRAMEWORK_NAME}"
-    rm -rf "${FRAMEWORK_NAME}.dSYM"
-    popd
+    #rm -rf "${OPT_DST_DIR}/${FRAMEWORK_NAME}"
+    rm -rf "${OPT_DST_DIR}/${FRAMEWORK_NAME}.dSYM"
 }
 
 cleanup()
