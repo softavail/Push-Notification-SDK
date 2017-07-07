@@ -57,7 +57,7 @@
     <!-- ios -->
     <platform name="ios">
         <config-file target="config.xml" parent="/*">
-            <feature name="ScgPush">
+            <feature name="SCGPush">
                 <param name="ios-package" value="SCGPushCordova"/>
                 <param name="onload" value="true" />
                 <preference name="AccessToken" value="" />
