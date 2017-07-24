@@ -5,6 +5,7 @@ plugins {
 apply plugin: 'com.android.library'
 apply plugin: 'maven-publish'
 apply plugin: 'maven'
+apply from: 'publish-constants.gradle'
 
 android {
     compileSdkVersion 25
@@ -14,7 +15,7 @@ android {
         minSdkVersion 15
         targetSdkVersion 25
         versionCode 5
-        versionName "1.3.0"
+        versionName mavenVersion
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
     }
     buildTypes {
@@ -37,11 +38,11 @@ task sourceJar(type: Jar) {
 publishing {
     publications {
         scg(MavenPublication) {
-            groupId 'com.syniverse.scg'
-            artifactId 'push-sdk'
-            version android.defaultConfig.versionName
+            groupId mavenGroup
+            artifactId mavenArtifact
+            version mavenVersion
 //            artifact(sourceJar)
-            artifact("$buildDir/outputs/aar/lib-release.aar")
+            artifact("$buildDir/outputs/aar/" + mavenArtifact + "-release.aar")
 
             // Add all dependencies into POM file, so when we include the library
             // with transitive dependencies all dependencies will be resolved
@@ -57,13 +58,7 @@ publishing {
         }
     }
 
-//    //publish to filesystem repo
-//    repositories{
-//        maven {
-//            url "${System.env.HOME}/.m2/repository"
-//        }
-//    }
-
+    //publish to filesystem repo
     repositories {
         mavenLocal()
     }
@@ -84,12 +79,9 @@ dependencies {
     androidTestCompile 'com.android.support.test:rules:0.5'
 }
 
-Properties propertiesPublish = new Properties()
-propertiesPublish.load(project.rootProject.file('publish.properties').newDataInputStream())
-
-archivesBaseName = propertiesPublish.getProperty("artifact")
-group = propertiesPublish.getProperty("group")
-version = propertiesPublish.getProperty("version")
+archivesBaseName = mavenArtifact
+group = mavenGroup
+version = mavenVersion
 
 Properties properties = new Properties()
 properties.load(project.rootProject.file('local.properties').newDataInputStream())
@@ -99,15 +91,15 @@ bintray {
     key = project.hasProperty('bintrayApiKey') ? project.property('bintrayApiKey') : properties.getProperty("bintrayApiKey")
     configurations = ['archives']
     pkg {
-        repo = propertiesPublish.getProperty("repo")
-        name = propertiesPublish.getProperty("packageName")
-        userOrg = propertiesPublish.getProperty("userOrg") != null ? propertiesPublish.getProperty("userOrg") : user
-        licenses = [propertiesPublish.getProperty('license')]
-        vcsUrl = propertiesPublish.getProperty("gitUrl")
+        repo = bintrayRepo
+        name = bintrayPackageName
+        userOrg = bintrayUserOrg != '' ? bintrayUserOrg : user
+        licenses = [bintrayLicense]
+        vcsUrl = bintrayGitUrl
         version {
-            name = propertiesPublish.getProperty("version")
-            desc = propertiesPublish.getProperty("desc")
-            vcsTag = propertiesPublish.getProperty("vcsTag")
+            name = mavenVersion
+            desc = bintrayDesc
+            vcsTag = bintrayVcsTag
         }
     }
 }
@@ -115,9 +107,18 @@ bintray {
 install {
     repositories.mavenInstaller {
         pom.project {
-            group propertiesPublish.getProperty("group")
-            artifactId propertiesPublish.getProperty("artifact")
-            version propertiesPublish.getProperty("version")
+            group mavenGroup
+            artifactId mavenArtifact
+            version mavenVersion
         }
     }
+}
+
+task sourcesJar(type: Jar) {
+    from android.sourceSets.main.java.srcDirs
+    classifier = 'sources'
+}
+
+artifacts {
+    archives sourcesJar
 }
