@@ -1,5 +1,5 @@
 {
-  "name": "cordova-plugin-scg-push",
+  "name": "@syniverse/cordova-plugin-scg-push",
   "version": "1.4.0",
   "description": "SCG Push Notification SDK Cordova Plugin",
   "types": "./types/index.d.ts",
@@ -19,5 +19,19 @@
     "push-notifications",
     "messaging",
     "syniverse"
-  ]
+  ],
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Syniverse/Push-Notification-SDK.git"
+  },
+  "author": "Syniverse",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/Syniverse/Push-Notification-SDK/issues"
+  },
+  "homepage": "https://github.com/Syniverse/Push-Notification-SDK#readme"
 }
