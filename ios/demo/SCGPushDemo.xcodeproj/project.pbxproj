@@ -117,6 +117,8 @@
 /* Begin PBXFileReference section */
 		5B831B4E1E77C53000A53428 /* SCGPushSDK.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = SCGPushSDK.xcodeproj; path = ../SCGPushSDK/SCGPushSDK.xcodeproj; sourceTree = "<group>"; };
 		5B831B5C1E77C6A700A53428 /* SCGPushDemo-Bridging-Header.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "SCGPushDemo-Bridging-Header.h"; sourceTree = "<group>"; };
+		5B9B5F101F0E26A1008B5CF7 /* build-demo.sh */ = {isa = PBXFileReference; lastKnownFileType = text.script.sh; name = "build-demo.sh"; path = "../build-demo.sh"; sourceTree = "<group>"; };
+		5B9B5F111F0E26A1008B5CF7 /* build-scgpush.sh */ = {isa = PBXFileReference; lastKnownFileType = text.script.sh; name = "build-scgpush.sh"; path = "../build-scgpush.sh"; sourceTree = "<group>"; };
 		5BB7F9341DD9FF640087F8C1 /* export_ipa.sh */ = {isa = PBXFileReference; lastKnownFileType = text.script.sh; path = export_ipa.sh; sourceTree = "<group>"; };
 		5BC0FE931D22996A007A9637 /* deploy.sh */ = {isa = PBXFileReference; lastKnownFileType = text.script.sh; path = deploy.sh; sourceTree = "<group>"; };
 		5BC0FE941D22996A007A9637 /* prepare.sh */ = {isa = PBXFileReference; lastKnownFileType = text.script.sh; path = prepare.sh; sourceTree = "<group>"; };
@@ -217,6 +219,8 @@
 				5BC0FE931D22996A007A9637 /* deploy.sh */,
 				5BC0FE941D22996A007A9637 /* prepare.sh */,
 				5BB7F9341DD9FF640087F8C1 /* export_ipa.sh */,
+				5B9B5F101F0E26A1008B5CF7 /* build-demo.sh */,
+				5B9B5F111F0E26A1008B5CF7 /* build-scgpush.sh */,
 			);
 			sourceTree = "<group>";
 		};

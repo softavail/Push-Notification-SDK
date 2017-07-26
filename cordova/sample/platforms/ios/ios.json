@@ -1,0 +1,67 @@
+{
+    "prepare_queue": {
+        "installed": [],
+        "uninstalled": []
+    },
+    "config_munge": {
+        "files": {
+            "config.xml": {
+                "parents": {
+                    "/*": [
+                        {
+                            "xml": "<feature name=\"Console\"><param name=\"ios-package\" value=\"CDVLogger\" /></feature>",
+                            "count": 1
+                        },
+                        {
+                            "xml": "<feature name=\"ScgPush\"><param name=\"ios-package\" value=\"SCGPushCordova\" /><param name=\"onload\" value=\"true\" /><preference name=\"AccessToken\" value=\"\" /><preference name=\"AppID\" value=\"\" /><preference name=\"CallbackUri\" value=\"\" /></feature>",
+                            "count": 1
+                        }
+                    ]
+                }
+            }
+        }
+    },
+    "installed_plugins": {
+        "cordova-plugin-console": {
+            "PACKAGE_NAME": "com.syniverse.scg.push.cordova.sample"
+        },
+        "cordova-plugin-whitelist": {
+            "PACKAGE_NAME": "com.syniverse.scg.push.cordova.sample"
+        },
+        "cordova-plugin-scg-push": {
+            "PACKAGE_NAME": "com.syniverse.scg.push.cordova.sample"
+        }
+    },
+    "dependent_plugins": {},
+    "modules": [
+        {
+            "id": "cordova-plugin-console.console",
+            "file": "plugins/cordova-plugin-console/www/console-via-logger.js",
+            "pluginId": "cordova-plugin-console",
+            "clobbers": [
+                "console"
+            ]
+        },
+        {
+            "id": "cordova-plugin-console.logger",
+            "file": "plugins/cordova-plugin-console/www/logger.js",
+            "pluginId": "cordova-plugin-console",
+            "clobbers": [
+                "cordova.logger"
+            ]
+        },
+        {
+            "id": "cordova-plugin-scg-push.ScgPush",
+            "file": "plugins/cordova-plugin-scg-push/www/scg-push.js",
+            "pluginId": "cordova-plugin-scg-push",
+            "clobbers": [
+                "scg.push"
+            ]
+        }
+    ],
+    "plugin_metadata": {
+        "cordova-plugin-console": "1.0.7",
+        "cordova-plugin-whitelist": "1.3.2",
+        "cordova-plugin-scg-push": "1.4.0"
+    }
+}

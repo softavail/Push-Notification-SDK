@@ -82,6 +82,11 @@ public class ScgClient {
         }
     }
 
+    /**
+     *  Check if library is initialized
+     *
+     * @return Returns true if library is initialized, false otherwise
+     */
     public static boolean isInitialized() {
         return sInstance != null;
     }
@@ -344,6 +349,12 @@ public class ScgClient {
         }, delay);
     }
 
+    /**
+     * Resolve tracked link
+     *
+     * @param url URL to be resolved to real one URL
+     * @param result Resolved URL
+     */
     public synchronized void resolveTrackedLink(String url, final ScgCallback result) {
 
         final Request.Builder r = new Request.Builder()
@@ -398,26 +409,55 @@ public class ScgClient {
         return FirebaseInstanceId.getInstance().getToken();
     }
 
+    /**
+     *  Get locally saved inbox messages count
+     *
+     * @return Returns messages count saved locally
+     */
     public int getInboxMessagesCount() {
         return ScgInboxDbHelper.getInstance(mContext).getMessagesCount();
     }
 
+    /**
+     *
+     *  Get locally saved inbox message at given index
+     *
+     * @param index Message index to be fetched
+     * @return Returns message at given index
+     */
     public ScgMessage getInboxMessageAtIndex(int index) {
         return ScgInboxDbHelper.getInstance(mContext).getMessage(index);
     }
 
+    /**
+     * Get all locally saved inbox messages
+     * @return Returns list of messages
+     */
     public List<ScgMessage> getAllInboxMessages() {
         return ScgInboxDbHelper.getInstance(mContext).getAllMessages();
     }
 
+    /**
+     * Delete all locally saved messages from the inbox
+     */
     public void deleteAllInboxMessages() {
         ScgInboxDbHelper.getInstance(mContext).deleteAllMessages();
     }
 
+    /**
+     *  Delete message from local inbox by message id
+     *
+     * @param messageId Message id to be deleted from the invox
+     */
     public void deleteInboxMessage(String messageId) {
         ScgInboxDbHelper.getInstance(mContext).deleteMessage(messageId);
     }
 
+    /**
+     * Delete message frol local inbox by given index
+     *
+     * @param index Index of message to be deleted
+     */
     public void deleteInboxMessageAtIndex(int index) {
         ScgInboxDbHelper.getInstance(mContext).deleteMessage(index);
     }

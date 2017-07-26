@@ -1,0 +1,79 @@
+{
+    "prepare_queue": {
+        "installed": [],
+        "uninstalled": []
+    },
+    "config_munge": {
+        "files": {
+            "res/xml/config.xml": {
+                "parents": {
+                    "/*": [
+                        {
+                            "xml": "<feature name=\"Whitelist\"><param name=\"android-package\" value=\"org.apache.cordova.whitelist.WhitelistPlugin\" /><param name=\"onload\" value=\"true\" /></feature>",
+                            "count": 1
+                        },
+                        {
+                            "xml": "<feature name=\"ScgPush\"><param name=\"android-package\" value=\"com.syniverse.scg.push.CordovaScgClient\" /><param name=\"onload\" value=\"true\" /></feature>",
+                            "count": 1
+                        }
+                    ]
+                }
+            },
+            "AndroidManifest.xml": {
+                "parents": {
+                    "/manifest/application": [
+                        {
+                            "xml": "<service android:name=\"com.syniverse.scg.push.sdk.ScgMessagingService\"><intent-filter><action android:name=\"com.google.firebase.MESSAGING_EVENT\" /></intent-filter></service>",
+                            "count": 1
+                        },
+                        {
+                            "xml": "<service android:name=\"com.syniverse.scg.push.sdk.ScgInstanceIdService\"><intent-filter><action android:name=\"com.google.firebase.INSTANCE_ID_EVENT\" /></intent-filter></service>",
+                            "count": 1
+                        },
+                        {
+                            "xml": "<receiver android:enabled=\"true\" android:exported=\"false\" android:name=\".MainReceiver\"><intent-filter><action android:name=\"com.syniverse.scg.push.sdk.action.PUSH_TOKEN_RECEIVED\" /><action android:name=\"com.syniverse.scg.push.sdk.action.MESSAGE_RECEIVED\" /></intent-filter></receiver>",
+                            "count": 1
+                        }
+                    ],
+                    "/manifest": [
+                        {
+                            "xml": "<uses-permission android:name=\"android.permission.INTERNET\" />",
+                            "count": 1
+                        },
+                        {
+                            "xml": "<uses-permission android:name=\"android.permission.WAKE_LOCK\" />",
+                            "count": 1
+                        }
+                    ]
+                }
+            }
+        }
+    },
+    "installed_plugins": {
+        "cordova-plugin-whitelist": {
+            "PACKAGE_NAME": "com.syniverse.scg.push.cordova.sample"
+        },
+        "cordova-plugin-console": {
+            "PACKAGE_NAME": "com.syniverse.scg.push.cordova.sample"
+        },
+        "cordova-plugin-scg-push": {
+            "PACKAGE_NAME": "com.syniverse.scg.push.cordova.sample"
+        }
+    },
+    "dependent_plugins": {},
+    "modules": [
+        {
+            "id": "cordova-plugin-scg-push.ScgPush",
+            "file": "plugins/cordova-plugin-scg-push/www/scg-push.js",
+            "pluginId": "cordova-plugin-scg-push",
+            "clobbers": [
+                "scg.push"
+            ]
+        }
+    ],
+    "plugin_metadata": {
+        "cordova-plugin-whitelist": "1.3.2",
+        "cordova-plugin-console": "1.0.7",
+        "cordova-plugin-scg-push": "1.4.0"
+    }
+}
