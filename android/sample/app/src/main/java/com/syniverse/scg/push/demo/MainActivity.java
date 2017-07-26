@@ -348,7 +348,7 @@ public class MainActivity extends AppCompatActivity implements ScgCallback {
             new Handler().postDelayed(new Runnable() {
                 @Override
                 public void run() {
-                    reportState(messageId, ScgState.CLICKTHRU);
+                    reportState(messageId, ScgState.READ);
                 }
             }, 3141);
         }

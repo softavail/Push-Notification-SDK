@@ -45,46 +45,103 @@ public class ScgMessage implements Parcelable {
         this.data = bundle;
     }
 
+    /**
+     * Get message body
+     *
+     * @return Returns message body
+     */
     public String getBody() {
         return data.getString(MESSAGE_BODY);
     }
 
+    /**
+     * Get message id
+     *
+     * @return Returns message id
+     */
     public String getId() {
         return data.getString(MESSAGE_ID);
     }
 
+    /**
+     *
+     * Check if message contains attachment
+     *
+     * @return Returns true if message contains attachment, false otherwise
+     */
     public boolean hasAttachment() {
         return data.containsKey(MESSAGE_ATTACHMENT_ID);
     }
 
+    /**
+     * Get attachment id of this message
+     *
+     * @return Returns attachment id of this message
+     */
     public String getAttachment() {
         return data.getString(MESSAGE_ATTACHMENT_ID);
     }
 
+    /**
+     * Check whatever this message contains a deeplink
+     *
+     * @return Returns true if message contains deeplink, false otherwise
+     */
     public boolean hasDeepLink() {
         return data.containsKey(MESSAGE_DEEP_LINK);
     }
 
+    /**
+     * Get message deeplink data
+     *
+     * @return Returns message deeplink
+     */
     public String getDeepLink() {
         return data.getString(MESSAGE_DEEP_LINK);
     }
 
+    /**
+     * Check whatever this message contains a appdata
+     *
+     * @return Returns true if message contains appdata, false otherwise
+     */
     public boolean hasAppData() {
         return data.containsKey(MESSAGE_APP_DATA);
     }
 
+    /**
+     * Get message appdata data
+     *
+     * @return Returns message appdata
+     */
     public String getAppData() {
         return data.getString(MESSAGE_APP_DATA);
     }
 
+    /**
+     * Check whatever this message will behave like an inbox
+     *
+     * @return Returns true if current message is inbox, false otherwise
+     */
     public boolean isInbox() {
         return "false".equalsIgnoreCase(data.getString(MESSAGE_SHOW_NOTIFICATION));
     }
 
+    /**
+     * Get received UTC time of the message
+     *
+     * @return Returns UTC time of receive
+     */
     public long getReceivedTimeUtc() {
         return data.getLong(MESSAGE_TIME_RECEIVED);
     }
 
+    /**
+     *
+     * Get badge count in case this message behave as a inbox
+     *
+     * @return Returns the badge count
+     */
     public int getBadge() {
         if (!data.containsKey(MESSAGE_BADGE)) {
             return -1;

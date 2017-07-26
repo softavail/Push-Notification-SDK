@@ -2,6 +2,9 @@ SCG Push SDK
 ===
 
 # Changelog
+## 1.4.0 (uses Firebase 10.2.6)
+- introduced Cordova plugin
+
 ## 1.3.0
 - added support for inbox and Badges
 - added retry logic on some methods

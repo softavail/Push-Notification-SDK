@@ -75,8 +75,9 @@ class MessageAdapter extends RecyclerView.Adapter<MessageAdapter.MessageViewHold
                     }).show();
                 } else {
                     if (!isInbox) {
-                        dataset.remove(holder.getAdapterPosition());
-                        notifyItemRemoved(holder.getAdapterPosition());
+                        if (dataset.remove(data)) {
+                            notifyDataSetChanged();
+                        }
                     }
                     String text = String.format("Success (%s): %s", code, message);
                     if (view != null && view.getContext() != null && view.isShown()) {
