@@ -31,48 +31,33 @@ var app = {
 
         console.log('device ready');
 
-
-        // Use the lines below in order to test the implentation.
-        // Make the coresponding changes.
-        scg.push.start("CjuDuhxOH2E6XRaVGIAtX5", "1234567830", "http://95.158.130.102:8080/scg-dra/proxy",function() {
+        scg.push.start("CjuDuhxOH2E6XRaVGIAtX5", "919551373144", "http://95.158.130.102:8080/scg-dra/proxy/", function() {
             console.log('ok start');
         }, function(error) {
             console.error('error start ' + error);
         });
-
-        scg.push.registerPushToken('bwbkz5Kd9yBApIkSxbRav6', function(token) {
-            console.log('ok registerPushToken ' + token);
-        }, function(error) {
-            console.error('error start ' + error);
-        });
-
-        // scg.push.authenticate('bwbkz5Kd9yBApIkSxbRav6', function(token) {
-        //   alert("good");
-        //     console.log('ok authenticate ' + token);
-        // }, function(error) {
-        //   alert("bad");
-        //     console.error('error authenticate ' + error);
-        // });
 /*
-        scg.push.authenticate('bwbkz5Kd9yBApIkSxbRav6', function(token) {
+        scg.push.authenticate('ttNs7etXXqvJd4VLiLHrp2', function(token) {
             console.log('ok authenticate ' + token);
         }, function(error) {
             console.error('error authenticate ' + error);
         });
 
+        var fcmToken;
         scg.push.getToken(function(token) {
             // save this server-side and use it to push notifications to this device
+            fcmToken = token;
             console.log('ok getToken ' + token);
         }, function(error) {
             console.error('error getToken ' + error);
         });
 
-        scg.push.registerPushToken('eMpHyTGifK4:APA91bFcIpTy8OAR2OQs1D_qGoqBCAfnFeH_bl1_mqrUOSZ9TFCakwAHZGG5poNL4URQuTJq4ITcQxdjtrRkIzV4F5hriLE56tM_Y_jIwVWoE5e3jQELfq_5OD7GaZmdTzPuRIYcd0UC', function(token) {
-            console.log('ok registerPushToken ' + token);
+        scg.push.registerPushToken(fcmToken, function(token) {
+            console.log('ok registerPushToken ' + fcmToken);
         }, function(error) {
             console.error('error registerPushToken ' + error);
         });
-*/
+*/        
     },
 
     // Update DOM on a Received Event
