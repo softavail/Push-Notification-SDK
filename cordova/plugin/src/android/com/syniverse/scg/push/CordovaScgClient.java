@@ -33,22 +33,18 @@ public class CordovaScgClient extends CordovaPlugin {
     @Override
     public void initialize(CordovaInterface cordova, CordovaWebView webView) {
         super.initialize(cordova, webView);
-
-        // final String rootUrl = preferences.getString("ScgPushRootUrl", "http://95.158.130.102:8080/scg-dra/proxy/");
-        final String rootUrl = preferences.getString("ScgPushRootUrl", null);
-        // final String appId = preferences.getString("ScgPushAppId", "3438755246859");
-        final String appId = preferences.getString("ScgPushAppId", null);
-        final int retryCount = preferences.getInteger("ScgPushRetryCount", 3);
-        final long retryDelay = preferences.getInteger("ScgPushAppId", 2000);
-
-        ScgClient.initialize(cordova.getActivity().getApplicationContext(), rootUrl, appId, retryCount, retryDelay);
     }
 
     @Override
     public boolean execute(String action, JSONArray args, final CallbackContext callbackContext) throws JSONException {
 
-        if (!ScgClient.isInitialized())
-            return false;
+        if (!ScgClient.isInitialized()) {
+            if ("cdv_start".equalsIgnoreCase(action)) {
+                ScgClient.initialize(cordova.getActivity().getApplicationContext(), args.getString(2), args.getString(1), -1, -1);
+            } else {
+                return false;
+            }
+        } 
 
         final ScgClient client = ScgClient.getInstance();
         final ScgCallback result = new ScgCallback() {
@@ -82,6 +78,13 @@ public class CordovaScgClient extends CordovaPlugin {
         };
 
         switch (action) {
+            case "cdv_start":
+                callbackContext.success();
+                return true;
+            case "cdv_getToken":
+                String token = client.getToken();
+                callbackContext.success(token);
+                return true;
             case "cdv_authenticate":
                 client.auth(args.getString(0));
                 callbackContext.success();
