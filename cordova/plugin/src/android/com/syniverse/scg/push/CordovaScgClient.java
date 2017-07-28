@@ -79,15 +79,13 @@ public class CordovaScgClient extends CordovaPlugin {
 
         switch (action) {
             case "cdv_start":
+            case "cdv_authenticate":
+                client.auth(args.getString(0));
                 callbackContext.success();
                 return true;
             case "cdv_getToken":
                 String token = client.getToken();
                 callbackContext.success(token);
-                return true;
-            case "cdv_authenticate":
-                client.auth(args.getString(0));
-                callbackContext.success();
                 return true;
             case "cdv_registerPushToken":
                 client.registerPushToken(args.getString(0), result);
