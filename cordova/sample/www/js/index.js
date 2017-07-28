@@ -36,7 +36,7 @@ var app = {
         }, function(error) {
             console.error('error start ' + error);
         });
-/*
+
         scg.push.authenticate('ttNs7etXXqvJd4VLiLHrp2', function(token) {
             console.log('ok authenticate ' + token);
         }, function(error) {
@@ -56,8 +56,7 @@ var app = {
             console.log('ok registerPushToken ' + fcmToken);
         }, function(error) {
             console.error('error registerPushToken ' + error);
-        });
-*/        
+        });       
     },
 
     // Update DOM on a Received Event
