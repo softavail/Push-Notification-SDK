@@ -1,0 +1,6 @@
+framework module SCGPushSDK {
+  umbrella header "SCGPushSDK.h"
+
+  export *
+  module * { export * }
+}
