@@ -55,6 +55,10 @@ public class MainReceiver extends ScgPushReceiver {
 
     @Override
     protected void onMessageReceived(final String messageId, final ScgMessage message) {
+        if (messageId == null) {
+            Log.w(TAG, "onMessageReceived() called with: messageId = [" + messageId + "], so message was not handled.");
+            return;
+        } 
         checkBadgeCount(message);
 
         if (!ScgClient.isInitialized()) {

@@ -31,33 +31,23 @@ var app = {
 
         console.log('device ready');
 
-        scg.push.start("CjuDuhxOH2E6XRaVGIAtX5", "919551373144", "http://95.158.130.102:8080/scg-dra/proxy/", function() {
+        scg.push.start("ttNs7etXXqvJd4VLiLHrp2", "3438755246859", "http://95.158.130.102:8080/scg-dra/proxy/", function() {
             console.log('ok start');
         }, function(error) {
             console.error('error start ' + error);
         });
-/*
-        scg.push.authenticate('ttNs7etXXqvJd4VLiLHrp2', function(token) {
-            console.log('ok authenticate ' + token);
-        }, function(error) {
-            console.error('error authenticate ' + error);
-        });
 
-        var fcmToken;
         scg.push.getToken(function(token) {
             // save this server-side and use it to push notifications to this device
-            fcmToken = token;
+            scg.push.registerPushToken(token, function(result) {
+                console.log('ok registerPushToken ' + JSON.stringify(result));
+            }, function(error) {
+                console.error('error registerPushToken ' + error);
+            });
             console.log('ok getToken ' + token);
         }, function(error) {
             console.error('error getToken ' + error);
-        });
-
-        scg.push.registerPushToken(fcmToken, function(token) {
-            console.log('ok registerPushToken ' + fcmToken);
-        }, function(error) {
-            console.error('error registerPushToken ' + error);
-        });
-*/        
+        });        
     },
 
     // Update DOM on a Received Event

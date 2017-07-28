@@ -1,6 +1,6 @@
 {
   "name": "@syniverse/cordova-plugin-scg-push",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "description": "SCG Push Notification SDK Cordova Plugin",
   "types": "./types/index.d.ts",
   "cordova": {
