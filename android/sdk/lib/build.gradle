@@ -67,7 +67,7 @@ publishing {
 dependencies {
     compile 'com.squareup.retrofit2:retrofit:2.3.0'
     compile 'com.squareup.retrofit2:converter-gson:2.3.0'
-    compile 'com.google.firebase:firebase-messaging:10.2.6'
+    compile 'com.google.firebase:firebase-messaging:9.8.0'
 
     // Required for local unit tests (JUnit 4 framework)
     testCompile 'junit:junit:4.12'
