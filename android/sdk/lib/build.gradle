@@ -84,7 +84,10 @@ group = mavenGroup
 version = mavenVersion
 
 Properties properties = new Properties()
-properties.load(project.rootProject.file('local.properties').newDataInputStream())
+def propFile = project.rootProject.file('local.properties')
+if (propFile.exists()) {
+    properties.load(propFile.newDataInputStream())
+}
 
 bintray {
     user = project.hasProperty('bintrayUser') ? project.property('bintrayUser') : properties.getProperty("bintrayUser")
