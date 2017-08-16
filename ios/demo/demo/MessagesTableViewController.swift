@@ -11,23 +11,67 @@ import QuickLook
 import SCGPushSDK
 import MobileCoreServices
 
-class MessagesTableViewController: UITableViewController, QLPreviewControllerDataSource {
+class MessagesTableViewController: UITableViewController, QLPreviewControllerDataSource, NotificationTableViewCellDelegate {
+    
+    public override init(style: UITableViewStyle) {
+        super.init(style: style)
+        initMe()
+    }
+    
+    public override init(nibName nibNameOrNil: String?, bundle nibBundleOrNil: Bundle?) {
+        super.init(nibName: nibNameOrNil, bundle: nibBundleOrNil)
+        initMe()
+    }
+    
+    public required init?(coder aDecoder: NSCoder) {
+        super.init(coder: aDecoder)
+        initMe()
+    }
+    
+    func initMe() {
+        self.todayFormatter.dateStyle = .none
+        self.todayFormatter.timeStyle = .short
+        self.todayFormatter.locale = Locale.current
 
-//    @IBOutlet weak var logOutButton: UIBarButtonItem!
+        self.lastWeekFormatter.locale = Locale.current
+        self.lastWeekFormatter.dateFormat = "EEEE"
+
+        self.formatter.dateStyle = .short
+        self.formatter.timeStyle = .none
+        self.formatter.locale = Locale.current
+    }
+    
+    func didClickDelivery(cell: UITableViewCell) {
+        
+    }
+    
+    func didClickRead(cell:UITableViewCell) {
+        
+    }
+    
+    func didClickThru(cell:UITableViewCell) {
+        
+    }
+    
+    func didClickDelete(cell:UITableViewCell) {
+        
+    }
+    
+    func didClickDeepLink(cell:UITableViewCell) {
+        
+    }
+    
+    func didClickAttachment(cell:UITableViewCell) {
+        
+    }
+
     let formatter: DateFormatter = DateFormatter()
+    let todayFormatter: DateFormatter = DateFormatter()
+    let lastWeekFormatter: DateFormatter = DateFormatter()
 
     override func viewDidLoad() {
         super.viewDidLoad()
         
-//        self.navigationItem.hidesBackButton = true
-//        let newBackButton = UIBarButtonItem(title: "Back", style: UIBarButtonItemStyle.plain, target: self, action: #selector(YourViewController.back(sender:)))
-//        self.navigationItem.leftBarButtonItem = newBackButton
-
-        // Uncomment the following line to preserve selection between presentations
-        // self.clearsSelectionOnViewWillAppear = false
-
-        // Uncomment the following line to display an Edit button in the navigation bar for this view controller.
-        // self.navigationItem.rightBarButtonItem = self.editButtonItem()
         let nib = UINib.init(nibName: "NotificationTableViewCell", bundle: nil)
         self.tableView.register(nib, forCellReuseIdentifier: "NotificationCell")
     }
@@ -38,15 +82,22 @@ class MessagesTableViewController: UITableViewController, QLPreviewControllerDat
         // Dispose of any resources that can be recreated.
     }
 
-    // MARK: - Table view data source
-
+    // MARK: - Private helpers
+    func calculateHeightWith(_ text: String, font:UIFont, maxWidth width: CGFloat) -> CGFloat {
+        let size: CGSize =
+        text.boundingRect(with: CGSize(width: width, height: CGFloat.greatestFiniteMagnitude),
+                          options: NSStringDrawingOptions.usesLineFragmentOrigin,
+                          attributes: [NSFontAttributeName: font], context: nil).size as CGSize
+        
+        return size.height
+    }
+    
+    // MARK: - UITableViewDataSource
     override func numberOfSections(in tableView: UITableView) -> Int {
-        // #warning Incomplete implementation, return the number of sections
         return 1
     }
 
     override func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        // #warning Incomplete implementation, return the number of rows
         return Int(SCGPush.sharedInstance().numberOfMessages())
     }
     
@@ -55,39 +106,70 @@ class MessagesTableViewController: UITableViewController, QLPreviewControllerDat
         
         let message:SCGPushMessage = SCGPush.sharedInstance().message(at: UInt(indexPath.row))!
         
-        self.formatter.dateStyle = .medium
-        self.formatter.timeStyle = .medium
-        self.formatter.locale = Locale(identifier: "en_US")
-        
+        cell.delegate = self
+        cell.message = message
         cell.labelBody.text = message.body!
-        cell.labelDate.text = self.formatter.string(from: message.created)
-        //debugPrint(message.created)
-        
-        // Configure the cell...
+    
+        if Calendar.current.isDateInToday(message.created) {
+            cell.labelDate.text = self.todayFormatter.string(from: message.created)
+        } else if (Date().timeIntervalSince(message.created) < (7 * 24 * 3600)) {
+            cell.labelDate.text = self.lastWeekFormatter.string(from: message.created)
+        } else {
+            cell.labelDate.text = self.formatter.string(from: message.created)
+        }
 
+        if message.hasAttachment {
+            cell.attachmentIndicatorView.isHidden = false
+        } else {
+            cell.attachmentIndicatorView.isHidden = true
+        }
+        
+        debugPrint("cell date: \(cell.labelDate.text!)")
         return cell
     }
+    
+    //MARK: - UITableViewDelegate
+    override func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
+        let message:SCGPushMessage = SCGPush.sharedInstance().message(at: UInt(indexPath.row))!
+        let cell:NotificationTableViewCell = tableView.dequeueReusableCell(withIdentifier: "NotificationCell") as! NotificationTableViewCell
+        let totalVerticalMargins:CGFloat =
+            cell.constraintTopSpaceToLabelDate.constant +
+            cell.constraintVerticalSpaceFromDateToBody.constant +
+            cell.constraintBottomSpaceToLabelBody.constant
+        
+        let labelDateHeight: CGFloat = cell.labelDate.intrinsicContentSize.height
+        
+        let labelBodyHeight: CGFloat = calculateHeightWith(message.body!, font: cell.labelBody.font, maxWidth: self.tableView.bounds.size.width)
+        let calculatedHeight = totalVerticalMargins + labelDateHeight + labelBodyHeight
+        
+        return [75, calculatedHeight].max()!
+    }
+
     
     override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         
         if let message:SCGPushMessage = SCGPush.sharedInstance().message(at: UInt(indexPath.row)) {
             
-            SCGPush.sharedInstance().loadAttachment(for: message, completionBlock: { (attachment) in
-                DispatchQueue.main.async {
-                    let previewQL = QLPreviewController()
-                    previewQL.dataSource = self
-                    previewQL.currentPreviewItemIndex = indexPath.row
-                    self.navigationController?.pushViewController(previewQL, animated: true)
-                }
-            }, failureBlock: { (error) in
-                DispatchQueue.main.async {
-//                    self.showAlert("Attachment", mess: "Error loadingattachment")
-                    let previewQL = QLPreviewController()
-                    previewQL.dataSource = self
-                    previewQL.currentPreviewItemIndex = indexPath.row
-                    self.navigationController?.pushViewController(previewQL, animated: true)
-                }
-            })
+            if message.hasAttachment {
+                SCGPush.sharedInstance().loadAttachment(for: message, completionBlock: { (attachment) in
+                    DispatchQueue.main.async {
+                        let previewQL = QLPreviewController()
+                        previewQL.dataSource = self
+                        previewQL.currentPreviewItemIndex = indexPath.row
+                        self.navigationController?.pushViewController(previewQL, animated: true)
+                    }
+                }, failureBlock: { (error) in
+                    DispatchQueue.main.async {
+                        //                    self.showAlert("Attachment", mess: "Error loadingattachment")
+                        let previewQL = QLPreviewController()
+                        previewQL.dataSource = self
+                        previewQL.currentPreviewItemIndex = indexPath.row
+                        self.navigationController?.pushViewController(previewQL, animated: true)
+                    }
+                })
+            } else {
+                tableView.deselectRow(at: indexPath, animated: true)
+            }
         }
         
 //        let mainStoryBoard = UIStoryboard(name: "Main", bundle: nil)
@@ -129,6 +211,74 @@ class MessagesTableViewController: UITableViewController, QLPreviewControllerDat
         }    
     }
 
+    override func tableView(_ tableView: UITableView, editActionsForRowAt indexPath: IndexPath) -> [UITableViewRowAction]? {
+        
+        let message:SCGPushMessage = SCGPush.sharedInstance().message(at: UInt(indexPath.row))!
+        let array: NSMutableArray = NSMutableArray()
+        
+
+        // delete action
+        let actionDelete:UITableViewRowAction = UITableViewRowAction.init(
+            style: UITableViewRowActionStyle.destructive,
+            title: "Delete",
+            handler: { (action, indexPath) in
+                // Delete the row from the data source
+                if (SCGPush.sharedInstance().deleteMessage(at: UInt(indexPath.row))) {
+                    tableView.deleteRows(at: [indexPath], with: .fade)
+                }
+        })
+        //actionDelete.backgroundColor = UIColor.blue
+        array.add(actionDelete)
+
+        // read action
+        let actionRead:UITableViewRowAction = UITableViewRowAction.init(
+            style: UITableViewRowActionStyle.default,
+            title: "Read",
+            handler: { (action, indexPath) in
+                SCGPush.sharedInstance().reportStatus(withMessageId: message.identifier,
+                                                      andMessageState: MessageState.read,
+                                                      completionBlock: {
+                }, failureBlock: { (error) in
+                })
+
+                tableView.setEditing(false, animated: true)
+        })
+        actionRead.backgroundColor = UIColor.blue
+        array.add(actionRead)
+
+        // click trough action
+        let actionClickTrough:UITableViewRowAction = UITableViewRowAction.init(
+            style: UITableViewRowActionStyle.default,
+            title: "Click",
+            handler: { (action, indexPath) in
+                SCGPush.sharedInstance().reportStatus(withMessageId: message.identifier,
+                                                      andMessageState: MessageState.clicked,
+                                                      completionBlock: {
+                }, failureBlock: { (error) in
+                })
+                
+                tableView.setEditing(false, animated: true)
+        })
+        actionClickTrough.backgroundColor = UIColor.lightGray
+        array.add(actionClickTrough)
+
+        if let url:String = message.deepLink {
+            if (url.lengthOfBytes(using: String.Encoding.utf8) > 0) {
+                let actionDeepLink:UITableViewRowAction = UITableViewRowAction.init(
+                    style: UITableViewRowActionStyle.default,
+                    title: "Link",
+                    handler: { (action, indexPath) in
+                        SCGPush.sharedInstance().resolveTrackedLink(message.deepLink)
+                        tableView.setEditing(false, animated: true)
+                })
+                
+                actionDeepLink.backgroundColor = UIColor.orange
+                array.add(actionDeepLink)
+            }
+        }
+        
+        return array as? [UITableViewRowAction]
+    }
 
     /*
     // Override to support rearranging the table view.
@@ -198,7 +348,7 @@ class MessagesTableViewController: UITableViewController, QLPreviewControllerDat
                         if FileManager.default.fileExists(atPath: tempDirURL.absoluteString) {
                             try FileManager.default.removeItem(at: tempDirURL)
                         }
-                        debugPrint("will try to save \(attachment?.data?.count) bytes")
+                        debugPrint("will try to save \(attachment?.data?.count ?? 0) bytes")
                         try attachment!.data?.write(to: tempDirURL)
                         
                         itemUrl = tempDirURL

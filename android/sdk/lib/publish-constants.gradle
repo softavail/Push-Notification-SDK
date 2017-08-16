@@ -1,0 +1,16 @@
+ext {
+    bintraySiteUrl = 'https://developer.syniverse.com'
+    bintrayGitUrl = 'https://github.com/Syniverse/Push-Notification-SDK.git'
+
+    mavenVersion = '1.0'
+    mavenGroup = 'com.syniverse.scg.push-sdk'
+    mavenArtifact = 'scg-push-sdk-android'
+
+    bintrayPackageName = 'scg-push-sdk-android'
+    bintrayRepo = 'SCGPushNotificationAndroidSDK'
+    bintrayDesc = ''
+    bintrayVcsTag = ''
+    bintrayLicense = 'MIT'
+
+    bintrayUserOrg = 'scg'
+}

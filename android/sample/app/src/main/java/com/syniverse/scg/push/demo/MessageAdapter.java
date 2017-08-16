@@ -179,7 +179,7 @@ class MessageAdapter extends RecyclerView.Adapter<MessageAdapter.MessageViewHold
     @Override
     public void onBindViewHolder(MessageViewHolder holder, int position) {
         final ScgMessage data = dataset.get(position);
-        holder.getBinding().setVariable(BR.message, data);
+        holder.getBinding().setVariable(com.syniverse.scg.push.demo.BR.message, data);
         holder.getBinding().executePendingBindings();
 
         holder.binding.messageAttachment.setOnClickListener(this);
