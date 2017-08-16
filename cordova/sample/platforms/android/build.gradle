@@ -23,6 +23,7 @@ buildscript {
     repositories {
         mavenCentral()
         jcenter()
+        mavenLocal()
     }
 
     // Switch the Android Gradle plugin version requirement depending on the
@@ -30,7 +31,7 @@ buildscript {
     // http://tools.android.com/tech-docs/new-build-system/version-compatibility
     // and https://issues.apache.org/jira/browse/CB-8143
     dependencies {
-        classpath 'com.android.tools.build:gradle:2.2.3'
+        classpath 'com.android.tools.build:gradle:2.3.3'
     }
 }
 
@@ -39,6 +40,7 @@ allprojects {
     repositories {
         mavenCentral();
         jcenter()
+        mavenLocal()
     }
 }
 
@@ -250,10 +252,16 @@ dependencies {
     // SUB-PROJECT DEPENDENCIES START
     debugCompile(project(path: "CordovaLib", configuration: "debug"))
     releaseCompile(project(path: "CordovaLib", configuration: "release"))
-    compile "com.google.firebase:firebase-messaging:9.8.0"
+    compile "com.google.firebase:firebase-core:+"
+    compile "com.google.firebase:firebase-messaging:+"
     compile "com.google.code.gson:gson:2.8.0"
     compile "com.squareup.retrofit2:retrofit:2.3.0"
     compile "com.squareup.retrofit2:converter-gson:2.3.0"
+
+    compile('com.syniverse.scg:push-sdk:1.4.0@aar') {
+        transitive = true
+    }
+//    compile "com.syniverse.scg.push-sdk:scg-push-sdk-android:1.0"
     // SUB-PROJECT DEPENDENCIES END
 }
 

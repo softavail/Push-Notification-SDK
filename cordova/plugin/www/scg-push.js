@@ -1,3 +1,4 @@
+cordova.define("cordova-plugin-scg-push.ScgPush", function(require, exports, module) {
 var exec = require('cordova/exec');
 
 var PLUGIN_NAME = "ScgPush";
@@ -24,6 +25,14 @@ var ScgPush = {
       exec(success, failure, PLUGIN_NAME, "cdv_unregisterPushToken", [token]);
     },
 
+    onNotification: function(success, failure) {
+      exec(success, failure, PLUGIN_NAME, "cdv_onnotification", []);
+    },
+
+    onTokenRefresh: function(success, failure) {
+      exec(success, failure, PLUGIN_NAME, "cdv_ontokenrefresh", []);
+    },
+
     reportStatus: function(messageID, messageState, success, failure) {
       exec(success, failure, PLUGIN_NAME, "cdv_reportStatus", [messageID, messageState]);
     },
@@ -44,20 +53,20 @@ var ScgPush = {
       exec(null, null, PLUGIN_NAME, "cdv_deleteAllInboxMessagese", []);
     },
 
-    deleteInboxMessage: function(messageId) {
-      exec(null, null, PLUGIN_NAME, "cdv_deleteAllInboxMessagese", [messageId]);
+    deleteInboxMessage: function(messageId, success, failure) {
+      exec(success, failure, PLUGIN_NAME, "cdv_deleteAllInboxMessagese", [messageId]);
     },
 
-    deleteInboxMessageAtIndex: function(messageIndex) {
-      exec(null, null, PLUGIN_NAME, "cdv_deleteInboxMessageAtIndex", [messageIndex]);
+    deleteInboxMessageAtIndex: function(messageIndex, success, failure) {
+      exec(success, failure, PLUGIN_NAME, "cdv_deleteInboxMessageAtIndex", [messageIndex]);
     },
 
     getAllInboxMessages: function(result) {
       exec(result, null, PLUGIN_NAME, "cdv_getAllInboxMessages", []);
     },
 
-    getInboxMessageAtIndex: function(result) {
-      exec(result, null, PLUGIN_NAME, "cdv_getInboxMessageAtIndex", []);
+    getInboxMessageAtIndex: function(index, success, failure) {
+      exec(success, failure, PLUGIN_NAME, "cdv_getInboxMessageAtIndex", [index]);
     },
 
     getInboxMessagesCount: function(result) {
@@ -66,3 +75,5 @@ var ScgPush = {
 };
 
 module.exports = ScgPush;
+
+});

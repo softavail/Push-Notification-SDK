@@ -13,7 +13,7 @@
                             "count": 1
                         },
                         {
-                            "xml": "<feature name=\"ScgPush\"><param name=\"ios-package\" value=\"SCGPushCordova\" /><param name=\"onload\" value=\"true\" /><preference name=\"AccessToken\" value=\"\" /><preference name=\"AppID\" value=\"\" /><preference name=\"CallbackUri\" value=\"\" /></feature>",
+                            "xml": "<feature name=\"SCGPush\"><param name=\"ios-package\" value=\"SCGPushCordova\" /><param name=\"onload\" value=\"true\" /><preference name=\"AccessToken\" value=\"\" /><preference name=\"AppID\" value=\"\" /><preference name=\"CallbackUri\" value=\"\" /></feature>",
                             "count": 1
                         }
                     ]

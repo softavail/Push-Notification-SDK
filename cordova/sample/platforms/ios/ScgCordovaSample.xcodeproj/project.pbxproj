@@ -5,7 +5,6 @@
 	};
 	objectVersion = 46;
 	objects = {
-
 /* Begin PBXBuildFile section */
 		0207DA581B56EA530066E2B4 /* Images.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 0207DA571B56EA530066E2B4 /* Images.xcassets */; };
 		1D3623260D0F684500981E51 /* AppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = 1D3623250D0F684500981E51 /* AppDelegate.m */; };
@@ -13,13 +12,11 @@
 		301BF552109A68D80062928A /* libCordova.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 301BF535109A57CC0062928A /* libCordova.a */; };
 		302D95F114D2391D003F00A1 /* MainViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 302D95EF14D2391D003F00A1 /* MainViewController.m */; };
 		302D95F214D2391D003F00A1 /* MainViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 302D95F014D2391D003F00A1 /* MainViewController.xib */; };
-		4F9B5063BFBA462CB819544F /* SCGPushSDK.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 1D653747DAE14FB28D56AD8D /* SCGPushSDK.framework */; };
-		61D74890F084497093101708 /* CoreData.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = C60803A5D926440D8F5FF1A7 /* CoreData.framework */; };
 		6AFF5BF91D6E424B00AB3073 /* CDVLaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 6AFF5BF81D6E424B00AB3073 /* CDVLaunchScreen.storyboard */; };
-		853D9A919B1D40EE865B291B /* SCGPushCordova.m in Sources */ = {isa = PBXBuildFile; fileRef = 8B48AFE1A47E4414A93FB6EA /* SCGPushCordova.m */; };
 		F2EF67B6301E495FA7E6FF0F /* CDVLogger.m in Sources */ = {isa = PBXBuildFile; fileRef = E5E50A1D1F05494C98358A0C /* CDVLogger.m */; };
-		F7540CE81EFA8EE9006AF06D /* SCGPushSDK.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 1D653747DAE14FB28D56AD8D /* SCGPushSDK.framework */; };
-		F7540CE91EFA8EE9006AF06D /* SCGPushSDK.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 1D653747DAE14FB28D56AD8D /* SCGPushSDK.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
+		B9DAB14E15C74612AB901991 /* SCGPushCordova.m in Sources */ = {isa = PBXBuildFile; fileRef = F1932B9CC9754310BF14E808 /* SCGPushCordova.m */; };
+		EFB1FD4F89824D2983661749 /* SCGPushSDK.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 81B282027C3249F1A29A8AEF /* SCGPushSDK.framework */; };
+		EB78D078553E486DAB7B1141 /* SCGPushSDK.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 81B282027C3249F1A29A8AEF /* SCGPushSDK.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, ); }; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -54,6 +51,7 @@
 			dstSubfolderSpec = 10;
 			files = (
 				F7540CE91EFA8EE9006AF06D /* SCGPushSDK.framework in Embed Frameworks */,
+				EB78D078553E486DAB7B1141 /* SCGPushSDK.framework in Embed Frameworks */,
 			);
 			name = "Embed Frameworks";
 			runOnlyForDeploymentPostprocessing = 0;
@@ -66,7 +64,6 @@
 		1D3623240D0F684500981E51 /* AppDelegate.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AppDelegate.h; sourceTree = "<group>"; };
 		1D3623250D0F684500981E51 /* AppDelegate.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = AppDelegate.m; sourceTree = "<group>"; };
 		1D6058910D05DD3D006BFB54 /* ScgCordovaSample.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = ScgCordovaSample.app; sourceTree = BUILT_PRODUCTS_DIR; };
-		1D653747DAE14FB28D56AD8D /* SCGPushSDK.framework */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = wrapper.framework; name = SCGPushSDK.framework; path = "ScgCordovaSample/Plugins/cordova-plugin-scg-push/SCGPushSDK.framework"; sourceTree = "<group>"; };
 		29B97316FDCFA39411CA2CEA /* main.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = main.m; sourceTree = "<group>"; };
 		301BF52D109A57CC0062928A /* CordovaLib/CordovaLib.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; path = CordovaLib/CordovaLib.xcodeproj; sourceTree = "<group>"; };
 		301BF56E109A69640062928A /* www */ = {isa = PBXFileReference; lastKnownFileType = folder; path = www; sourceTree = SOURCE_ROOT; };
@@ -78,15 +75,15 @@
 		3047A5111AB8059700498E2A /* build.xcconfig */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.xcconfig; name = build.xcconfig; path = cordova/build.xcconfig; sourceTree = SOURCE_ROOT; };
 		32CA4F630368D1EE00C91783 /* ScgCordovaSample-Prefix.pch */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "ScgCordovaSample-Prefix.pch"; sourceTree = "<group>"; };
 		6AFF5BF81D6E424B00AB3073 /* CDVLaunchScreen.storyboard */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.storyboard; name = CDVLaunchScreen.storyboard; path = ScgCordovaSample/CDVLaunchScreen.storyboard; sourceTree = SOURCE_ROOT; };
-		8B48AFE1A47E4414A93FB6EA /* SCGPushCordova.m */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 4; includeInIndex = 0; lastKnownFileType = sourcecode.c.objc; name = SCGPushCordova.m; path = "cordova-plugin-scg-push/SCGPushCordova.m"; sourceTree = "<group>"; };
 		8D1107310486CEB800E47090 /* ScgCordovaSample-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; name = "ScgCordovaSample-Info.plist"; path = "ScgCordovaSample/ScgCordovaSample-Info.plist"; plistStructureDefinitionIdentifier = "com.apple.xcode.plist.structure-definition.iphone.info-plist"; sourceTree = SOURCE_ROOT; };
-		9A874CF9D5BF4AEDB57AE8D9 /* SCGPushCordova.h */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 4; includeInIndex = 0; lastKnownFileType = sourcecode.c.h; name = SCGPushCordova.h; path = "cordova-plugin-scg-push/SCGPushCordova.h"; sourceTree = "<group>"; };
-		C60803A5D926440D8F5FF1A7 /* CoreData.framework */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = wrapper.framework; name = CoreData.framework; path = System/Library/Frameworks/CoreData.framework; sourceTree = SDKROOT; };
 		E5E50A1D1F05494C98358A0C /* CDVLogger.m */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 4; includeInIndex = 0; lastKnownFileType = sourcecode.c.objc; name = CDVLogger.m; path = "cordova-plugin-console/CDVLogger.m"; sourceTree = "<group>"; };
 		EB87FDF31871DA8E0020F90C /* www */ = {isa = PBXFileReference; lastKnownFileType = folder; name = www; path = ../../www; sourceTree = "<group>"; };
 		EB87FDF41871DAF40020F90C /* config.xml */ = {isa = PBXFileReference; lastKnownFileType = text.xml; name = config.xml; path = ../../config.xml; sourceTree = "<group>"; };
 		ED33DF2A687741AEAF9F8254 /* Bridging-Header.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "Bridging-Header.h"; sourceTree = "<group>"; };
 		F840E1F0165FE0F500CFE078 /* config.xml */ = {isa = PBXFileReference; lastKnownFileType = text.xml; name = config.xml; path = ScgCordovaSample/config.xml; sourceTree = "<group>"; };
+		F1932B9CC9754310BF14E808 /* SCGPushCordova.m */ = {isa = PBXFileReference; name = "SCGPushCordova.m"; path = "cordova-plugin-scg-push/SCGPushCordova.m"; sourceTree = "<group>"; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; explicitFileType = undefined; includeInIndex = 0; };
+		EEB70B4F3E31427CA0901011 /* SCGPushCordova.h */ = {isa = PBXFileReference; name = "SCGPushCordova.h"; path = "cordova-plugin-scg-push/SCGPushCordova.h"; sourceTree = "<group>"; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; explicitFileType = undefined; includeInIndex = 0; };
+		81B282027C3249F1A29A8AEF /* SCGPushSDK.framework */ = {isa = PBXFileReference; name = "SCGPushSDK.framework"; path = "ScgCordovaSample/Plugins/cordova-plugin-scg-push/SCGPushSDK.framework"; sourceTree = "<group>"; fileEncoding = undefined; lastKnownFileType = wrapper.framework; explicitFileType = undefined; includeInIndex = 0; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -95,8 +92,6 @@
 			buildActionMask = 2147483647;
 			files = (
 				301BF552109A68D80062928A /* libCordova.a in Frameworks */,
-				4F9B5063BFBA462CB819544F /* SCGPushSDK.framework in Frameworks */,
-				61D74890F084497093101708 /* CoreData.framework in Frameworks */,
 				F7540CE81EFA8EE9006AF06D /* SCGPushSDK.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -168,8 +163,7 @@
 		29B97323FDCFA39411CA2CEA /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
-				1D653747DAE14FB28D56AD8D /* SCGPushSDK.framework */,
-				C60803A5D926440D8F5FF1A7 /* CoreData.framework */,
+				81B282027C3249F1A29A8AEF /* SCGPushSDK.framework */,
 			);
 			name = Frameworks;
 			sourceTree = "<group>";
@@ -198,8 +192,8 @@
 			children = (
 				E5E50A1D1F05494C98358A0C /* CDVLogger.m */,
 				194CA474A37F4CB7B240F676 /* CDVLogger.h */,
-				8B48AFE1A47E4414A93FB6EA /* SCGPushCordova.m */,
-				9A874CF9D5BF4AEDB57AE8D9 /* SCGPushCordova.h */,
+				F1932B9CC9754310BF14E808 /* SCGPushCordova.m */,
+				EEB70B4F3E31427CA0901011 /* SCGPushCordova.h */,
 			);
 			name = Plugins;
 			path = ScgCordovaSample/Plugins;
@@ -329,7 +323,7 @@
 				1D3623260D0F684500981E51 /* AppDelegate.m in Sources */,
 				302D95F114D2391D003F00A1 /* MainViewController.m in Sources */,
 				F2EF67B6301E495FA7E6FF0F /* CDVLogger.m in Sources */,
-				853D9A919B1D40EE865B291B /* SCGPushCordova.m in Sources */,
+				B9DAB14E15C74612AB901991 /* SCGPushCordova.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -359,6 +353,7 @@
 					"$(inherited)",
 					"ScgCordovaSample/Plugins/cordova-plugin-scg-push",
 					"$(PROJECT_DIR)/ScgCordovaSample/Plugins/cordova-plugin-scg-push",
+					"\"ScgCordovaSample/Plugins/cordova-plugin-scg-push\"",
 					"\"ScgCordovaSample/Plugins/cordova-plugin-scg-push\"",
 					"\"ScgCordovaSample/Plugins/cordova-plugin-scg-push\"",
 					"\"ScgCordovaSample/Plugins/cordova-plugin-scg-push\"",
@@ -392,6 +387,7 @@
 					"$(inherited)",
 					"ScgCordovaSample/Plugins/cordova-plugin-scg-push",
 					"$(PROJECT_DIR)/ScgCordovaSample/Plugins/cordova-plugin-scg-push",
+					"\"ScgCordovaSample/Plugins/cordova-plugin-scg-push\"",
 					"\"ScgCordovaSample/Plugins/cordova-plugin-scg-push\"",
 					"\"ScgCordovaSample/Plugins/cordova-plugin-scg-push\"",
 					"\"ScgCordovaSample/Plugins/cordova-plugin-scg-push\"",

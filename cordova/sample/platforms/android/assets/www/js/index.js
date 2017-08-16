@@ -29,28 +29,38 @@ var app = {
     onDeviceReady: function() {
         this.receivedEvent('deviceready');
 
-        // Use the lines below in order to test the implentation.
-        // Make the coresponding changes.
-/*
-        scg.push.authenticate('bwbkz5Kd9yBApIkSxbRav6', function(token) {
-            console.log('ok authenticate ' + token);
+        console.log('device ready');
+
+        scg.push.start("ttNs7etXXqvJd4VLiLHrp2", "3438755246859", "http://95.158.130.102:8080/scg-dra/proxy/", function() {
+            console.log('ok start');
         }, function(error) {
-            console.error('error authenticate ' + error);
+            console.error('error start ' + error);
         });
 
         scg.push.getToken(function(token) {
             // save this server-side and use it to push notifications to this device
+            scg.push.registerPushToken(token, function(result) {
+              console.log('ok registerPushToken ' + JSON.stringify(result));
+            }, function(error) {
+              console.error('error registerPushToken ' + error);
+            });
             console.log('ok getToken ' + token);
-        }, function(error) {
+        },  function(error) {
             console.error('error getToken ' + error);
         });
 
-        scg.push.registerPushToken('eMpHyTGifK4:APA91bFcIpTy8OAR2OQs1D_qGoqBCAfnFeH_bl1_mqrUOSZ9TFCakwAHZGG5poNL4URQuTJq4ITcQxdjtrRkIzV4F5hriLE56tM_Y_jIwVWoE5e3jQELfq_5OD7GaZmdTzPuRIYcd0UC', function(token) {
-            console.log('ok registerPushToken ' + token);
-        }, function(error) {
-            console.error('error registerPushToken ' + error);
-        });
-*/
+        scg.push.onTokenRefresh(function(newToken) {
+            console.log('ok onNewToken ' + newToken);
+        }, function() {});
+
+        scg.push.onNotification(function(scgMessage) {
+            console.log('ok onNotification ' + JSON.stringify(scgMessage));
+        }, function (error) {});
+
+        scg.push.getInboxMessageAtIndex(0, function(data) {
+            console.log('ok getInboxMessageAtIndex[0] ' + JSON.stringify(data));
+        }, function (error) {});
+
     },
 
     // Update DOM on a Received Event
