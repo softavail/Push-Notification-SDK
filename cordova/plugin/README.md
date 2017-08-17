@@ -173,7 +173,7 @@ scg.push.getAllInboxMessages(function(data) {
 ## Get inbox message at index
 
 ```
-scg.push.getInboxMessageAtIndex(function(message) {
+scg.push.getInboxMessageAtIndex(0, function(message) {
     console.log('ok getInboxMessageAtIndex ' + JSON.stringify(message));
 }, function (error) {
     console.log('error getInboxMessageAtIndex ');
