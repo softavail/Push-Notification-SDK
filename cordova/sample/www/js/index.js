@@ -65,6 +65,14 @@ var app = {
             console.error('error getInboxMessageAtIndex ' + error);
         });
 
+        scg.push.getAllInboxMessages(function(data) {
+            console.log('ok getAllInboxMessages ' + JSON.stringify(data));
+        });
+
+        scg.push.getInboxMessagesCount(function(count) {
+            console.log('ok getInboxMessagesCount ' + count);
+        });
+
     },
 
     // Update DOM on a Received Event

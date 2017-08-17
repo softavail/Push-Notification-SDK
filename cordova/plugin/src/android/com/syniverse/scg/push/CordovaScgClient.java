@@ -6,7 +6,6 @@ import android.net.Uri;
 import android.os.Bundle;
 
 import com.google.gson.Gson;
-import com.google.gson.reflect.TypeToken;
 import com.syniverse.scg.push.sdk.ScgCallback;
 import com.syniverse.scg.push.sdk.ScgClient;
 import com.syniverse.scg.push.sdk.ScgMessage;
@@ -19,7 +18,6 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-import java.lang.reflect.Type;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -136,13 +134,17 @@ public class CordovaScgClient extends CordovaPlugin {
                     }
 
                     @Override
-                    protected void onResult(String s, Uri uri) {
-                        callbackContext.success();
+                    protected void onResult(String mimeType, Uri uri) {
+                        final JSONArray jsonArray = new JSONArray();
+                        jsonArray.put(uri.toString());
+                        jsonArray.put(mimeType);
+
+                        callbackContext.success(jsonArray);
                     }
 
                     @Override
                     protected void onFailed(int i, String s) {
-                        callbackContext.error(s);
+                        result.onFailed(i, s);
                     }
                 }.execute(args.getString(0), args.getString(1));
                 return true;
@@ -161,9 +163,10 @@ public class CordovaScgClient extends CordovaPlugin {
             case "cdv_getAllInboxMessages": {
                 final List<ScgMessage> messages = client.getAllInboxMessages();
 
-                final Type type = new TypeToken<List<ScgMessage>>() {
-                }.getType();
-                final JSONArray jsonArray = new JSONArray(fGson.toJson(messages, type));
+                final JSONArray jsonArray = new JSONArray();
+                for (ScgMessage message: messages) {
+                    jsonArray.put(message.toJson());
+                }
 
                 callbackContext.success(jsonArray);
                 return true;

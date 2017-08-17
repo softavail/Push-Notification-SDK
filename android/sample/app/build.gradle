@@ -54,7 +54,7 @@ def getDate() {
 dependencies {
     compile 'com.android.support:appcompat-v7:25.3.1'
     compile 'com.android.support:design:25.3.1'
-//    compile 'com.syniverse.scg.push-sdk:scg-push-sdk-android:1.0'
+//    compile 'com.syniverse.scg.push-sdk:scg-push-sdk-android:1.1'
     // Only for development
     compile project(':sdk')
     compile 'com.google.firebase:firebase-messaging:9.8.0'
