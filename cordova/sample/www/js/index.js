@@ -54,12 +54,16 @@ var app = {
         }, function() {});
 
         scg.push.onNotification(function(scgMessage) {
-            console.log('ok onNotification ' + JSON.stringify(data));
-        }, function (error) {});
+            console.log('ok onNotification ' + JSON.stringify(scgMessage));
+        }, function (error) {
+            console.error('error onNotification ' + error);
+        });
 
         scg.push.getInboxMessageAtIndex(0, function(data) {
             console.log('ok getInboxMessageAtIndex[0] ' + JSON.stringify(data));
-        }, function (error) {});
+        }, function (error) {
+            console.error('error getInboxMessageAtIndex ' + error);
+        });
 
     },
 

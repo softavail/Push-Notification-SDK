@@ -1,0 +1,26 @@
+{
+    "ios": {
+        "debug": {
+            "codeSignIdentity": "iPhone Developer: Angel Terziev (3T87W3XCHR)",
+            "provisioningProfile": "154de4a5-236f-4a31-b809-badb7ad8bb79",
+            "developmentTeam": "6D6V2A9HWX",
+            "packageType": "development",
+            "buildFlag": [
+                "EMBEDDED_CONTENT_CONTAINS_SWIFT = YES",
+                "ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES=NO",
+                "LD_RUNPATH_SEARCH_PATHS = \"@executable_path/Frameworks\""
+            ]
+        },
+        "release": {
+            "codeSignIdentity": "iPhone Distribution: Partners 1993, Inc. (6D6V2A9HWX)",
+            "provisioningProfile": "62053d4f-70c2-415c-9850-1ef5c13b4954",
+            "developmentTeam": "6D6V2A9HWX",
+            "packageType": "ad-hoc",
+            "buildFlag": [
+                "EMBEDDED_CONTENT_CONTAINS_SWIFT = YES",
+                "ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES=NO",
+                "LD_RUNPATH_SEARCH_PATHS = \"@executable_path/Frameworks\""
+            ]
+        }
+    }
+}

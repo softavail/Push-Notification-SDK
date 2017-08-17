@@ -49,11 +49,11 @@ var ScgPush = {
     },
 
     deleteAllInboxMessages: function() {
-      exec(null, null, PLUGIN_NAME, "cdv_deleteAllInboxMessagese", []);
+      exec(null, null, PLUGIN_NAME, "cdv_deleteAllInboxMessages", []);
     },
 
     deleteInboxMessage: function(messageId, success, failure) {
-      exec(success, failure, PLUGIN_NAME, "cdv_deleteAllInboxMessagese", [messageId]);
+      exec(success, failure, PLUGIN_NAME, "cdv_deleteInboxMessage", [messageId]);
     },
 
     deleteInboxMessageAtIndex: function(messageIndex, success, failure) {
