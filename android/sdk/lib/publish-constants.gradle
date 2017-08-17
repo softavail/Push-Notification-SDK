@@ -2,7 +2,7 @@ ext {
     bintraySiteUrl = 'https://developer.syniverse.com'
     bintrayGitUrl = 'https://github.com/Syniverse/Push-Notification-SDK.git'
 
-    mavenVersion = '1.0'
+    mavenVersion = '1.1'
     mavenGroup = 'com.syniverse.scg.push-sdk'
     mavenArtifact = 'scg-push-sdk-android'
 
