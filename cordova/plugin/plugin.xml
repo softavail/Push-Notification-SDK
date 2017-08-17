@@ -18,10 +18,10 @@
         <framework src="com.google.code.gson:gson:2.8.0" />
         <framework src="com.squareup.retrofit2:retrofit:2.3.0" />
         <framework src="com.squareup.retrofit2:converter-gson:2.3.0" />
-        <framework src="com.syniverse.scg.push-sdk:scg-push-sdk-android:1.0" />
+        <framework src="com.syniverse.scg.push-sdk:scg-push-sdk-android:1.1" />
         <framework src="src/android/scg-build.gradle" custom="true" type="gradleReference" />
         <source-file src="src/android/com/syniverse/scg/push/CordovaScgClient.java" target-dir="src/com/syniverse/scg/push" />
-        <source-file src="src/android/com/syniverse/scg/push/cordova/sample/MainReceiver.java" target-dir="src/com/syniverse/scg/push/cordova/sample" />
+        <source-file src="src/android/com/syniverse/scg/push/MainReceiver.java" target-dir="src/com/syniverse/scg/push" />
 
         <config-file target="res/xml/config.xml" parent="/*">
           <feature name="ScgPush">
@@ -41,7 +41,7 @@
                   <action android:name="com.google.firebase.INSTANCE_ID_EVENT" />
               </intent-filter>
           </service>
-          <receiver android:enabled="true" android:exported="false" android:name=".MainReceiver">
+          <receiver android:enabled="true" android:exported="false" android:name="com.syniverse.scg.push.MainReceiver">
             <intent-filter>
                 <action android:name="com.syniverse.scg.push.sdk.action.PUSH_TOKEN_RECEIVED" />
                 <action android:name="com.syniverse.scg.push.sdk.action.MESSAGE_RECEIVED" />
