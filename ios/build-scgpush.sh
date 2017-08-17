@@ -127,6 +127,12 @@ build_install()
     xcodebuild -workspace ios.xcworkspace -scheme SCGPushSDK -configuration Release -jobs 8 clean install DSTROOT="${OPT_DST_DIR}" CONFIGURATION_BUILD_DIR="${OPT_DST_DIR}" REVISION_NUMBER=${REVISION_NUMBER} SKIP_INSTALL=NO
     check_failure "Error building: ${PRODUCT_NAME}"
 
+    xcodebuild 	-workspace ios.xcworkspace -scheme SCGPushSDK \
+				-destination 'platform=iOS Simulator,name=iPhone 7' \
+				-configuration Release -jobs 8 clean install DSTROOT="${OPT_DST_DIR}" \
+				CONFIGURATION_BUILD_DIR="${OPT_DST_DIR}" REVISION_NUMBER=${REVISION_NUMBER} SKIP_INSTALL=NO
+    check_failure "Error building: ${PRODUCT_NAME}"
+
     pushd ${OPT_DST_DIR}
 
     # compress framework
