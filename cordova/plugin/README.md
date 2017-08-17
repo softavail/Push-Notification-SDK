@@ -27,7 +27,7 @@ scg.push.start(accessToken, appId, callbackUri, function() {
 
 The parameters are:
 Param  | Description
---|--
+-- | --
 accessToken  |
 appId  |
 callbackUri  | The URL of the SCG REST service
