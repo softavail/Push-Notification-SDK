@@ -1,1 +1,0 @@
-../../../../../../../../cordova/src/android/com/syniverse/scg/push/CordovaScgClient.java

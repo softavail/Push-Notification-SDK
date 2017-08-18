@@ -69,7 +69,7 @@ public class MainReceiver extends ScgPushReceiver {
         deliveryReport(messageId);
         if (message.isInbox()) {
             return;
-        };
+        }
 
         final String msg = message.getBody();
 

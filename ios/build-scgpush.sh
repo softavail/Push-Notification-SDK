@@ -124,8 +124,39 @@ build_install()
 {
     echo "Building ${PRODUCT_NAME} ... "
 
-    xcodebuild -workspace ios.xcworkspace -scheme SCGPushSDK -configuration Release -jobs 8 clean install DSTROOT="${OPT_DST_DIR}" CONFIGURATION_BUILD_DIR="${OPT_DST_DIR}" REVISION_NUMBER=${REVISION_NUMBER} SKIP_INSTALL=NO
+    rm -rf "${OPT_DST_DIR}/${FRAMEWORK_NAME}"
+    rm "${OPT_DST_DIR}/${PRODUCT_NAME}_Sim"
+    rm "${OPT_DST_DIR}/${PRODUCT_NAME}_Dev"
+    rm "${OPT_DST_DIR}/${PRODUCT_NAME}"
+
+    xcodebuild 	-workspace ios.xcworkspace -scheme SCGPushSDK \
+                -destination 'platform=iOS Simulator,name=iPhone 7' \
+                -configuration Release -jobs 8 clean install DSTROOT="${OPT_DST_DIR}" \
+                CONFIGURATION_BUILD_DIR="${OPT_DST_DIR}" REVISION_NUMBER=${REVISION_NUMBER} SKIP_INSTALL=NO
     check_failure "Error building: ${PRODUCT_NAME}"
+
+    if [ -f "${OPT_DST_DIR}/${FRAMEWORK_NAME}/${PRODUCT_NAME}" ]; then
+        cp "${OPT_DST_DIR}/${FRAMEWORK_NAME}/${PRODUCT_NAME}" "${OPT_DST_DIR}/${PRODUCT_NAME}_Sim"
+    fi
+
+    xcodebuild  -workspace ios.xcworkspace -scheme SCGPushSDK \
+                -configuration Release -jobs 8 clean install DSTROOT="${OPT_DST_DIR}" \
+                CONFIGURATION_BUILD_DIR="${OPT_DST_DIR}" REVISION_NUMBER=${REVISION_NUMBER} SKIP_INSTALL=NO
+    check_failure "Error building: ${PRODUCT_NAME}"
+
+    if [ -f "${OPT_DST_DIR}/${FRAMEWORK_NAME}/${PRODUCT_NAME}" ]; then
+        cp "${OPT_DST_DIR}/${FRAMEWORK_NAME}/${PRODUCT_NAME}" "${OPT_DST_DIR}/${PRODUCT_NAME}_Dev"
+        lipo "${OPT_DST_DIR}/${PRODUCT_NAME}_Dev" "${OPT_DST_DIR}/${PRODUCT_NAME}_Sim" -create -output "${OPT_DST_DIR}/${PRODUCT_NAME}"
+    fi
+
+    if [ -f "${OPT_DST_DIR}/${PRODUCT_NAME}" ]; then
+        rm "${OPT_DST_DIR}/${FRAMEWORK_NAME}/${PRODUCT_NAME}"
+        cp "${OPT_DST_DIR}/${PRODUCT_NAME}" "${OPT_DST_DIR}/${FRAMEWORK_NAME}/${PRODUCT_NAME}"
+    fi
+
+    rm "${OPT_DST_DIR}/${PRODUCT_NAME}_Sim"
+    rm "${OPT_DST_DIR}/${PRODUCT_NAME}_Dev"
+    rm "${OPT_DST_DIR}/${PRODUCT_NAME}"
 
     pushd ${OPT_DST_DIR}
 

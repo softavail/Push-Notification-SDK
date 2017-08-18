@@ -1,12 +1,17 @@
 package com.syniverse.scg.push.sdk;
 
+import android.os.Build;
 import android.os.Bundle;
 import android.os.Parcel;
 import android.os.Parcelable;
 
 import com.google.firebase.messaging.RemoteMessage;
 
+import org.json.JSONException;
+import org.json.JSONObject;
+
 import java.util.Map;
+import java.util.Set;
 
 /**
  * Created by lekov on 11/17/16.
@@ -29,8 +34,11 @@ public class ScgMessage implements Parcelable {
         return new ScgMessage(message);
     }
 
-    static ScgMessage from(Bundle message) {
-        return new ScgMessage(message);
+    static public ScgMessage from(Bundle message) {
+        if (message.containsKey(MESSAGE_ID)) {
+            return new ScgMessage(message);
+        }
+        return null;
     }
 
     private ScgMessage(RemoteMessage message) {
@@ -160,6 +168,24 @@ public class ScgMessage implements Parcelable {
     @Override
     public String toString() {
         return data.toString();
+    }
+
+    public JSONObject toJson() {
+        JSONObject json = new JSONObject();
+        Set<String> keys = data.keySet();
+        for (String key : keys) {
+            try {
+                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT) {
+                    json.put(key, JSONObject.wrap(data.get(key)));
+                } else {
+                    json.put(key, data.get(key));
+                }
+            } catch(JSONException e) {
+                return null;
+            }
+        }
+
+        return json;
     }
 
     @Override

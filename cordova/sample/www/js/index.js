@@ -40,14 +40,39 @@ var app = {
         scg.push.getToken(function(token) {
             // save this server-side and use it to push notifications to this device
             scg.push.registerPushToken(token, function(result) {
-                console.log('ok registerPushToken ' + JSON.stringify(result));
+              console.log('ok registerPushToken ' + JSON.stringify(result));
             }, function(error) {
-                console.error('error registerPushToken ' + error);
+              console.error('error registerPushToken ' + error);
             });
             console.log('ok getToken ' + token);
-        }, function(error) {
+        },  function(error) {
             console.error('error getToken ' + error);
-        });        
+        });
+
+        scg.push.onTokenRefresh(function(newToken) {
+            console.log('ok onNewToken ' + newToken);
+        }, function() {});
+
+        scg.push.onNotification(function(scgMessage) {
+            console.log('ok onNotification ' + JSON.stringify(scgMessage));
+        }, function (error) {
+            console.error('error onNotification ' + error);
+        });
+
+        scg.push.getInboxMessageAtIndex(0, function(data) {
+            console.log('ok getInboxMessageAtIndex[0] ' + JSON.stringify(data));
+        }, function (error) {
+            console.error('error getInboxMessageAtIndex ' + error);
+        });
+
+        scg.push.getAllInboxMessages(function(data) {
+            console.log('ok getAllInboxMessages ' + JSON.stringify(data));
+        });
+
+        scg.push.getInboxMessagesCount(function(count) {
+            console.log('ok getInboxMessagesCount ' + count);
+        });
+
     },
 
     // Update DOM on a Received Event

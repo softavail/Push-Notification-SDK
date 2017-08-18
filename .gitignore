@@ -2,6 +2,9 @@
 # Project
 ############################
 ios/demo/depends
+cordova/sample/plugins
+cordova/sample/platforms
+cordova/sample/node_modules
 
 ############################
 # MAC OS X
