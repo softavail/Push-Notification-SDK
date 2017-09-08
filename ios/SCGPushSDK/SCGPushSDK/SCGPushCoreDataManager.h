@@ -25,6 +25,6 @@
 - (SCGPushAttachment* _Nullable) loadAttachmentForMessage: (SCGPushMessage* _Nonnull) message;
 
 - (BOOL) updateAttachment: (SCGPushAttachment* _Nonnull) attachment;
-- (SCGPushAttachment* _Nullable) createAttachmentWithId: (NSString*) attachmentId;
+- (SCGPushAttachment* _Nullable) createAttachmentWithId: (NSString*_Nullable) attachmentId;
 
 @end

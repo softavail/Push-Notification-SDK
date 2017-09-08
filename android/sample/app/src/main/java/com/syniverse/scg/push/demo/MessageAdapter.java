@@ -75,8 +75,9 @@ class MessageAdapter extends RecyclerView.Adapter<MessageAdapter.MessageViewHold
                     }).show();
                 } else {
                     if (!isInbox) {
-                        dataset.remove(holder.getAdapterPosition());
-                        notifyItemRemoved(holder.getAdapterPosition());
+                        if (dataset.remove(data)) {
+                            notifyDataSetChanged();
+                        }
                     }
                     String text = String.format("Success (%s): %s", code, message);
                     if (view != null && view.getContext() != null && view.isShown()) {
@@ -178,7 +179,7 @@ class MessageAdapter extends RecyclerView.Adapter<MessageAdapter.MessageViewHold
     @Override
     public void onBindViewHolder(MessageViewHolder holder, int position) {
         final ScgMessage data = dataset.get(position);
-        holder.getBinding().setVariable(BR.message, data);
+        holder.getBinding().setVariable(com.syniverse.scg.push.demo.BR.message, data);
         holder.getBinding().executePendingBindings();
 
         holder.binding.messageAttachment.setOnClickListener(this);

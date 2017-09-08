@@ -4,7 +4,7 @@ SCRIPT_DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
 CURRENT_DIR="$(pwd)"
 
 # set archive base dir
-OPT_SCHEME="demo"
+OPT_SCHEME="SCGPushDemo"
 OPT_STRIPREVNUMDIR_FLAG=0
 
 OPT_ARCHIVE_BASE_DIR=
@@ -58,17 +58,18 @@ IPA_FILE_ADHOC=
 IPA_FILE_APPSTORE=
 DSYM_FILE=
 CL_RELEASE_NOTES="notes.txt"
-PRODUCT_NAME="demo"
+PRODUCT_NAME="SCGPushDemo"
 ADHOC_MOBILEPROVISION_NAME="SCGPushDemoAdHoc.mobileprovision"
 APPSTORE_MOBILEPROVISION_NAME="SCGPushDemoAppStore.mobileprovision"
+ADHOC_EXTENSION_MOBILEPROVISION_NAME="SCG_Push_Demo_Extension_AdHoc.mobileprovision"
+APPSTORE_EXTENSION_MOBILEPROVISION_NAME="SCG_Push_Demo_Extension_AppStore.mobileprovision"
 EXPORT_ADHOC_FLAG=0
 EXPORT_APPSTORE_FLAG=0
 
 TEMP_DIR="$(pwd)/.temp"
 
 # application
-APP_NAME="demo"
-DSYM_NAME="${APP_NAME}.app.dSYM"
+DSYM_NAME="${PRODUCT_NAME}.app.dSYM"
 
 XCODE_EXPORT_FORMAT="ipa"
 
@@ -182,7 +183,7 @@ print_options()
 
 updateProvisioningProfileById()
 {
-    echo "Updating prov profile '$1' ..."
+    echo "Checking prov profile '$1' ..."
 
     local PROV_PROF_NAME=$1
     local DEST_PROV="${HOME}/Library/MobileDevice/Provisioning Profiles"
@@ -230,7 +231,7 @@ updateProvisioningProfileById()
         #echo "md5_src=$md5_src"
         #echo "md5_dst=$md5_dst"
         if [ $md5_src != $md5_dst ]; then
-            echo "Overwriting ${DEST_PROV_PROF} ..."
+            echo "Updating ${DEST_PROV_PROF} ..."
             cp "${SRC_PROV_PROF}" "${DEST_PROV_PROF}"
         fi
     fi
@@ -243,6 +244,7 @@ prepare()
 
     updateProvisioningProfileById $ADHOC_MOBILEPROVISION_NAME
     updateProvisioningProfileById $APPSTORE_MOBILEPROVISION_NAME
+    updateProvisioningProfileById $ADHOC_EXTENSION_MOBILEPROVISION_NAME
 }
 
 # build sources and make archive

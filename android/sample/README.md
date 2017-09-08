@@ -2,6 +2,13 @@ SCG Push SDK
 ===
 
 # Changelog
+## 1.4.0 (uses Firebase 10.2.6)
+- introduced Cordova plugin
+
+## 1.3.0
+- added support for inbox and Badges
+- added retry logic on some methods
+
 ## 1.2.0 (uses Firebase 9.8.0)
 - added support for deep links and app data.
 - added common method for confirmation of different events
@@ -220,7 +227,8 @@ If your logic heavily download attachments, consider saving the `ScgClient.Downl
 Some notifications can contains also deep link or app data. You can check and query them using provided in `ScgMessage` methods.
 
 > Example of checking for deep link or add data
-```
+
+```java
 boolean hasDeepLink = scgMsg.hasDeepLink();
 boolean hasAppData = scgMsg.hasAppData();
 ```
@@ -229,7 +237,8 @@ boolean hasAppData = scgMsg.hasAppData();
 Some deep links are tracked, this means that you must resolve them to get the real URL. SCG SDK provides easy way to do this:
 
 > Example of resolving tracked URL
-```
+
+```java
 if (message.hasDeepLink()) {
     ScgClient.getInstance().resolveTrackedLink(message.getDeepLink(), new ScgCallback() {
         @Override
@@ -249,7 +258,7 @@ if (message.hasDeepLink()) {
 
 # Delivery and seen/interaction report
 
-Once message is arrived you can perform **optionally**, confirmation report by calling ` ScgClient.getInstance().confirm(messageId, ScgState.DELIVERED, callback);` with the `messageId`, `ScgState` and some `callback`:
+Once message is arrived you can perform **optionally** , confirmation report by calling ` ScgClient.getInstance().confirm(messageId, ScgState.DELIVERED, callback);` with the `messageId`, `ScgState` and some `callback`:
 
 ```java
 ScgClient.getInstance().confirm(messageId, messageState, new ScgCallback() {
@@ -278,3 +287,15 @@ ScgClient.getInstance().confirm(messageId, messageState, new ScgCallback() {
 will give you some human error message.
 
 *Example: 401 will be returned if you are not authenticated in front of service.*
+
+# Manage the inbox
+
+You can manage your inbox which represent locally saved messages by the `ScgClient` methods:
+
+* `resetBadgesCounter()` - which clear the badge counter and mark all massages as read.
+* `deleteAllInboxMessages()`
+* `deleteInboxMessage()` - which delete message with given id
+* `deleteInboxMessageAtIndex()` - which delete message on given index
+* `getAllInboxMessages()`
+* `getInboxMessageAtIndex()`
+* `getInboxMessagesCount()`

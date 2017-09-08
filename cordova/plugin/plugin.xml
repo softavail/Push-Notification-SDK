@@ -1,0 +1,76 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<plugin xmlns="http://apache.org/cordova/ns/plugins/1.0"
+    xmlns:android="http://schemas.android.com/apk/res/android"
+        id="cordova-plugin-scg-push" version="1.4.0">
+    <name>SCG Push</name>
+    <description>SCG Push Notification SDK Cordova Plugin</description>
+    <author>Syniverse</author>
+    <keywords>cordova,scg,push,notifications,sdk</keywords>
+
+    <js-module src="www/scg-push.js" name="ScgPush">
+        <clobbers target="scg.push" />
+    </js-module>
+
+    <!-- android -->
+    <platform name="android">
+        <framework src="com.google.firebase:firebase-core:+" />
+        <framework src="com.google.firebase:firebase-messaging:+" />
+        <framework src="com.google.code.gson:gson:2.8.0" />
+        <framework src="com.squareup.retrofit2:retrofit:2.3.0" />
+        <framework src="com.squareup.retrofit2:converter-gson:2.3.0" />
+        <framework src="com.syniverse.scg.push-sdk:scg-push-sdk-android:1.1" />
+        <framework src="src/android/scg-build.gradle" custom="true" type="gradleReference" />
+        <source-file src="src/android/com/syniverse/scg/push/CordovaScgClient.java" target-dir="src/com/syniverse/scg/push" />
+        <source-file src="src/android/com/syniverse/scg/push/MainReceiver.java" target-dir="src/com/syniverse/scg/push" />
+
+        <config-file target="res/xml/config.xml" parent="/*">
+          <feature name="ScgPush">
+            <param name="android-package" value="com.syniverse.scg.push.CordovaScgClient"/>
+            <param name="onload" value="true" />
+          </feature>
+        </config-file>
+
+        <config-file target="AndroidManifest.xml" parent="/manifest/application">
+          <service android:name="com.syniverse.scg.push.sdk.ScgMessagingService">
+              <intent-filter>
+                  <action android:name="com.google.firebase.MESSAGING_EVENT" />
+              </intent-filter>
+          </service>
+          <service android:name="com.syniverse.scg.push.sdk.ScgInstanceIdService">
+              <intent-filter>
+                  <action android:name="com.google.firebase.INSTANCE_ID_EVENT" />
+              </intent-filter>
+          </service>
+          <receiver android:enabled="true" android:exported="false" android:name="com.syniverse.scg.push.MainReceiver">
+            <intent-filter>
+                <action android:name="com.syniverse.scg.push.sdk.action.PUSH_TOKEN_RECEIVED" />
+                <action android:name="com.syniverse.scg.push.sdk.action.MESSAGE_RECEIVED" />
+            </intent-filter>
+          </receiver>
+        </config-file>
+
+        <config-file target="AndroidManifest.xml" parent="/manifest">
+          <uses-permission android:name="android.permission.INTERNET" />
+          <uses-permission android:name="android.permission.WAKE_LOCK" />
+        </config-file>
+
+        <hook src="scripts/afterPrepare.js" type="after_prepare" />
+    </platform>
+
+    <!-- ios -->
+    <platform name="ios">
+        <config-file target="config.xml" parent="/*">
+            <feature name="SCGPush">
+                <param name="ios-package" value="SCGPushCordova"/>
+                <param name="onload" value="true" />
+                <preference name="AccessToken" value="" />
+                <preference name="AppID" value="" />
+                <preference name="CallbackUri" value="" />
+            </feature>
+        </config-file>
+        <framework src="src/ios/SCGPushSDK.framework" custom="true" embed="true"/>
+        <header-file src="src/ios/SCGPushSDK/SCGPushCordova.h" />
+        <source-file src="src/ios/SCGPushSDK/SCGPushCordova.m" />
+    </platform>
+
+</plugin>

@@ -302,6 +302,7 @@ public class MainActivity extends AppCompatActivity implements ScgCallback {
 
     public void onTokenRegister(final View view) {
         final String token = pushToken.getText().toString();
+        System.out.println("!!!! token: " + token);
 
         if (!TextUtils.isEmpty(token)) {
             ScgClient.getInstance().registerPushToken(token, this);
@@ -348,7 +349,7 @@ public class MainActivity extends AppCompatActivity implements ScgCallback {
             new Handler().postDelayed(new Runnable() {
                 @Override
                 public void run() {
-                    reportState(messageId, ScgState.CLICKTHRU);
+                    reportState(messageId, ScgState.READ);
                 }
             }, 3141);
         }

@@ -39,9 +39,10 @@ else
     REVISION_NUMBER=$(git rev-list HEAD | wc -l | tr -d ' ')
 fi
 
-APP_FILE=
-DSYM_FILE=
-PRODUCT_NAME=SCGPush
+
+PRODUCT_NAME="SCGPushSDK"
+FRAMEWORK_NAME="${PRODUCT_NAME}.framework"
+DSYM_NAME="${FRAMEWORK_NAME}.dSYM"
 
 #exit batch script with error
 do_exit ()
@@ -123,8 +124,52 @@ build_install()
 {
     echo "Building ${PRODUCT_NAME} ... "
 
-	xcodebuild -workspace ios.xcworkspace -scheme SCGPush -configuration Release -jobs 8 clean install DSTROOT="${OPT_DST_DIR}" REVISION_NUMBER=${REVISION_NUMBER}
+    rm -rf "${OPT_DST_DIR}/${FRAMEWORK_NAME}"
+    rm "${OPT_DST_DIR}/${PRODUCT_NAME}_Sim"
+    rm "${OPT_DST_DIR}/${PRODUCT_NAME}_Dev"
+    rm "${OPT_DST_DIR}/${PRODUCT_NAME}"
+
+    xcodebuild 	-workspace ios.xcworkspace -scheme SCGPushSDK \
+                -destination 'platform=iOS Simulator,name=iPhone 7' \
+                -configuration Release -jobs 8 clean install DSTROOT="${OPT_DST_DIR}" \
+                CONFIGURATION_BUILD_DIR="${OPT_DST_DIR}" REVISION_NUMBER=${REVISION_NUMBER} SKIP_INSTALL=NO
     check_failure "Error building: ${PRODUCT_NAME}"
+
+    if [ -f "${OPT_DST_DIR}/${FRAMEWORK_NAME}/${PRODUCT_NAME}" ]; then
+        cp "${OPT_DST_DIR}/${FRAMEWORK_NAME}/${PRODUCT_NAME}" "${OPT_DST_DIR}/${PRODUCT_NAME}_Sim"
+    fi
+
+    xcodebuild  -workspace ios.xcworkspace -scheme SCGPushSDK \
+                -configuration Release -jobs 8 clean install DSTROOT="${OPT_DST_DIR}" \
+                CONFIGURATION_BUILD_DIR="${OPT_DST_DIR}" REVISION_NUMBER=${REVISION_NUMBER} SKIP_INSTALL=NO
+    check_failure "Error building: ${PRODUCT_NAME}"
+
+    if [ -f "${OPT_DST_DIR}/${FRAMEWORK_NAME}/${PRODUCT_NAME}" ]; then
+        cp "${OPT_DST_DIR}/${FRAMEWORK_NAME}/${PRODUCT_NAME}" "${OPT_DST_DIR}/${PRODUCT_NAME}_Dev"
+        lipo "${OPT_DST_DIR}/${PRODUCT_NAME}_Dev" "${OPT_DST_DIR}/${PRODUCT_NAME}_Sim" -create -output "${OPT_DST_DIR}/${PRODUCT_NAME}"
+    fi
+
+    if [ -f "${OPT_DST_DIR}/${PRODUCT_NAME}" ]; then
+        rm "${OPT_DST_DIR}/${FRAMEWORK_NAME}/${PRODUCT_NAME}"
+        cp "${OPT_DST_DIR}/${PRODUCT_NAME}" "${OPT_DST_DIR}/${FRAMEWORK_NAME}/${PRODUCT_NAME}"
+    fi
+
+    rm "${OPT_DST_DIR}/${PRODUCT_NAME}_Sim"
+    rm "${OPT_DST_DIR}/${PRODUCT_NAME}_Dev"
+    rm "${OPT_DST_DIR}/${PRODUCT_NAME}"
+
+    pushd ${OPT_DST_DIR}
+
+    # compress framework
+    zip -qyr "${FRAMEWORK_NAME}-${REVISION_NUMBER}.zip" "${FRAMEWORK_NAME}"
+    #rm -rf "${FRAMEWORK_NAME}"
+
+    # compress dSYM
+    zip -qr "${FRAMEWORK_NAME}-${REVISION_NUMBER}.dSYM.zip" "${FRAMEWORK_NAME}.dSYM"
+    rm -rf "${FRAMEWORK_NAME}.dSYM"
+
+    popd
+
 }
 
 cleanup()

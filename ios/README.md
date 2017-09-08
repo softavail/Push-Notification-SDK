@@ -12,30 +12,24 @@ Configure your project to use Xcode.
 ## Install
 
 
-Drag the SCGPush.framework file to the project in Xcode.
+Drag the SCGPushSDK.framework file to the project in Xcode.
 
 Then:
 
 > Import library
-
 > Swift
 ```swift
-import SSCGPush
+import SSCGPushSDK
 ```
 
-For an Objective-C project
-1. Under Build Settings, in Packaging, make sure the Defines Module setting for that framework target is set to “Yes".
-
-2. Import library
 > Objective-C
 ```objective-c
-#import <SCGPush/SCGPush-Swift.h>
+import <SCGPushSDK/SCGPush.h>
 ```
-
 
 ## Initialize with root URL and App ID
 The SDK Push library must be used as a singleton object. Before start using it,
-you must initialize it with `callbackURI` and `appID`.
+you must initialize it with `accessToken`, `callbackURI` and `appID`.
 
 You can initialize the library from every entry point, but `AppDelegate` class is preferred.
 
@@ -43,30 +37,15 @@ You can initialize the library from every entry point, but `AppDelegate` class i
 
 > Swift
 ```swift
-SSCGPush.instance.appID = "your app id"
-SCGPush.instance.callbackURI = "http://example.com"
+SCGPush.start(withAccessToken: "YOUR_ACCESS_TOKEN", appId: "YOUR_APP_ID", callbackUri: "http://example.com", delegate: nil)
 ```
 
 > Objective-C
 ```objective-c
-[[SSCGPush instance] setAppID:@"your app id"];
-[[SSCGPush instance] setCallbackURI:@"http://example.com"];
-```
-
-## Authentication
-
-Before you can use SDK functionality (for example `register`/`unregister` push token or `delivery` report) you must authenticate using:
-
-> Set authentication token
-
-> Swift
-```swift
-SCGPush.instance.accessToken = "your access token"
-```
-
-> Objective-C
-```objective-c
-[[SCGPush instance] setAccessToken:@"your access token"];
+[SCGPush startWithAccessToken: @"YOUR_ACCESS_TOKEN" 
+                        appId: @"YOUR_APP_ID"
+                  callbackUri: @"http://example.com"
+                     delegate: nil]
 ```
 
 # Register/Unregister push token
@@ -79,7 +58,7 @@ To register given `token` you must call `registerPushToken`:
 
 > Swift
 ```swift
-SCGPush.instance.registerPushToken("your device token",
+SCGPush.sharedInstance().registerToken("your device token",
             completionBlock: {
                 //handle when successful register the push token
             }) { (error) in
@@ -90,7 +69,7 @@ SCGPush.instance.registerPushToken("your device token",
 
 > Objective-C
 ```objective-c
-[[SCGPush instance] registerPushToken:@"your device token"
+[[SCGPush sharedInstance] registerToken:@"your device token"
                           completionBlock:^{
                               //handle when successful register the push token
                           } failureBlock:^(NSError * error) {
@@ -107,7 +86,7 @@ You can register token in `didRegisterForRemoteNotificationsWithDeviceToken` met
 ```swift
 func application(application: UIApplication, didRegisterForRemoteNotificationsWithDeviceToken deviceToken: NSData) {
     ...
-    SCGPush.instance.registerPushToken(deviceTokeData: deviceToken, completionBlock: {
+    SCGPush.sharedInstance().registerToken(deviceTokeData: deviceToken, completionBlock: {
             //handle when successful register the push token
         }) { (error) in
             //handle when some error occurred
@@ -123,7 +102,7 @@ If you are working on Objective-C project You can register token in `- (void)app
 ```objective-c
 - (void)application:(UIApplication *)application didRegisterForRemoteNotificationsWithDeviceToken:(NSData *)deviceToken {
   ...
-  [[SCGPush instance] registerPushTokenWithDeviceTokeData:deviceToken
+  [[SCGPush sharedInstance] registerTokenWithDeviceTokeData:deviceToken
                           completionBlock:^{
                               //handle when successful register the push token
                           } failureBlock:^(NSError * error) {
@@ -134,55 +113,13 @@ If you are working on Objective-C project You can register token in `- (void)app
 }
 ```
 
-If you want to register the `token` somewhere else, you can save token with `saveDeviceToken` method.
-
-> Swift
-```swift
-func application(application: UIApplication, didRegisterForRemoteNotificationsWithDeviceToken deviceToken: NSData) {
-    ...
-    SCGPush.instance.saveDeviceToken(deviceTokenData: deviceToken)
-    ...
-}
-```
-
-> Objective-C
-```objective-c
-- (void)application:(UIApplication *)application didRegisterForRemoteNotificationsWithDeviceToken:(NSData *)deviceToken {
-  ...
-  [[SCGPush instance] saveDeviceTokenWithDeviceTokenData:deviceToken];
-  ...
-}
-```
-
-And call `registerPushToken(completionBlock, failureBlock: failureBlock)`:
-
-> Swift
-```swift
-SCGPush.instance.registerPushToken(completionBlock: {
-            //handle when successful register the push
-           }) { (error) in
-            //handle when some error occurred
-            //use error.description for more details
-       }
-```
-
-> Objective-C
-```objective-c
-[[SCGPush instance] registerPushToken:^{
-        //handle when successful register the push token
-    } failureBlock:^(NSError * error) {
-        //handle when some error occurred
-        //use error.description for more details
-    }];
-```
-
 ## Unregister
 
 To unregister given `token` you must call `unregisterPushToken`:
 
 > Swift
 ```swift
-SCGPush.instance.unregisterPushToken({
+SCGPush.sharedInstance().unregisterPushToken({
             //handle when successful register the push
             }) { (error) in
             //handle when some error occurred
@@ -192,7 +129,7 @@ SCGPush.instance.unregisterPushToken({
 
 > Objective-C
 ```objective-c
-[[SCGPush instance] unregisterPushToken:^{
+[[SCGPush sharedInstance] unregisterPushToken:^{
         //handle when successful register the push token
     } failureBlock:^(NSError * error) {
         //handle when some error occurred
@@ -216,7 +153,7 @@ Allowed statuses are:
 ```swift
 func application(application: UIApplication, didReceiveRemoteNotification userInfo: [NSObject : AnyObject]){
        ...
-       func reportStatus(userInfo: userInfo, state:MessageState.read, completionBlock: {
+       SCGPush.sharedInstance().reportStatus(withMessageId: messageID, andMessageState: MessageState.delivered, completionBlock: {
              //send report when the message is read
              }) { (error) in
              //handle when some error occurred
@@ -230,7 +167,7 @@ func application(application: UIApplication, didReceiveRemoteNotification userIn
 ```objective-c
 - (void)application:(UIApplication *)application didReceiveRemoteNotification:(NSDictionary *)userInfo {
   ...
-  [[SCGPush instance] reportStatusUserInfo:userInfo state:Read
+  [[SCGPush sharedInstance] reportStatusWithMessageId:messageID andMessageState:MessageStateDelivered
   completionBlock:^{
         //handle when successful register the push token
     } failureBlock:^(NSError * error) {
@@ -250,7 +187,7 @@ For that you have to register for `SessionDelegateHandler`
 ```swift
 func application(application: UIApplication, didReceiveRemoteNotification userInfo: [NSObject : AnyObject]){
        ...
-       SCGPush.shared.resolveTrackedLink(userInfo: userInfo)
+       SCGPush.shared.resolveTrackedLink(url)
         ...
 }
 
@@ -323,7 +260,57 @@ With this functionality you can present an image, an animated image, a video or 
 > Swift
 ```swift
     SCGPush.shared.groupBundle = "your.group.bundel.identifier"
-    SSCGPush.instance.appID = "your app id"
+    SCGPush.instance.appID = "your app id"
     SCGPush.instance.callbackURI = "http://example.com"
 ```
 
+# Push inbox
+
+You can manage your inbox which represent locally saved messages by the `SCGPush` methods:
+1. Push message to inbox
+> Swift
+```swift
+    open func push(toInbox payload: [AnyHashable : Any]) -> Bool
+```
+
+2. Get number of inbox messages
+> Swift
+```swift
+    open func numberOfMessages() -> UInt
+```
+
+3. Get message at specified index
+> Swift
+```swift
+    open func message(at index: UInt) -> SCGPushMessage?
+```
+
+4. Delete inbox message
+> Swift
+```swift
+    open func delete(_ message: SCGPushMessage) -> Bool
+```
+
+5. Delete inbox message by index
+> Swift
+```swift
+    open func deleteMessage(at index: UInt) -> Bool
+```
+
+6. Delete all inbox messages
+> Swift
+```swift
+    open func deleteAllMessages() -> Bool
+```
+
+7. Load attachment for inbox message ( 
+> Swift
+```swift
+    open func loadAttachment(for message: SCGPushMessage, completionBlock: ((SCGPushAttachment) -> Swift.Void)?, failureBlock: ((Error?) -> Swift.Void)? = nil)
+```
+
+8. Get attachment for inbox message
+> Swift
+```swift
+    open func getAttachmentFor(_ message: SCGPushMessage) -> SCGPushAttachment?
+```
