@@ -10,12 +10,12 @@ import UIKit
 
 protocol NotificationTableViewCellDelegate: class {
     
-    func didClickDelivery(cell:UITableViewCell)
-    func didClickRead(cell:UITableViewCell)
-    func didClickThru(cell:UITableViewCell)
-    func didClickDelete(cell:UITableViewCell)
-    func didClickDeepLink(cell:UITableViewCell)
-    func didClickAttachment(cell:UITableViewCell)
+    func didClickDelivery(cell:NotificationTableViewCell)
+    func didClickRead(cell:NotificationTableViewCell)
+    func didClickThru(cell:NotificationTableViewCell)
+    func didClickDelete(cell:NotificationTableViewCell)
+    func didClickDeepLink(cell:NotificationTableViewCell)
+    func didClickAttachment(cell:NotificationTableViewCell)
 }
 
 class NotificationTableViewCell: UITableViewCell {
@@ -31,6 +31,8 @@ class NotificationTableViewCell: UITableViewCell {
     @IBOutlet weak var constraintLabelDateTop: NSLayoutConstraint!
     
     weak var delegate:NotificationTableViewCellDelegate?
+    
+    var deepLink:String?
 
     
     override func awakeFromNib() {

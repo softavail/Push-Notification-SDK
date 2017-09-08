@@ -13,27 +13,31 @@ import MobileCoreServices
 
 class MessagesTableViewController: UITableViewController, QLPreviewControllerDataSource, NotificationTableViewCellDelegate {
     
-    func didClickDelivery(cell: UITableViewCell) {
+    
+    func didClickDelivery(cell: NotificationTableViewCell) {
         
     }
     
-    func didClickRead(cell:UITableViewCell) {
+    func didClickRead(cell:NotificationTableViewCell) {
         
     }
     
-    func didClickThru(cell:UITableViewCell) {
+    func didClickThru(cell:NotificationTableViewCell) {
         
     }
     
-    func didClickDelete(cell:UITableViewCell) {
+    func didClickDelete(cell:NotificationTableViewCell) {
         
     }
     
-    func didClickDeepLink(cell:UITableViewCell) {
+    func didClickDeepLink(cell:NotificationTableViewCell) {
+     
+        let url = URL(string:cell.deepLink!)
         
+        UIApplication.shared.openURL(url!)
     }
     
-    func didClickAttachment(cell:UITableViewCell) {
+    func didClickAttachment(cell:NotificationTableViewCell) {
         
     }
 
@@ -56,8 +60,7 @@ class MessagesTableViewController: UITableViewController, QLPreviewControllerDat
         let nib = UINib.init(nibName: "NotificationTableViewCell", bundle: nil)
         self.tableView.register(nib, forCellReuseIdentifier: "NotificationCell")
     }
-
-
+    
     override func didReceiveMemoryWarning() {
         super.didReceiveMemoryWarning()
         // Dispose of any resources that can be recreated.
@@ -87,6 +90,7 @@ class MessagesTableViewController: UITableViewController, QLPreviewControllerDat
         cell.delegate = self
         cell.labelBody.text = message.body!
         cell.labelDate.text = self.formatter.string(from: message.created)
+        cell.deepLink = message.deepLink;
         //debugPrint(message.created)
         
         // Configure the cell...
