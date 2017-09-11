@@ -23,9 +23,12 @@ class NotificationTableViewCell: UITableViewCell {
     @IBOutlet weak var labelBody: UILabel!
     @IBOutlet weak var labelDate: UILabel!
     @IBOutlet weak var constraintTopSpaceToLabelDate: NSLayoutConstraint!
-    @IBOutlet weak var constraintVerticalSpaceFromDateToBody: NSLayoutConstraint!
-    @IBOutlet weak var constraintBottomSpaceToLabelBody: NSLayoutConstraint!
-    @IBOutlet weak var attachmentIndicatorView: UIImageView!
+    @IBOutlet weak var constraintVerticalSpaceBodyToDelivery: NSLayoutConstraint!
+    @IBOutlet weak var constraintVertialSpaceClickToDelete: NSLayoutConstraint!
+    
+    @IBOutlet weak var attachmentButton: UIButton!
+    @IBOutlet weak var deepLinkButton: UIButton!
+    @IBOutlet weak var deliveryButton: UIButton!
     
     weak var delegate:NotificationTableViewCellDelegate?
     

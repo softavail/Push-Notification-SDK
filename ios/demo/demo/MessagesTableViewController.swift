@@ -61,7 +61,12 @@ class MessagesTableViewController: UITableViewController, QLPreviewControllerDat
      
         let url = URL(string:cell.deepLink!)
         
-        UIApplication.shared.openURL(url!)
+        if #available(iOS 10.0, *) {
+            UIApplication.shared.open(url!, options: [:], completionHandler: nil)
+        } else {
+            // Fallback on earlier versions
+            UIApplication.shared.openURL(url!)
+        }
     }
     
     func didClickAttachment(cell:NotificationTableViewCell) {
@@ -127,9 +132,9 @@ class MessagesTableViewController: UITableViewController, QLPreviewControllerDat
         }
 
         if message.hasAttachment {
-            cell.attachmentIndicatorView.isHidden = false
+            cell.attachmentButton.isHidden = false;
         } else {
-            cell.attachmentIndicatorView.isHidden = true
+            cell.attachmentButton.isHidden = true;
         }
         
         debugPrint("cell date: \(cell.labelDate.text!)")
@@ -142,13 +147,14 @@ class MessagesTableViewController: UITableViewController, QLPreviewControllerDat
         let cell:NotificationTableViewCell = tableView.dequeueReusableCell(withIdentifier: "NotificationCell") as! NotificationTableViewCell
         let totalVerticalMargins:CGFloat =
             cell.constraintTopSpaceToLabelDate.constant +
-            cell.constraintVerticalSpaceFromDateToBody.constant +
-            cell.constraintBottomSpaceToLabelBody.constant
+            cell.constraintVerticalSpaceBodyToDelivery.constant +
+            cell.constraintVertialSpaceClickToDelete.constant
         
-        let labelDateHeight: CGFloat = cell.labelDate.intrinsicContentSize.height
-        
-        let labelBodyHeight: CGFloat = calculateHeightWith(message.body!, font: cell.labelBody.font, maxWidth: self.tableView.bounds.size.width)
-        let calculatedHeight = totalVerticalMargins + labelDateHeight + labelBodyHeight
+        let labelDateWidth: CGFloat = cell.labelDate.intrinsicContentSize.width
+        let labelBodyHeight: CGFloat = calculateHeightWith(message.body!, font: cell.labelBody.font, maxWidth: self.tableView.bounds.size.width - labelDateWidth)
+        let attachmentButtonHeight = cell.attachmentButton.intrinsicContentSize.height;
+        let deliveryButtonHeight = cell.deliveryButton.intrinsicContentSize.height;
+        let calculatedHeight = totalVerticalMargins + labelBodyHeight + attachmentButtonHeight + deliveryButtonHeight + 10;
         
         return [75, calculatedHeight].max()!
     }
