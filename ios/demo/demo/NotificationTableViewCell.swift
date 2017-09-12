@@ -26,9 +26,13 @@ class NotificationTableViewCell: UITableViewCell {
     @IBOutlet weak var constraintVerticalSpaceBodyToDelivery: NSLayoutConstraint!
     @IBOutlet weak var constraintVertialSpaceClickToDelete: NSLayoutConstraint!
     
+    @IBOutlet weak var deliveryButton: UIButton!
+    @IBOutlet weak var readButton: UIButton!
+    @IBOutlet weak var thruButton: UIButton!
+    
     @IBOutlet weak var attachmentButton: UIButton!
     @IBOutlet weak var deepLinkButton: UIButton!
-    @IBOutlet weak var deliveryButton: UIButton!
+    @IBOutlet weak var deleteButton: UIButton!
     
     weak var delegate:NotificationTableViewCellDelegate?
     
@@ -44,6 +48,28 @@ class NotificationTableViewCell: UITableViewCell {
         labelDate.numberOfLines = 1
         
         labelBody.numberOfLines = 0
+        
+        let imageRed            = UIImage(named: "buttonRed.png") as UIImage!
+        let imageFinalRed       = imageRed?.resizableImage(withCapInsets: UIEdgeInsetsMake(3, 3, 3, 3))
+        
+        let imageBlue           = UIImage(named: "buttonBlue.png") as UIImage!
+        let imageFinalBlue      = imageBlue?.resizableImage(withCapInsets: UIEdgeInsetsMake(3, 3, 3, 3))
+        
+        let imageGreen          = UIImage(named: "buttonGreen.png") as UIImage!
+        let imageFinalGreen     = imageGreen?.resizableImage(withCapInsets: UIEdgeInsetsMake(3, 3, 3, 3))
+
+        let imagePink           = UIImage(named: "buttonPink.png") as UIImage!
+        let imageFinalPink      = imagePink?.resizableImage(withCapInsets: UIEdgeInsetsMake(3, 3, 3, 3))
+
+        let imageOrange         = UIImage(named: "buttonOrange.png") as UIImage!
+        let imageFinalOrange    = imageOrange?.resizableImage(withCapInsets: UIEdgeInsetsMake(3, 3, 3, 3))
+        
+        self.deleteButton.setBackgroundImage(imageFinalRed, for: UIControlState.normal)
+        self.thruButton.setBackgroundImage(imageFinalGreen, for: UIControlState.normal)
+        self.deepLinkButton.setBackgroundImage(imageFinalBlue, for: UIControlState.normal)
+        self.attachmentButton.setBackgroundImage(imageFinalBlue, for: UIControlState.normal)
+        self.deliveryButton.setBackgroundImage(imageFinalOrange, for: UIControlState.normal)
+        self.readButton.setBackgroundImage(imageFinalPink, for: UIControlState.normal)
     }
 
     override func setSelected(_ selected: Bool, animated: Bool) {

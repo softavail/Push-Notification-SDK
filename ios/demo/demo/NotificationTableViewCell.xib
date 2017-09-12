@@ -30,43 +30,43 @@
                         <nil key="textColor"/>
                         <nil key="highlightedColor"/>
                     </label>
-                    <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="cDP-7f-bHB">
-                        <rect key="frame" x="18" y="40.5" width="94" height="30"/>
+                    <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="cDP-7f-bHB">
+                        <rect key="frame" x="18" y="40.5" width="94" height="34"/>
                         <state key="normal" title="Delivery"/>
                         <connections>
                             <action selector="onClickDelivery:" destination="KGk-i7-Jjw" eventType="touchUpInside" id="QEE-Wf-yq7"/>
                         </connections>
                     </button>
-                    <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="28b-bM-NDn">
-                        <rect key="frame" x="122" y="80" width="94" height="30"/>
+                    <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="28b-bM-NDn">
+                        <rect key="frame" x="122" y="84" width="94" height="34"/>
                         <state key="normal" title="Deep Link"/>
                         <connections>
                             <action selector="onClickDeepLink:" destination="KGk-i7-Jjw" eventType="touchUpInside" id="jMn-oy-wAa"/>
                         </connections>
                     </button>
-                    <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="h9h-vs-MOT">
-                        <rect key="frame" x="18" y="80.5" width="94" height="30"/>
+                    <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="h9h-vs-MOT">
+                        <rect key="frame" x="18" y="84.5" width="94" height="34"/>
                         <state key="normal" title="Attachment"/>
                         <connections>
                             <action selector="onClickAttachment:" destination="KGk-i7-Jjw" eventType="touchUpInside" id="oVU-q1-uda"/>
                         </connections>
                     </button>
-                    <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="tMs-31-9uQ">
-                        <rect key="frame" x="122" y="40.5" width="94" height="30"/>
+                    <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="tMs-31-9uQ">
+                        <rect key="frame" x="122" y="40.5" width="94" height="34"/>
                         <state key="normal" title="Read"/>
                         <connections>
                             <action selector="onClickRead:" destination="KGk-i7-Jjw" eventType="touchUpInside" id="zMW-KP-t0z"/>
                         </connections>
                     </button>
-                    <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="If2-C0-R9H">
-                        <rect key="frame" x="226" y="40.5" width="94" height="30"/>
+                    <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="If2-C0-R9H">
+                        <rect key="frame" x="226" y="40.5" width="94" height="34"/>
                         <state key="normal" title="Click Thru"/>
                         <connections>
                             <action selector="onClickThru:" destination="KGk-i7-Jjw" eventType="touchUpInside" id="dEq-OS-d2O"/>
                         </connections>
                     </button>
-                    <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="IwQ-NA-9Rh">
-                        <rect key="frame" x="226" y="80.5" width="94" height="30"/>
+                    <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="IwQ-NA-9Rh">
+                        <rect key="frame" x="226" y="84.5" width="94" height="34"/>
                         <state key="normal" title="Delete"/>
                         <connections>
                             <action selector="onClickDelete:" destination="KGk-i7-Jjw" eventType="touchUpInside" id="m8c-CC-HUL"/>
@@ -105,9 +105,12 @@
                 <outlet property="constraintVertialSpaceClickToDelete" destination="CnD-SS-ij4" id="Euf-L4-zLU"/>
                 <outlet property="constraintVerticalSpaceBodyToDelivery" destination="mZQ-WI-lgf" id="lXF-NS-1ar"/>
                 <outlet property="deepLinkButton" destination="28b-bM-NDn" id="hFR-Kv-98a"/>
+                <outlet property="deleteButton" destination="IwQ-NA-9Rh" id="m2z-TW-lbc"/>
                 <outlet property="deliveryButton" destination="cDP-7f-bHB" id="Zos-bk-D94"/>
                 <outlet property="labelBody" destination="0nu-1x-p5N" id="QJS-tu-CtS"/>
                 <outlet property="labelDate" destination="2k1-qa-CeN" id="qIV-f5-l4a"/>
+                <outlet property="readButton" destination="tMs-31-9uQ" id="yg1-dc-vdq"/>
+                <outlet property="thruButton" destination="If2-C0-R9H" id="TUP-jQ-q51"/>
             </connections>
             <point key="canvasLocation" x="-54" y="-162"/>
         </tableViewCell>
