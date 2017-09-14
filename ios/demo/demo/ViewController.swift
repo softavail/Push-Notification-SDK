@@ -240,6 +240,15 @@ class ViewController: UIViewController {
         }
     }
 
+    func openLinkInBrowser(_ link: String) {
+        let url = URL(string:link)
+        if #available(iOS 10.0, *) {
+            UIApplication.shared.open(url!, options: [:], completionHandler: nil)
+        } else {
+            // Fallback on earlier versions
+            UIApplication.shared.openURL(url!)
+        }
+    }
 }
 
 
@@ -247,6 +256,7 @@ extension ViewController: SCGPushSDK.SCGPushDelegate {
     func resolveTrackedLinkDidSuccess(_ redirectLocation: String!, withrequest request: URLRequest!) {
         DispatchQueue.main.async {
             debugPrint("RedirectionLocation: \(redirectLocation)\n")
+            self.openLinkInBrowser(redirectLocation)
         }
     }
     
