@@ -41,27 +41,35 @@ class MessagesTableViewController: UITableViewController, QLPreviewControllerDat
         self.formatter.locale = Locale.current
     }
     
-    func didClickDelivery(cell: UITableViewCell) {
+    func didClickDelivery(cell: NotificationTableViewCell) {
         
     }
     
-    func didClickRead(cell:UITableViewCell) {
+    func didClickRead(cell:NotificationTableViewCell) {
         
     }
     
-    func didClickThru(cell:UITableViewCell) {
+    func didClickThru(cell:NotificationTableViewCell) {
         
     }
     
-    func didClickDelete(cell:UITableViewCell) {
+    func didClickDelete(cell:NotificationTableViewCell) {
         
     }
     
-    func didClickDeepLink(cell:UITableViewCell) {
+    func didClickDeepLink(cell:NotificationTableViewCell) {
+     
+        let url = URL(string:cell.deepLink!)
         
+        if #available(iOS 10.0, *) {
+            UIApplication.shared.open(url!, options: [:], completionHandler: nil)
+        } else {
+            // Fallback on earlier versions
+            UIApplication.shared.openURL(url!)
+        }
     }
     
-    func didClickAttachment(cell:UITableViewCell) {
+    func didClickAttachment(cell:NotificationTableViewCell) {
         
     }
 
@@ -75,8 +83,7 @@ class MessagesTableViewController: UITableViewController, QLPreviewControllerDat
         let nib = UINib.init(nibName: "NotificationTableViewCell", bundle: nil)
         self.tableView.register(nib, forCellReuseIdentifier: "NotificationCell")
     }
-
-
+    
     override func didReceiveMemoryWarning() {
         super.didReceiveMemoryWarning()
         // Dispose of any resources that can be recreated.
@@ -109,6 +116,12 @@ class MessagesTableViewController: UITableViewController, QLPreviewControllerDat
         cell.delegate = self
         cell.message = message
         cell.labelBody.text = message.body!
+
+        cell.deepLink = message.deepLink;
+        //debugPrint(message.created)
+        
+        // Configure the cell...
+
     
         if Calendar.current.isDateInToday(message.created) {
             cell.labelDate.text = self.todayFormatter.string(from: message.created)
@@ -119,9 +132,9 @@ class MessagesTableViewController: UITableViewController, QLPreviewControllerDat
         }
 
         if message.hasAttachment {
-            cell.attachmentIndicatorView.isHidden = false
+            cell.attachmentButton.isHidden = false;
         } else {
-            cell.attachmentIndicatorView.isHidden = true
+            cell.attachmentButton.isHidden = true;
         }
         
         debugPrint("cell date: \(cell.labelDate.text!)")
@@ -134,13 +147,14 @@ class MessagesTableViewController: UITableViewController, QLPreviewControllerDat
         let cell:NotificationTableViewCell = tableView.dequeueReusableCell(withIdentifier: "NotificationCell") as! NotificationTableViewCell
         let totalVerticalMargins:CGFloat =
             cell.constraintTopSpaceToLabelDate.constant +
-            cell.constraintVerticalSpaceFromDateToBody.constant +
-            cell.constraintBottomSpaceToLabelBody.constant
+            cell.constraintVerticalSpaceBodyToDelivery.constant +
+            cell.constraintVertialSpaceClickToDelete.constant
         
-        let labelDateHeight: CGFloat = cell.labelDate.intrinsicContentSize.height
-        
-        let labelBodyHeight: CGFloat = calculateHeightWith(message.body!, font: cell.labelBody.font, maxWidth: self.tableView.bounds.size.width)
-        let calculatedHeight = totalVerticalMargins + labelDateHeight + labelBodyHeight
+        let labelDateWidth: CGFloat = cell.labelDate.intrinsicContentSize.width
+        let labelBodyHeight: CGFloat = calculateHeightWith(message.body!, font: cell.labelBody.font, maxWidth: self.tableView.bounds.size.width - labelDateWidth)
+        let attachmentButtonHeight = cell.attachmentButton.intrinsicContentSize.height;
+        let deliveryButtonHeight = cell.deliveryButton.intrinsicContentSize.height;
+        let calculatedHeight = totalVerticalMargins + labelBodyHeight + attachmentButtonHeight + deliveryButtonHeight + 10;
         
         return [75, calculatedHeight].max()!
     }
