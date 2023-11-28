@@ -10,8 +10,6 @@
 		5B831B631E78539200A53428 /* SCGPushSDK.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 5B831B561E77C53000A53428 /* SCGPushSDK.framework */; };
 		5B831B641E7853A900A53428 /* SCGPushSDK.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 5B831B561E77C53000A53428 /* SCGPushSDK.framework */; };
 		5B831B651E7853A900A53428 /* SCGPushSDK.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 5B831B561E77C53000A53428 /* SCGPushSDK.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
-		5BC0FE971D229BB6007A9637 /* Fabric.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 5BC0FE951D229BB6007A9637 /* Fabric.framework */; };
-		5BC0FE981D229BB6007A9637 /* Crashlytics.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 5BC0FE961D229BB6007A9637 /* Crashlytics.framework */; };
 		94AF5F0B1E79799200852808 /* MessagesTableViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 94AF5F0A1E79799200852808 /* MessagesTableViewController.swift */; };
 		94CE16211E7A991D0054C0B3 /* SettingsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 94CE16201E7A991D0054C0B3 /* SettingsViewController.swift */; };
 		94CE16321E8107300054C0B3 /* NotificationTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 94CE16301E8107300054C0B3 /* NotificationTableViewCell.swift */; };
@@ -156,8 +154,6 @@
 			files = (
 				F778FB0F1DC0CF7700D73AC7 /* UserNotifications.framework in Frameworks */,
 				5B831B641E7853A900A53428 /* SCGPushSDK.framework in Frameworks */,
-				5BC0FE971D229BB6007A9637 /* Fabric.framework in Frameworks */,
-				5BC0FE981D229BB6007A9637 /* Crashlytics.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -288,7 +284,6 @@
 			isa = PBXNativeTarget;
 			buildConfigurationList = F59BC84D1CEA56320043E96E /* Build configuration list for PBXNativeTarget "SCGPushDemo" */;
 			buildPhases = (
-				5BC0FE9A1D229C0E007A9637 /* Prepare */,
 				F59BC8211CEA56310043E96E /* Sources */,
 				F59BC8221CEA56310043E96E /* Frameworks */,
 				F59BC8231CEA56310043E96E /* Resources */,
@@ -417,6 +412,7 @@
 			developmentRegion = English;
 			hasScannedForEncodings = 0;
 			knownRegions = (
+				English,
 				en,
 				Base,
 			);
@@ -507,20 +503,6 @@
 			shellPath = /bin/sh;
 			shellScript = "echo \"GCC_PREPROCESSOR_DEFINITIONS=${GCC_PREPROCESSOR_DEFINITIONS}\"\n\nWITH_CRASHLYTICS_STRING=\"WITH_CRASHLYTICS=true\"\n\nif echo \"$GCC_PREPROCESSOR_DEFINITIONS\" | grep -q \"$WITH_CRASHLYTICS_STRING\"; then\necho \"!!! Running Fabric !!!\"\n./depends/fabric_ios/Fabric.framework/run 04514ea659042cc5c7368ba808304e40ff726e7c 6aa5626991f10e90acf79f617ebb09f78e554a17a95fb850682e1dd251a9e740\nfi\n";
 		};
-		5BC0FE9A1D229C0E007A9637 /* Prepare */ = {
-			isa = PBXShellScriptBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-			);
-			inputPaths = (
-			);
-			name = Prepare;
-			outputPaths = (
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-			shellPath = /bin/sh;
-			shellScript = "echo \"Prepare dependencies ..\"\n\n./prepare.sh";
-		};
 		5BC0FE9B1D229E03007A9637 /* BuildNumber */ = {
 			isa = PBXShellScriptBuildPhase;
 			buildActionMask = 2147483647;
@@ -533,7 +515,7 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
-			shellScript = "# xcode-build-bump.sh\n# @desc Auto-increment the build number every time the project is run.\n# @usage\n# 1. Select: your Target in Xcode\n# 2. Select: Build Phases Tab\n# 3. Select: Add Build Phase -> Add Run Script\n# 4. Paste code below in to new \"Run Script\" section\n# 5. Drag the \"Run Script\" below \"Link Binaries With Libraries\"\n# 6. Insure that your starting build number is set to a whole integer and not a float (e.g. 1, not 1.0)\n\nREVENV=${REVISION_NUMBER}\nbuildNumber=$(git rev-list HEAD | wc -l | tr -d ' ')\n\nif [ X\"${REVENV}\" != X\"\" ]; then\nbuildNumber=\"${REVENV}\"\nfi\n\nINFOPLIST=\"${BUILT_PRODUCTS_DIR}/${WRAPPER_NAME}/Info.plist\"\n/usr/libexec/PlistBuddy -c \"Set :CFBundleVersion $buildNumber\" \"${INFOPLIST}\"\necho \"CFBundleVersion: \" $buildNumber";
+			shellScript = "# xcode-build-bump.sh\n# @desc Auto-increment the build number every time the project is run.\n# @usage\n# 1. Select: your Target in Xcode\n# 2. Select: Build Phases Tab\n# 3. Select: Add Build Phase -> Add Run Script\n# 4. Paste code below in to new \"Run Script\" section\n# 5. Drag the \"Run Script\" below \"Link Binaries With Libraries\"\n# 6. Insure that your starting build number is set to a whole integer and not a float (e.g. 1, not 1.0)\n\nREVENV=${REVISION_NUMBER}\nbuildNumber=$(git rev-list HEAD | wc -l | tr -d ' ')\n\nif [ X\"${REVENV}\" != X\"\" ]; then\nbuildNumber=\"${REVENV}\"\nfi\n\nINFOPLIST=\"${BUILT_PRODUCTS_DIR}/${WRAPPER_NAME}/Info.plist\"\n/usr/libexec/PlistBuddy -c \"Set :CFBundleVersion $buildNumber\" \"${INFOPLIST}\"\necho \"CFBundleVersion: \" $buildNumber\n";
 		};
 /* End PBXShellScriptBuildPhase section */
 
@@ -664,7 +646,7 @@
 				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
 				GCC_WARN_UNUSED_FUNCTION = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
-				IPHONEOS_DEPLOYMENT_TARGET = 9.3;
+				IPHONEOS_DEPLOYMENT_TARGET = 12.0;
 				MTL_ENABLE_DEBUG_INFO = YES;
 				ONLY_ACTIVE_ARCH = YES;
 				SDKROOT = iphoneos;
@@ -704,7 +686,7 @@
 				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
 				GCC_WARN_UNUSED_FUNCTION = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
-				IPHONEOS_DEPLOYMENT_TARGET = 9.3;
+				IPHONEOS_DEPLOYMENT_TARGET = 12.0;
 				MTL_ENABLE_DEBUG_INFO = NO;
 				SDKROOT = iphoneos;
 				TARGETED_DEVICE_FAMILY = "1,2";
@@ -731,7 +713,7 @@
 				);
 				HEADER_SEARCH_PATHS = "$(PROJECT_DIR)/../Frameworks";
 				INFOPLIST_FILE = demo/Info.plist;
-				IPHONEOS_DEPLOYMENT_TARGET = 8.0;
+				IPHONEOS_DEPLOYMENT_TARGET = 12.0;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				OTHER_SWIFT_FLAGS = "";
 				PRODUCT_BUNDLE_IDENTIFIER = com.syniverse.scg.push.demo;
@@ -739,7 +721,7 @@
 				PROVISIONING_PROFILE = "44344447-b722-4de9-9f4c-05252ab688fd";
 				PROVISIONING_PROFILE_SPECIFIER = SCGPushDemoDev;
 				SWIFT_OBJC_BRIDGING_HEADER = "$(SRCROOT)/SCGPushDemo-Bridging-Header.h";
-				SWIFT_VERSION = 3.0;
+				SWIFT_VERSION = 5.0;
 			};
 			name = Debug;
 		};
@@ -760,18 +742,16 @@
 					"$(BUILT_PRODUCTS_DIR)",
 					"$(PROJECT_DIR)/depends/fabric_ios",
 				);
-				GCC_PREPROCESSOR_DEFINITIONS = "WITH_CRASHLYTICS=1";
 				HEADER_SEARCH_PATHS = "$(PROJECT_DIR)/../Frameworks";
 				INFOPLIST_FILE = demo/Info.plist;
-				IPHONEOS_DEPLOYMENT_TARGET = 8.0;
+				IPHONEOS_DEPLOYMENT_TARGET = 12.0;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
-				OTHER_SWIFT_FLAGS = "-DWITH_CRASHLYTICS";
 				PRODUCT_BUNDLE_IDENTIFIER = com.syniverse.scg.push.demo;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				PROVISIONING_PROFILE = "b5bbf5cd-533b-42e6-aafb-5cd6af753112";
 				PROVISIONING_PROFILE_SPECIFIER = SCGPushDemoAdHoc;
 				SWIFT_OBJC_BRIDGING_HEADER = "$(SRCROOT)/SCGPushDemo-Bridging-Header.h";
-				SWIFT_VERSION = 3.0;
+				SWIFT_VERSION = 5.0;
 			};
 			name = Release;
 		};
@@ -836,7 +816,7 @@
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
 				DEVELOPMENT_TEAM = 6D6V2A9HWX;
 				INFOPLIST_FILE = Downloader/Info.plist;
-				IPHONEOS_DEPLOYMENT_TARGET = 10.0;
+				IPHONEOS_DEPLOYMENT_TARGET = 12.0;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @executable_path/../../Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = com.syniverse.scg.push.demo.NotificationExtension;
 				PRODUCT_NAME = "$(TARGET_NAME)";
@@ -845,7 +825,7 @@
 				SKIP_INSTALL = YES;
 				SWIFT_ACTIVE_COMPILATION_CONDITIONS = DEBUG;
 				SWIFT_OBJC_BRIDGING_HEADER = "$(SRCROOT)/SCGPushDemo-Bridging-Header.h";
-				SWIFT_VERSION = 3.0;
+				SWIFT_VERSION = 5.0;
 			};
 			name = Debug;
 		};
@@ -859,7 +839,7 @@
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Distribution";
 				DEVELOPMENT_TEAM = 6D6V2A9HWX;
 				INFOPLIST_FILE = Downloader/Info.plist;
-				IPHONEOS_DEPLOYMENT_TARGET = 10.0;
+				IPHONEOS_DEPLOYMENT_TARGET = 12.0;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @executable_path/../../Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = com.syniverse.scg.push.demo.NotificationExtension;
 				PRODUCT_NAME = "$(TARGET_NAME)";
@@ -868,7 +848,7 @@
 				SKIP_INSTALL = YES;
 				SWIFT_OBJC_BRIDGING_HEADER = "$(SRCROOT)/SCGPushDemo-Bridging-Header.h";
 				SWIFT_OPTIMIZATION_LEVEL = "-Owholemodule";
-				SWIFT_VERSION = 3.0;
+				SWIFT_VERSION = 5.0;
 			};
 			name = Release;
 		};

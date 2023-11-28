@@ -10,10 +10,6 @@ import UIKit
 import SCGPushSDK
 import UserNotifications
 
-#if WITH_CRASHLYTICS
-    import Fabric
-    import Crashlytics
-#endif
 
 @UIApplicationMain
 class AppDelegate: UIResponder, UIApplicationDelegate {
@@ -21,14 +17,8 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     var window: UIWindow?
 
 
-    func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplicationLaunchOptionsKey: Any]?) -> Bool {
+    func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplication.LaunchOptionsKey: Any]?) -> Bool {
         // Override point for customization after application launch.
-        #if WITH_CRASHLYTICS
-            debugPrint("WITH_CRASHLYTICS")
-            Fabric.with([Crashlytics.self])
-        #else
-            debugPrint("NO CRASHLYTICS")
-        #endif
 
         if #available(iOS 10.0, *) {
             // use the feature only available in iOS 10
@@ -339,7 +329,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     }
     
     func showAlert(_ title:String, mess:String){
-        let alert = UIAlertController(title: title, message: mess, preferredStyle: UIAlertControllerStyle.alert)
+        let alert = UIAlertController(title: title, message: mess, preferredStyle: UIAlertController.Style.alert)
         alert.addAction(UIAlertAction(title: "Ok", style: .default, handler:nil))
         DispatchQueue.main.async {
             self.window?.rootViewController!.present(alert, animated: true, completion: nil)

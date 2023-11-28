@@ -22,19 +22,19 @@ class NotificationService: UNNotificationServiceExtension {
         
         if let defaults:UserDefaults = UserDefaults(suiteName: "group.com.syniverse.scg.push.demo") {
             
-            if let appId = defaults.string(forKey: "scg-push-appid") as String! {
+            if let appId = defaults.string(forKey: "scg-push-appid") as String? {
                 debugPrint("Info: [SCGPush] successfully assigned appid")
                 SCGPush.sharedInstance().appID = appId
                 self.hasApppId = true
             }
 
-            if let token = defaults.string(forKey: "scg-push-token") as String! {
+            if let token = defaults.string(forKey: "scg-push-token") as String? {
                 debugPrint("Info: [SCGPush] successfully assigned acces token")
                 SCGPush.sharedInstance().accessToken = token
                 self.hasToken = true
             }
 
-            if let baseUrl = defaults.string(forKey: "scg-push-baseurl") as String! {
+            if let baseUrl = defaults.string(forKey: "scg-push-baseurl") as String? {
                 debugPrint("Info: [SCGPush] successfully assigned baseurl")
                 SCGPush.sharedInstance().callbackURI = baseUrl
                 self.hasBaseUrl = true

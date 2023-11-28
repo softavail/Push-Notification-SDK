@@ -143,7 +143,11 @@ class ViewController: UIViewController {
         
         
         
-        let token: String = UserDefaults.standard.string(forKey: "apnTokenString")!
+        guard let token = UserDefaults.standard.string(forKey: "apnTokenString") else {
+            //TODO: Show teh error to teh user
+            return
+        }
+        
         debugPrint("token: \(token)")
         if(!self.isUserRegistered) {
             
@@ -221,7 +225,7 @@ class ViewController: UIViewController {
     
     func showAlert(_ title:String, mess:String){
         OperationQueue.main.addOperation {
-            let alert = UIAlertController(title: title, message: mess, preferredStyle: UIAlertControllerStyle.alert)
+            let alert = UIAlertController(title: title, message: mess, preferredStyle: UIAlertController.Style.alert)
             alert.addAction(UIAlertAction(title: "Ok", style: .default, handler:nil))
             DispatchQueue.main.async {
                 self.present(alert, animated: true, completion: nil)

@@ -7,6 +7,7 @@
 //
 
 import UIKit
+import SCGPushSDK
 
 protocol NotificationTableViewCellDelegate: class {
     
@@ -49,27 +50,27 @@ class NotificationTableViewCell: UITableViewCell {
         
         labelBody.numberOfLines = 0
         
-        let imageRed            = UIImage(named: "buttonRed.png") as UIImage!
-        let imageFinalRed       = imageRed?.resizableImage(withCapInsets: UIEdgeInsetsMake(3, 3, 3, 3))
+        let imageRed            = UIImage(named: "buttonRed.png") as UIImage?
+        let imageFinalRed       = imageRed?.resizableImage(withCapInsets: UIEdgeInsets(top: 3, left: 3, bottom: 3, right: 3))
         
-        let imageBlue           = UIImage(named: "buttonBlue.png") as UIImage!
-        let imageFinalBlue      = imageBlue?.resizableImage(withCapInsets: UIEdgeInsetsMake(3, 3, 3, 3))
+        let imageBlue           = UIImage(named: "buttonBlue.png") as UIImage?
+        let imageFinalBlue      = imageBlue?.resizableImage(withCapInsets: UIEdgeInsets(top: 3, left: 3, bottom: 3, right: 3))
         
-        let imageGreen          = UIImage(named: "buttonGreen.png") as UIImage!
-        let imageFinalGreen     = imageGreen?.resizableImage(withCapInsets: UIEdgeInsetsMake(3, 3, 3, 3))
+        let imageGreen          = UIImage(named: "buttonGreen.png") as UIImage?
+        let imageFinalGreen     = imageGreen?.resizableImage(withCapInsets: UIEdgeInsets(top: 3, left: 3, bottom: 3, right: 3))
 
-        let imagePink           = UIImage(named: "buttonPink.png") as UIImage!
-        let imageFinalPink      = imagePink?.resizableImage(withCapInsets: UIEdgeInsetsMake(3, 3, 3, 3))
+        let imagePink           = UIImage(named: "buttonPink.png") as UIImage?
+        let imageFinalPink      = imagePink?.resizableImage(withCapInsets: UIEdgeInsets(top: 3, left: 3, bottom: 3, right: 3))
 
-        let imageOrange         = UIImage(named: "buttonOrange.png") as UIImage!
-        let imageFinalOrange    = imageOrange?.resizableImage(withCapInsets: UIEdgeInsetsMake(3, 3, 3, 3))
+        let imageOrange         = UIImage(named: "buttonOrange.png") as UIImage?
+        let imageFinalOrange    = imageOrange?.resizableImage(withCapInsets: UIEdgeInsets(top: 3, left: 3, bottom: 3, right: 3))
         
-        self.deleteButton.setBackgroundImage(imageFinalRed, for: UIControlState.normal)
-        self.thruButton.setBackgroundImage(imageFinalGreen, for: UIControlState.normal)
-        self.deepLinkButton.setBackgroundImage(imageFinalBlue, for: UIControlState.normal)
-        self.attachmentButton.setBackgroundImage(imageFinalBlue, for: UIControlState.normal)
-        self.deliveryButton.setBackgroundImage(imageFinalOrange, for: UIControlState.normal)
-        self.readButton.setBackgroundImage(imageFinalPink, for: UIControlState.normal)
+        self.deleteButton.setBackgroundImage(imageFinalRed, for: UIControl.State.normal)
+        self.thruButton.setBackgroundImage(imageFinalGreen, for: UIControl.State.normal)
+        self.deepLinkButton.setBackgroundImage(imageFinalBlue, for: UIControl.State.normal)
+        self.attachmentButton.setBackgroundImage(imageFinalBlue, for: UIControl.State.normal)
+        self.deliveryButton.setBackgroundImage(imageFinalOrange, for: UIControl.State.normal)
+        self.readButton.setBackgroundImage(imageFinalPink, for: UIControl.State.normal)
     }
 
     override func setSelected(_ selected: Bool, animated: Bool) {

@@ -7,7 +7,7 @@
 //
 
 import XCTest
-@testable import demo
+@testable import SCGPushDemo // demo
 
 class demoTests: XCTestCase {
     

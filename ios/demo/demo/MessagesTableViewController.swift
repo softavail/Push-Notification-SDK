@@ -13,7 +13,7 @@ import MobileCoreServices
 
 class MessagesTableViewController: UITableViewController, QLPreviewControllerDataSource, NotificationTableViewCellDelegate {
     
-    public override init(style: UITableViewStyle) {
+    public override init(style: UITableView.Style) {
         super.init(style: style)
         initMe()
     }
@@ -94,7 +94,7 @@ class MessagesTableViewController: UITableViewController, QLPreviewControllerDat
         let size: CGSize =
         text.boundingRect(with: CGSize(width: width, height: CGFloat.greatestFiniteMagnitude),
                           options: NSStringDrawingOptions.usesLineFragmentOrigin,
-                          attributes: [NSFontAttributeName: font], context: nil).size as CGSize
+                          attributes: [NSAttributedString.Key.font: font], context: nil).size as CGSize
         
         return size.height
     }
@@ -193,7 +193,7 @@ class MessagesTableViewController: UITableViewController, QLPreviewControllerDat
 
     func showAlert(_ title:String, mess:String){
         OperationQueue.main.addOperation {
-            let alert = UIAlertController(title: title, message: mess, preferredStyle: UIAlertControllerStyle.alert)
+            let alert = UIAlertController(title: title, message: mess, preferredStyle: UIAlertController.Style.alert)
             alert.addAction(UIAlertAction(title: "Ok", style: .default, handler:nil))
             DispatchQueue.main.async {
                 self.present(alert, animated: true, completion: nil)
@@ -212,7 +212,7 @@ class MessagesTableViewController: UITableViewController, QLPreviewControllerDat
 
 
     // Override to support editing the table view.
-    override func tableView(_ tableView: UITableView, commit editingStyle: UITableViewCellEditingStyle, forRowAt indexPath: IndexPath) {
+    override func tableView(_ tableView: UITableView, commit editingStyle: UITableViewCell.EditingStyle, forRowAt indexPath: IndexPath) {
         if editingStyle == .delete {
             
             // Delete the row from the data source
@@ -233,7 +233,7 @@ class MessagesTableViewController: UITableViewController, QLPreviewControllerDat
 
         // delete action
         let actionDelete:UITableViewRowAction = UITableViewRowAction.init(
-            style: UITableViewRowActionStyle.destructive,
+            style: UITableViewRowAction.Style.destructive,
             title: "Delete",
             handler: { (action, indexPath) in
                 // Delete the row from the data source
@@ -246,7 +246,7 @@ class MessagesTableViewController: UITableViewController, QLPreviewControllerDat
 
         // read action
         let actionRead:UITableViewRowAction = UITableViewRowAction.init(
-            style: UITableViewRowActionStyle.default,
+            style: UITableViewRowAction.Style.default,
             title: "Read",
             handler: { (action, indexPath) in
                 SCGPush.sharedInstance().reportStatus(withMessageId: message.identifier,
@@ -262,7 +262,7 @@ class MessagesTableViewController: UITableViewController, QLPreviewControllerDat
 
         // click trough action
         let actionClickTrough:UITableViewRowAction = UITableViewRowAction.init(
-            style: UITableViewRowActionStyle.default,
+            style: UITableViewRowAction.Style.default,
             title: "Click",
             handler: { (action, indexPath) in
                 SCGPush.sharedInstance().reportStatus(withMessageId: message.identifier,
@@ -279,7 +279,7 @@ class MessagesTableViewController: UITableViewController, QLPreviewControllerDat
         if let url:String = message.deepLink {
             if (url.lengthOfBytes(using: String.Encoding.utf8) > 0) {
                 let actionDeepLink:UITableViewRowAction = UITableViewRowAction.init(
-                    style: UITableViewRowActionStyle.default,
+                    style: UITableViewRowAction.Style.default,
                     title: "Link",
                     handler: { (action, indexPath) in
                         SCGPush.sharedInstance().resolveTrackedLink(message.deepLink)

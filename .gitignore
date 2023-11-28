@@ -410,3 +410,5 @@ Carthage/Build
 /*.gcno
 
 # End of https://www.gitignore.io/api/node,swift,xcode,android,cocoapods,apachecordova,androidstudio
+ios/ios.xcworkspace/xcshareddata/IDEWorkspaceChecks.plist
+*.xcworkspacedata
