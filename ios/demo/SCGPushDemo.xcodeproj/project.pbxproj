@@ -370,7 +370,7 @@
 				TargetAttributes = {
 					F59BC8241CEA56310043E96E = {
 						CreatedOnToolsVersion = 7.3;
-						DevelopmentTeam = 6D6V2A9HWX;
+						DevelopmentTeam = G5A9C5LTK7;
 						LastSwiftMigration = 0800;
 						ProvisioningStyle = Manual;
 						SystemCapabilities = {
@@ -397,7 +397,7 @@
 					};
 					F778FAFF1DC0CE4300D73AC7 = {
 						CreatedOnToolsVersion = 8.0;
-						DevelopmentTeam = 6D6V2A9HWX;
+						DevelopmentTeam = G5A9C5LTK7;
 						ProvisioningStyle = Manual;
 						SystemCapabilities = {
 							com.apple.ApplicationGroups.iOS = {
@@ -704,6 +704,7 @@
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
 				COPY_PHASE_STRIP = YES;
 				DEVELOPMENT_TEAM = 6D6V2A9HWX;
+				"DEVELOPMENT_TEAM[sdk=iphoneos*]" = G5A9C5LTK7;
 				ENABLE_BITCODE = NO;
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(PROJECT_DIR)/../Frameworks",
@@ -716,10 +717,11 @@
 				IPHONEOS_DEPLOYMENT_TARGET = 12.0;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				OTHER_SWIFT_FLAGS = "";
-				PRODUCT_BUNDLE_IDENTIFIER = com.syniverse.scg.push.demo;
+				PRODUCT_BUNDLE_IDENTIFIER = com.syniverse.scg.push.demo.app;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				PROVISIONING_PROFILE = "44344447-b722-4de9-9f4c-05252ab688fd";
 				PROVISIONING_PROFILE_SPECIFIER = SCGPushDemoDev;
+				"PROVISIONING_PROFILE_SPECIFIER[sdk=iphoneos*]" = "SCG Push Demo App Dev";
 				SWIFT_OBJC_BRIDGING_HEADER = "$(SRCROOT)/SCGPushDemo-Bridging-Header.h";
 				SWIFT_VERSION = 5.0;
 			};
@@ -732,9 +734,10 @@
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CODE_SIGN_ENTITLEMENTS = demo/demo.entitlements;
 				CODE_SIGN_IDENTITY = "";
-				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Distribution";
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
 				COPY_PHASE_STRIP = YES;
 				DEVELOPMENT_TEAM = 6D6V2A9HWX;
+				"DEVELOPMENT_TEAM[sdk=iphoneos*]" = G5A9C5LTK7;
 				ENABLE_BITCODE = NO;
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(PROJECT_DIR)/../Frameworks",
@@ -746,10 +749,11 @@
 				INFOPLIST_FILE = demo/Info.plist;
 				IPHONEOS_DEPLOYMENT_TARGET = 12.0;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
-				PRODUCT_BUNDLE_IDENTIFIER = com.syniverse.scg.push.demo;
+				PRODUCT_BUNDLE_IDENTIFIER = com.syniverse.scg.push.demo.app;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				PROVISIONING_PROFILE = "b5bbf5cd-533b-42e6-aafb-5cd6af753112";
 				PROVISIONING_PROFILE_SPECIFIER = SCGPushDemoAdHoc;
+				"PROVISIONING_PROFILE_SPECIFIER[sdk=iphoneos*]" = "SCG Push Demo App Dev";
 				SWIFT_OBJC_BRIDGING_HEADER = "$(SRCROOT)/SCGPushDemo-Bridging-Header.h";
 				SWIFT_VERSION = 5.0;
 			};
@@ -815,13 +819,15 @@
 				CODE_SIGN_IDENTITY = "iPhone Developer: Slav Sarafski (9A657N44WD)";
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
 				DEVELOPMENT_TEAM = 6D6V2A9HWX;
+				"DEVELOPMENT_TEAM[sdk=iphoneos*]" = G5A9C5LTK7;
 				INFOPLIST_FILE = Downloader/Info.plist;
 				IPHONEOS_DEPLOYMENT_TARGET = 12.0;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @executable_path/../../Frameworks";
-				PRODUCT_BUNDLE_IDENTIFIER = com.syniverse.scg.push.demo.NotificationExtension;
+				PRODUCT_BUNDLE_IDENTIFIER = com.syniverse.scg.push.demo.app.ntf.ext;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				PROVISIONING_PROFILE = "d53e011a-9a25-4351-987d-2072d509570f";
 				PROVISIONING_PROFILE_SPECIFIER = "SCG Push Demo Extension Dev";
+				"PROVISIONING_PROFILE_SPECIFIER[sdk=iphoneos*]" = "SCG Push Demo App Ntf Ext Dev";
 				SKIP_INSTALL = YES;
 				SWIFT_ACTIVE_COMPILATION_CONDITIONS = DEBUG;
 				SWIFT_OBJC_BRIDGING_HEADER = "$(SRCROOT)/SCGPushDemo-Bridging-Header.h";
@@ -836,15 +842,17 @@
 				CLANG_WARN_INFINITE_RECURSION = YES;
 				CLANG_WARN_SUSPICIOUS_MOVES = YES;
 				CODE_SIGN_ENTITLEMENTS = Downloader/Downloader.entitlements;
-				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Distribution";
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
 				DEVELOPMENT_TEAM = 6D6V2A9HWX;
+				"DEVELOPMENT_TEAM[sdk=iphoneos*]" = G5A9C5LTK7;
 				INFOPLIST_FILE = Downloader/Info.plist;
 				IPHONEOS_DEPLOYMENT_TARGET = 12.0;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @executable_path/../../Frameworks";
-				PRODUCT_BUNDLE_IDENTIFIER = com.syniverse.scg.push.demo.NotificationExtension;
+				PRODUCT_BUNDLE_IDENTIFIER = com.syniverse.scg.push.demo.app.ntf.ext;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				PROVISIONING_PROFILE = "e6afe1d2-3b71-4d92-98ac-7c0b3877eacd";
 				PROVISIONING_PROFILE_SPECIFIER = "SCG Push Demo Extension AdHoc";
+				"PROVISIONING_PROFILE_SPECIFIER[sdk=iphoneos*]" = "SCG Push Demo App Ntf Ext Dev";
 				SKIP_INSTALL = YES;
 				SWIFT_OBJC_BRIDGING_HEADER = "$(SRCROOT)/SCGPushDemo-Bridging-Header.h";
 				SWIFT_OPTIMIZATION_LEVEL = "-Owholemodule";
