@@ -1,0 +1,11 @@
+import Foundation
+
+private let accessTokenTextFieldIsEmptyNotificationKey = "vasilbotsev.accessTokenIsEmpty"
+private let accessTokenTextFieldIsNotEmptyNotificationKey = "vasilbotsev.accessTokenIsNotEmpty"
+private let appIDTextFieldIsEmptyNotificationKey = "vasilbotsev.appIDIsEmpty"
+private let appIDTextFieldIsNotEmptyNotificationKey = "vasilbotsev.appIDIsNotEmpty"
+
+let accessTokenIsEmptyName = Notification.Name(accessTokenTextFieldIsEmptyNotificationKey)
+let accessTokenIsNotEmptyName = Notification.Name(accessTokenTextFieldIsNotEmptyNotificationKey)
+let appIDIsEmptyName = Notification.Name(appIDTextFieldIsEmptyNotificationKey)
+let appIDIsNotEmptyName = Notification.Name(appIDTextFieldIsNotEmptyNotificationKey)

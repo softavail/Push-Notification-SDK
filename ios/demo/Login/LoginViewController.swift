@@ -11,14 +11,24 @@ class LoginViewController: UIViewController, UITableViewDelegate, UITableViewDat
         title = "SCGPush Test App"
         navigationController?.navigationBar.prefersLargeTitles = true
         
+        navigationItem.rightBarButtonItem = UIBarButtonItem(title: "Settings", style: .plain, target: self, action: #selector(settingsTapped))
+        
         dataSource = loginDataSource.getLoginDataSource()
         loginTableVIew.separatorStyle = .none
         loginTableVIew.estimatedRowHeight = 44
         loginTableVIew.rowHeight = UITableView.automaticDimension
-        
+        loginTableVIew.delaysContentTouches = false
+    }
+    
+    override func viewWillAppear(_ animated: Bool) {
         let notificationCenter = NotificationCenter.default
         notificationCenter.addObserver(self, selector: #selector(adjustForKeyboard), name: UIResponder.keyboardWillHideNotification, object: nil)
         notificationCenter.addObserver(self, selector: #selector(adjustForKeyboard), name: UIResponder.keyboardWillChangeFrameNotification, object: nil)
+    }
+    
+    override func viewWillDisappear(_ animated: Bool) {
+        let notificationCenter = NotificationCenter.default
+        notificationCenter.removeObserver(self)
     }
     
     // MARK: UITableView methods
@@ -47,11 +57,17 @@ class LoginViewController: UIViewController, UITableViewDelegate, UITableViewDat
                 cell.updateCell()
                 return cell
             }
-        } else {
+        } else if model.loginCellType == .register {
             if let cell = tableView.dequeueReusableCell(withIdentifier: cellIdentifier, for: indexPath) as? ButtonCell {
                 cell.buttonModel = model as? ButtonModel
                 cell.updateCell()
                 cell.delegate = self
+                return cell
+            }
+        } else {
+            if let cell = tableView.dequeueReusableCell(withIdentifier: cellIdentifier, for: indexPath) as? DoubleButtonCell {
+                cell.doubleButtonModel = model as? DoubleButtonModel
+                cell.updateCell()
                 return cell
             }
         }
@@ -61,21 +77,30 @@ class LoginViewController: UIViewController, UITableViewDelegate, UITableViewDat
     
     // MARK: ButtonCellDelegate methods
     
-    func didPressRegisterButton(forCell: ButtonCell) {
+    func didPressRegisterButton(forCell cell: ButtonCell) {
         guard let accessTokenModel = dataSource[LoginCellType.accessToken.rawValue] as? TextFieldModel else { return }
         guard let appIDModel = dataSource[LoginCellType.appID.rawValue] as? TextFieldModel else { return }
         
-        let accessStr = accessTokenModel.textFieldValue
-        let appIDStr = appIDModel.textFieldValue
+        cell.registerButton.isEnabled = false
+        navigationController?.navigationBar.isUserInteractionEnabled = false
+        view.isUserInteractionEnabled = false
+        cell.activityIndicator.isHidden = false
+        cell.activityIndicator.startAnimating()
         
-        guard let accessStr = accessStr else { return }
-        guard let appIDStr = appIDStr else { return }
+        let accessString = accessTokenModel.textFieldValue
+        let appIDString = appIDModel.textFieldValue
         
-        print(accessStr)
-        print(appIDStr)
+        guard let accessString = accessString else { return }
+        guard let appIDString = appIDString else { return }
+        
+        let accessStringTrimmed = accessString.trimWhiteSpaces()
+        let appIDStringTrimmed = appIDString.trimWhiteSpaces()
+        
+        print(accessStringTrimmed)
+        print(appIDStringTrimmed)
     }
     
-    // MARK: adjustKeyboard method
+    // MARK: #selector methods
     
     @objc func adjustForKeyboard(notification: Notification) {
         guard let keyboardValue = notification.userInfo?[UIResponder.keyboardFrameEndUserInfoKey] as? NSValue else { return }
@@ -90,5 +115,9 @@ class LoginViewController: UIViewController, UITableViewDelegate, UITableViewDat
         }
 
         loginTableVIew.scrollIndicatorInsets = loginTableVIew.contentInset
+    }
+    
+    @objc func settingsTapped() {
+        
     }
 }

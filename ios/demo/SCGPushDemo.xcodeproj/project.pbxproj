@@ -16,6 +16,12 @@
 		94CE16331E8107300054C0B3 /* NotificationTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 94CE16301E8107300054C0B3 /* NotificationTableViewCell.swift */; };
 		94CE16341E8107300054C0B3 /* NotificationTableViewCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 94CE16311E8107300054C0B3 /* NotificationTableViewCell.xib */; };
 		94CE16351E8107300054C0B3 /* NotificationTableViewCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 94CE16311E8107300054C0B3 /* NotificationTableViewCell.xib */; };
+		CE0AC3EF2B17428800E5D926 /* DoubleButtonModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = CE0AC3EE2B17428800E5D926 /* DoubleButtonModel.swift */; };
+		CE0AC3F22B1742D900E5D926 /* DoubleButtonCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = CE0AC3F12B1742D900E5D926 /* DoubleButtonCell.swift */; };
+		CE0AC3F52B174F2100E5D926 /* BetterButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = CE0AC3F42B174F2100E5D926 /* BetterButton.swift */; };
+		CE0AC3F72B177D9300E5D926 /* ClearTextFieldButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = CE0AC3F62B177D9300E5D926 /* ClearTextFieldButton.swift */; };
+		CE0AC3FA2B1781AC00E5D926 /* Constants.swift in Sources */ = {isa = PBXBuildFile; fileRef = CE0AC3F92B1781AC00E5D926 /* Constants.swift */; };
+		CE0AC3FC2B17BCB300E5D926 /* Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = CE0AC3FB2B17BCB300E5D926 /* Extensions.swift */; };
 		CE9EF7122B15FAB70084478C /* LoginViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = CE9EF7102B15FAB70084478C /* LoginViewController.swift */; };
 		CE9EF7162B15FCA60084478C /* BaseModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = CE9EF7152B15FCA60084478C /* BaseModel.swift */; };
 		CE9EF7182B15FCF60084478C /* TextFieldModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = CE9EF7172B15FCF60084478C /* TextFieldModel.swift */; };
@@ -133,6 +139,12 @@
 		94CE16201E7A991D0054C0B3 /* SettingsViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SettingsViewController.swift; sourceTree = "<group>"; };
 		94CE16301E8107300054C0B3 /* NotificationTableViewCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = NotificationTableViewCell.swift; sourceTree = "<group>"; };
 		94CE16311E8107300054C0B3 /* NotificationTableViewCell.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = NotificationTableViewCell.xib; sourceTree = "<group>"; };
+		CE0AC3EE2B17428800E5D926 /* DoubleButtonModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DoubleButtonModel.swift; sourceTree = "<group>"; };
+		CE0AC3F12B1742D900E5D926 /* DoubleButtonCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DoubleButtonCell.swift; sourceTree = "<group>"; };
+		CE0AC3F42B174F2100E5D926 /* BetterButton.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BetterButton.swift; sourceTree = "<group>"; };
+		CE0AC3F62B177D9300E5D926 /* ClearTextFieldButton.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ClearTextFieldButton.swift; sourceTree = "<group>"; };
+		CE0AC3F92B1781AC00E5D926 /* Constants.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Constants.swift; sourceTree = "<group>"; };
+		CE0AC3FB2B17BCB300E5D926 /* Extensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Extensions.swift; sourceTree = "<group>"; };
 		CE9EF7102B15FAB70084478C /* LoginViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LoginViewController.swift; sourceTree = "<group>"; };
 		CE9EF7152B15FCA60084478C /* BaseModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BaseModel.swift; sourceTree = "<group>"; };
 		CE9EF7172B15FCF60084478C /* TextFieldModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TextFieldModel.swift; sourceTree = "<group>"; };
@@ -215,11 +227,23 @@
 			name = Frameworks;
 			sourceTree = "<group>";
 		};
+		CE0AC3F32B174EEE00E5D926 /* Buttons */ = {
+			isa = PBXGroup;
+			children = (
+				CE0AC3F42B174F2100E5D926 /* BetterButton.swift */,
+				CE0AC3F62B177D9300E5D926 /* ClearTextFieldButton.swift */,
+			);
+			path = Buttons;
+			sourceTree = "<group>";
+		};
 		CE9EF70E2B15FA860084478C /* Login */ = {
 			isa = PBXGroup;
 			children = (
+				CE0AC3F92B1781AC00E5D926 /* Constants.swift */,
+				CE0AC3FB2B17BCB300E5D926 /* Extensions.swift */,
 				CE9EF7102B15FAB70084478C /* LoginViewController.swift */,
 				CE9EF71B2B15FD6F0084478C /* LoginViewControllerData.swift */,
+				CE0AC3F32B174EEE00E5D926 /* Buttons */,
 				CE9EF71D2B16013C0084478C /* Cells */,
 				CE9EF7142B15FC8B0084478C /* Models */,
 			);
@@ -232,6 +256,7 @@
 				CE9EF7152B15FCA60084478C /* BaseModel.swift */,
 				CE9EF7172B15FCF60084478C /* TextFieldModel.swift */,
 				CE9EF7192B15FD040084478C /* ButtonModel.swift */,
+				CE0AC3EE2B17428800E5D926 /* DoubleButtonModel.swift */,
 			);
 			path = Models;
 			sourceTree = "<group>";
@@ -241,6 +266,7 @@
 			children = (
 				CE9EF71E2B16015F0084478C /* TextFieldCell.swift */,
 				CE9EF7222B16016E0084478C /* ButtonCell.swift */,
+				CE0AC3F12B1742D900E5D926 /* DoubleButtonCell.swift */,
 			);
 			path = Cells;
 			sourceTree = "<group>";
@@ -570,14 +596,20 @@
 			buildActionMask = 2147483647;
 			files = (
 				CE9EF7122B15FAB70084478C /* LoginViewController.swift in Sources */,
+				CE0AC3FC2B17BCB300E5D926 /* Extensions.swift in Sources */,
+				CE0AC3FA2B1781AC00E5D926 /* Constants.swift in Sources */,
+				CE0AC3F72B177D9300E5D926 /* ClearTextFieldButton.swift in Sources */,
 				CE9EF7182B15FCF60084478C /* TextFieldModel.swift in Sources */,
 				CE9EF7202B16015F0084478C /* TextFieldCell.swift in Sources */,
 				94CE16321E8107300054C0B3 /* NotificationTableViewCell.swift in Sources */,
 				CE9EF7162B15FCA60084478C /* BaseModel.swift in Sources */,
 				F59BC82B1CEA56310043E96E /* ViewController.swift in Sources */,
 				CE9EF71A2B15FD040084478C /* ButtonModel.swift in Sources */,
+				CE0AC3F52B174F2100E5D926 /* BetterButton.swift in Sources */,
 				CE9EF71C2B15FD6F0084478C /* LoginViewControllerData.swift in Sources */,
 				94AF5F0B1E79799200852808 /* MessagesTableViewController.swift in Sources */,
+				CE0AC3EF2B17428800E5D926 /* DoubleButtonModel.swift in Sources */,
+				CE0AC3F22B1742D900E5D926 /* DoubleButtonCell.swift in Sources */,
 				F59BC8291CEA56310043E96E /* AppDelegate.swift in Sources */,
 				94CE16211E7A991D0054C0B3 /* SettingsViewController.swift in Sources */,
 				CE9EF7242B16016E0084478C /* ButtonCell.swift in Sources */,

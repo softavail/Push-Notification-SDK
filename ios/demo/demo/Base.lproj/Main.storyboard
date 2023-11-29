@@ -366,32 +366,46 @@
                                                     <fontDescription key="fontDescription" type="system" pointSize="14"/>
                                                     <textInputTraits key="textInputTraits"/>
                                                 </textField>
+                                                <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="DzO-yM-CvL" customClass="ClearTextFieldButton" customModule="SCGPushDemo" customModuleProvider="target">
+                                                    <rect key="frame" x="284" y="33" width="75" height="35"/>
+                                                    <state key="normal" title="Button"/>
+                                                    <buttonConfiguration key="configuration" style="plain" title="Button"/>
+                                                    <connections>
+                                                        <action selector="clearTextFieldButtonTapped:" destination="wRk-YC-gae" eventType="touchUpInside" id="c70-zf-HBH"/>
+                                                    </connections>
+                                                </button>
                                             </subviews>
                                             <constraints>
                                                 <constraint firstAttribute="trailing" relation="greaterThanOrEqual" secondItem="F2l-1k-Oir" secondAttribute="trailing" constant="15" id="0mj-0O-A9Y"/>
                                                 <constraint firstAttribute="trailing" secondItem="1Qa-d5-YUM" secondAttribute="trailing" constant="15" id="MVk-7b-bcv"/>
                                                 <constraint firstItem="F2l-1k-Oir" firstAttribute="leading" secondItem="NLD-W9-dII" secondAttribute="leading" constant="15" id="QXl-LS-Pgo"/>
+                                                <constraint firstItem="DzO-yM-CvL" firstAttribute="leading" relation="greaterThanOrEqual" secondItem="NLD-W9-dII" secondAttribute="leading" constant="284" id="Tym-kZ-Bcp"/>
                                                 <constraint firstItem="F2l-1k-Oir" firstAttribute="top" secondItem="NLD-W9-dII" secondAttribute="top" constant="5" id="Yw6-My-KyB"/>
+                                                <constraint firstAttribute="trailing" secondItem="DzO-yM-CvL" secondAttribute="trailing" constant="16" id="Z2I-DI-Aj7"/>
                                                 <constraint firstItem="1Qa-d5-YUM" firstAttribute="leading" secondItem="NLD-W9-dII" secondAttribute="leading" constant="15" id="at8-yT-gHc"/>
+                                                <constraint firstItem="DzO-yM-CvL" firstAttribute="top" secondItem="NLD-W9-dII" secondAttribute="top" constant="33" id="fJ1-PQ-ocJ"/>
                                                 <constraint firstItem="1Qa-d5-YUM" firstAttribute="top" secondItem="F2l-1k-Oir" secondAttribute="bottom" constant="5" id="hzT-Tx-glC"/>
+                                                <constraint firstAttribute="bottom" secondItem="DzO-yM-CvL" secondAttribute="bottom" constant="9" id="wHx-kE-kPH"/>
                                                 <constraint firstAttribute="bottom" secondItem="1Qa-d5-YUM" secondAttribute="bottom" constant="5" id="xs9-ew-aax"/>
                                             </constraints>
                                         </tableViewCellContentView>
                                         <color key="backgroundColor" systemColor="systemBackgroundColor"/>
                                         <connections>
+                                            <outlet property="clearTextFieldButton" destination="DzO-yM-CvL" id="B5n-yB-ORr"/>
                                             <outlet property="textField" destination="1Qa-d5-YUM" id="iLP-65-5gu"/>
                                             <outlet property="titleLabel" destination="F2l-1k-Oir" id="gmB-v4-Ddn"/>
                                         </connections>
                                     </tableViewCell>
-                                    <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" preservesSuperviewLayoutMargins="YES" selectionStyle="none" indentationWidth="10" reuseIdentifier="ButtonCell" rowHeight="89" id="LyA-Hd-n0n" customClass="ButtonCell" customModule="SCGPushDemo" customModuleProvider="target">
-                                        <rect key="frame" x="0.0" y="127" width="375" height="89"/>
+                                    <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" preservesSuperviewLayoutMargins="YES" selectionStyle="none" indentationWidth="10" reuseIdentifier="ButtonCell" rowHeight="104" id="LyA-Hd-n0n" customClass="ButtonCell" customModule="SCGPushDemo" customModuleProvider="target">
+                                        <rect key="frame" x="0.0" y="127" width="375" height="104"/>
                                         <autoresizingMask key="autoresizingMask"/>
                                         <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" preservesSuperviewLayoutMargins="YES" insetsLayoutMarginsFromSafeArea="NO" tableViewCell="LyA-Hd-n0n" id="gPg-U4-IZJ">
-                                            <rect key="frame" x="0.0" y="0.0" width="375" height="89"/>
+                                            <rect key="frame" x="0.0" y="0.0" width="375" height="104"/>
                                             <autoresizingMask key="autoresizingMask"/>
                                             <subviews>
-                                                <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="QTV-Wc-TRW">
-                                                    <rect key="frame" x="100" y="40" width="175" height="34"/>
+                                                <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="QTV-Wc-TRW" customClass="BetterButton" customModule="SCGPushDemo" customModuleProvider="target">
+                                                    <rect key="frame" x="100" y="55" width="175" height="34"/>
+                                                    <color key="backgroundColor" white="0.0" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                                     <inset key="titleEdgeInsets" minX="15" minY="0.0" maxX="15" maxY="0.0"/>
                                                     <inset key="imageEdgeInsets" minX="0.0" minY="0.0" maxX="2.2250738585072014e-308" maxY="0.0"/>
                                                     <state key="normal" title="Button"/>
@@ -399,18 +413,68 @@
                                                         <action selector="registerButtonTapped:" destination="LyA-Hd-n0n" eventType="touchUpInside" id="fUE-kz-Ghg"/>
                                                     </connections>
                                                 </button>
+                                                <activityIndicatorView opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="750" verticalHuggingPriority="750" style="medium" translatesAutoresizingMaskIntoConstraints="NO" id="Uqv-Fw-lRz">
+                                                    <rect key="frame" x="157.5" y="-7" width="60" height="60"/>
+                                                    <constraints>
+                                                        <constraint firstAttribute="width" secondItem="Uqv-Fw-lRz" secondAttribute="height" multiplier="1:1" id="JRt-lj-gAP"/>
+                                                        <constraint firstAttribute="width" constant="60" id="ZrP-6l-vBE"/>
+                                                        <constraint firstAttribute="height" constant="60" id="nuV-Ap-2Rm"/>
+                                                    </constraints>
+                                                </activityIndicatorView>
                                             </subviews>
                                             <constraints>
                                                 <constraint firstAttribute="bottom" secondItem="QTV-Wc-TRW" secondAttribute="bottom" constant="15" id="6iz-ER-vyc"/>
-                                                <constraint firstItem="QTV-Wc-TRW" firstAttribute="top" secondItem="gPg-U4-IZJ" secondAttribute="top" constant="40" id="OAZ-gg-uxf"/>
+                                                <constraint firstItem="QTV-Wc-TRW" firstAttribute="top" secondItem="gPg-U4-IZJ" secondAttribute="top" constant="55" id="OAZ-gg-uxf"/>
+                                                <constraint firstItem="QTV-Wc-TRW" firstAttribute="top" secondItem="Uqv-Fw-lRz" secondAttribute="bottom" constant="2" id="Y8l-y7-HS8"/>
                                                 <constraint firstItem="QTV-Wc-TRW" firstAttribute="centerX" secondItem="gPg-U4-IZJ" secondAttribute="centerX" id="ZxC-7G-2lN"/>
+                                                <constraint firstItem="Uqv-Fw-lRz" firstAttribute="centerX" secondItem="gPg-U4-IZJ" secondAttribute="centerX" id="bu0-zX-rOV"/>
                                                 <constraint firstItem="QTV-Wc-TRW" firstAttribute="leading" relation="greaterThanOrEqual" secondItem="gPg-U4-IZJ" secondAttribute="leading" constant="100" id="kyL-GY-vEv"/>
                                                 <constraint firstAttribute="trailing" secondItem="QTV-Wc-TRW" secondAttribute="trailing" constant="100" id="mxU-r4-3lM"/>
                                             </constraints>
                                         </tableViewCellContentView>
                                         <color key="backgroundColor" systemColor="systemBackgroundColor"/>
                                         <connections>
+                                            <outlet property="activityIndicator" destination="Uqv-Fw-lRz" id="D4j-hh-e12"/>
                                             <outlet property="registerButton" destination="QTV-Wc-TRW" id="DGn-Jw-fCp"/>
+                                        </connections>
+                                    </tableViewCell>
+                                    <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" preservesSuperviewLayoutMargins="YES" selectionStyle="none" indentationWidth="10" reuseIdentifier="DoubleButtonCell" rowHeight="98" id="dcT-x7-cWB" customClass="DoubleButtonCell" customModule="SCGPushDemo" customModuleProvider="target">
+                                        <rect key="frame" x="0.0" y="231" width="375" height="98"/>
+                                        <autoresizingMask key="autoresizingMask"/>
+                                        <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" preservesSuperviewLayoutMargins="YES" insetsLayoutMarginsFromSafeArea="NO" tableViewCell="dcT-x7-cWB" id="qKY-j6-hS5">
+                                            <rect key="frame" x="0.0" y="0.0" width="375" height="98"/>
+                                            <autoresizingMask key="autoresizingMask"/>
+                                            <subviews>
+                                                <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="jOV-TO-fc3">
+                                                    <rect key="frame" x="16" y="53" width="75" height="34"/>
+                                                    <state key="normal" title="Button"/>
+                                                    <buttonConfiguration key="configuration" style="plain" title="Button"/>
+                                                    <connections>
+                                                        <action selector="goToInboxButtonTapped:" destination="dcT-x7-cWB" eventType="touchUpInside" id="odY-th-Iqy"/>
+                                                    </connections>
+                                                </button>
+                                                <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="kEg-WJ-9es">
+                                                    <rect key="frame" x="284" y="53" width="75" height="34"/>
+                                                    <state key="normal" title="Button"/>
+                                                    <buttonConfiguration key="configuration" style="plain" title="Button"/>
+                                                    <connections>
+                                                        <action selector="resetBadgeButtonTapped:" destination="dcT-x7-cWB" eventType="touchUpInside" id="vYY-hL-dJ0"/>
+                                                    </connections>
+                                                </button>
+                                            </subviews>
+                                            <constraints>
+                                                <constraint firstItem="kEg-WJ-9es" firstAttribute="top" secondItem="qKY-j6-hS5" secondAttribute="top" constant="53" id="5mD-ro-8qQ"/>
+                                                <constraint firstAttribute="bottom" secondItem="jOV-TO-fc3" secondAttribute="bottom" constant="11" id="N6a-Ni-OMg"/>
+                                                <constraint firstItem="jOV-TO-fc3" firstAttribute="leading" secondItem="qKY-j6-hS5" secondAttribute="leading" constant="16" id="Qh6-Gj-8ng"/>
+                                                <constraint firstItem="kEg-WJ-9es" firstAttribute="leading" relation="greaterThanOrEqual" secondItem="jOV-TO-fc3" secondAttribute="trailing" constant="100" id="T5C-H1-6FT"/>
+                                                <constraint firstItem="jOV-TO-fc3" firstAttribute="top" secondItem="qKY-j6-hS5" secondAttribute="top" constant="53" id="W6i-xq-fC1"/>
+                                                <constraint firstAttribute="bottom" secondItem="kEg-WJ-9es" secondAttribute="bottom" constant="11" id="XVo-58-WlG"/>
+                                                <constraint firstAttribute="trailing" secondItem="kEg-WJ-9es" secondAttribute="trailing" constant="16" id="Zp8-Ze-PSX"/>
+                                            </constraints>
+                                        </tableViewCellContentView>
+                                        <connections>
+                                            <outlet property="goToInboxButton" destination="jOV-TO-fc3" id="8w1-qf-Ir2"/>
+                                            <outlet property="resetBadgeButton" destination="kEg-WJ-9es" id="COU-TO-dlE"/>
                                         </connections>
                                     </tableViewCell>
                                 </prototypes>
@@ -443,7 +507,7 @@
             <color white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
         </systemColor>
         <systemColor name="tintColor">
-            <color red="0.0" green="0.47843137254901963" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+            <color red="0.0" green="0.47843137250000001" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
         </systemColor>
     </resources>
 </document>

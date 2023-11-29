@@ -3,6 +3,7 @@ import UIKit
 class TextFieldCell: UITableViewCell, UITextFieldDelegate {
     @IBOutlet var textField: UITextField!
     @IBOutlet var titleLabel: UILabel!
+    @IBOutlet var clearTextFieldButton: ClearTextFieldButton!
     var textFieldModel: TextFieldModel?
     
     override func awakeFromNib() {
@@ -16,7 +17,7 @@ class TextFieldCell: UITableViewCell, UITextFieldDelegate {
     }
     
     func updateCell() {
-        guard let textFieldModel = textFieldModel else { return }
+        guard let textFieldModel = self.textFieldModel else { return }
         
         titleLabel.text = textFieldModel.labelTitle
         textField.text = textFieldModel.textFieldValue
@@ -24,6 +25,40 @@ class TextFieldCell: UITableViewCell, UITextFieldDelegate {
     }
     
     func textFieldDidChangeSelection(_ textField: UITextField) {
-        textFieldModel?.textFieldValue = textField.text
+        guard let text = textField.text else { return }
+        
+        textFieldModel?.textFieldValue = text
+        let notificationCenter = NotificationCenter.default
+        
+        if textFieldModel?.loginCellType == .accessToken {
+            if text.isEmpty {
+                clearTextFieldButton.isHidden = true
+                notificationCenter.post(name: accessTokenIsEmptyName, object: nil)
+            } else {
+                clearTextFieldButton.isHidden = false
+                notificationCenter.post(name: accessTokenIsNotEmptyName, object: nil)
+            }
+        } else {
+            if text.isEmpty {
+                clearTextFieldButton.isHidden = true
+                notificationCenter.post(name: appIDIsEmptyName, object: nil)
+            } else {
+                clearTextFieldButton.isHidden = false
+                notificationCenter.post(name: appIDIsNotEmptyName, object: nil)
+            }
+        }
+    }
+    
+    @IBAction func clearTextFieldButtonTapped(_ sender: Any) {
+        textField.text = ""
+        let notificationCenter = NotificationCenter.default
+        
+        if textFieldModel?.loginCellType == .accessToken {
+            clearTextFieldButton.isHidden = true
+            notificationCenter.post(name: accessTokenIsEmptyName, object: nil)
+        } else {
+            clearTextFieldButton.isHidden = true
+            notificationCenter.post(name: appIDIsEmptyName, object: nil)
+        }
     }
 }
