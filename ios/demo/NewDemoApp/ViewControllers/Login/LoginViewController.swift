@@ -1,15 +1,29 @@
 import UIKit
 
-class LoginViewController: UIViewController, UITableViewDelegate, UITableViewDataSource, ButtonCellDelegate {
+protocol LoginViewControllerDelegate {
+    func textFieldsDidChange(for viewController: LoginViewController)
+}
+
+class LoginViewController: UIViewController, UITableViewDelegate, UITableViewDataSource, ButtonCellDelegate, TextFieldCellDelegate {
     @IBOutlet var loginTableVIew: UITableView!
     lazy var loginDataSource = LoginViewControllerData()
     var dataSource = [BaseModel]()
+    var delegate: LoginViewControllerDelegate?
+    var accessTokenIsEmpty = true {
+        didSet {
+            delegate?.textFieldsDidChange(for: self)
+        }
+    }
+    var appIDIsEmpty = true {
+        didSet {
+            delegate?.textFieldsDidChange(for: self)
+        }
+    }
     
     override func viewDidLoad() {
         super.viewDidLoad()
         
         title = "SCGPush Test App"
-        navigationController?.navigationBar.prefersLargeTitles = true
         
         navigationItem.rightBarButtonItem = UIBarButtonItem(title: "Settings", style: .plain, target: self, action: #selector(settingsTapped))
         
@@ -21,6 +35,8 @@ class LoginViewController: UIViewController, UITableViewDelegate, UITableViewDat
     }
     
     override func viewWillAppear(_ animated: Bool) {
+        navigationController?.navigationBar.prefersLargeTitles = true
+        
         let notificationCenter = NotificationCenter.default
         notificationCenter.addObserver(self, selector: #selector(adjustForKeyboard), name: UIResponder.keyboardWillHideNotification, object: nil)
         notificationCenter.addObserver(self, selector: #selector(adjustForKeyboard), name: UIResponder.keyboardWillChangeFrameNotification, object: nil)
@@ -49,19 +65,22 @@ class LoginViewController: UIViewController, UITableViewDelegate, UITableViewDat
             if let cell = tableView.dequeueReusableCell(withIdentifier: cellIdentifier, for: indexPath) as? TextFieldCell {
                 cell.textFieldModel = model as? TextFieldModel
                 cell.updateCell()
+                cell.delegate = self
                 return cell
             }
         } else if model.loginCellType == .appID {
             if let cell = tableView.dequeueReusableCell(withIdentifier: cellIdentifier, for: indexPath) as? TextFieldCell {
                 cell.textFieldModel = model as? TextFieldModel
                 cell.updateCell()
+                cell.delegate = self
                 return cell
             }
         } else if model.loginCellType == .register {
-            if let cell = tableView.dequeueReusableCell(withIdentifier: cellIdentifier, for: indexPath) as? ButtonCell {
+            if let cell = tableView.dequeueReusableCell(withIdentifier: cellIdentifier, for: indexPath) as? RegisterButtonCell {
                 cell.buttonModel = model as? ButtonModel
                 cell.updateCell()
                 cell.delegate = self
+                delegate = cell
                 return cell
             }
         } else {
@@ -77,15 +96,9 @@ class LoginViewController: UIViewController, UITableViewDelegate, UITableViewDat
     
     // MARK: ButtonCellDelegate methods
     
-    func didPressRegisterButton(forCell cell: ButtonCell) {
+    func didPressRegisterButton(for cell: RegisterButtonCell) {
         guard let accessTokenModel = dataSource[LoginCellType.accessToken.rawValue] as? TextFieldModel else { return }
         guard let appIDModel = dataSource[LoginCellType.appID.rawValue] as? TextFieldModel else { return }
-        
-        cell.registerButton.isEnabled = false
-        navigationController?.navigationBar.isUserInteractionEnabled = false
-        view.isUserInteractionEnabled = false
-        cell.activityIndicator.isHidden = false
-        cell.activityIndicator.startAnimating()
         
         let accessString = accessTokenModel.textFieldValue
         let appIDString = appIDModel.textFieldValue
@@ -98,6 +111,42 @@ class LoginViewController: UIViewController, UITableViewDelegate, UITableViewDat
         
         print(accessStringTrimmed)
         print(appIDStringTrimmed)
+        
+        cell.registerButton.isEnabled = false
+        navigationController?.navigationBar.isUserInteractionEnabled = false
+        view.isUserInteractionEnabled = false
+        cell.activityIndicator.isHidden = false
+        cell.activityIndicator.startAnimating()
+        
+        if let vc = storyboard?.instantiateViewController(withIdentifier: "LoggedViewController") as? LoggedViewController {
+            cell.registerButton.isEnabled = true
+            navigationController?.navigationBar.isUserInteractionEnabled = true
+            view.isUserInteractionEnabled = true
+            cell.activityIndicator.stopAnimating()
+            cell.activityIndicator.isHidden = true
+            
+            present(vc, animated: true)
+        }
+    }
+    
+    // MARK: TextFieldCellDelegate methods
+    
+    func textFieldDidChange(for cell: TextFieldCell) {
+        guard let text = cell.textField.text else { return }
+        
+        if cell.textFieldModel?.loginCellType == .accessToken {
+            if text.isEmpty {
+                accessTokenIsEmpty = true
+            } else {
+                accessTokenIsEmpty = false
+            }
+        } else if cell.textFieldModel?.loginCellType == .appID {
+            if text.isEmpty {
+                appIDIsEmpty = true
+            } else {
+                appIDIsEmpty = false
+            }
+        }
     }
     
     // MARK: #selector methods
@@ -118,6 +167,8 @@ class LoginViewController: UIViewController, UITableViewDelegate, UITableViewDat
     }
     
     @objc func settingsTapped() {
-        
+        if let vc = storyboard?.instantiateViewController(withIdentifier: "NewSettingsViewController") as? NewSettingsViewController {
+            navigationController?.pushViewController(vc, animated: true)
+        }
     }
 }

@@ -14,10 +14,11 @@ class DoubleButtonCell: UITableViewCell {
     }
     
     func updateCell() {
-        guard let doubleButtonModel = self.doubleButtonModel else { return }
+        guard let leftButtonTitle = doubleButtonModel?.leftButtonTitle else { return }
+        guard let rightButtonTitle = doubleButtonModel?.rightButtonTitle else { return }
         
-        resetBadgeButton.setTitle(doubleButtonModel.resetBadgeButtonTitle, for: .normal)
-        goToInboxButton.setTitle(doubleButtonModel.goToInboxButtonTitle, for: .normal)
+        goToInboxButton.setTitle(leftButtonTitle, for: .normal)
+        resetBadgeButton.setTitle(rightButtonTitle, for: .normal)
     }
     
     @IBAction func goToInboxButtonTapped(_ sender: Any) {
