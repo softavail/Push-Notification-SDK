@@ -31,8 +31,6 @@ class LoginViewController: MainViewController, UITableViewDelegate, UITableViewD
         
         dataSource = loginDataSource.getLoginDataSource()
         loginTableView.delaysContentTouches = false
-        
-        
     }
     
     // MARK: #selector methods
