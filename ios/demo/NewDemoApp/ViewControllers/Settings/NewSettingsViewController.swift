@@ -1,6 +1,6 @@
 import UIKit
 
-class NewSettingsViewController: UIViewController, UITableViewDelegate, UITableViewDataSource {
+class NewSettingsViewController: MainViewController, UITableViewDelegate, UITableViewDataSource {
     @IBOutlet var tableView: UITableView!
     lazy var settingsDataSource = NewSettingsViewControllerData()
     var dataSource = [BaseModel]()
@@ -9,17 +9,11 @@ class NewSettingsViewController: UIViewController, UITableViewDelegate, UITableV
         super.viewDidLoad()
         
         title = "Settings"
+        navigationItem.largeTitleDisplayMode = .never
         navigationItem.backBarButtonItem = UIBarButtonItem(barButtonSystemItem: .done, target: self, action: nil)
         
         dataSource = settingsDataSource.getSettingsDataSource()
-        tableView.estimatedRowHeight = 44
-        tableView.rowHeight = UITableView.automaticDimension
-        tableView.separatorStyle = .none
         tableView.delaysContentTouches = false
-    }
-    
-    override func viewWillAppear(_ animated: Bool) {
-        navigationController?.navigationBar.prefersLargeTitles = true
     }
     
     // MARK: UITableView methods
@@ -69,5 +63,22 @@ class NewSettingsViewController: UIViewController, UITableViewDelegate, UITableV
         }
         
         return UITableViewCell()
+    }
+    
+    // MARK: Keyboard method
+    
+    override func adjustForKeyboard(notification: Notification) {
+        guard let keyboardValue = notification.userInfo?[UIResponder.keyboardFrameEndUserInfoKey] as? NSValue else { return }
+
+        let keyboardScreenEndFrame = keyboardValue.cgRectValue
+        let keyboardViewEndFrame = view.convert(keyboardScreenEndFrame, from: view.window)
+
+        if notification.name == UIResponder.keyboardWillHideNotification {
+            tableView.contentInset = .zero
+        } else {
+            tableView.contentInset = UIEdgeInsets(top: 0, left: 0, bottom: keyboardViewEndFrame.height - view.safeAreaInsets.bottom, right: 0)
+        }
+
+        tableView.scrollIndicatorInsets = tableView.contentInset
     }
 }

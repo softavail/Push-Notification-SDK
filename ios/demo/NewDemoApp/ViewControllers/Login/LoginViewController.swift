@@ -1,11 +1,12 @@
 import UIKit
+import UserNotifications
 
 protocol LoginViewControllerDelegate {
     func textFieldsDidChange(for viewController: LoginViewController)
 }
 
-class LoginViewController: UIViewController, UITableViewDelegate, UITableViewDataSource, ButtonCellDelegate, TextFieldCellDelegate {
-    @IBOutlet var loginTableVIew: UITableView!
+class LoginViewController: MainViewController, UITableViewDelegate, UITableViewDataSource,  UNUserNotificationCenterDelegate, ButtonCellDelegate, TextFieldCellDelegate {
+    @IBOutlet var loginTableView: UITableView!
     lazy var loginDataSource = LoginViewControllerData()
     var dataSource = [BaseModel]()
     var delegate: LoginViewControllerDelegate?
@@ -23,31 +24,31 @@ class LoginViewController: UIViewController, UITableViewDelegate, UITableViewDat
     override func viewDidLoad() {
         super.viewDidLoad()
         
-        title = "SCGPush Test App"
-        
+        title = "SCGPush Demo App"
+        navigationItem.largeTitleDisplayMode = .always
         navigationItem.rightBarButtonItem = UIBarButtonItem(title: "Settings", style: .plain, target: self, action: #selector(settingsTapped))
+        navigationItem.leftBarButtonItem = UIBarButtonItem(title: "Notification", style: .plain, target: self, action: #selector(notificationTapped))
         
         dataSource = loginDataSource.getLoginDataSource()
-        loginTableVIew.separatorStyle = .none
-        loginTableVIew.estimatedRowHeight = 44
-        loginTableVIew.rowHeight = UITableView.automaticDimension
-        loginTableVIew.delaysContentTouches = false
-    }
-    
-    override func viewWillAppear(_ animated: Bool) {
-        navigationController?.navigationBar.prefersLargeTitles = true
+        loginTableView.delaysContentTouches = false
         
-        let notificationCenter = NotificationCenter.default
-        notificationCenter.addObserver(self, selector: #selector(adjustForKeyboard), name: UIResponder.keyboardWillHideNotification, object: nil)
-        notificationCenter.addObserver(self, selector: #selector(adjustForKeyboard), name: UIResponder.keyboardWillChangeFrameNotification, object: nil)
+        
     }
     
-    override func viewWillDisappear(_ animated: Bool) {
-        let notificationCenter = NotificationCenter.default
-        notificationCenter.removeObserver(self)
+    // MARK: #selector methods
+    
+    @objc func settingsTapped() {
+        if let vc = storyboard?.instantiateViewController(withIdentifier: "NewSettingsViewController") as? NewSettingsViewController {
+            navigationController?.pushViewController(vc, animated: true)
+        }
     }
     
-    // MARK: UITableView methods
+    @objc func notificationTapped() {
+        registerNotifications()
+        scheduleNotifications()
+    }
+    
+    // MARK: UITableViewDelegate methods
     
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         return dataSource.count
@@ -76,7 +77,7 @@ class LoginViewController: UIViewController, UITableViewDelegate, UITableViewDat
                 return cell
             }
         } else if model.loginCellType == .register {
-            if let cell = tableView.dequeueReusableCell(withIdentifier: cellIdentifier, for: indexPath) as? RegisterButtonCell {
+            if let cell = tableView.dequeueReusableCell(withIdentifier: cellIdentifier, for: indexPath) as? ButtonCell {
                 cell.buttonModel = model as? ButtonModel
                 cell.updateCell()
                 cell.delegate = self
@@ -96,7 +97,7 @@ class LoginViewController: UIViewController, UITableViewDelegate, UITableViewDat
     
     // MARK: ButtonCellDelegate methods
     
-    func didPressRegisterButton(for cell: RegisterButtonCell) {
+    func didPressRegisterButton(for cell: ButtonCell) {
         guard let accessTokenModel = dataSource[LoginCellType.accessToken.rawValue] as? TextFieldModel else { return }
         guard let appIDModel = dataSource[LoginCellType.appID.rawValue] as? TextFieldModel else { return }
         
@@ -112,18 +113,18 @@ class LoginViewController: UIViewController, UITableViewDelegate, UITableViewDat
         print(accessStringTrimmed)
         print(appIDStringTrimmed)
         
-        cell.registerButton.isEnabled = false
+        cell.registerButton?.disable()
         navigationController?.navigationBar.isUserInteractionEnabled = false
         view.isUserInteractionEnabled = false
-        cell.activityIndicator.isHidden = false
-        cell.activityIndicator.startAnimating()
+        cell.activityIndicator?.isHidden = false
+        cell.activityIndicator?.startAnimating()
         
         if let vc = storyboard?.instantiateViewController(withIdentifier: "LoggedViewController") as? LoggedViewController {
-            cell.registerButton.isEnabled = true
+            cell.registerButton?.enable()
             navigationController?.navigationBar.isUserInteractionEnabled = true
             view.isUserInteractionEnabled = true
-            cell.activityIndicator.stopAnimating()
-            cell.activityIndicator.isHidden = true
+            cell.activityIndicator?.stopAnimating()
+            cell.activityIndicator?.isHidden = true
             
             present(vc, animated: true)
         }
@@ -149,26 +150,92 @@ class LoginViewController: UIViewController, UITableViewDelegate, UITableViewDat
         }
     }
     
-    // MARK: #selector methods
+    // MARK: Keyboard method
     
-    @objc func adjustForKeyboard(notification: Notification) {
+    override func adjustForKeyboard(notification: Notification) {
         guard let keyboardValue = notification.userInfo?[UIResponder.keyboardFrameEndUserInfoKey] as? NSValue else { return }
 
         let keyboardScreenEndFrame = keyboardValue.cgRectValue
         let keyboardViewEndFrame = view.convert(keyboardScreenEndFrame, from: view.window)
 
         if notification.name == UIResponder.keyboardWillHideNotification {
-            loginTableVIew.contentInset = .zero
+            loginTableView.contentInset = .zero
         } else {
-            loginTableVIew.contentInset = UIEdgeInsets(top: 0, left: 0, bottom: keyboardViewEndFrame.height - view.safeAreaInsets.bottom, right: 0)
+            loginTableView.contentInset = UIEdgeInsets(top: 0, left: 0, bottom: keyboardViewEndFrame.height - view.safeAreaInsets.bottom, right: 0)
         }
 
-        loginTableVIew.scrollIndicatorInsets = loginTableVIew.contentInset
+        loginTableView.scrollIndicatorInsets = loginTableView.contentInset
     }
     
-    @objc func settingsTapped() {
-        if let vc = storyboard?.instantiateViewController(withIdentifier: "NewSettingsViewController") as? NewSettingsViewController {
-            navigationController?.pushViewController(vc, animated: true)
+    // MARK: UNUserNotificationCenter methods
+    
+    func registerNotifications() {
+        let center = UNUserNotificationCenter.current()
+        
+        center.requestAuthorization(options: [.badge, .alert, .sound]) { success, error in
+            if success {
+                print("Notification request granted.")
+            } else {
+                print("Notification request NOT granted.")
+            }
         }
+    }
+    
+    func scheduleNotifications() {
+        guard let notificationImageURL = getNotificationImageURL() else { return }
+        guard let notificationImage = try? UNNotificationAttachment(identifier: UUID().uuidString, url: notificationImageURL) else { return }
+        
+        let center = UNUserNotificationCenter.current()
+        registerNotificationCategories()
+        
+        let trigger = UNTimeIntervalNotificationTrigger(timeInterval: 5, repeats: false)
+        
+        let content = UNMutableNotificationContent()
+        content.title = "Notification Title"
+        content.body = "Notification Body"
+        content.sound = .default
+        content.categoryIdentifier = "categoryIdentifier"
+        content.userInfo = ["UserInfoKey": "UserInfoData"]
+        content.attachments = [notificationImage]
+        
+        let request = UNNotificationRequest(identifier: UUID().uuidString, content: content, trigger: trigger)
+        center.add(request)
+    }
+    
+    func registerNotificationCategories() {
+        let center = UNUserNotificationCenter.current()
+        center.delegate = self
+        
+        let action1 = UNNotificationAction(identifier: "action1", title: "Action1", options: .foreground)
+        let action2 = UNNotificationAction(identifier: "action2", title: "Action2", options: .foreground)
+        
+        let category = UNNotificationCategory(identifier: "categoryIdentifier", actions: [action1, action2], intentIdentifiers: [])
+        center.setNotificationCategories([category])
+    }
+    
+    func getNotificationImageURL() -> URL? {
+        return Bundle.main.url(forResource: "notificationImage", withExtension: "png")
+    }
+    
+    // MARK: UNUserNotificationCenterDelegate methods
+    
+    func userNotificationCenter(_ center: UNUserNotificationCenter, didReceive response: UNNotificationResponse, withCompletionHandler completionHandler: @escaping () -> Void) {
+        let userInfo = response.notification.request.content.userInfo
+        if let userInfoData = userInfo["UserInfoKey"] as? String {
+            print(userInfoData)
+        }
+        
+        switch response.actionIdentifier {
+        case UNNotificationDefaultActionIdentifier:
+            break
+        case "action1":
+            break
+        case "action2":
+            break
+        default:
+            break
+        }
+        
+        completionHandler()
     }
 }

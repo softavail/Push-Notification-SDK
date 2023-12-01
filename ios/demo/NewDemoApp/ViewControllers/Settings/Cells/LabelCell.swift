@@ -7,6 +7,8 @@ class LabelCell: UITableViewCell {
     
     override func awakeFromNib() {
         super.awakeFromNib()
+        
+        cellSwitch?.onTintColor = .mySecondaryColor
     }
 
     override func setSelected(_ selected: Bool, animated: Bool) {

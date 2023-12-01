@@ -19,7 +19,9 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 
     func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplication.LaunchOptionsKey: Any]?) -> Bool {
         // Override point for customization after application launch.
-
+        
+        UINavigationBar.appearance().tintColor = .white
+        
         if #available(iOS 10.0, *) {
             // use the feature only available in iOS 10
             let center = UNUserNotificationCenter.current() as UNUserNotificationCenter

@@ -23,7 +23,7 @@ class LoginViewControllerData: NSObject {
         let registerButton = ButtonModel()
         registerButton.buttonTitle = "Register"
         registerButton.loginCellType = .register
-        registerButton.cellIdentifier = String(describing: RegisterButtonCell.self)
+        registerButton.cellIdentifier = String(describing: ButtonCell.self)
         modelArray.append(registerButton)
         
         let doubleButton = DoubleButtonModel()

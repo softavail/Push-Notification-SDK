@@ -396,14 +396,14 @@
                                             <outlet property="titleLabel" destination="F2l-1k-Oir" id="gmB-v4-Ddn"/>
                                         </connections>
                                     </tableViewCell>
-                                    <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" preservesSuperviewLayoutMargins="YES" selectionStyle="none" indentationWidth="10" reuseIdentifier="RegisterButtonCell" rowHeight="104" id="LyA-Hd-n0n" customClass="RegisterButtonCell" customModule="SCGPushDemo" customModuleProvider="target">
+                                    <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" preservesSuperviewLayoutMargins="YES" selectionStyle="none" indentationWidth="10" reuseIdentifier="ButtonCell" rowHeight="104" id="LyA-Hd-n0n" customClass="ButtonCell" customModule="SCGPushDemo" customModuleProvider="target">
                                         <rect key="frame" x="0.0" y="127" width="375" height="104"/>
                                         <autoresizingMask key="autoresizingMask"/>
                                         <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" preservesSuperviewLayoutMargins="YES" insetsLayoutMarginsFromSafeArea="NO" tableViewCell="LyA-Hd-n0n" id="gPg-U4-IZJ">
                                             <rect key="frame" x="0.0" y="0.0" width="375" height="104"/>
                                             <autoresizingMask key="autoresizingMask"/>
                                             <subviews>
-                                                <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="QTV-Wc-TRW" customClass="BetterButton" customModule="SCGPushDemo" customModuleProvider="target">
+                                                <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="QTV-Wc-TRW">
                                                     <rect key="frame" x="150" y="55" width="75" height="34"/>
                                                     <inset key="titleEdgeInsets" minX="20" minY="0.0" maxX="20" maxY="0.0"/>
                                                     <inset key="imageEdgeInsets" minX="0.0" minY="0.0" maxX="2.2250738585072014e-308" maxY="0.0"/>
@@ -501,7 +501,7 @@
                     </view>
                     <navigationItem key="navigationItem" id="cIU-LX-XzL"/>
                     <connections>
-                        <outlet property="loginTableVIew" destination="UYO-Uk-LaV" id="W6y-K3-Gah"/>
+                        <outlet property="loginTableView" destination="UYO-Uk-LaV" id="8W2-eo-MOR"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="3ej-mj-63o" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
@@ -679,7 +679,7 @@
                                                     </state>
                                                     <buttonConfiguration key="configuration" style="plain" title="Button"/>
                                                     <connections>
-                                                        <action selector="clipboardButtonTapped:" destination="tdB-hz-bh6" eventType="touchUpInside" id="XU8-7j-c14"/>
+                                                        <action selector="clipboardButtonTapped:" destination="tdB-hz-bh6" eventType="touchUpInside" id="SPi-GF-l54"/>
                                                     </connections>
                                                 </button>
                                             </subviews>
@@ -692,7 +692,7 @@
                                             </constraints>
                                         </tableViewCellContentView>
                                         <connections>
-                                            <outlet property="clipboardButton" destination="mWn-5f-oS0" id="Yja-mD-haC"/>
+                                            <outlet property="clipboardButton" destination="mWn-5f-oS0" id="Occ-xe-dE9"/>
                                         </connections>
                                     </tableViewCell>
                                 </prototypes>
@@ -724,7 +724,7 @@
             <color white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
         </systemColor>
         <systemColor name="tintColor">
-            <color red="0.0" green="0.47843137254901963" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+            <color red="0.0" green="0.47843137250000001" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
         </systemColor>
     </resources>
 </document>

@@ -1,6 +1,6 @@
 import UIKit
 
-class LoggedViewController: UIViewController, UITableViewDelegate, UITableViewDataSource {
+class LoggedViewController: MainViewController, UITableViewDelegate, UITableViewDataSource {
     @IBOutlet var tableView: UITableView!
     lazy var loggedDataSource = LoggedViewControllerData()
     var dataSource = [BaseModel]()
@@ -9,9 +9,6 @@ class LoggedViewController: UIViewController, UITableViewDelegate, UITableViewDa
         super.viewDidLoad()
 
         dataSource = loggedDataSource.getLoggedDataSource()
-        tableView.estimatedRowHeight = 44
-        tableView.rowHeight = UITableView.automaticDimension
-        tableView.separatorStyle = .none
     }
     
     // MARK: UITableView methods
