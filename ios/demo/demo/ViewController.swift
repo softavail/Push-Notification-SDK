@@ -259,7 +259,7 @@ class ViewController: UIViewController {
 extension ViewController: SCGPushSDK.SCGPushDelegate {
     func resolveTrackedLinkDidSuccess(_ redirectLocation: String!, withrequest request: URLRequest!) {
         DispatchQueue.main.async {
-            debugPrint("RedirectionLocation: \(redirectLocation)\n")
+            debugPrint("RedirectionLocation: \(redirectLocation ?? "")\n")
             self.openLinkInBrowser(redirectLocation)
         }
     }

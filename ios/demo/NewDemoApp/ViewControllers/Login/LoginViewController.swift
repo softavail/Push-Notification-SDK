@@ -27,7 +27,6 @@ class LoginViewController: MainViewController, UITableViewDelegate, UITableViewD
         title = "SCGPush Demo App"
         navigationItem.largeTitleDisplayMode = .always
         navigationItem.rightBarButtonItem = UIBarButtonItem(title: "Settings", style: .plain, target: self, action: #selector(settingsTapped))
-        navigationItem.leftBarButtonItem = UIBarButtonItem(title: "Notification", style: .plain, target: self, action: #selector(notificationTapped))
         
         dataSource = loginDataSource.getLoginDataSource()
         loginTableView.delaysContentTouches = false
@@ -39,11 +38,6 @@ class LoginViewController: MainViewController, UITableViewDelegate, UITableViewD
         if let vc = storyboard?.instantiateViewController(withIdentifier: "NewSettingsViewController") as? NewSettingsViewController {
             navigationController?.pushViewController(vc, animated: true)
         }
-    }
-    
-    @objc func notificationTapped() {
-        //registerNotifications()
-        scheduleNotifications()
     }
     
     // MARK: UITableViewDelegate methods

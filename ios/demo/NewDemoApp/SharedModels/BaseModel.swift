@@ -1,7 +1,7 @@
 import UIKit
 
 enum LoginCellType: Int {
-    case accessToken = 0
+    case accessToken
     case appID
     case register
     case doubleButton

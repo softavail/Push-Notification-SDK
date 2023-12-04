@@ -9,7 +9,7 @@
 import UIKit
 import SCGPushSDK
 
-protocol NotificationTableViewCellDelegate: class {
+protocol NotificationTableViewCellDelegate: AnyObject { // class instead of AnyObject
     
     func didClickDelivery(cell:NotificationTableViewCell)
     func didClickRead(cell:NotificationTableViewCell)
