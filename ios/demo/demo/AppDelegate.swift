@@ -26,12 +26,13 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
             // use the feature only available in iOS 10
             let center = UNUserNotificationCenter.current() as UNUserNotificationCenter
             setUNUserNotificationCenterDelegate(center)
-            setUNUserNotificationCenterCategroies();
+            setUNUserNotificationCenterCategroies()
             center.requestAuthorization(options: [.badge, .alert , .sound]) { (granted, error) in
-                if granted {
-                    application.registerForRemoteNotifications()
+                DispatchQueue.main.async {
+                    if granted {
+                        application.registerForRemoteNotifications()
+                    }
                 }
-                
                 if error != nil {
                     debugPrint(error?.localizedDescription ?? "Unknown")
                 }
@@ -101,9 +102,17 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     func applicationWillTerminate(_ application: UIApplication) {
         // Called when the application is about to terminate. Save data if appropriate. See also applicationDidEnterBackground:.
     }
+    
+    // MARK: Updated old func
 
-    func application(_ application: UIApplication, didRegister notificationSettings: UIUserNotificationSettings) {
-        if notificationSettings.types != UIUserNotificationType() {
+//    func application(_ application: UIApplication, didRegister notificationSettings: UIUserNotificationSettings) {
+//        if notificationSettings.types != UIUserNotificationType() {
+//            application.registerForRemoteNotifications()
+//        }
+//    }
+    
+    private func application(_ application: UIApplication, didRegister notificationSettings: UNAuthorizationOptions) {
+        DispatchQueue.main.async {
             application.registerForRemoteNotifications()
         }
     }
@@ -203,31 +212,56 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         }
     }
     
-    func application(_ application: UIApplication,
-                     didReceive notification: UILocalNotification)
-    {
-        if let category = notification.category {
-            if category == "categoryLink" {
-                debugPrint("Tapped in notification with deep link")
-            }
+    // MARK: Updated old func
+    
+//    func application(_ application: UIApplication,
+//                     didReceive notification: UILocalNotification)
+//    {
+//        if let category = notification.category {
+//            if category == "categoryLink" {
+//                debugPrint("Tapped in notification with deep link")
+//            }
+//        }
+//    }
+    
+    private func application(_ application: UIApplication, didReceive notification: UNNotificationRequest) {
+        let category = notification.content.categoryIdentifier
+        if category == "categoryLink" {
+            debugPrint("Tapped in notification with deep link")
         }
     }
 
-    func application(_ application: UIApplication,
-                     handleActionWithIdentifier identifier: String?,
-                     for notification: UILocalNotification,
-                     completionHandler: @escaping () -> Void)
-    {
-        if let category = notification.category {
-            if category == "categoryLink" {
-                if let action = identifier {
-                    if action == "actionLink" {
-                        debugPrint("Tapped in deep link")
-                        if let url:String = notification.userInfo?["deep_link"] as? String
-                        {
-                            debugPrint("Will resolve deep link")
-                            SCGPush.sharedInstance().resolveTrackedLink(url)
-                        }
+//    func application(_ application: UIApplication,
+//                     handleActionWithIdentifier identifier: String?,
+//                     for notification: UILocalNotification,
+//                     completionHandler: @escaping () -> Void)
+//    {
+//        if let category = notification.category {
+//            if category == "categoryLink" {
+//                if let action = identifier {
+//                    if action == "actionLink" {
+//                        debugPrint("Tapped in deep link")
+//                        if let url:String = notification.userInfo?["deep_link"] as? String
+//                        {
+//                            debugPrint("Will resolve deep link")
+//                            SCGPush.sharedInstance().resolveTrackedLink(url)
+//                        }
+//                    }
+//                }
+//            }
+//        }
+//    }
+    
+    private func application(_ application: UIApplication, handleActionWithIdentifier identifier: String?, for notification: UNNotificationRequest, completionHandler: @escaping () -> Void) {
+        let category = notification.content.categoryIdentifier
+        if category == "categoryLink" {
+            if let action = identifier {
+                if action == "actionLink" {
+                    debugPrint("Tapped in deep link")
+                    let userInfo = notification.content.userInfo
+                    if let url: String = userInfo["deep_link"] as? String {
+                        debugPrint("Will resolve deep link")
+                        SCGPush.sharedInstance().resolveTrackedLink(url)
                     }
                 }
             }

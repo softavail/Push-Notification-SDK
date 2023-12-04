@@ -63,6 +63,9 @@ class ButtonCell: UITableViewCell, LoginViewControllerDelegate {
     }
     
     @IBAction func clipboardButtonTapped(_ sender: Any) {
+        let defaults = UserDefaults.standard
         
+        let tokenString = defaults.object(forKey: "apnTokenString") as? String
+        UIPasteboard.general.string = tokenString ?? ""
     }
 }

@@ -42,7 +42,7 @@ class LoginViewController: MainViewController, UITableViewDelegate, UITableViewD
     }
     
     @objc func notificationTapped() {
-        registerNotifications()
+        //registerNotifications()
         scheduleNotifications()
     }
     

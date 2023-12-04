@@ -9,7 +9,7 @@ class MainViewController: UIViewController {
         navigationController?.navigationBar.barTintColor = .myPrimaryColor
         view.backgroundColor = .myPrimaryColor
         
-        for case let tableView as UITableView in self.view.subviews {
+        for case let tableView as UITableView in view.subviews {
             tableView.backgroundColor = .myPrimaryColor
             tableView.estimatedRowHeight = 44
             tableView.rowHeight = UITableView.automaticDimension

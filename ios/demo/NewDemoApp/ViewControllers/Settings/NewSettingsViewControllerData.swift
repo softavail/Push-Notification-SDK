@@ -24,7 +24,7 @@ class NewSettingsViewControllerData: NSObject {
         modelArray.append(deviceToken)
         
         let tokenLabel = LabelModel()
-        tokenLabel.labelTitle = "Token goes here"
+        tokenLabel.labelTitle = getDeviceTokenString() ?? "Token Label"
         tokenLabel.settingsCellType = .tokenLabel
         tokenLabel.cellIdentifier = String(describing: LabelCell.self)
         modelArray.append(tokenLabel)
@@ -37,5 +37,12 @@ class NewSettingsViewControllerData: NSObject {
         
         let immutableModelArray = modelArray
         return immutableModelArray
+    }
+    
+    func getDeviceTokenString() -> String? {
+        let defaults = UserDefaults.standard
+        
+        let tokenString = defaults.object(forKey: "apnTokenString") as? String
+        return tokenString
     }
 }

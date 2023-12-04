@@ -638,8 +638,8 @@
                                             <rect key="frame" x="0.0" y="0.0" width="375" height="67"/>
                                             <autoresizingMask key="autoresizingMask"/>
                                             <subviews>
-                                                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Label" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="EOn-KP-Vin">
-                                                    <rect key="frame" x="16" y="23" width="42" height="21"/>
+                                                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Label" textAlignment="natural" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="EOn-KP-Vin">
+                                                    <rect key="frame" x="16" y="23.5" width="41.5" height="20.5"/>
                                                     <fontDescription key="fontDescription" type="system" pointSize="17"/>
                                                     <nil key="textColor"/>
                                                     <nil key="highlightedColor"/>
@@ -652,10 +652,12 @@
                                                 </switch>
                                             </subviews>
                                             <constraints>
+                                                <constraint firstItem="EOn-KP-Vin" firstAttribute="top" relation="greaterThanOrEqual" secondItem="1W1-xy-DSB" secondAttribute="top" constant="10" id="AQN-Yc-B2k"/>
                                                 <constraint firstItem="NVG-pN-B2c" firstAttribute="leading" relation="greaterThanOrEqual" secondItem="EOn-KP-Vin" secondAttribute="trailing" constant="15" id="EjD-OT-8fp"/>
                                                 <constraint firstAttribute="trailing" secondItem="NVG-pN-B2c" secondAttribute="trailing" constant="16" id="M2l-Jb-Iy5"/>
                                                 <constraint firstItem="EOn-KP-Vin" firstAttribute="centerY" secondItem="1W1-xy-DSB" secondAttribute="centerY" id="SH9-4G-rOs"/>
                                                 <constraint firstItem="EOn-KP-Vin" firstAttribute="leading" secondItem="1W1-xy-DSB" secondAttribute="leading" constant="16" id="civ-eo-MWA"/>
+                                                <constraint firstAttribute="bottom" relation="greaterThanOrEqual" secondItem="EOn-KP-Vin" secondAttribute="bottom" constant="10" id="hoz-8R-pKe"/>
                                                 <constraint firstItem="NVG-pN-B2c" firstAttribute="centerY" secondItem="1W1-xy-DSB" secondAttribute="centerY" id="ljK-zg-EQS"/>
                                             </constraints>
                                         </tableViewCellContentView>
