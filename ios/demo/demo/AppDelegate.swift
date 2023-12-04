@@ -116,6 +116,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
             tokenString += String(format: "%02.2hhx", arguments: [tokenChars[i]])
         }
         
+        print("token: \(tokenString)")
         UserDefaults.standard.set(tokenString, forKey: "apnTokenString")
     }
     
