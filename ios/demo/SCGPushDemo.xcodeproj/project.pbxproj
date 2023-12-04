@@ -27,7 +27,7 @@
 		CE9EF7202B16015F0084478C /* TextFieldCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = CE9EF71E2B16015F0084478C /* TextFieldCell.swift */; };
 		CE9EF7242B16016E0084478C /* ButtonCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = CE9EF7222B16016E0084478C /* ButtonCell.swift */; };
 		CEC3EFA82B19E222001134B5 /* MainViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = CEC3EFA72B19E222001134B5 /* MainViewController.swift */; };
-		CEC3EFAB2B19F6C1001134B5 /* notificationImage.png in Resources */ = {isa = PBXBuildFile; fileRef = CEC3EFAA2B19F6C1001134B5 /* notificationImage.png */; };
+		CED195C62B1DBD3F0020FF41 /* notificationImage.png in Resources */ = {isa = PBXBuildFile; fileRef = CED195C52B1DBD3F0020FF41 /* notificationImage.png */; };
 		CEEBAB7D2B189F9A00026969 /* NewSettingsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = CEEBAB7C2B189F9A00026969 /* NewSettingsViewController.swift */; };
 		CEEBAB7F2B18A01500026969 /* NewSettingsViewControllerData.swift in Sources */ = {isa = PBXBuildFile; fileRef = CEEBAB7E2B18A01500026969 /* NewSettingsViewControllerData.swift */; };
 		CEEBAB812B18A04100026969 /* LoggedViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = CEEBAB802B18A04100026969 /* LoggedViewController.swift */; };
@@ -157,7 +157,7 @@
 		CE9EF71E2B16015F0084478C /* TextFieldCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TextFieldCell.swift; sourceTree = "<group>"; };
 		CE9EF7222B16016E0084478C /* ButtonCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ButtonCell.swift; sourceTree = "<group>"; };
 		CEC3EFA72B19E222001134B5 /* MainViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MainViewController.swift; sourceTree = "<group>"; };
-		CEC3EFAA2B19F6C1001134B5 /* notificationImage.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = notificationImage.png; path = ../../../../../../../Screenshots/Hearthstone/notificationImage.png; sourceTree = "<group>"; };
+		CED195C52B1DBD3F0020FF41 /* notificationImage.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = notificationImage.png; sourceTree = "<group>"; };
 		CEEBAB7C2B189F9A00026969 /* NewSettingsViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NewSettingsViewController.swift; sourceTree = "<group>"; };
 		CEEBAB7E2B18A01500026969 /* NewSettingsViewControllerData.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NewSettingsViewControllerData.swift; sourceTree = "<group>"; };
 		CEEBAB802B18A04100026969 /* LoggedViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LoggedViewController.swift; sourceTree = "<group>"; };
@@ -323,7 +323,7 @@
 		CEC3EFA92B19F627001134B5 /* Assets */ = {
 			isa = PBXGroup;
 			children = (
-				CEC3EFAA2B19F6C1001134B5 /* notificationImage.png */,
+				CED195C52B1DBD3F0020FF41 /* notificationImage.png */,
 			);
 			path = Assets;
 			sourceTree = "<group>";
@@ -630,8 +630,8 @@
 			buildActionMask = 2147483647;
 			files = (
 				94CE16341E8107300054C0B3 /* NotificationTableViewCell.xib in Resources */,
+				CED195C62B1DBD3F0020FF41 /* notificationImage.png in Resources */,
 				F59BC8331CEA56310043E96E /* LaunchScreen.storyboard in Resources */,
-				CEC3EFAB2B19F6C1001134B5 /* notificationImage.png in Resources */,
 				F59BC8301CEA56310043E96E /* Assets.xcassets in Resources */,
 				F59BC82E1CEA56310043E96E /* Main.storyboard in Resources */,
 			);
