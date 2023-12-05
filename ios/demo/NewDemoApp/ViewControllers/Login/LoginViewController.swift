@@ -1,11 +1,13 @@
 import UIKit
 import UserNotifications
+import Photos
+import AVFoundation
 
 protocol LoginViewControllerDelegate {
     func textFieldsDidChange(for viewController: LoginViewController)
 }
 
-class LoginViewController: MainViewController, UITableViewDelegate, UITableViewDataSource,  UNUserNotificationCenterDelegate, ButtonCellDelegate, TextFieldCellDelegate {
+class LoginViewController: MainViewController, UITableViewDelegate, UITableViewDataSource,  UNUserNotificationCenterDelegate, ButtonCellDelegate, TextFieldCellDelegate, URLSessionDelegate {
     @IBOutlet var loginTableView: UITableView!
     lazy var loginDataSource = LoginViewControllerData()
     var dataSource = [BaseModel]()
@@ -180,18 +182,25 @@ class LoginViewController: MainViewController, UITableViewDelegate, UITableViewD
         let center = UNUserNotificationCenter.current()
         registerNotificationCategories()
         
-        let trigger = UNTimeIntervalNotificationTrigger(timeInterval: 5, repeats: false)
+        let urlString = "https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/ForBiggerBlazes.mp4"
+        let videoName = "notificationVideo"
         
-        let content = UNMutableNotificationContent()
-        content.title = "Notification Title"
-        content.body = "Notification Body"
-        content.sound = .default
-        content.categoryIdentifier = "categoryIdentifier"
-        content.userInfo = ["UserInfoKey": "UserInfoData"]
-        content.attachments = [notificationImage]
-        
-        let request = UNNotificationRequest(identifier: UUID().uuidString, content: content, trigger: trigger)
-        center.add(request)
+        downloadVideo(from: urlString, nameForVideo: videoName) { localURL in
+            guard let notificationVideo = try? UNNotificationAttachment(identifier: UUID().uuidString, url: localURL) else { return }
+            
+            let trigger = UNTimeIntervalNotificationTrigger(timeInterval: 5, repeats: false)
+            
+            let content = UNMutableNotificationContent()
+            content.title = "Notification Title"
+            content.body = "Notification Body"
+            content.sound = .default
+            content.categoryIdentifier = "categoryIdentifier"
+            content.userInfo = ["UserInfoKey": "UserInfoData"]
+            content.attachments = [notificationVideo, notificationImage]
+            
+            let request = UNNotificationRequest(identifier: UUID().uuidString, content: content, trigger: trigger)
+            center.add(request)
+        }
     }
     
     func registerNotificationCategories() {
@@ -207,6 +216,34 @@ class LoginViewController: MainViewController, UITableViewDelegate, UITableViewD
     
     func getNotificationImageURL() -> URL? {
         return Bundle.main.url(forResource: "notificationImage", withExtension: "png")
+    }
+    
+    func downloadVideo(from urlString: String, nameForVideo: String, completionHandler: @escaping (URL) -> Void) {
+        var videoName: String
+        if nameForVideo.isEmpty {
+            videoName = UUID().uuidString + ".mp4"
+        } else {
+            if nameForVideo.hasSuffix(".mp4") {
+                videoName = nameForVideo
+            } else {
+                videoName = nameForVideo + ".mp4"
+            }
+        }
+        
+        DispatchQueue.global(qos: .background).async { [weak self] in
+            guard let attachmentURL = URL(string: urlString) else { return }
+            guard let urlData = NSData(contentsOf: attachmentURL) else { return }
+            guard let videoPath = self?.getDocumentsDirectory().appendingPathComponent(videoName) else { return }
+            
+            DispatchQueue.main.async {
+                do {
+                    try urlData.write(to: videoPath)
+                    completionHandler(videoPath)
+                } catch {
+                    print("Failed writing to videoPath.")
+                }
+            }
+        }
     }
     
     // MARK: UNUserNotificationCenterDelegate methods

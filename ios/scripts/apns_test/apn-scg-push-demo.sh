@@ -46,7 +46,7 @@ function send_push_mutable()
     	\"alert\": \"${alert}\",\
 	    \"mutable-content\": 1\
 	  },\
-	  \"scgg-attachment\": \"${url}\"\
+	  \"scgg-attachment-id\": \"${url}\"\
 	}"
 
 #	apn push "${token}" -c "$key" -e "$environ" -P "{\
