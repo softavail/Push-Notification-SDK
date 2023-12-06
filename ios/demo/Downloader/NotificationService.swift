@@ -46,8 +46,7 @@ class NotificationService: UNNotificationServiceExtension {
 
     override func didReceive(_ request: UNNotificationRequest, withContentHandler contentHandler: @escaping (UNNotificationContent) -> Void) {
         guard let attachmentID = request.content.userInfo["scgg-attachment-id"] as? String else { return }
-        
-        let newContent = request.content.mutableCopy() as! UNMutableNotificationContent
+        guard let newContent = request.content.mutableCopy() as? UNMutableNotificationContent else { return }
         
         downloadVideo(from: attachmentID, nameForVideo: "") { localURL in
             if let attachment = try? UNNotificationAttachment(identifier: attachmentID, url: localURL) {

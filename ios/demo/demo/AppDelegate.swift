@@ -112,7 +112,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 //    }
     
     private func application(_ application: UIApplication, didRegister notificationSettings: UNAuthorizationOptions) {
-        DispatchQueue.main.async {
+        if notificationSettings != UNAuthorizationOptions() {
             application.registerForRemoteNotifications()
         }
     }
