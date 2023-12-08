@@ -1,13 +1,10 @@
 import UIKit
-import UserNotifications
-import Photos
-import AVFoundation
 
 protocol LoginViewControllerDelegate {
     func textFieldsDidChange(for viewController: LoginViewController)
 }
 
-class LoginViewController: MainViewController, UITableViewDelegate, UITableViewDataSource,  UNUserNotificationCenterDelegate, ButtonCellDelegate, TextFieldCellDelegate, URLSessionDelegate {
+class LoginViewController: MainViewController, UITableViewDelegate, UITableViewDataSource, ButtonCellDelegate, TextFieldCellDelegate {
     @IBOutlet var loginTableView: UITableView!
     lazy var loginDataSource = LoginViewControllerData()
     var dataSource = [BaseModel]()
@@ -44,12 +41,12 @@ class LoginViewController: MainViewController, UITableViewDelegate, UITableViewD
     
     // MARK: UITableViewDelegate methods
     
-    func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return dataSource.count
-    }
-    
     func numberOfSections(in tableView: UITableView) -> Int {
         return 1
+    }
+    
+    func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
+        return dataSource.count
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
@@ -159,112 +156,5 @@ class LoginViewController: MainViewController, UITableViewDelegate, UITableViewD
         }
 
         loginTableView.scrollIndicatorInsets = loginTableView.contentInset
-    }
-    
-    // MARK: UNUserNotificationCenter methods
-    
-    func registerNotifications() {
-        let center = UNUserNotificationCenter.current()
-        
-        center.requestAuthorization(options: [.badge, .alert, .sound]) { success, error in
-            if success {
-                print("Notification request granted.")
-            } else {
-                print("Notification request NOT granted.")
-            }
-        }
-    }
-    
-    func scheduleNotifications() {
-        guard let notificationImageURL = getNotificationImageURL() else { return }
-        guard let notificationImage = try? UNNotificationAttachment(identifier: UUID().uuidString, url: notificationImageURL) else { return }
-        
-        let center = UNUserNotificationCenter.current()
-        registerNotificationCategories()
-        
-        let urlString = "https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/ForBiggerBlazes.mp4"
-        let videoName = "notificationVideo"
-        
-        downloadVideo(from: urlString, nameForVideo: videoName) { localURL in
-            guard let notificationVideo = try? UNNotificationAttachment(identifier: UUID().uuidString, url: localURL) else { return }
-            
-            let trigger = UNTimeIntervalNotificationTrigger(timeInterval: 5, repeats: false)
-            
-            let content = UNMutableNotificationContent()
-            content.title = "Notification Title"
-            content.body = "Notification Body"
-            content.sound = .default
-            content.categoryIdentifier = "categoryIdentifier"
-            content.userInfo = ["UserInfoKey": "UserInfoData"]
-            content.attachments = [notificationVideo, notificationImage]
-            
-            let request = UNNotificationRequest(identifier: UUID().uuidString, content: content, trigger: trigger)
-            center.add(request)
-        }
-    }
-    
-    func registerNotificationCategories() {
-        let center = UNUserNotificationCenter.current()
-        center.delegate = self
-        
-        let action1 = UNNotificationAction(identifier: "action1", title: "Action1", options: .foreground)
-        let action2 = UNNotificationAction(identifier: "action2", title: "Action2", options: .foreground)
-        
-        let category = UNNotificationCategory(identifier: "categoryIdentifier", actions: [action1, action2], intentIdentifiers: [])
-        center.setNotificationCategories([category])
-    }
-    
-    func getNotificationImageURL() -> URL? {
-        return Bundle.main.url(forResource: "notificationImage", withExtension: "png")
-    }
-    
-    func downloadVideo(from urlString: String, nameForVideo: String, completionHandler: @escaping (URL) -> Void) {
-        var videoName: String
-        if nameForVideo.isEmpty {
-            videoName = UUID().uuidString + ".mp4"
-        } else {
-            if nameForVideo.hasSuffix(".mp4") {
-                videoName = nameForVideo
-            } else {
-                videoName = nameForVideo + ".mp4"
-            }
-        }
-        
-        DispatchQueue.global(qos: .background).async { [weak self] in
-            guard let attachmentURL = URL(string: urlString) else { return }
-            guard let urlData = NSData(contentsOf: attachmentURL) else { return }
-            guard let videoPath = self?.getDocumentsDirectory().appendingPathComponent(videoName) else { return }
-            
-            DispatchQueue.main.async {
-                do {
-                    try urlData.write(to: videoPath)
-                    completionHandler(videoPath)
-                } catch {
-                    print("Failed writing to videoPath.")
-                }
-            }
-        }
-    }
-    
-    // MARK: UNUserNotificationCenterDelegate methods
-    
-    func userNotificationCenter(_ center: UNUserNotificationCenter, didReceive response: UNNotificationResponse, withCompletionHandler completionHandler: @escaping () -> Void) {
-        let userInfo = response.notification.request.content.userInfo
-        if let userInfoData = userInfo["UserInfoKey"] as? String {
-            print(userInfoData)
-        }
-        
-        switch response.actionIdentifier {
-        case UNNotificationDefaultActionIdentifier:
-            break
-        case "action1":
-            break
-        case "action2":
-            break
-        default:
-            break
-        }
-        
-        completionHandler()
     }
 }

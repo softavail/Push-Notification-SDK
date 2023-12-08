@@ -34,11 +34,6 @@ class MainViewController: UIViewController {
         notificationCenter.removeObserver(self)
     }
     
-    func getDocumentsDirectory() -> URL {
-        let paths = FileManager.default.urls(for: .documentDirectory, in: .userDomainMask)
-        return paths[0]
-    }
-    
     @objc func adjustForKeyboard(notification: Notification) {
         
     }

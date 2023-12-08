@@ -11,7 +11,7 @@ class LoggedViewController: MainViewController, UITableViewDelegate, UITableView
         dataSource = loggedDataSource.getLoggedDataSource()
     }
     
-    // MARK: UITableView methods
+    // MARK: UITableViewDelegate methods
     
     func numberOfSections(in tableView: UITableView) -> Int {
         return 1

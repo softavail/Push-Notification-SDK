@@ -53,3 +53,11 @@ extension UIColor {
     
     static let mySecondaryColor: UIColor = UIColor(r: 247, g: 32, b: 31)
 }
+
+extension Date {
+    func customDescription() -> String {
+        let dateFormatter = DateFormatter()
+        dateFormatter.dateFormat = "dd MMMM yyyy"
+        return dateFormatter.string(from: self)
+    }
+}
