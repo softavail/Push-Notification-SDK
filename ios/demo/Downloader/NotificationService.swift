@@ -10,17 +10,6 @@ import UserNotifications
 import SCGPushSDK
 import MobileCoreServices
 
-enum ContentType {
-    case audio
-    case image
-    case video
-    case word
-    case excel
-    case powerPoint
-    case pdf
-    case defaultDocument
-}
-
 @available(iOSApplicationExtension 10.0, *)
 class NotificationService: UNNotificationServiceExtension {
 
@@ -56,13 +45,18 @@ class NotificationService: UNNotificationServiceExtension {
     }
 
     override func didReceive(_ request: UNNotificationRequest, withContentHandler contentHandler: @escaping (UNNotificationContent) -> Void) {
+        let persistentContainer = CoreDataSingleton.shared.persistentContainer
+        let notificationObject = NotificationObject(context: persistentContainer.viewContext)
+        
         guard let newContent = request.content.mutableCopy() as? UNMutableNotificationContent else { return }
         guard let attachmentURL = request.content.userInfo["scgg-attachment-id"] as? String else {
+            CoreDataSingleton.shared.configure(notification: notificationObject, content: request.content, attachmentData: nil, attachmentType: nil)
             contentHandler(request.content)
             return
         }
         
-        downloadURLContent(from: attachmentURL) { localURL, urlType in
+        SharedMethods.downloadURLContent(from: attachmentURL) { localURL, urlType, urlData in
+            CoreDataSingleton.shared.configure(notification: notificationObject, content: request.content, attachmentData: urlData, attachmentType: localURL.pathExtension)
             if urlType == .audio || urlType == .image || urlType == .video {
                 if let attachment = try? UNNotificationAttachment(identifier: UUID().uuidString, url: localURL) {
                     newContent.attachments = [attachment]
@@ -89,7 +83,7 @@ class NotificationService: UNNotificationServiceExtension {
 //            SCGPush.sharedInstance().loadAttachment(withMessageId: messageID, andAttachmentId: attachmentID, completionBlock: { (contentUrl, contentType) in
 //                debugPrint("Info: [SCGPush] successfully loaded attachment with content-type: \(contentType)")
 //                let bestAttemptContent:UNMutableNotificationContent = request.content.mutableCopy() as! UNMutableNotificationContent
-//                
+//
 //                let options = [UNNotificationAttachmentOptionsTypeHintKey: contentType]
 //                if let attachment = try? UNNotificationAttachment(identifier: attachmentID, url: contentUrl, options: options) {
 //                    bestAttemptContent.attachments = [attachment]
@@ -98,7 +92,7 @@ class NotificationService: UNNotificationServiceExtension {
 //                }
 //
 //                contentHandler(bestAttemptContent)
-//                
+//
 //            }, failureBlock: { (error) in
 //                debugPrint("Error: [SCGPush] failed to load attachment: \(attachmentID)")
 //                contentHandler(request.content.mutableCopy() as! UNMutableNotificationContent)
@@ -111,58 +105,5 @@ class NotificationService: UNNotificationServiceExtension {
     
     override func serviceExtensionTimeWillExpire() {
         // No best attempt from us
-    }
-    
-    // MARK: downloadURLContent methods
-    
-    func downloadURLContent(from urlString: String, completionHandler: @escaping (URL, ContentType) -> Void) {
-        DispatchQueue.global(qos: .background).async { [weak self] in
-            var secureURLString = urlString
-            if !urlString.hasPrefix("https") {
-                secureURLString.insert("s", at: "https".firstIndex(of: "s")!)
-            }
-            
-            guard let attachmentURL = URL(string: secureURLString) else { return }
-            guard let urlData = NSData(contentsOf: attachmentURL) else { return }
-            
-            let fileExtension = attachmentURL.pathExtension.lowercased()
-            let name = UUID().uuidString + "." + fileExtension
-            guard let path = self?.getSharedDirectory()?.appendingPathComponent(name) else { return }
-            
-            let urlType: ContentType
-            
-            switch fileExtension {
-            case "aiff", "aif", "aifc", "wav", "mp3", "m4a":
-                urlType = .audio
-            case "jpg", "jpeg", "jpe", "jif", "jfif", "pjpeg", "pjp", "gif", "png":
-                urlType = .image
-            case "mpg", "mp2", "mpeg", "mpe", "mpv", "m2v", "mp4", "m4p", "m4v", "avi":
-                urlType = .video
-            case "doc", "docx":
-                urlType = .word
-            case "xls", "xlsx":
-                urlType = .excel
-            case "ppt", "pptx":
-                urlType = .powerPoint
-            case "pdf":
-                urlType = .pdf
-            default:
-                urlType = .defaultDocument
-            }
-            
-            DispatchQueue.main.async {
-                do {
-                    try urlData.write(to: path)
-                    completionHandler(path, urlType)
-                } catch {
-                    print("Failed writing to path.")
-                }
-            }
-        }
-    }
-    
-    func getSharedDirectory() -> URL? {
-        let path = FileManager.default.containerURL(forSecurityApplicationGroupIdentifier: "group.com.syniverse.push.demo.app")
-        return path
     }
 }

@@ -14,15 +14,6 @@ import CoreData
 @UIApplicationMain
 class AppDelegate: UIResponder, UIApplicationDelegate {
     var window: UIWindow?
-    lazy var persistentContainer: NSPersistentContainer = {
-        let container = NSPersistentContainer(name: "NewDemoApp")
-        container.loadPersistentStores() { storeDescription, error in
-            if let error = error as NSError? {
-                fatalError("Unresolved error \(error), \(error.userInfo)")
-            }
-        }
-        return container
-    }()
     
     func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplication.LaunchOptionsKey: Any]?) -> Bool {
         // Override point for customization after application launch.
@@ -404,13 +395,6 @@ extension AppDelegate: UNUserNotificationCenterDelegate {
     public func userNotificationCenter(_ center: UNUserNotificationCenter, willPresent notification: UNNotification, withCompletionHandler completionHandler: @escaping (UNNotificationPresentationOptions) -> Swift.Void) {
         debugPrint("willPresent notification")
         
-        let content = notification.request.content
-        let userInfo = content.userInfo
-        let attachmentURL = userInfo["scgg-attachment-id"] as? String
-        
-        let notificationObject = NotificationObject(context: persistentContainer.viewContext)
-        configure(notification: notificationObject, content: content, attachmentURL: attachmentURL)
-        
         completionHandler( [.alert, .badge, .sound])
     }
     
@@ -430,28 +414,6 @@ extension AppDelegate: UNUserNotificationCenterDelegate {
         }
         
         completionHandler()
-    }
-    
-    // MARK: CoreData helping methods
-    
-    func configure(notification: NotificationObject, content: UNNotificationContent, attachmentURL: String?) {
-        notification.id = UUID().uuidString
-        notification.date = Date()
-        notification.title = content.title
-        notification.body = content.body
-        notification.attachmentURL = attachmentURL ?? ""
-        
-        saveDatabase()
-    }
-    
-    func saveDatabase() {
-        if persistentContainer.viewContext.hasChanges {
-            do {
-                try persistentContainer.viewContext.save()
-            } catch {
-                print("CoreData failed to save changes.\nError: \(error)")
-            }
-        }
     }
 }
 

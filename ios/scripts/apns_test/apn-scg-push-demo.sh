@@ -26,7 +26,8 @@ function send_push()
 
 	./send_push_notification.sh -d "${token}" -c "${key}" -e "${environ}" -p "{\
 	  \"aps\": {\
-    	\"alert\": \"${alert}\"\
+    	\"alert\": \"${alert}\",\
+        \"mutable-content\": 1\
 	  }\
 	}"
 }

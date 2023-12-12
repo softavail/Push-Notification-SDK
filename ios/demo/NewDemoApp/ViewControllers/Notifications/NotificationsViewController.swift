@@ -9,7 +9,10 @@ class NotificationsViewController: MainViewController, UITableViewDataSource, UI
         super.viewDidLoad()
         
         notificationsDataSource.getNotificationsDataSource() { [weak self] dataArray in
-            self?.dataSource = dataArray
+            DispatchQueue.main.async {
+                self?.dataSource = dataArray
+                self?.tableView.reloadData()
+            }
         }
         tableView.separatorStyle = .singleLine
     }
@@ -42,7 +45,7 @@ class NotificationsViewController: MainViewController, UITableViewDataSource, UI
             guard let cell = tableView.cellForRow(at: indexPath) as? NotificationCell else { return }
             guard let contentURL = cell.contentURL else { return }
             
-            vc.selectedContentURL = cell.contentURL
+            vc.selectedContentURL = contentURL
             navigationController?.pushViewController(vc, animated: true)
         }
     }

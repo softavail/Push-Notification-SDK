@@ -5,5 +5,6 @@ class NotificationModel: BaseModel {
     var bodyLabel: String?
     var receivedLabel: String?
     var dateLabel: String?
-    var attachmentURL: String?
+    var attachmentData: NSData?
+    var attachmentType: String?
 }

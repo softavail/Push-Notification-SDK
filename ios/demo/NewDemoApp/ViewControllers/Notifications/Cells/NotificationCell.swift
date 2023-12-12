@@ -1,17 +1,6 @@
 import UIKit
 import AVFoundation
 
-enum URLType {
-    case audio
-    case image
-    case video
-    case word
-    case excel
-    case powerPoint
-    case pdf
-    case defaultDocument
-}
-
 class NotificationCell: UITableViewCell {
     @IBOutlet var cellImageView: UIImageView!
     @IBOutlet var titleLabel: UILabel!
@@ -31,92 +20,61 @@ class NotificationCell: UITableViewCell {
     
     func updateCell() {
         guard let notificationModel = self.notificationModel else { return }
-        guard let attachmentURL = notificationModel.attachmentURL else { return }
+        guard let sharedDirectory = SharedMethods.getSharedDirectory() else { return }
         
         titleLabel.text = notificationModel.titleLabel
         bodyLabel.text = notificationModel.bodyLabel
         receivedLabel.text = notificationModel.receivedLabel
         dateLabel.text = notificationModel.dateLabel
         
-        if !attachmentURL.isEmpty {
-            accessoryType = .disclosureIndicator
-            selectionStyle = .default
-            
-            downloadURLContent(from: attachmentURL) { [weak self] localURL, urlType in
-                self?.contentURL = localURL
-                switch urlType {
-                case .audio:
-                    self?.cellImageView.image = UIImage(named: "mp3")
-                case .image:
-                    self?.cellImageView.image = UIImage(contentsOfFile: localURL.relativePath)
-                case .video:
-                    self?.cellImageView.image = self?.getThumbnail(from: localURL)
-                case .word:
-                    self?.cellImageView.image = UIImage(named: "doc")
-                case .excel:
-                    self?.cellImageView.image = UIImage(named: "xls")
-                case .powerPoint:
-                    self?.cellImageView.image = UIImage(named: "ppt")
-                case .pdf:
-                    self?.cellImageView.image = UIImage(named: "pdf")
-                case .defaultDocument:
-                    self?.cellImageView.image = UIImage(named: "defaultDoc")
-                }
-            }
+        accessoryType = .none
+        selectionStyle = .none
+        
+        guard let attachmentData = notificationModel.attachmentData else {
+            cellImageView.image = nil
+            contentURL = nil
+            return
         }
-    }
-    
-    // MARK: Helping methods
-    
-    func downloadURLContent(from urlString: String, completionHandler: @escaping (URL, URLType) -> Void) {
-        DispatchQueue.global(qos: .background).async { [weak self] in
-            var secureURLString = urlString
-            if !urlString.hasPrefix("https") {
-                secureURLString.insert("s", at: "https".firstIndex(of: "s")!)
-            }
-            
-            guard let attachmentURL = URL(string: secureURLString) else { return }
-            guard let urlData = NSData(contentsOf: attachmentURL) else { return }
-            
-            let fileExtension = attachmentURL.pathExtension.lowercased()
-            let name = UUID().uuidString + "." + fileExtension
-            guard let path = self?.getDocumentsDirectory().appendingPathComponent(name) else { return }
-            
-            let urlType: URLType
-            
-            switch fileExtension {
-            case "aiff", "aif", "aifc", "wav", "mp3", "m4a":
-                urlType = .audio
-            case "jpg", "jpeg", "jpe", "jif", "jfif", "pjpeg", "pjp", "gif", "png":
-                urlType = .image
-            case "mpg", "mp2", "mpeg", "mpe", "mpv", "m2v", "mp4", "m4p", "m4v", "avi":
-                urlType = .video
-            case "doc", "docx":
-                urlType = .word
-            case "xls", "xlsx":
-                urlType = .excel
-            case "ppt", "pptx":
-                urlType = .powerPoint
-            case "pdf":
-                urlType = .pdf
-            default:
-                urlType = .defaultDocument
-            }
-            
-            DispatchQueue.main.async {
-                do {
-                    try urlData.write(to: path)
-                    completionHandler(path, urlType)
-                } catch {
-                    print("Failed writing to path.")
-                }
-            }
+        guard let attachmentType = notificationModel.attachmentType else {
+            cellImageView.image = nil
+            contentURL = nil
+            return
         }
-    }
-    
-    func getDocumentsDirectory() -> URL {
-        let paths = FileManager.default.urls(for: .documentDirectory, in: .userDomainMask)
-        return paths[0]
+        
+        accessoryType = .disclosureIndicator
+        selectionStyle = .default
+        
+        let name = UUID().uuidString + "." + attachmentType
+        let fileURL = sharedDirectory.appendingPathComponent(name)
+        
+        do {
+            try attachmentData.write(to: fileURL)
+        } catch {
+            print("Failed writing to path.")
+        }
+        
+        contentURL = fileURL
+        
+        switch attachmentType {
+        case "aiff", "aif", "aifc", "wav", "mp3", "m4a":
+            cellImageView.image = UIImage(named: "mp3")
+        case "jpg", "jpeg", "jpe", "jif", "jfif", "pjpeg", "pjp", "gif", "png":
+            cellImageView.image = UIImage(contentsOfFile: fileURL.relativePath)
+        case "mpg", "mp2", "mpeg", "mpe", "mpv", "m2v", "mp4", "m4p", "m4v", "avi":
+            if let contentURL = self.contentURL {
+                cellImageView.image = getThumbnail(from: contentURL)
+            }
+        case "doc", "docx":
+            cellImageView.image = UIImage(named: "doc")
+        case "xls", "xlsx":
+            cellImageView.image = UIImage(named: "xls")
+        case "ppt", "pptx":
+            cellImageView.image = UIImage(named: "ppt")
+        case "pdf":
+            cellImageView.image = UIImage(named: "pdf")
+        default:
+            cellImageView.image = UIImage(named: "defaultDoc")
+        }
     }
     
     func getThumbnail(from videoURL: URL) -> UIImage? {
