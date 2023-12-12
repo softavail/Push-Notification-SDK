@@ -16,19 +16,19 @@
 		94CE16331E8107300054C0B3 /* NotificationTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 94CE16301E8107300054C0B3 /* NotificationTableViewCell.swift */; };
 		94CE16341E8107300054C0B3 /* NotificationTableViewCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 94CE16311E8107300054C0B3 /* NotificationTableViewCell.xib */; };
 		94CE16351E8107300054C0B3 /* NotificationTableViewCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 94CE16311E8107300054C0B3 /* NotificationTableViewCell.xib */; };
-		CE044C0A2B2759C9007B19BF /* CoreDataSingleton.swift in Sources */ = {isa = PBXBuildFile; fileRef = CE044C092B2759C9007B19BF /* CoreDataSingleton.swift */; };
-		CE044C0B2B2759C9007B19BF /* CoreDataSingleton.swift in Sources */ = {isa = PBXBuildFile; fileRef = CE044C092B2759C9007B19BF /* CoreDataSingleton.swift */; };
-		CE044C0E2B275A55007B19BF /* NewDemoApp.xcdatamodeld in Sources */ = {isa = PBXBuildFile; fileRef = CE044C0C2B275A55007B19BF /* NewDemoApp.xcdatamodeld */; };
-		CE044C0F2B275A55007B19BF /* NewDemoApp.xcdatamodeld in Sources */ = {isa = PBXBuildFile; fileRef = CE044C0C2B275A55007B19BF /* NewDemoApp.xcdatamodeld */; };
 		CE044C172B276601007B19BF /* SharedMethods.swift in Sources */ = {isa = PBXBuildFile; fileRef = CE044C162B276601007B19BF /* SharedMethods.swift */; };
 		CE044C182B276601007B19BF /* SharedMethods.swift in Sources */ = {isa = PBXBuildFile; fileRef = CE044C162B276601007B19BF /* SharedMethods.swift */; };
 		CE0AC3EF2B17428800E5D926 /* DoubleButtonModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = CE0AC3EE2B17428800E5D926 /* DoubleButtonModel.swift */; };
 		CE0AC3F22B1742D900E5D926 /* DoubleButtonCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = CE0AC3F12B1742D900E5D926 /* DoubleButtonCell.swift */; };
 		CE0AC3FC2B17BCB300E5D926 /* Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = CE0AC3FB2B17BCB300E5D926 /* Extensions.swift */; };
-		CE6FFAE72B28656400DD796D /* NotificationObject+CoreDataClass.swift in Sources */ = {isa = PBXBuildFile; fileRef = CE6FFAE52B28656400DD796D /* NotificationObject+CoreDataClass.swift */; };
-		CE6FFAE82B28656400DD796D /* NotificationObject+CoreDataClass.swift in Sources */ = {isa = PBXBuildFile; fileRef = CE6FFAE52B28656400DD796D /* NotificationObject+CoreDataClass.swift */; };
-		CE6FFAE92B28656400DD796D /* NotificationObject+CoreDataProperties.swift in Sources */ = {isa = PBXBuildFile; fileRef = CE6FFAE62B28656400DD796D /* NotificationObject+CoreDataProperties.swift */; };
-		CE6FFAEA2B28656400DD796D /* NotificationObject+CoreDataProperties.swift in Sources */ = {isa = PBXBuildFile; fileRef = CE6FFAE62B28656400DD796D /* NotificationObject+CoreDataProperties.swift */; };
+		CE6FFAF02B28822400DD796D /* NotificationObject+CoreDataProperties.swift in Sources */ = {isa = PBXBuildFile; fileRef = CE6FFAEB2B28822400DD796D /* NotificationObject+CoreDataProperties.swift */; };
+		CE6FFAF12B28822400DD796D /* NotificationObject+CoreDataProperties.swift in Sources */ = {isa = PBXBuildFile; fileRef = CE6FFAEB2B28822400DD796D /* NotificationObject+CoreDataProperties.swift */; };
+		CE6FFAF22B28822400DD796D /* NotificationObject+CoreDataClass.swift in Sources */ = {isa = PBXBuildFile; fileRef = CE6FFAEC2B28822400DD796D /* NotificationObject+CoreDataClass.swift */; };
+		CE6FFAF32B28822400DD796D /* NotificationObject+CoreDataClass.swift in Sources */ = {isa = PBXBuildFile; fileRef = CE6FFAEC2B28822400DD796D /* NotificationObject+CoreDataClass.swift */; };
+		CE6FFAF42B28822400DD796D /* NewDemoApp.xcdatamodeld in Sources */ = {isa = PBXBuildFile; fileRef = CE6FFAED2B28822400DD796D /* NewDemoApp.xcdatamodeld */; };
+		CE6FFAF52B28822400DD796D /* NewDemoApp.xcdatamodeld in Sources */ = {isa = PBXBuildFile; fileRef = CE6FFAED2B28822400DD796D /* NewDemoApp.xcdatamodeld */; };
+		CE6FFAF62B28822400DD796D /* CoreDataSingleton.swift in Sources */ = {isa = PBXBuildFile; fileRef = CE6FFAEF2B28822400DD796D /* CoreDataSingleton.swift */; };
+		CE6FFAF72B28822400DD796D /* CoreDataSingleton.swift in Sources */ = {isa = PBXBuildFile; fileRef = CE6FFAEF2B28822400DD796D /* CoreDataSingleton.swift */; };
 		CE9EF7122B15FAB70084478C /* LoginViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = CE9EF7102B15FAB70084478C /* LoginViewController.swift */; };
 		CE9EF7162B15FCA60084478C /* BaseModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = CE9EF7152B15FCA60084478C /* BaseModel.swift */; };
 		CE9EF7182B15FCF60084478C /* TextFieldModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = CE9EF7172B15FCF60084478C /* TextFieldModel.swift */; };
@@ -160,14 +160,14 @@
 		94CE16201E7A991D0054C0B3 /* SettingsViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SettingsViewController.swift; sourceTree = "<group>"; };
 		94CE16301E8107300054C0B3 /* NotificationTableViewCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = NotificationTableViewCell.swift; sourceTree = "<group>"; };
 		94CE16311E8107300054C0B3 /* NotificationTableViewCell.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = NotificationTableViewCell.xib; sourceTree = "<group>"; };
-		CE044C092B2759C9007B19BF /* CoreDataSingleton.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = CoreDataSingleton.swift; path = ../../../../../../../../../CoreDataSingleton.swift; sourceTree = "<group>"; };
-		CE044C0D2B275A55007B19BF /* NewDemoApp.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = NewDemoApp.xcdatamodel; sourceTree = "<group>"; };
 		CE044C162B276601007B19BF /* SharedMethods.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SharedMethods.swift; sourceTree = "<group>"; };
 		CE0AC3EE2B17428800E5D926 /* DoubleButtonModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DoubleButtonModel.swift; sourceTree = "<group>"; };
 		CE0AC3F12B1742D900E5D926 /* DoubleButtonCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DoubleButtonCell.swift; sourceTree = "<group>"; };
 		CE0AC3FB2B17BCB300E5D926 /* Extensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Extensions.swift; sourceTree = "<group>"; };
-		CE6FFAE52B28656400DD796D /* NotificationObject+CoreDataClass.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = "NotificationObject+CoreDataClass.swift"; path = "../../../NotificationObject+CoreDataClass.swift"; sourceTree = "<group>"; };
-		CE6FFAE62B28656400DD796D /* NotificationObject+CoreDataProperties.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = "NotificationObject+CoreDataProperties.swift"; path = "../../../NotificationObject+CoreDataProperties.swift"; sourceTree = "<group>"; };
+		CE6FFAEB2B28822400DD796D /* NotificationObject+CoreDataProperties.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "NotificationObject+CoreDataProperties.swift"; sourceTree = "<group>"; };
+		CE6FFAEC2B28822400DD796D /* NotificationObject+CoreDataClass.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "NotificationObject+CoreDataClass.swift"; sourceTree = "<group>"; };
+		CE6FFAEE2B28822400DD796D /* NewDemoApp.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = NewDemoApp.xcdatamodel; sourceTree = "<group>"; };
+		CE6FFAEF2B28822400DD796D /* CoreDataSingleton.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CoreDataSingleton.swift; sourceTree = "<group>"; };
 		CE9EF7102B15FAB70084478C /* LoginViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LoginViewController.swift; sourceTree = "<group>"; };
 		CE9EF7152B15FCA60084478C /* BaseModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BaseModel.swift; sourceTree = "<group>"; };
 		CE9EF7172B15FCF60084478C /* TextFieldModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TextFieldModel.swift; sourceTree = "<group>"; };
@@ -267,10 +267,10 @@
 		CE044C042B275983007B19BF /* CoreData */ = {
 			isa = PBXGroup;
 			children = (
-				CE044C0C2B275A55007B19BF /* NewDemoApp.xcdatamodeld */,
-				CE044C092B2759C9007B19BF /* CoreDataSingleton.swift */,
-				CE6FFAE52B28656400DD796D /* NotificationObject+CoreDataClass.swift */,
-				CE6FFAE62B28656400DD796D /* NotificationObject+CoreDataProperties.swift */,
+				CE6FFAED2B28822400DD796D /* NewDemoApp.xcdatamodeld */,
+				CE6FFAEF2B28822400DD796D /* CoreDataSingleton.swift */,
+				CE6FFAEC2B28822400DD796D /* NotificationObject+CoreDataClass.swift */,
+				CE6FFAEB2B28822400DD796D /* NotificationObject+CoreDataProperties.swift */,
 			);
 			path = CoreData;
 			sourceTree = "<group>";
@@ -762,14 +762,15 @@
 			files = (
 				CE9EF7122B15FAB70084478C /* LoginViewController.swift in Sources */,
 				CE0AC3FC2B17BCB300E5D926 /* Extensions.swift in Sources */,
+				CE6FFAF62B28822400DD796D /* CoreDataSingleton.swift in Sources */,
 				CE9EF7182B15FCF60084478C /* TextFieldModel.swift in Sources */,
+				CE6FFAF22B28822400DD796D /* NotificationObject+CoreDataClass.swift in Sources */,
 				CE044C172B276601007B19BF /* SharedMethods.swift in Sources */,
 				CE9FB3C72B21C51500A65627 /* NotificationsViewController.swift in Sources */,
 				CE9EF7202B16015F0084478C /* TextFieldCell.swift in Sources */,
 				94CE16321E8107300054C0B3 /* NotificationTableViewCell.swift in Sources */,
 				CE9FB3C92B21C54C00A65627 /* NotificationsViewControllerData.swift in Sources */,
 				CE9EF7162B15FCA60084478C /* BaseModel.swift in Sources */,
-				CE044C0A2B2759C9007B19BF /* CoreDataSingleton.swift in Sources */,
 				F59BC82B1CEA56310043E96E /* ViewController.swift in Sources */,
 				CEEBAB812B18A04100026969 /* LoggedViewController.swift in Sources */,
 				CEEBAB832B18A06200026969 /* LoggedViewControllerData.swift in Sources */,
@@ -777,7 +778,9 @@
 				CEEBAB8E2B18A40800026969 /* LabelCell.swift in Sources */,
 				CEEBAB862B18A11800026969 /* TripleLabelModel.swift in Sources */,
 				CE9EF71C2B15FD6F0084478C /* LoginViewControllerData.swift in Sources */,
+				CE6FFAF02B28822400DD796D /* NotificationObject+CoreDataProperties.swift in Sources */,
 				CE9FB3CF2B21C97F00A65627 /* NotificationModel.swift in Sources */,
+				CE6FFAF42B28822400DD796D /* NewDemoApp.xcdatamodeld in Sources */,
 				94AF5F0B1E79799200852808 /* MessagesTableViewController.swift in Sources */,
 				CE0AC3EF2B17428800E5D926 /* DoubleButtonModel.swift in Sources */,
 				CEC3EFA82B19E222001134B5 /* MainViewController.swift in Sources */,
@@ -785,15 +788,12 @@
 				CE0AC3F22B1742D900E5D926 /* DoubleButtonCell.swift in Sources */,
 				F59BC8291CEA56310043E96E /* AppDelegate.swift in Sources */,
 				94CE16211E7A991D0054C0B3 /* SettingsViewController.swift in Sources */,
-				CE6FFAE92B28656400DD796D /* NotificationObject+CoreDataProperties.swift in Sources */,
-				CE6FFAE72B28656400DD796D /* NotificationObject+CoreDataClass.swift in Sources */,
 				CEEBAB7F2B18A01500026969 /* NewSettingsViewControllerData.swift in Sources */,
 				CEEBAB8A2B18A34F00026969 /* LabelModel.swift in Sources */,
 				CE9FB3CD2B21C59A00A65627 /* AttachmentViewController.swift in Sources */,
 				CE9EF7242B16016E0084478C /* ButtonCell.swift in Sources */,
 				CE9FB3D12B21C9B600A65627 /* NotificationCell.swift in Sources */,
 				CEEBAB8C2B18A3CA00026969 /* TripleLabelCell.swift in Sources */,
-				CE044C0E2B275A55007B19BF /* NewDemoApp.xcdatamodeld in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -818,12 +818,12 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				CE6FFAE82B28656400DD796D /* NotificationObject+CoreDataClass.swift in Sources */,
+				CE6FFAF12B28822400DD796D /* NotificationObject+CoreDataProperties.swift in Sources */,
 				F778FB031DC0CE4300D73AC7 /* NotificationService.swift in Sources */,
-				CE044C0B2B2759C9007B19BF /* CoreDataSingleton.swift in Sources */,
-				CE6FFAEA2B28656400DD796D /* NotificationObject+CoreDataProperties.swift in Sources */,
-				CE044C0F2B275A55007B19BF /* NewDemoApp.xcdatamodeld in Sources */,
 				CE044C182B276601007B19BF /* SharedMethods.swift in Sources */,
+				CE6FFAF32B28822400DD796D /* NotificationObject+CoreDataClass.swift in Sources */,
+				CE6FFAF72B28822400DD796D /* CoreDataSingleton.swift in Sources */,
+				CE6FFAF52B28822400DD796D /* NewDemoApp.xcdatamodeld in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -1181,14 +1181,13 @@
 /* End XCConfigurationList section */
 
 /* Begin XCVersionGroup section */
-		CE044C0C2B275A55007B19BF /* NewDemoApp.xcdatamodeld */ = {
+		CE6FFAED2B28822400DD796D /* NewDemoApp.xcdatamodeld */ = {
 			isa = XCVersionGroup;
 			children = (
-				CE044C0D2B275A55007B19BF /* NewDemoApp.xcdatamodel */,
+				CE6FFAEE2B28822400DD796D /* NewDemoApp.xcdatamodel */,
 			);
-			currentVersion = CE044C0D2B275A55007B19BF /* NewDemoApp.xcdatamodel */;
-			name = NewDemoApp.xcdatamodeld;
-			path = ../../../../../../../../../NewDemoApp.xcdatamodeld;
+			currentVersion = CE6FFAEE2B28822400DD796D /* NewDemoApp.xcdatamodel */;
+			path = NewDemoApp.xcdatamodeld;
 			sourceTree = "<group>";
 			versionGroupType = wrapper.xcdatamodel;
 		};
