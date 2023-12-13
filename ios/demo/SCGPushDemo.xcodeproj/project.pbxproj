@@ -21,6 +21,9 @@
 		CE0AC3EF2B17428800E5D926 /* DoubleButtonModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = CE0AC3EE2B17428800E5D926 /* DoubleButtonModel.swift */; };
 		CE0AC3F22B1742D900E5D926 /* DoubleButtonCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = CE0AC3F12B1742D900E5D926 /* DoubleButtonCell.swift */; };
 		CE0AC3FC2B17BCB300E5D926 /* Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = CE0AC3FB2B17BCB300E5D926 /* Extensions.swift */; };
+		CE40AE922B29A063002581AB /* Localizable.strings in Resources */ = {isa = PBXBuildFile; fileRef = CE40AE942B29A063002581AB /* Localizable.strings */; };
+		CE40AE982B29A443002581AB /* LocalizedStringConstants.swift in Sources */ = {isa = PBXBuildFile; fileRef = CE40AE972B29A443002581AB /* LocalizedStringConstants.swift */; };
+		CE40AE9D2B29D1AF002581AB /* FontMethods.swift in Sources */ = {isa = PBXBuildFile; fileRef = CE40AE9C2B29D1AF002581AB /* FontMethods.swift */; };
 		CE6FFAF02B28822400DD796D /* NotificationObject+CoreDataProperties.swift in Sources */ = {isa = PBXBuildFile; fileRef = CE6FFAEB2B28822400DD796D /* NotificationObject+CoreDataProperties.swift */; };
 		CE6FFAF12B28822400DD796D /* NotificationObject+CoreDataProperties.swift in Sources */ = {isa = PBXBuildFile; fileRef = CE6FFAEB2B28822400DD796D /* NotificationObject+CoreDataProperties.swift */; };
 		CE6FFAF22B28822400DD796D /* NotificationObject+CoreDataClass.swift in Sources */ = {isa = PBXBuildFile; fileRef = CE6FFAEC2B28822400DD796D /* NotificationObject+CoreDataClass.swift */; };
@@ -164,6 +167,10 @@
 		CE0AC3EE2B17428800E5D926 /* DoubleButtonModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DoubleButtonModel.swift; sourceTree = "<group>"; };
 		CE0AC3F12B1742D900E5D926 /* DoubleButtonCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DoubleButtonCell.swift; sourceTree = "<group>"; };
 		CE0AC3FB2B17BCB300E5D926 /* Extensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Extensions.swift; sourceTree = "<group>"; };
+		CE40AE952B29A070002581AB /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = en.lproj/Localizable.strings; sourceTree = "<group>"; };
+		CE40AE962B29A0CD002581AB /* fr */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = fr; path = fr.lproj/Localizable.strings; sourceTree = "<group>"; };
+		CE40AE972B29A443002581AB /* LocalizedStringConstants.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LocalizedStringConstants.swift; sourceTree = "<group>"; };
+		CE40AE9C2B29D1AF002581AB /* FontMethods.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = FontMethods.swift; path = NewDemoApp/FontMethods.swift; sourceTree = SOURCE_ROOT; };
 		CE6FFAEB2B28822400DD796D /* NotificationObject+CoreDataProperties.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "NotificationObject+CoreDataProperties.swift"; sourceTree = "<group>"; };
 		CE6FFAEC2B28822400DD796D /* NotificationObject+CoreDataClass.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "NotificationObject+CoreDataClass.swift"; sourceTree = "<group>"; };
 		CE6FFAEE2B28822400DD796D /* NewDemoApp.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = NewDemoApp.xcdatamodel; sourceTree = "<group>"; };
@@ -284,9 +291,28 @@
 			path = Utilities;
 			sourceTree = "<group>";
 		};
+		CE40AE8F2B299FCB002581AB /* Localization */ = {
+			isa = PBXGroup;
+			children = (
+				CE40AE972B29A443002581AB /* LocalizedStringConstants.swift */,
+				CE40AE942B29A063002581AB /* Localizable.strings */,
+			);
+			path = Localization;
+			sourceTree = "<group>";
+		};
+		CE40AE992B29C833002581AB /* Font */ = {
+			isa = PBXGroup;
+			children = (
+				CE40AE9C2B29D1AF002581AB /* FontMethods.swift */,
+			);
+			path = Font;
+			sourceTree = "<group>";
+		};
 		CE9EF70E2B15FA860084478C /* NewDemoApp */ = {
 			isa = PBXGroup;
 			children = (
+				CE40AE992B29C833002581AB /* Font */,
+				CE40AE8F2B299FCB002581AB /* Localization */,
 				CE044C042B275983007B19BF /* CoreData */,
 				CE044C052B27598D007B19BF /* Utilities */,
 				CEEBAB842B18A07B00026969 /* ViewControllers */,
@@ -645,12 +671,12 @@
 			};
 			buildConfigurationList = F59BC8201CEA56310043E96E /* Build configuration list for PBXProject "SCGPushDemo" */;
 			compatibilityVersion = "Xcode 3.2";
-			developmentRegion = English;
+			developmentRegion = en;
 			hasScannedForEncodings = 0;
 			knownRegions = (
-				English,
 				en,
 				Base,
+				fr,
 			);
 			mainGroup = F59BC81C1CEA56310043E96E;
 			productRefGroup = F59BC8261CEA56310043E96E /* Products */;
@@ -693,6 +719,7 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				CE40AE922B29A063002581AB /* Localizable.strings in Resources */,
 				94CE16341E8107300054C0B3 /* NotificationTableViewCell.xib in Resources */,
 				F59BC8331CEA56310043E96E /* LaunchScreen.storyboard in Resources */,
 				F59BC8301CEA56310043E96E /* Assets.xcassets in Resources */,
@@ -763,12 +790,14 @@
 				CE9EF7122B15FAB70084478C /* LoginViewController.swift in Sources */,
 				CE0AC3FC2B17BCB300E5D926 /* Extensions.swift in Sources */,
 				CE6FFAF62B28822400DD796D /* CoreDataSingleton.swift in Sources */,
+				CE40AE9D2B29D1AF002581AB /* FontMethods.swift in Sources */,
 				CE9EF7182B15FCF60084478C /* TextFieldModel.swift in Sources */,
 				CE6FFAF22B28822400DD796D /* NotificationObject+CoreDataClass.swift in Sources */,
 				CE044C172B276601007B19BF /* SharedMethods.swift in Sources */,
 				CE9FB3C72B21C51500A65627 /* NotificationsViewController.swift in Sources */,
 				CE9EF7202B16015F0084478C /* TextFieldCell.swift in Sources */,
 				94CE16321E8107300054C0B3 /* NotificationTableViewCell.swift in Sources */,
+				CE40AE982B29A443002581AB /* LocalizedStringConstants.swift in Sources */,
 				CE9FB3C92B21C54C00A65627 /* NotificationsViewControllerData.swift in Sources */,
 				CE9EF7162B15FCA60084478C /* BaseModel.swift in Sources */,
 				F59BC82B1CEA56310043E96E /* ViewController.swift in Sources */,
@@ -863,6 +892,16 @@
 /* End PBXTargetDependency section */
 
 /* Begin PBXVariantGroup section */
+		CE40AE942B29A063002581AB /* Localizable.strings */ = {
+			isa = PBXVariantGroup;
+			children = (
+				CE40AE952B29A070002581AB /* en */,
+				CE40AE962B29A0CD002581AB /* fr */,
+			);
+			name = Localizable.strings;
+			path = NewDemoApp;
+			sourceTree = SOURCE_ROOT;
+		};
 		F59BC82C1CEA56310043E96E /* Main.storyboard */ = {
 			isa = PBXVariantGroup;
 			children = (
@@ -886,6 +925,7 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_ANALYZER_LOCALIZABILITY_NONLOCALIZED = YES;
 				CLANG_ANALYZER_NONNULL = YES;
 				CLANG_CXX_LANGUAGE_STANDARD = "gnu++0x";
 				CLANG_CXX_LIBRARY = "libc++";
@@ -929,6 +969,7 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_ANALYZER_LOCALIZABILITY_NONLOCALIZED = YES;
 				CLANG_ANALYZER_NONNULL = YES;
 				CLANG_CXX_LANGUAGE_STANDARD = "gnu++0x";
 				CLANG_CXX_LIBRARY = "libc++";

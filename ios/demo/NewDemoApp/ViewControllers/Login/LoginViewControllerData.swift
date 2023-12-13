@@ -5,30 +5,30 @@ class LoginViewControllerData: NSObject {
         var modelArray = [BaseModel]()
         
         let accessToken = TextFieldModel()
-        accessToken.labelTitle = "Access token"
+        accessToken.labelTitle = ACCESS_TOKEN
         accessToken.textFieldValue = ""
-        accessToken.textFieldPlaceholder = "Enter your access token"
+        accessToken.textFieldPlaceholder = ENTER_YOUR_ACCESS_TOKEN
         accessToken.loginCellType = .accessToken
         accessToken.cellIdentifier = String(describing: TextFieldCell.self)
         modelArray.append(accessToken)
         
         let appID = TextFieldModel()
-        appID.labelTitle = "App ID"
+        appID.labelTitle = APP_ID
         appID.textFieldValue = ""
-        appID.textFieldPlaceholder = "Enter your app ID"
+        appID.textFieldPlaceholder = ENTER_YOUR_APP_ID
         appID.loginCellType = .appID
         appID.cellIdentifier = String(describing: TextFieldCell.self)
         modelArray.append(appID)
         
         let registerButton = ButtonModel()
-        registerButton.buttonTitle = "Register"
+        registerButton.buttonTitle = REGISTER
         registerButton.loginCellType = .register
         registerButton.cellIdentifier = String(describing: ButtonCell.self)
         modelArray.append(registerButton)
         
         let doubleButton = DoubleButtonModel()
-        doubleButton.leftButtonTitle = "Go to Inbox"
-        doubleButton.rightButtonTitle = "Reset Badge"
+        doubleButton.leftButtonTitle = GO_TO_INBOX
+        doubleButton.rightButtonTitle = RESET_BADGE
         doubleButton.loginCellType = .doubleButton
         doubleButton.cellIdentifier = String(describing: DoubleButtonCell.self)
         modelArray.append(doubleButton)

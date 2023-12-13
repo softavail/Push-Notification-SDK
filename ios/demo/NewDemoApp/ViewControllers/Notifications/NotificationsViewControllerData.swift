@@ -12,10 +12,10 @@ class NotificationsViewControllerData: NSObject {
 
             for notification in notifications {
                 let notificationModel = NotificationModel()
-                notificationModel.titleLabel = notification.title == "" ? "Missing Title" : notification.title
-                notificationModel.bodyLabel = notification.body == "" ? "Missing Body" : notification.body
+                notificationModel.titleLabel = notification.title == "" ? MISSING_TITLE : notification.title
+                notificationModel.bodyLabel = notification.body == "" ? MISSING_BODY : notification.body
                 notificationModel.attachmentType = notification.attachmentType
-                notificationModel.receivedLabel = "Received:"
+                notificationModel.receivedLabel = RECEIVED
                 notificationModel.dateLabel = notification.date.customDescription()
                 notificationModel.cellIdentifier = String(describing: NotificationCell.self)
                 

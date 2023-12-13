@@ -15,6 +15,26 @@ extension String {
         
         return returnString
     }
+    
+    func removeAllWhiteSpaces() -> String {
+        var returnString = ""
+        
+        for character in self {
+            if character != " " {
+                returnString += String(character)
+            }
+        }
+        
+        return returnString
+    }
+    
+    func isContained(in string: String) -> Bool {
+        if string.lowercased().contains(self.lowercased()) {
+            return true
+        } else {
+            return false
+        }
+    }
 }
 
 extension UILabel {
@@ -57,7 +77,7 @@ extension UIColor {
 extension Date {
     func customDescription() -> String {
         let dateFormatter = DateFormatter()
-        dateFormatter.dateFormat = "dd MMMM yyyy"
+        dateFormatter.dateFormat = "dd MMMM yy"
         return dateFormatter.string(from: self)
     }
 }

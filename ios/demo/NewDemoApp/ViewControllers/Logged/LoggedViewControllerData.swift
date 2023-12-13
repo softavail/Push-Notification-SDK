@@ -5,9 +5,9 @@ class LoggedViewControllerData: NSObject {
         var modelArray = [BaseModel]()
         
         let loggedVCCellModel = TripleLabelModel()
-        loggedVCCellModel.topLabelTitle = "Label"
-        loggedVCCellModel.bottomLeftLabelTitle = "Created:"
-        loggedVCCellModel.bottomRightLabelTitle = "Date goes here"
+        loggedVCCellModel.topLabelTitle = LABEL
+        loggedVCCellModel.bottomLeftLabelTitle = CREATED
+        loggedVCCellModel.bottomRightLabelTitle = DATE_GOES_HERE
         loggedVCCellModel.cellIdentifier = String(describing: TripleLabelCell.self)
         modelArray.append(loggedVCCellModel)
         

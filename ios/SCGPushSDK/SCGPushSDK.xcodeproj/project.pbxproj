@@ -228,7 +228,7 @@
 			};
 			buildConfigurationList = 5BF52A211E76D251008DEE80 /* Build configuration list for PBXProject "SCGPushSDK" */;
 			compatibilityVersion = "Xcode 3.2";
-			developmentRegion = English;
+			developmentRegion = en;
 			hasScannedForEncodings = 0;
 			knownRegions = (
 				English,

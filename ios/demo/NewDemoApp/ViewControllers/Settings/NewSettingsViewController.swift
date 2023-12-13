@@ -8,10 +8,10 @@ class NewSettingsViewController: MainViewController, UITableViewDelegate, UITabl
     override func viewDidLoad() {
         super.viewDidLoad()
         
-        title = "Settings"
+        title = TITLE_SETTINGS
         navigationItem.largeTitleDisplayMode = .never
         navigationItem.backBarButtonItem = UIBarButtonItem(barButtonSystemItem: .done, target: self, action: nil)
-        navigationItem.rightBarButtonItem = UIBarButtonItem(title: "Notifications", style: .plain, target: self, action: #selector(notificationsTapped))
+        navigationItem.rightBarButtonItem = UIBarButtonItem(title: NOTIFICATIONS, style: .plain, target: self, action: #selector(notificationsTapped))
         
         dataSource = settingsDataSource.getSettingsDataSource()
         tableView.delaysContentTouches = false

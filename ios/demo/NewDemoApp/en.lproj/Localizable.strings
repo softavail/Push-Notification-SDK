@@ -1,0 +1,26 @@
+"LoginVCDAccessToken" = "Access token";
+"LoginVCDEnterYourAccessToken" = "Enter your access token";
+"LoginVCDAppID" = "App ID";
+"LoginVCDEnterYourAppID" = "Enter your app ID";
+"LoginVCDRegister" = "Register";
+"LoginVCDGoToInbox" = "Go to Inbox";
+"LoginVCDResetBadge" = "Reset Badge";
+
+"LoggedVCDLabel" = "Label";
+"LoggedVCDCreated" = "Created:";
+"LoggedVCDDateGoesHere" = "Date goes here";
+
+"NewSettingsVCDBaseURL" = "Base URL";
+"NewSettingsVCDInteractionReportOnOff" = "Interaction Report - on/off";
+"NewSettingsVCDDevicesToken" = "Device's Token";
+"NewSettingsVCDTokenLabel" = "Token Label";
+"NewSettingsVCDCopyToClipboard" = "Copy to Clipboard";
+
+"NotificationsVCDMissingTitle" = "Missing Title";
+"NotificationsVCDMissingBody" = "Missing Body";
+"NotificationsVCDReceived" = "Received:";
+
+"LoginVCSettings" = "Settings";
+
+"NewSettingsVCTitleSettings" = "Settings";
+"NewSettingsVCNotifications" = "Notifications";

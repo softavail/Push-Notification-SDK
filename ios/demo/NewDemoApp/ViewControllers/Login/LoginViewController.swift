@@ -25,7 +25,7 @@ class LoginViewController: MainViewController, UITableViewDelegate, UITableViewD
         
         title = "SCGPush Demo App"
         navigationItem.largeTitleDisplayMode = .always
-        navigationItem.rightBarButtonItem = UIBarButtonItem(title: "Settings", style: .plain, target: self, action: #selector(settingsTapped))
+        navigationItem.rightBarButtonItem = UIBarButtonItem(title: SETTINGS, style: .plain, target: self, action: #selector(settingsTapped))
         
         dataSource = loginDataSource.getLoginDataSource()
         loginTableView.delaysContentTouches = false

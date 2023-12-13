@@ -1,0 +1,26 @@
+"LoginVCDAccessToken" = "Jeton d'accès";
+"LoginVCDEnterYourAccessToken" = "Saisissez votre jeton d'accès";
+"LoginVCDAppID" = "ID de l'application";
+"LoginVCDEnterYourAppID" = "Entrez votre identifiant de l'application";
+"LoginVCDRegister" = "Registre";
+"LoginVCDGoToInbox" = "Aller à la boîte de réception";
+"LoginVCDResetBadge" = "Réinitialiser le badge";
+
+"LoggedVCDLabel" = "Étiquette";
+"LoggedVCDCreated" = "Créée:";
+"LoggedVCDDateGoesHere" = "La date est indiquée ici";
+
+"NewSettingsVCDBaseURL" = "URL de base";
+"NewSettingsVCDInteractionReportOnOff" = "Rapport d'interaction - sur/éteint";
+"NewSettingsVCDDevicesToken" = "Jeton du dispositif";
+"NewSettingsVCDTokenLabel" = "Étiquette du jeton";
+"NewSettingsVCDCopyToClipboard" = "Copier dans le presse-papiers";
+
+"NotificationsVCDMissingTitle" = "Titre manquant";
+"NotificationsVCDMissingBody" = "Corps manquant";
+"NotificationsVCDReceived" = "Reçu:";
+
+"LoginVCSettings" = "Paramètres";
+
+"NewSettingsVCTitleSettings" = "Paramètres";
+"NewSettingsVCNotifications" = "Notifications";
