@@ -16,18 +16,6 @@ extension String {
         return returnString
     }
     
-    func removeAllWhiteSpaces() -> String {
-        var returnString = ""
-        
-        for character in self {
-            if character != " " {
-                returnString += String(character)
-            }
-        }
-        
-        return returnString
-    }
-    
     func isContained(in string: String) -> Bool {
         if string.lowercased().contains(self.lowercased()) {
             return true

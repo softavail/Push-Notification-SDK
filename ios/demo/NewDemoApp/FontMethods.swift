@@ -3,7 +3,7 @@ import UIKit
 
 let appFont = "Helvetica Neue"
 
-func appThinFontOfSize(size: CGFloat) -> UIFont {
+func appThinFont(ofSize size: CGFloat) -> UIFont {
     let newSize: CGFloat
     if size <= 0 {
         newSize = 17
@@ -21,7 +21,7 @@ func appThinFontOfSize(size: CGFloat) -> UIFont {
     }
     
     if returnFont == nil {
-        returnFont = appUltraLightFontOfSize(size: newSize)
+        returnFont = appUltraLightFont(ofSize: newSize)
         isScaled = true
     }
     
@@ -63,7 +63,7 @@ func appThinFontOfSize(size: CGFloat) -> UIFont {
     return returnFont
 }
 
-func appThinItalicFontOfSize(size: CGFloat) -> UIFont {
+func appThinItalicFont(ofSize size: CGFloat) -> UIFont {
     let newSize: CGFloat
     if size <= 0 {
         newSize = 17
@@ -81,7 +81,7 @@ func appThinItalicFontOfSize(size: CGFloat) -> UIFont {
     }
     
     if returnFont == nil {
-        returnFont = appUltraLightItalicFontOfSize(size: newSize)
+        returnFont = appUltraLightItalicFont(ofSize: newSize)
         isScaled = true
     }
     
@@ -123,7 +123,7 @@ func appThinItalicFontOfSize(size: CGFloat) -> UIFont {
     return returnFont
 }
 
-func appUltraLightFontOfSize(size: CGFloat) -> UIFont {
+func appUltraLightFont(ofSize size: CGFloat) -> UIFont {
     let newSize: CGFloat
     if size <= 0 {
         newSize = 17
@@ -141,7 +141,7 @@ func appUltraLightFontOfSize(size: CGFloat) -> UIFont {
     }
     
     if returnFont == nil {
-        returnFont = appLightFontOfSize(size: newSize)
+        returnFont = appLightFont(ofSize: newSize)
         isScaled = true
     }
     
@@ -183,7 +183,7 @@ func appUltraLightFontOfSize(size: CGFloat) -> UIFont {
     return returnFont
 }
 
-func appUltraLightItalicFontOfSize(size: CGFloat) -> UIFont {
+func appUltraLightItalicFont(ofSize size: CGFloat) -> UIFont {
     let newSize: CGFloat
     if size <= 0 {
         newSize = 17
@@ -201,7 +201,7 @@ func appUltraLightItalicFontOfSize(size: CGFloat) -> UIFont {
     }
     
     if returnFont == nil {
-        returnFont = appLightItalicFontOfSize(size: newSize)
+        returnFont = appLightItalicFont(ofSize: newSize)
         isScaled = true
     }
     
@@ -243,7 +243,7 @@ func appUltraLightItalicFontOfSize(size: CGFloat) -> UIFont {
     return returnFont
 }
 
-func appLightFontOfSize(size: CGFloat) -> UIFont {
+func appLightFont(ofSize size: CGFloat) -> UIFont {
     let newSize: CGFloat
     if size <= 0 {
         newSize = 17
@@ -261,7 +261,7 @@ func appLightFontOfSize(size: CGFloat) -> UIFont {
     }
     
     if returnFont == nil {
-        returnFont = appFontOfSize(size: newSize)
+        returnFont = appFont(ofSize: newSize)
         isScaled = true
     }
     
@@ -303,7 +303,7 @@ func appLightFontOfSize(size: CGFloat) -> UIFont {
     return returnFont
 }
 
-func appLightItalicFontOfSize(size: CGFloat) -> UIFont {
+func appLightItalicFont(ofSize size: CGFloat) -> UIFont {
     let newSize: CGFloat
     if size <= 0 {
         newSize = 17
@@ -321,7 +321,7 @@ func appLightItalicFontOfSize(size: CGFloat) -> UIFont {
     }
     
     if returnFont == nil {
-        returnFont = appItalicFontOfSize(size: newSize)
+        returnFont = appItalicFont(ofSize: newSize)
         isScaled = true
     }
     
@@ -363,7 +363,7 @@ func appLightItalicFontOfSize(size: CGFloat) -> UIFont {
     return returnFont
 }
 
-func appFontOfSize(size: CGFloat) -> UIFont {
+func appFont(ofSize size: CGFloat) -> UIFont {
     let newSize: CGFloat
     if size <= 0 {
         newSize = 17
@@ -374,7 +374,7 @@ func appFontOfSize(size: CGFloat) -> UIFont {
     var returnFont: UIFont!
     let fontFamily = UIFont.fontNames(forFamilyName: appFont)
     for font in fontFamily {
-        if appFont.removeAllWhiteSpaces().isContained(in: font) && !"italic".isContained(in: font) && !"thin".isContained(in: font) && !"light".isContained(in: font) && !"medium".isContained(in: font) && !"bold".isContained(in: font) && !"black".isContained(in: font) && !"heavy".isContained(in: font) && !"condensed".isContained(in: font) && !"roman".isContained(in: font) {
+        if !"italic".isContained(in: font) && !"thin".isContained(in: font) && !"light".isContained(in: font) && !"medium".isContained(in: font) && !"bold".isContained(in: font) && !"black".isContained(in: font) && !"heavy".isContained(in: font) && !"condensed".isContained(in: font) && !"roman".isContained(in: font) && !"wide".isContained(in: font) {
             returnFont = UIFont(name: font, size: newSize)
         }
     }
@@ -415,7 +415,7 @@ func appFontOfSize(size: CGFloat) -> UIFont {
     return returnFont
 }
 
-func appItalicFontOfSize(size: CGFloat) -> UIFont {
+func appItalicFont(ofSize size: CGFloat) -> UIFont {
     let newSize: CGFloat
     if size <= 0 {
         newSize = 17
@@ -427,13 +427,13 @@ func appItalicFontOfSize(size: CGFloat) -> UIFont {
     var returnFont: UIFont!
     let fontFamily = UIFont.fontNames(forFamilyName: appFont)
     for font in fontFamily {
-        if "italic".isContained(in: font) && !"thin".isContained(in: font) && !"light".isContained(in: font) && !"medium".isContained(in: font) && !"bold".isContained(in: font) && !"black".isContained(in: font) && !"heavy".isContained(in: font) && !"condensed".isContained(in: font) && !"roman".isContained(in: font) {
+        if "italic".isContained(in: font) && !"thin".isContained(in: font) && !"light".isContained(in: font) && !"medium".isContained(in: font) && !"bold".isContained(in: font) && !"black".isContained(in: font) && !"heavy".isContained(in: font) && !"condensed".isContained(in: font) && !"roman".isContained(in: font) && !"wide".isContained(in: font) {
             returnFont = UIFont(name: font, size: newSize)
         }
     }
     
     if returnFont == nil {
-        returnFont = appFontOfSize(size: newSize)
+        returnFont = appFont(ofSize: newSize)
         isScaled = true
     }
     
@@ -475,7 +475,7 @@ func appItalicFontOfSize(size: CGFloat) -> UIFont {
     return returnFont
 }
 
-func appMediumFontOfSize(size: CGFloat) -> UIFont {
+func appMediumFont(ofSize size: CGFloat) -> UIFont {
     let newSize: CGFloat
     if size <= 0 {
         newSize = 17
@@ -493,7 +493,7 @@ func appMediumFontOfSize(size: CGFloat) -> UIFont {
     }
     
     if returnFont == nil {
-        returnFont = appFontOfSize(size: newSize)
+        returnFont = appFont(ofSize: newSize)
         isScaled = true
     }
     
@@ -535,7 +535,7 @@ func appMediumFontOfSize(size: CGFloat) -> UIFont {
     return returnFont
 }
 
-func appMediumItalicFontOfSize(size: CGFloat) -> UIFont {
+func appMediumItalicFont(ofSize size: CGFloat) -> UIFont {
     let newSize: CGFloat
     if size <= 0 {
         newSize = 17
@@ -553,7 +553,7 @@ func appMediumItalicFontOfSize(size: CGFloat) -> UIFont {
     }
     
     if returnFont == nil {
-        returnFont = appItalicFontOfSize(size: newSize)
+        returnFont = appItalicFont(ofSize: newSize)
         isScaled = true
     }
     
@@ -595,7 +595,7 @@ func appMediumItalicFontOfSize(size: CGFloat) -> UIFont {
     return returnFont
 }
 
-func appSemiBoldFontOfSize(size: CGFloat) -> UIFont {
+func appSemiBoldFont(ofSize size: CGFloat) -> UIFont {
     let newSize: CGFloat
     if size <= 0 {
         newSize = 17
@@ -613,7 +613,7 @@ func appSemiBoldFontOfSize(size: CGFloat) -> UIFont {
     }
     
     if returnFont == nil {
-        returnFont = appMediumFontOfSize(size: newSize)
+        returnFont = appMediumFont(ofSize: newSize)
         isScaled = true
     }
     
@@ -655,7 +655,7 @@ func appSemiBoldFontOfSize(size: CGFloat) -> UIFont {
     return returnFont
 }
 
-func appSemiBoldItalicFontOfSize(size: CGFloat) -> UIFont {
+func appSemiBoldItalicFont(ofSize size: CGFloat) -> UIFont {
     let newSize: CGFloat
     if size <= 0 {
         newSize = 17
@@ -673,7 +673,7 @@ func appSemiBoldItalicFontOfSize(size: CGFloat) -> UIFont {
     }
     
     if returnFont == nil {
-        returnFont = appMediumItalicFontOfSize(size: newSize)
+        returnFont = appMediumItalicFont(ofSize: newSize)
         isScaled = true
     }
     
@@ -715,7 +715,7 @@ func appSemiBoldItalicFontOfSize(size: CGFloat) -> UIFont {
     return returnFont
 }
 
-func appBoldFontOfSize(size: CGFloat) -> UIFont {
+func appBoldFont(ofSize size: CGFloat) -> UIFont {
     let newSize: CGFloat
     if size <= 0 {
         newSize = 17
@@ -733,7 +733,7 @@ func appBoldFontOfSize(size: CGFloat) -> UIFont {
     }
     
     if returnFont == nil {
-        returnFont = appSemiBoldFontOfSize(size: newSize)
+        returnFont = appSemiBoldFont(ofSize: newSize)
         isScaled = true
     }
     
@@ -775,7 +775,7 @@ func appBoldFontOfSize(size: CGFloat) -> UIFont {
     return returnFont
 }
 
-func appBoldItalicFontOfSize(size: CGFloat) -> UIFont {
+func appBoldItalicFont(ofSize size: CGFloat) -> UIFont {
     let newSize: CGFloat
     if size <= 0 {
         newSize = 17
@@ -793,7 +793,7 @@ func appBoldItalicFontOfSize(size: CGFloat) -> UIFont {
     }
     
     if returnFont == nil {
-        returnFont = appSemiBoldItalicFontOfSize(size: newSize)
+        returnFont = appSemiBoldItalicFont(ofSize: newSize)
         isScaled = true
     }
     
@@ -835,7 +835,7 @@ func appBoldItalicFontOfSize(size: CGFloat) -> UIFont {
     return returnFont
 }
 
-func appUltraBoldFontOfSize(size: CGFloat) -> UIFont {
+func appUltraBoldFont(ofSize size: CGFloat) -> UIFont {
     let newSize: CGFloat
     if size <= 0 {
         newSize = 17
@@ -853,7 +853,7 @@ func appUltraBoldFontOfSize(size: CGFloat) -> UIFont {
     }
     
     if returnFont == nil {
-        returnFont = appBoldFontOfSize(size: newSize)
+        returnFont = appBoldFont(ofSize: newSize)
         isScaled = true
     }
     
@@ -895,7 +895,7 @@ func appUltraBoldFontOfSize(size: CGFloat) -> UIFont {
     return returnFont
 }
 
-func appUltraBoldItalicFontOfSize(size: CGFloat) -> UIFont {
+func appUltraBoldItalicFont(ofSize size: CGFloat) -> UIFont {
     let newSize: CGFloat
     if size <= 0 {
         newSize = 17
@@ -913,7 +913,7 @@ func appUltraBoldItalicFontOfSize(size: CGFloat) -> UIFont {
     }
     
     if returnFont == nil {
-        returnFont = appBoldItalicFontOfSize(size: newSize)
+        returnFont = appBoldItalicFont(ofSize: newSize)
         isScaled = true
     }
     
@@ -955,7 +955,7 @@ func appUltraBoldItalicFontOfSize(size: CGFloat) -> UIFont {
     return returnFont
 }
 
-func appBlackFontOfSize(size: CGFloat) -> UIFont {
+func appBlackFont(ofSize size: CGFloat) -> UIFont {
     let newSize: CGFloat
     if size <= 0 {
         newSize = 17
@@ -973,7 +973,7 @@ func appBlackFontOfSize(size: CGFloat) -> UIFont {
     }
     
     if returnFont == nil {
-        returnFont = appUltraBoldFontOfSize(size: newSize)
+        returnFont = appUltraBoldFont(ofSize: newSize)
         isScaled = true
     }
     
@@ -1015,7 +1015,7 @@ func appBlackFontOfSize(size: CGFloat) -> UIFont {
     return returnFont
 }
 
-func appBlackItalicFontOfSize(size: CGFloat) -> UIFont {
+func appBlackItalicFont(ofSize size: CGFloat) -> UIFont {
     let newSize: CGFloat
     if size <= 0 {
         newSize = 17
@@ -1033,7 +1033,7 @@ func appBlackItalicFontOfSize(size: CGFloat) -> UIFont {
     }
     
     if returnFont == nil {
-        returnFont = appUltraBoldItalicFontOfSize(size: newSize)
+        returnFont = appUltraBoldItalicFont(ofSize: newSize)
         isScaled = true
     }
     

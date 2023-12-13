@@ -9,7 +9,7 @@ class LabelCell: UITableViewCell {
         super.awakeFromNib()
         
         cellSwitch?.onTintColor = .mySecondaryColor
-        cellLabel.font = appBlackItalicFontOfSize(size: 17)
+        cellLabel.font = appBlackItalicFont(ofSize: 17)
     }
 
     override func setSelected(_ selected: Bool, animated: Bool) {
