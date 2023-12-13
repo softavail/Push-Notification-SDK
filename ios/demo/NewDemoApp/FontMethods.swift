@@ -371,7 +371,6 @@ func appFontOfSize(size: CGFloat) -> UIFont {
         newSize = size
     }
     
-    var isScaled = false
     var returnFont: UIFont!
     let fontFamily = UIFont.fontNames(forFamilyName: appFont)
     for font in fontFamily {
@@ -384,34 +383,32 @@ func appFontOfSize(size: CGFloat) -> UIFont {
         returnFont = UIFont.systemFont(ofSize: newSize)
     }
     
-    if !isScaled {
-        switch newSize {
-        case 1...6:
-            returnFont = UIFontMetrics(forTextStyle: .caption2).scaledFont(for: returnFont)
-        case 7...12:
-            returnFont = UIFontMetrics(forTextStyle: .caption1).scaledFont(for: returnFont)
-        case 13...18:
-            returnFont = UIFontMetrics(forTextStyle: .footnote).scaledFont(for: returnFont)
-        case 19...24:
-            returnFont = UIFontMetrics(forTextStyle: .subheadline).scaledFont(for: returnFont)
-        case 25...30:
-            returnFont = UIFontMetrics(forTextStyle: .callout).scaledFont(for: returnFont)
-        case 31...36:
-            returnFont = UIFontMetrics(forTextStyle: .body).scaledFont(for: returnFont)
-        case 37...42:
-            returnFont = UIFontMetrics(forTextStyle: .headline).scaledFont(for: returnFont)
-        case 43...48:
-            returnFont = UIFontMetrics(forTextStyle: .title3).scaledFont(for: returnFont)
-        case 49...54:
-            returnFont = UIFontMetrics(forTextStyle: .title2).scaledFont(for: returnFont)
-        case 55...60:
-            returnFont = UIFontMetrics(forTextStyle: .title1).scaledFont(for: returnFont)
-        case 61...66:
+    switch newSize {
+    case 1...6:
+        returnFont = UIFontMetrics(forTextStyle: .caption2).scaledFont(for: returnFont)
+    case 7...12:
+        returnFont = UIFontMetrics(forTextStyle: .caption1).scaledFont(for: returnFont)
+    case 13...18:
+        returnFont = UIFontMetrics(forTextStyle: .footnote).scaledFont(for: returnFont)
+    case 19...24:
+        returnFont = UIFontMetrics(forTextStyle: .subheadline).scaledFont(for: returnFont)
+    case 25...30:
+        returnFont = UIFontMetrics(forTextStyle: .callout).scaledFont(for: returnFont)
+    case 31...36:
+        returnFont = UIFontMetrics(forTextStyle: .body).scaledFont(for: returnFont)
+    case 37...42:
+        returnFont = UIFontMetrics(forTextStyle: .headline).scaledFont(for: returnFont)
+    case 43...48:
+        returnFont = UIFontMetrics(forTextStyle: .title3).scaledFont(for: returnFont)
+    case 49...54:
+        returnFont = UIFontMetrics(forTextStyle: .title2).scaledFont(for: returnFont)
+    case 55...60:
+        returnFont = UIFontMetrics(forTextStyle: .title1).scaledFont(for: returnFont)
+    case 61...66:
+        returnFont = UIFontMetrics(forTextStyle: .largeTitle).scaledFont(for: returnFont)
+    default:
+        if newSize > 66 {
             returnFont = UIFontMetrics(forTextStyle: .largeTitle).scaledFont(for: returnFont)
-        default:
-            if newSize > 66 {
-                returnFont = UIFontMetrics(forTextStyle: .largeTitle).scaledFont(for: returnFont)
-            }
         }
     }
     
