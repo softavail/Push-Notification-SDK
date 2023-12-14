@@ -20,7 +20,7 @@ class ButtonCell: UITableViewCell, LoginViewControllerDelegate {
         registerButton?.titleLabel?.numberOfLines = 2
         registerButton?.disable()
         registerButton?.setTitleColor(.gray, for: .disabled)
-        registerButton?.layer.cornerRadius = 15
+        registerButton?.layer.cornerRadius = 20
         
         if traitCollection.userInterfaceStyle == .dark {
             registerButton?.backgroundColor = .white

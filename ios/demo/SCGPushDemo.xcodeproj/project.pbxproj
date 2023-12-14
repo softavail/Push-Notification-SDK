@@ -21,6 +21,7 @@
 		CE0AC3EF2B17428800E5D926 /* DoubleButtonModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = CE0AC3EE2B17428800E5D926 /* DoubleButtonModel.swift */; };
 		CE0AC3F22B1742D900E5D926 /* DoubleButtonCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = CE0AC3F12B1742D900E5D926 /* DoubleButtonCell.swift */; };
 		CE0AC3FC2B17BCB300E5D926 /* Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = CE0AC3FB2B17BCB300E5D926 /* Extensions.swift */; };
+		CE1FA8682B2B0E730002AAFD /* AlertControllerTemplates.swift in Sources */ = {isa = PBXBuildFile; fileRef = CE1FA8672B2B0E730002AAFD /* AlertControllerTemplates.swift */; };
 		CE40AE922B29A063002581AB /* Localizable.strings in Resources */ = {isa = PBXBuildFile; fileRef = CE40AE942B29A063002581AB /* Localizable.strings */; };
 		CE40AE982B29A443002581AB /* LocalizedStringConstants.swift in Sources */ = {isa = PBXBuildFile; fileRef = CE40AE972B29A443002581AB /* LocalizedStringConstants.swift */; };
 		CE40AE9D2B29D1AF002581AB /* FontMethods.swift in Sources */ = {isa = PBXBuildFile; fileRef = CE40AE9C2B29D1AF002581AB /* FontMethods.swift */; };
@@ -167,6 +168,7 @@
 		CE0AC3EE2B17428800E5D926 /* DoubleButtonModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DoubleButtonModel.swift; sourceTree = "<group>"; };
 		CE0AC3F12B1742D900E5D926 /* DoubleButtonCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DoubleButtonCell.swift; sourceTree = "<group>"; };
 		CE0AC3FB2B17BCB300E5D926 /* Extensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Extensions.swift; sourceTree = "<group>"; };
+		CE1FA8672B2B0E730002AAFD /* AlertControllerTemplates.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AlertControllerTemplates.swift; sourceTree = "<group>"; };
 		CE40AE952B29A070002581AB /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = en.lproj/Localizable.strings; sourceTree = "<group>"; };
 		CE40AE962B29A0CD002581AB /* fr */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = fr; path = fr.lproj/Localizable.strings; sourceTree = "<group>"; };
 		CE40AE972B29A443002581AB /* LocalizedStringConstants.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LocalizedStringConstants.swift; sourceTree = "<group>"; };
@@ -287,6 +289,7 @@
 			children = (
 				CE0AC3FB2B17BCB300E5D926 /* Extensions.swift */,
 				CE044C162B276601007B19BF /* SharedMethods.swift */,
+				CE1FA8672B2B0E730002AAFD /* AlertControllerTemplates.swift */,
 			);
 			path = Utilities;
 			sourceTree = "<group>";
@@ -807,6 +810,7 @@
 				CEEBAB8E2B18A40800026969 /* LabelCell.swift in Sources */,
 				CEEBAB862B18A11800026969 /* TripleLabelModel.swift in Sources */,
 				CE9EF71C2B15FD6F0084478C /* LoginViewControllerData.swift in Sources */,
+				CE1FA8682B2B0E730002AAFD /* AlertControllerTemplates.swift in Sources */,
 				CE6FFAF02B28822400DD796D /* NotificationObject+CoreDataProperties.swift in Sources */,
 				CE9FB3CF2B21C97F00A65627 /* NotificationModel.swift in Sources */,
 				CE6FFAF42B28822400DD796D /* NewDemoApp.xcdatamodeld in Sources */,
