@@ -34,19 +34,24 @@ class ButtonCell: UITableViewCell, LoginViewControllerDelegate {
             .font: UIFont.appFont(ofSize: 17),
             .foregroundColor: UIColor.black
         ]
+        let attrsGray: [NSAttributedString.Key: Any] = [
+            .font: UIFont.appFont(ofSize: 17),
+            .foregroundColor: UIColor.gray
+        ]
         
         let attributedButtonTitleWhite = NSAttributedString(string: buttonTitle, attributes: attrsWhite)
         let attributedButtonTitleBlack = NSAttributedString(string: buttonTitle, attributes: attrsBlack)
+        let attributedButtonTitleGray = NSAttributedString(string: buttonTitle, attributes: attrsGray)
         
         if previousTraitCollection?.userInterfaceStyle == .dark {
             registerButton?.backgroundColor = .black
             registerButton?.setAttributedTitle(attributedButtonTitleWhite, for: .normal)
-            registerButton?.setAttributedTitle(attributedButtonTitleWhite, for: .disabled)
+            registerButton?.setAttributedTitle(attributedButtonTitleGray, for: .disabled)
             registerButton?.setAttributedTitle(attributedButtonTitleWhite, for: .highlighted)
         } else {
             registerButton?.backgroundColor = .white
             registerButton?.setAttributedTitle(attributedButtonTitleBlack, for: .normal)
-            registerButton?.setAttributedTitle(attributedButtonTitleBlack, for: .disabled)
+            registerButton?.setAttributedTitle(attributedButtonTitleGray, for: .disabled)
             registerButton?.setAttributedTitle(attributedButtonTitleBlack, for: .highlighted)
         }
     }
@@ -65,20 +70,25 @@ class ButtonCell: UITableViewCell, LoginViewControllerDelegate {
             .font: UIFont.appFont(ofSize: 17),
             .foregroundColor: UIColor.black
         ]
+        let attrsGray: [NSAttributedString.Key: Any] = [
+            .font: UIFont.appFont(ofSize: 17),
+            .foregroundColor: UIColor.gray
+        ]
         
         let attributedButtonTitle = NSAttributedString(string: buttonTitle, attributes: attrs)
         let attributedButtonTitleWhite = NSAttributedString(string: buttonTitle, attributes: attrsWhite)
         let attributedButtonTitleBlack = NSAttributedString(string: buttonTitle, attributes: attrsBlack)
+        let attributedButtonTitleGray = NSAttributedString(string: buttonTitle, attributes: attrsGray)
         
         if traitCollection.userInterfaceStyle == .dark {
             registerButton?.backgroundColor = .white
             registerButton?.setAttributedTitle(attributedButtonTitleBlack, for: .normal)
-            registerButton?.setAttributedTitle(attributedButtonTitleBlack, for: .disabled)
+            registerButton?.setAttributedTitle(attributedButtonTitleGray, for: .disabled)
             registerButton?.setAttributedTitle(attributedButtonTitleBlack, for: .highlighted)
         } else {
             registerButton?.backgroundColor = .black
             registerButton?.setAttributedTitle(attributedButtonTitleWhite, for: .normal)
-            registerButton?.setAttributedTitle(attributedButtonTitleWhite, for: .disabled)
+            registerButton?.setAttributedTitle(attributedButtonTitleGray, for: .disabled)
             registerButton?.setAttributedTitle(attributedButtonTitleWhite, for: .highlighted)
         }
         
