@@ -57,6 +57,22 @@
 	<array>
 		<string>UIInterfaceOrientationPortrait</string>
 	</array>
+	<key>UIAppFonts</key>
+	<array>
+		<string>quicksand.dash-regular.otf</string>
+		<string>ATTAleckSans_Regular.ttf</string>
+		<string>ATTAleckSans_Italic.ttf</string>
+		<string>ATTAleckSans_Thin.ttf</string>
+		<string>ATTAleckSans_ThinItalic.ttf</string>
+		<string>ATTAleckSans_Light.ttf</string>
+		<string>ATTAleckSans_LightItalic.ttf</string>
+		<string>ATTAleckSans_Medium.ttf</string>
+		<string>ATTAleckSans_MediumItalic.ttf</string>
+		<string>ATTAleckSans_Bold.ttf</string>
+		<string>ATTAleckSans_BoldItalic.ttf</string>
+		<string>ATTAleckSans_Black.ttf</string>
+		<string>ATTAleckSans_BlackItalic.ttf</string>
+	</array>
 	<key>UISupportedInterfaceOrientations~ipad</key>
 	<array>
 		<string>UIInterfaceOrientationPortrait</string>

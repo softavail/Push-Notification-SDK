@@ -5,6 +5,8 @@ enum FontFamily: String {
     case system = ""
     case helvetica = "Helvetica"
     case helveticaNeue = "Helvetica Neue"
+    case attAleckSans = "ATT Aleck Sans"
+    case quicksand = "Quicksand"
 }
 
 extension String {
