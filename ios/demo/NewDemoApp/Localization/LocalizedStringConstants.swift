@@ -38,3 +38,14 @@ let SETTINGS = NSLocalizedString("LoginVCSettings", comment: "")
 
 let TITLE_SETTINGS = NSLocalizedString("NewSettingsVCTitleSettings", comment: "")
 let NOTIFICATIONS = NSLocalizedString("NewSettingsVCNotifications", comment: "")
+
+// MARK: AlertControllerTemplates strings
+
+let ERROR = NSLocalizedString("AlertControllerTemplatesError", comment: "")
+let INFO = NSLocalizedString("AlertControllerTemplatesInfo", comment: "")
+let YES = NSLocalizedString("AlertControllerTemplatesYes", comment: "")
+let NO = NSLocalizedString("AlertControllerTemplatesNo", comment: "")
+let DONE = NSLocalizedString("AlertControllerTemplatesDone", comment: "")
+let OK = NSLocalizedString("AlertControllerTemplatesOK", comment: "")
+let CANCEL = NSLocalizedString("AlertControllerTemplatesCancel", comment: "")
+let CLOSE = NSLocalizedString("AlertControllerTemplatesClose", comment: "")

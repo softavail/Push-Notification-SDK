@@ -24,3 +24,12 @@
 
 "NewSettingsVCTitleSettings" = "Settings";
 "NewSettingsVCNotifications" = "Notifications";
+
+"AlertControllerTemplatesError" = "Error";
+"AlertControllerTemplatesInfo" = "Info";
+"AlertControllerTemplatesYes" = "Yes";
+"AlertControllerTemplatesNo" = "No";
+"AlertControllerTemplatesDone" = "Done";
+"AlertControllerTemplatesOK" = "OK";
+"AlertControllerTemplatesCancel" = "Cancel";
+"AlertControllerTemplatesClose" = "Close";

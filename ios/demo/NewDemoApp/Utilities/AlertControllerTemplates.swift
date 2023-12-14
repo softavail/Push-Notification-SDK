@@ -6,41 +6,41 @@ final class AlertControllerSingleton {
     private init() {  }
     
     func showError(_ error: String, presentFrom viewController: UIViewController) {
-        let ac = UIAlertController(title: "Error", message: error, preferredStyle: .alert)
-        ac.addAction(UIAlertAction(title: "OK", style: .default))
+        let ac = UIAlertController(title: ERROR, message: error, preferredStyle: .alert)
+        ac.addAction(UIAlertAction(title: OK, style: .default))
         viewController.present(ac, animated: true)
     }
     
     func showInfo(_ info: String, presentFrom viewController: UIViewController) {
-        let ac = UIAlertController(title: "Info", message: info, preferredStyle: .alert)
-        ac.addAction(UIAlertAction(title: "OK", style: .default))
+        let ac = UIAlertController(title: INFO, message: info, preferredStyle: .alert)
+        ac.addAction(UIAlertAction(title: OK, style: .default))
         viewController.present(ac, animated: true)
     }
     
     func showYesNoAlert(title: String, message: String, presentFrom viewController: UIViewController, completionHandler: @escaping () -> Void) {
         let ac = UIAlertController(title: title, message: message, preferredStyle: .alert)
-        ac.addAction(UIAlertAction(title: "Yes", style: .default) { _ in
+        ac.addAction(UIAlertAction(title: YES, style: .default) { _ in
             completionHandler()
         })
-        ac.addAction(UIAlertAction(title: "No", style: .cancel))
+        ac.addAction(UIAlertAction(title: NO, style: .cancel))
         viewController.present(ac, animated: true)
     }
     
     func showDoneCancelAlert(title: String, message: String, presentFrom viewController: UIViewController, completionHandler: @escaping () -> Void) {
         let ac = UIAlertController(title: title, message: message, preferredStyle: .alert)
-        ac.addAction(UIAlertAction(title: "Done", style: .default) { _ in
+        ac.addAction(UIAlertAction(title: DONE, style: .default) { _ in
             completionHandler()
         })
-        ac.addAction(UIAlertAction(title: "Cancel", style: .cancel))
+        ac.addAction(UIAlertAction(title: CANCEL, style: .cancel))
         viewController.present(ac, animated: true)
     }
     
     func showOKCancelAlert(title: String, message: String, presentFrom viewController: UIViewController, completionHandler: @escaping () -> Void) {
         let ac = UIAlertController(title: title, message: message, preferredStyle: .alert)
-        ac.addAction(UIAlertAction(title: "OK", style: .default) { _ in
+        ac.addAction(UIAlertAction(title: OK, style: .default) { _ in
             completionHandler()
         })
-        ac.addAction(UIAlertAction(title: "Cancel", style: .cancel))
+        ac.addAction(UIAlertAction(title: CANCEL, style: .cancel))
         viewController.present(ac, animated: true)
     }
     
@@ -53,7 +53,7 @@ final class AlertControllerSingleton {
                 }
             })
         }
-        ac.addAction(UIAlertAction(title: "Cancel", style: .cancel))
+        ac.addAction(UIAlertAction(title: CANCEL, style: .cancel))
         viewController.present(ac, animated: true)
     }
     
@@ -66,7 +66,7 @@ final class AlertControllerSingleton {
                 }
             })
         }
-        ac.addAction(UIAlertAction(title: "Close", style: .cancel))
+        ac.addAction(UIAlertAction(title: CLOSE, style: .cancel))
         viewController.present(ac, animated: true)
     }
 }
