@@ -8,6 +8,10 @@ class TripleLabelCell: UITableViewCell {
     
     override func awakeFromNib() {
         super.awakeFromNib()
+        
+        topLabel.font = appFont(ofSize: 17)
+        bottomLeftLabel.font = appFont(ofSize: 10)
+        bottomRightLabel.font = appFont(ofSize: 10)
     }
 
     override func setSelected(_ selected: Bool, animated: Bool) {

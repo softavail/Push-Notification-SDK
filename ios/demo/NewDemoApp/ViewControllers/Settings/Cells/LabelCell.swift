@@ -8,8 +8,8 @@ class LabelCell: UITableViewCell {
     override func awakeFromNib() {
         super.awakeFromNib()
         
+        cellLabel.font = appFont(ofSize: 17)
         cellSwitch?.onTintColor = .mySecondaryColor
-        cellLabel.font = appBlackItalicFont(ofSize: 17)
     }
 
     override func setSelected(_ selected: Bool, animated: Bool) {

@@ -4,1073 +4,332 @@ import UIKit
 let appFont = "Helvetica Neue"
 
 func appThinFont(ofSize size: CGFloat) -> UIFont {
-    let newSize: CGFloat
-    if size <= 0 {
-        newSize = 17
-    } else {
-        newSize = size
-    }
+    let checkedSize = checkSize(size)
     
-    var isScaled = false
-    var returnFont: UIFont!
     let fontFamily = UIFont.fontNames(forFamilyName: appFont)
     for font in fontFamily {
         if "thin".isContained(in: font) && !"italic".isContained(in: font) {
-            returnFont = UIFont(name: font, size: newSize)
-        }
-    }
-    
-    if returnFont == nil {
-        returnFont = appUltraLightFont(ofSize: newSize)
-        isScaled = true
-    }
-    
-    if returnFont == nil {
-        returnFont = UIFont.systemFont(ofSize: newSize)
-    }
-    
-    if !isScaled {
-        switch newSize {
-        case 1...6:
-            returnFont = UIFontMetrics(forTextStyle: .caption2).scaledFont(for: returnFont)
-        case 7...12:
-            returnFont = UIFontMetrics(forTextStyle: .caption1).scaledFont(for: returnFont)
-        case 13...18:
-            returnFont = UIFontMetrics(forTextStyle: .footnote).scaledFont(for: returnFont)
-        case 19...24:
-            returnFont = UIFontMetrics(forTextStyle: .subheadline).scaledFont(for: returnFont)
-        case 25...30:
-            returnFont = UIFontMetrics(forTextStyle: .callout).scaledFont(for: returnFont)
-        case 31...36:
-            returnFont = UIFontMetrics(forTextStyle: .body).scaledFont(for: returnFont)
-        case 37...42:
-            returnFont = UIFontMetrics(forTextStyle: .headline).scaledFont(for: returnFont)
-        case 43...48:
-            returnFont = UIFontMetrics(forTextStyle: .title3).scaledFont(for: returnFont)
-        case 49...54:
-            returnFont = UIFontMetrics(forTextStyle: .title2).scaledFont(for: returnFont)
-        case 55...60:
-            returnFont = UIFontMetrics(forTextStyle: .title1).scaledFont(for: returnFont)
-        case 61...66:
-            returnFont = UIFontMetrics(forTextStyle: .largeTitle).scaledFont(for: returnFont)
-        default:
-            if newSize > 66 {
-                returnFont = UIFontMetrics(forTextStyle: .largeTitle).scaledFont(for: returnFont)
+            guard let returnFont = UIFont(name: font, size: checkedSize) else {
+                return appUltraLightFont(ofSize: checkedSize)
             }
+            return scale(font: returnFont, ofSize: checkedSize)
         }
     }
     
-    return returnFont
+    return appUltraLightFont(ofSize: checkedSize)
 }
 
 func appThinItalicFont(ofSize size: CGFloat) -> UIFont {
-    let newSize: CGFloat
-    if size <= 0 {
-        newSize = 17
-    } else {
-        newSize = size
-    }
+    let checkedSize = checkSize(size)
     
-    var isScaled = false
-    var returnFont: UIFont!
     let fontFamily = UIFont.fontNames(forFamilyName: appFont)
     for font in fontFamily {
         if "thin".isContained(in: font) && "italic".isContained(in: font) {
-            returnFont = UIFont(name: font, size: newSize)
-        }
-    }
-    
-    if returnFont == nil {
-        returnFont = appUltraLightItalicFont(ofSize: newSize)
-        isScaled = true
-    }
-    
-    if returnFont == nil {
-        returnFont = UIFont.systemFont(ofSize: newSize)
-    }
-    
-    if !isScaled {
-        switch newSize {
-        case 1...6:
-            returnFont = UIFontMetrics(forTextStyle: .caption2).scaledFont(for: returnFont)
-        case 7...12:
-            returnFont = UIFontMetrics(forTextStyle: .caption1).scaledFont(for: returnFont)
-        case 13...18:
-            returnFont = UIFontMetrics(forTextStyle: .footnote).scaledFont(for: returnFont)
-        case 19...24:
-            returnFont = UIFontMetrics(forTextStyle: .subheadline).scaledFont(for: returnFont)
-        case 25...30:
-            returnFont = UIFontMetrics(forTextStyle: .callout).scaledFont(for: returnFont)
-        case 31...36:
-            returnFont = UIFontMetrics(forTextStyle: .body).scaledFont(for: returnFont)
-        case 37...42:
-            returnFont = UIFontMetrics(forTextStyle: .headline).scaledFont(for: returnFont)
-        case 43...48:
-            returnFont = UIFontMetrics(forTextStyle: .title3).scaledFont(for: returnFont)
-        case 49...54:
-            returnFont = UIFontMetrics(forTextStyle: .title2).scaledFont(for: returnFont)
-        case 55...60:
-            returnFont = UIFontMetrics(forTextStyle: .title1).scaledFont(for: returnFont)
-        case 61...66:
-            returnFont = UIFontMetrics(forTextStyle: .largeTitle).scaledFont(for: returnFont)
-        default:
-            if newSize > 66 {
-                returnFont = UIFontMetrics(forTextStyle: .largeTitle).scaledFont(for: returnFont)
+            guard let returnFont = UIFont(name: font, size: checkedSize) else {
+                return appUltraLightItalicFont(ofSize: checkedSize)
             }
+            return scale(font: returnFont, ofSize: checkedSize)
         }
     }
     
-    return returnFont
+    return appUltraLightItalicFont(ofSize: checkedSize)
 }
 
 func appUltraLightFont(ofSize size: CGFloat) -> UIFont {
-    let newSize: CGFloat
-    if size <= 0 {
-        newSize = 17
-    } else {
-        newSize = size
-    }
+    let checkedSize = checkSize(size)
     
-    var isScaled = false
-    var returnFont: UIFont!
     let fontFamily = UIFont.fontNames(forFamilyName: appFont)
     for font in fontFamily {
         if "ultralight".isContained(in: font) && !"italic".isContained(in: font) {
-            returnFont = UIFont(name: font, size: newSize)
-        }
-    }
-    
-    if returnFont == nil {
-        returnFont = appLightFont(ofSize: newSize)
-        isScaled = true
-    }
-    
-    if returnFont == nil {
-        returnFont = UIFont.systemFont(ofSize: newSize)
-    }
-    
-    if !isScaled {
-        switch newSize {
-        case 1...6:
-            returnFont = UIFontMetrics(forTextStyle: .caption2).scaledFont(for: returnFont)
-        case 7...12:
-            returnFont = UIFontMetrics(forTextStyle: .caption1).scaledFont(for: returnFont)
-        case 13...18:
-            returnFont = UIFontMetrics(forTextStyle: .footnote).scaledFont(for: returnFont)
-        case 19...24:
-            returnFont = UIFontMetrics(forTextStyle: .subheadline).scaledFont(for: returnFont)
-        case 25...30:
-            returnFont = UIFontMetrics(forTextStyle: .callout).scaledFont(for: returnFont)
-        case 31...36:
-            returnFont = UIFontMetrics(forTextStyle: .body).scaledFont(for: returnFont)
-        case 37...42:
-            returnFont = UIFontMetrics(forTextStyle: .headline).scaledFont(for: returnFont)
-        case 43...48:
-            returnFont = UIFontMetrics(forTextStyle: .title3).scaledFont(for: returnFont)
-        case 49...54:
-            returnFont = UIFontMetrics(forTextStyle: .title2).scaledFont(for: returnFont)
-        case 55...60:
-            returnFont = UIFontMetrics(forTextStyle: .title1).scaledFont(for: returnFont)
-        case 61...66:
-            returnFont = UIFontMetrics(forTextStyle: .largeTitle).scaledFont(for: returnFont)
-        default:
-            if newSize > 66 {
-                returnFont = UIFontMetrics(forTextStyle: .largeTitle).scaledFont(for: returnFont)
+            guard let returnFont = UIFont(name: font, size: checkedSize) else {
+                return appLightFont(ofSize: checkedSize)
             }
+            return scale(font: returnFont, ofSize: checkedSize)
         }
     }
     
-    return returnFont
+    return appLightFont(ofSize: checkedSize)
 }
 
 func appUltraLightItalicFont(ofSize size: CGFloat) -> UIFont {
-    let newSize: CGFloat
-    if size <= 0 {
-        newSize = 17
-    } else {
-        newSize = size
-    }
+    let checkedSize = checkSize(size)
     
-    var isScaled = false
-    var returnFont: UIFont!
     let fontFamily = UIFont.fontNames(forFamilyName: appFont)
     for font in fontFamily {
         if "ultralight".isContained(in: font) && "italic".isContained(in: font) {
-            returnFont = UIFont(name: font, size: newSize)
-        }
-    }
-    
-    if returnFont == nil {
-        returnFont = appLightItalicFont(ofSize: newSize)
-        isScaled = true
-    }
-    
-    if returnFont == nil {
-        returnFont = UIFont.systemFont(ofSize: newSize)
-    }
-    
-    if !isScaled {
-        switch newSize {
-        case 1...6:
-            returnFont = UIFontMetrics(forTextStyle: .caption2).scaledFont(for: returnFont)
-        case 7...12:
-            returnFont = UIFontMetrics(forTextStyle: .caption1).scaledFont(for: returnFont)
-        case 13...18:
-            returnFont = UIFontMetrics(forTextStyle: .footnote).scaledFont(for: returnFont)
-        case 19...24:
-            returnFont = UIFontMetrics(forTextStyle: .subheadline).scaledFont(for: returnFont)
-        case 25...30:
-            returnFont = UIFontMetrics(forTextStyle: .callout).scaledFont(for: returnFont)
-        case 31...36:
-            returnFont = UIFontMetrics(forTextStyle: .body).scaledFont(for: returnFont)
-        case 37...42:
-            returnFont = UIFontMetrics(forTextStyle: .headline).scaledFont(for: returnFont)
-        case 43...48:
-            returnFont = UIFontMetrics(forTextStyle: .title3).scaledFont(for: returnFont)
-        case 49...54:
-            returnFont = UIFontMetrics(forTextStyle: .title2).scaledFont(for: returnFont)
-        case 55...60:
-            returnFont = UIFontMetrics(forTextStyle: .title1).scaledFont(for: returnFont)
-        case 61...66:
-            returnFont = UIFontMetrics(forTextStyle: .largeTitle).scaledFont(for: returnFont)
-        default:
-            if newSize > 66 {
-                returnFont = UIFontMetrics(forTextStyle: .largeTitle).scaledFont(for: returnFont)
+            guard let returnFont = UIFont(name: font, size: checkedSize) else {
+                return appLightItalicFont(ofSize: checkedSize)
             }
+            return scale(font: returnFont, ofSize: checkedSize)
         }
     }
     
-    return returnFont
+    return appLightItalicFont(ofSize: checkedSize)
 }
 
 func appLightFont(ofSize size: CGFloat) -> UIFont {
-    let newSize: CGFloat
-    if size <= 0 {
-        newSize = 17
-    } else {
-        newSize = size
-    }
+    let checkedSize = checkSize(size)
     
-    var isScaled = false
-    var returnFont: UIFont!
     let fontFamily = UIFont.fontNames(forFamilyName: appFont)
     for font in fontFamily {
         if "light".isContained(in: font) && !"italic".isContained(in: font) && !"ultra".isContained(in: font) && !"heavy".isContained(in: font) && !"condensed".isContained(in: font) && !"extra".isContained(in: font) {
-            returnFont = UIFont(name: font, size: newSize)
-        }
-    }
-    
-    if returnFont == nil {
-        returnFont = appFont(ofSize: newSize)
-        isScaled = true
-    }
-    
-    if returnFont == nil {
-        returnFont = UIFont.systemFont(ofSize: newSize)
-    }
-    
-    if !isScaled {
-        switch newSize {
-        case 1...6:
-            returnFont = UIFontMetrics(forTextStyle: .caption2).scaledFont(for: returnFont)
-        case 7...12:
-            returnFont = UIFontMetrics(forTextStyle: .caption1).scaledFont(for: returnFont)
-        case 13...18:
-            returnFont = UIFontMetrics(forTextStyle: .footnote).scaledFont(for: returnFont)
-        case 19...24:
-            returnFont = UIFontMetrics(forTextStyle: .subheadline).scaledFont(for: returnFont)
-        case 25...30:
-            returnFont = UIFontMetrics(forTextStyle: .callout).scaledFont(for: returnFont)
-        case 31...36:
-            returnFont = UIFontMetrics(forTextStyle: .body).scaledFont(for: returnFont)
-        case 37...42:
-            returnFont = UIFontMetrics(forTextStyle: .headline).scaledFont(for: returnFont)
-        case 43...48:
-            returnFont = UIFontMetrics(forTextStyle: .title3).scaledFont(for: returnFont)
-        case 49...54:
-            returnFont = UIFontMetrics(forTextStyle: .title2).scaledFont(for: returnFont)
-        case 55...60:
-            returnFont = UIFontMetrics(forTextStyle: .title1).scaledFont(for: returnFont)
-        case 61...66:
-            returnFont = UIFontMetrics(forTextStyle: .largeTitle).scaledFont(for: returnFont)
-        default:
-            if newSize > 66 {
-                returnFont = UIFontMetrics(forTextStyle: .largeTitle).scaledFont(for: returnFont)
+            guard let returnFont = UIFont(name: font, size: checkedSize) else {
+                return appFont(ofSize: checkedSize)
             }
+            return scale(font: returnFont, ofSize: checkedSize)
         }
     }
     
-    return returnFont
+    return appFont(ofSize: checkedSize)
 }
 
 func appLightItalicFont(ofSize size: CGFloat) -> UIFont {
-    let newSize: CGFloat
-    if size <= 0 {
-        newSize = 17
-    } else {
-        newSize = size
-    }
+    let checkedSize = checkSize(size)
     
-    var isScaled = false
-    var returnFont: UIFont!
     let fontFamily = UIFont.fontNames(forFamilyName: appFont)
     for font in fontFamily {
         if "light".isContained(in: font) && "italic".isContained(in: font) && !"ultra".isContained(in: font) && !"heavy".isContained(in: font) && !"condensed".isContained(in: font) && !"extra".isContained(in: font) {
-            returnFont = UIFont(name: font, size: newSize)
-        }
-    }
-    
-    if returnFont == nil {
-        returnFont = appItalicFont(ofSize: newSize)
-        isScaled = true
-    }
-    
-    if returnFont == nil {
-        returnFont = UIFont.systemFont(ofSize: newSize)
-    }
-    
-    if !isScaled {
-        switch newSize {
-        case 1...6:
-            returnFont = UIFontMetrics(forTextStyle: .caption2).scaledFont(for: returnFont)
-        case 7...12:
-            returnFont = UIFontMetrics(forTextStyle: .caption1).scaledFont(for: returnFont)
-        case 13...18:
-            returnFont = UIFontMetrics(forTextStyle: .footnote).scaledFont(for: returnFont)
-        case 19...24:
-            returnFont = UIFontMetrics(forTextStyle: .subheadline).scaledFont(for: returnFont)
-        case 25...30:
-            returnFont = UIFontMetrics(forTextStyle: .callout).scaledFont(for: returnFont)
-        case 31...36:
-            returnFont = UIFontMetrics(forTextStyle: .body).scaledFont(for: returnFont)
-        case 37...42:
-            returnFont = UIFontMetrics(forTextStyle: .headline).scaledFont(for: returnFont)
-        case 43...48:
-            returnFont = UIFontMetrics(forTextStyle: .title3).scaledFont(for: returnFont)
-        case 49...54:
-            returnFont = UIFontMetrics(forTextStyle: .title2).scaledFont(for: returnFont)
-        case 55...60:
-            returnFont = UIFontMetrics(forTextStyle: .title1).scaledFont(for: returnFont)
-        case 61...66:
-            returnFont = UIFontMetrics(forTextStyle: .largeTitle).scaledFont(for: returnFont)
-        default:
-            if newSize > 66 {
-                returnFont = UIFontMetrics(forTextStyle: .largeTitle).scaledFont(for: returnFont)
+            guard let returnFont = UIFont(name: font, size: checkedSize) else {
+                return appItalicFont(ofSize: checkedSize)
             }
+            return scale(font: returnFont, ofSize: checkedSize)
         }
     }
     
-    return returnFont
+    return appItalicFont(ofSize: checkedSize)
 }
 
 func appFont(ofSize size: CGFloat) -> UIFont {
-    let newSize: CGFloat
-    if size <= 0 {
-        newSize = 17
-    } else {
-        newSize = size
-    }
+    let checkedSize = checkSize(size)
     
-    var returnFont: UIFont!
     let fontFamily = UIFont.fontNames(forFamilyName: appFont)
     for font in fontFamily {
         if !"italic".isContained(in: font) && !"thin".isContained(in: font) && !"light".isContained(in: font) && !"medium".isContained(in: font) && !"bold".isContained(in: font) && !"black".isContained(in: font) && !"heavy".isContained(in: font) && !"condensed".isContained(in: font) && !"roman".isContained(in: font) && !"wide".isContained(in: font) {
-            returnFont = UIFont(name: font, size: newSize)
+            guard let returnFont = UIFont(name: font, size: checkedSize) else {
+                return defaultFont(ofSize: checkedSize)
+            }
+            return scale(font: returnFont, ofSize: checkedSize)
         }
     }
     
-    if returnFont == nil {
-        returnFont = UIFont.systemFont(ofSize: newSize)
-    }
-    
-    switch newSize {
-    case 1...6:
-        returnFont = UIFontMetrics(forTextStyle: .caption2).scaledFont(for: returnFont)
-    case 7...12:
-        returnFont = UIFontMetrics(forTextStyle: .caption1).scaledFont(for: returnFont)
-    case 13...18:
-        returnFont = UIFontMetrics(forTextStyle: .footnote).scaledFont(for: returnFont)
-    case 19...24:
-        returnFont = UIFontMetrics(forTextStyle: .subheadline).scaledFont(for: returnFont)
-    case 25...30:
-        returnFont = UIFontMetrics(forTextStyle: .callout).scaledFont(for: returnFont)
-    case 31...36:
-        returnFont = UIFontMetrics(forTextStyle: .body).scaledFont(for: returnFont)
-    case 37...42:
-        returnFont = UIFontMetrics(forTextStyle: .headline).scaledFont(for: returnFont)
-    case 43...48:
-        returnFont = UIFontMetrics(forTextStyle: .title3).scaledFont(for: returnFont)
-    case 49...54:
-        returnFont = UIFontMetrics(forTextStyle: .title2).scaledFont(for: returnFont)
-    case 55...60:
-        returnFont = UIFontMetrics(forTextStyle: .title1).scaledFont(for: returnFont)
-    case 61...66:
-        returnFont = UIFontMetrics(forTextStyle: .largeTitle).scaledFont(for: returnFont)
-    default:
-        if newSize > 66 {
-            returnFont = UIFontMetrics(forTextStyle: .largeTitle).scaledFont(for: returnFont)
-        }
-    }
-    
-    return returnFont
+    return defaultFont(ofSize: checkedSize)
 }
 
 func appItalicFont(ofSize size: CGFloat) -> UIFont {
-    let newSize: CGFloat
-    if size <= 0 {
-        newSize = 17
-    } else {
-        newSize = size
-    }
+    let checkedSize = checkSize(size)
     
-    var isScaled = false
-    var returnFont: UIFont!
     let fontFamily = UIFont.fontNames(forFamilyName: appFont)
     for font in fontFamily {
         if "italic".isContained(in: font) && !"thin".isContained(in: font) && !"light".isContained(in: font) && !"medium".isContained(in: font) && !"bold".isContained(in: font) && !"black".isContained(in: font) && !"heavy".isContained(in: font) && !"condensed".isContained(in: font) && !"roman".isContained(in: font) && !"wide".isContained(in: font) {
-            returnFont = UIFont(name: font, size: newSize)
-        }
-    }
-    
-    if returnFont == nil {
-        returnFont = appFont(ofSize: newSize)
-        isScaled = true
-    }
-    
-    if returnFont == nil {
-        returnFont = UIFont.systemFont(ofSize: newSize)
-    }
-    
-    if !isScaled {
-        switch newSize {
-        case 1...6:
-            returnFont = UIFontMetrics(forTextStyle: .caption2).scaledFont(for: returnFont)
-        case 7...12:
-            returnFont = UIFontMetrics(forTextStyle: .caption1).scaledFont(for: returnFont)
-        case 13...18:
-            returnFont = UIFontMetrics(forTextStyle: .footnote).scaledFont(for: returnFont)
-        case 19...24:
-            returnFont = UIFontMetrics(forTextStyle: .subheadline).scaledFont(for: returnFont)
-        case 25...30:
-            returnFont = UIFontMetrics(forTextStyle: .callout).scaledFont(for: returnFont)
-        case 31...36:
-            returnFont = UIFontMetrics(forTextStyle: .body).scaledFont(for: returnFont)
-        case 37...42:
-            returnFont = UIFontMetrics(forTextStyle: .headline).scaledFont(for: returnFont)
-        case 43...48:
-            returnFont = UIFontMetrics(forTextStyle: .title3).scaledFont(for: returnFont)
-        case 49...54:
-            returnFont = UIFontMetrics(forTextStyle: .title2).scaledFont(for: returnFont)
-        case 55...60:
-            returnFont = UIFontMetrics(forTextStyle: .title1).scaledFont(for: returnFont)
-        case 61...66:
-            returnFont = UIFontMetrics(forTextStyle: .largeTitle).scaledFont(for: returnFont)
-        default:
-            if newSize > 66 {
-                returnFont = UIFontMetrics(forTextStyle: .largeTitle).scaledFont(for: returnFont)
+            guard let returnFont = UIFont(name: font, size: checkedSize) else {
+                return appFont(ofSize: checkedSize)
             }
+            return scale(font: returnFont, ofSize: checkedSize)
         }
     }
     
-    return returnFont
+    return appFont(ofSize: checkedSize)
 }
 
 func appMediumFont(ofSize size: CGFloat) -> UIFont {
-    let newSize: CGFloat
-    if size <= 0 {
-        newSize = 17
-    } else {
-        newSize = size
-    }
+    let checkedSize = checkSize(size)
     
-    var isScaled = false
-    var returnFont: UIFont!
     let fontFamily = UIFont.fontNames(forFamilyName: appFont)
     for font in fontFamily {
         if "medium".isContained(in: font) && !"italic".isContained(in: font) {
-            returnFont = UIFont(name: font, size: newSize)
-        }
-    }
-    
-    if returnFont == nil {
-        returnFont = appFont(ofSize: newSize)
-        isScaled = true
-    }
-    
-    if returnFont == nil {
-        returnFont = UIFont.systemFont(ofSize: newSize)
-    }
-    
-    if !isScaled {
-        switch newSize {
-        case 1...6:
-            returnFont = UIFontMetrics(forTextStyle: .caption2).scaledFont(for: returnFont)
-        case 7...12:
-            returnFont = UIFontMetrics(forTextStyle: .caption1).scaledFont(for: returnFont)
-        case 13...18:
-            returnFont = UIFontMetrics(forTextStyle: .footnote).scaledFont(for: returnFont)
-        case 19...24:
-            returnFont = UIFontMetrics(forTextStyle: .subheadline).scaledFont(for: returnFont)
-        case 25...30:
-            returnFont = UIFontMetrics(forTextStyle: .callout).scaledFont(for: returnFont)
-        case 31...36:
-            returnFont = UIFontMetrics(forTextStyle: .body).scaledFont(for: returnFont)
-        case 37...42:
-            returnFont = UIFontMetrics(forTextStyle: .headline).scaledFont(for: returnFont)
-        case 43...48:
-            returnFont = UIFontMetrics(forTextStyle: .title3).scaledFont(for: returnFont)
-        case 49...54:
-            returnFont = UIFontMetrics(forTextStyle: .title2).scaledFont(for: returnFont)
-        case 55...60:
-            returnFont = UIFontMetrics(forTextStyle: .title1).scaledFont(for: returnFont)
-        case 61...66:
-            returnFont = UIFontMetrics(forTextStyle: .largeTitle).scaledFont(for: returnFont)
-        default:
-            if newSize > 66 {
-                returnFont = UIFontMetrics(forTextStyle: .largeTitle).scaledFont(for: returnFont)
+            guard let returnFont = UIFont(name: font, size: checkedSize) else {
+                return appFont(ofSize: checkedSize)
             }
+            return scale(font: returnFont, ofSize: checkedSize)
         }
     }
     
-    return returnFont
+    return appFont(ofSize: checkedSize)
 }
 
 func appMediumItalicFont(ofSize size: CGFloat) -> UIFont {
-    let newSize: CGFloat
-    if size <= 0 {
-        newSize = 17
-    } else {
-        newSize = size
-    }
+    let checkedSize = checkSize(size)
     
-    var isScaled = false
-    var returnFont: UIFont!
     let fontFamily = UIFont.fontNames(forFamilyName: appFont)
     for font in fontFamily {
         if "medium".isContained(in: font) && "italic".isContained(in: font) {
-            returnFont = UIFont(name: font, size: newSize)
-        }
-    }
-    
-    if returnFont == nil {
-        returnFont = appItalicFont(ofSize: newSize)
-        isScaled = true
-    }
-    
-    if returnFont == nil {
-        returnFont = UIFont.systemFont(ofSize: newSize)
-    }
-    
-    if !isScaled {
-        switch newSize {
-        case 1...6:
-            returnFont = UIFontMetrics(forTextStyle: .caption2).scaledFont(for: returnFont)
-        case 7...12:
-            returnFont = UIFontMetrics(forTextStyle: .caption1).scaledFont(for: returnFont)
-        case 13...18:
-            returnFont = UIFontMetrics(forTextStyle: .footnote).scaledFont(for: returnFont)
-        case 19...24:
-            returnFont = UIFontMetrics(forTextStyle: .subheadline).scaledFont(for: returnFont)
-        case 25...30:
-            returnFont = UIFontMetrics(forTextStyle: .callout).scaledFont(for: returnFont)
-        case 31...36:
-            returnFont = UIFontMetrics(forTextStyle: .body).scaledFont(for: returnFont)
-        case 37...42:
-            returnFont = UIFontMetrics(forTextStyle: .headline).scaledFont(for: returnFont)
-        case 43...48:
-            returnFont = UIFontMetrics(forTextStyle: .title3).scaledFont(for: returnFont)
-        case 49...54:
-            returnFont = UIFontMetrics(forTextStyle: .title2).scaledFont(for: returnFont)
-        case 55...60:
-            returnFont = UIFontMetrics(forTextStyle: .title1).scaledFont(for: returnFont)
-        case 61...66:
-            returnFont = UIFontMetrics(forTextStyle: .largeTitle).scaledFont(for: returnFont)
-        default:
-            if newSize > 66 {
-                returnFont = UIFontMetrics(forTextStyle: .largeTitle).scaledFont(for: returnFont)
+            guard let returnFont = UIFont(name: font, size: checkedSize) else {
+                return appItalicFont(ofSize: checkedSize)
             }
+            return scale(font: returnFont, ofSize: checkedSize)
         }
     }
     
-    return returnFont
+    return appItalicFont(ofSize: checkedSize)
 }
 
 func appSemiBoldFont(ofSize size: CGFloat) -> UIFont {
-    let newSize: CGFloat
-    if size <= 0 {
-        newSize = 17
-    } else {
-        newSize = size
-    }
+    let checkedSize = checkSize(size)
     
-    var isScaled = false
-    var returnFont: UIFont!
     let fontFamily = UIFont.fontNames(forFamilyName: appFont)
     for font in fontFamily {
         if "emibold".isContained(in: font) && !"italic".isContained(in: font) {
-            returnFont = UIFont(name: font, size: newSize)
-        }
-    }
-    
-    if returnFont == nil {
-        returnFont = appMediumFont(ofSize: newSize)
-        isScaled = true
-    }
-    
-    if returnFont == nil {
-        returnFont = UIFont.systemFont(ofSize: newSize)
-    }
-    
-    if !isScaled {
-        switch newSize {
-        case 1...6:
-            returnFont = UIFontMetrics(forTextStyle: .caption2).scaledFont(for: returnFont)
-        case 7...12:
-            returnFont = UIFontMetrics(forTextStyle: .caption1).scaledFont(for: returnFont)
-        case 13...18:
-            returnFont = UIFontMetrics(forTextStyle: .footnote).scaledFont(for: returnFont)
-        case 19...24:
-            returnFont = UIFontMetrics(forTextStyle: .subheadline).scaledFont(for: returnFont)
-        case 25...30:
-            returnFont = UIFontMetrics(forTextStyle: .callout).scaledFont(for: returnFont)
-        case 31...36:
-            returnFont = UIFontMetrics(forTextStyle: .body).scaledFont(for: returnFont)
-        case 37...42:
-            returnFont = UIFontMetrics(forTextStyle: .headline).scaledFont(for: returnFont)
-        case 43...48:
-            returnFont = UIFontMetrics(forTextStyle: .title3).scaledFont(for: returnFont)
-        case 49...54:
-            returnFont = UIFontMetrics(forTextStyle: .title2).scaledFont(for: returnFont)
-        case 55...60:
-            returnFont = UIFontMetrics(forTextStyle: .title1).scaledFont(for: returnFont)
-        case 61...66:
-            returnFont = UIFontMetrics(forTextStyle: .largeTitle).scaledFont(for: returnFont)
-        default:
-            if newSize > 66 {
-                returnFont = UIFontMetrics(forTextStyle: .largeTitle).scaledFont(for: returnFont)
+            guard let returnFont = UIFont(name: font, size: checkedSize) else {
+                return appMediumFont(ofSize: checkedSize)
             }
+            return scale(font: returnFont, ofSize: checkedSize)
         }
     }
     
-    return returnFont
+    return appMediumFont(ofSize: checkedSize)
 }
 
 func appSemiBoldItalicFont(ofSize size: CGFloat) -> UIFont {
-    let newSize: CGFloat
-    if size <= 0 {
-        newSize = 17
-    } else {
-        newSize = size
-    }
+    let checkedSize = checkSize(size)
     
-    var isScaled = false
-    var returnFont: UIFont!
     let fontFamily = UIFont.fontNames(forFamilyName: appFont)
     for font in fontFamily {
         if "emibold".isContained(in: font) && "italic".isContained(in: font) {
-            returnFont = UIFont(name: font, size: newSize)
-        }
-    }
-    
-    if returnFont == nil {
-        returnFont = appMediumItalicFont(ofSize: newSize)
-        isScaled = true
-    }
-    
-    if returnFont == nil {
-        returnFont = UIFont.systemFont(ofSize: newSize)
-    }
-    
-    if !isScaled {
-        switch newSize {
-        case 1...6:
-            returnFont = UIFontMetrics(forTextStyle: .caption2).scaledFont(for: returnFont)
-        case 7...12:
-            returnFont = UIFontMetrics(forTextStyle: .caption1).scaledFont(for: returnFont)
-        case 13...18:
-            returnFont = UIFontMetrics(forTextStyle: .footnote).scaledFont(for: returnFont)
-        case 19...24:
-            returnFont = UIFontMetrics(forTextStyle: .subheadline).scaledFont(for: returnFont)
-        case 25...30:
-            returnFont = UIFontMetrics(forTextStyle: .callout).scaledFont(for: returnFont)
-        case 31...36:
-            returnFont = UIFontMetrics(forTextStyle: .body).scaledFont(for: returnFont)
-        case 37...42:
-            returnFont = UIFontMetrics(forTextStyle: .headline).scaledFont(for: returnFont)
-        case 43...48:
-            returnFont = UIFontMetrics(forTextStyle: .title3).scaledFont(for: returnFont)
-        case 49...54:
-            returnFont = UIFontMetrics(forTextStyle: .title2).scaledFont(for: returnFont)
-        case 55...60:
-            returnFont = UIFontMetrics(forTextStyle: .title1).scaledFont(for: returnFont)
-        case 61...66:
-            returnFont = UIFontMetrics(forTextStyle: .largeTitle).scaledFont(for: returnFont)
-        default:
-            if newSize > 66 {
-                returnFont = UIFontMetrics(forTextStyle: .largeTitle).scaledFont(for: returnFont)
+            guard let returnFont = UIFont(name: font, size: checkedSize) else {
+                return appMediumItalicFont(ofSize: checkedSize)
             }
+            return scale(font: returnFont, ofSize: checkedSize)
         }
     }
     
-    return returnFont
+    return appMediumItalicFont(ofSize: checkedSize)
 }
 
 func appBoldFont(ofSize size: CGFloat) -> UIFont {
-    let newSize: CGFloat
-    if size <= 0 {
-        newSize = 17
-    } else {
-        newSize = size
-    }
+    let checkedSize = checkSize(size)
     
-    var isScaled = false
-    var returnFont: UIFont!
     let fontFamily = UIFont.fontNames(forFamilyName: appFont)
     for font in fontFamily {
         if "bold".isContained(in: font) && !"italic".isContained(in: font) && !"ultra".isContained(in: font) && !"heavy".isContained(in: font) && !"condensed".isContained(in: font) && !"extra".isContained(in: font) {
-            returnFont = UIFont(name: font, size: newSize)
-        }
-    }
-    
-    if returnFont == nil {
-        returnFont = appSemiBoldFont(ofSize: newSize)
-        isScaled = true
-    }
-    
-    if returnFont == nil {
-        returnFont = UIFont.systemFont(ofSize: newSize)
-    }
-    
-    if !isScaled {
-        switch newSize {
-        case 1...6:
-            returnFont = UIFontMetrics(forTextStyle: .caption2).scaledFont(for: returnFont)
-        case 7...12:
-            returnFont = UIFontMetrics(forTextStyle: .caption1).scaledFont(for: returnFont)
-        case 13...18:
-            returnFont = UIFontMetrics(forTextStyle: .footnote).scaledFont(for: returnFont)
-        case 19...24:
-            returnFont = UIFontMetrics(forTextStyle: .subheadline).scaledFont(for: returnFont)
-        case 25...30:
-            returnFont = UIFontMetrics(forTextStyle: .callout).scaledFont(for: returnFont)
-        case 31...36:
-            returnFont = UIFontMetrics(forTextStyle: .body).scaledFont(for: returnFont)
-        case 37...42:
-            returnFont = UIFontMetrics(forTextStyle: .headline).scaledFont(for: returnFont)
-        case 43...48:
-            returnFont = UIFontMetrics(forTextStyle: .title3).scaledFont(for: returnFont)
-        case 49...54:
-            returnFont = UIFontMetrics(forTextStyle: .title2).scaledFont(for: returnFont)
-        case 55...60:
-            returnFont = UIFontMetrics(forTextStyle: .title1).scaledFont(for: returnFont)
-        case 61...66:
-            returnFont = UIFontMetrics(forTextStyle: .largeTitle).scaledFont(for: returnFont)
-        default:
-            if newSize > 66 {
-                returnFont = UIFontMetrics(forTextStyle: .largeTitle).scaledFont(for: returnFont)
+            guard let returnFont = UIFont(name: font, size: checkedSize) else {
+                return appSemiBoldFont(ofSize: checkedSize)
             }
+            return scale(font: returnFont, ofSize: checkedSize)
         }
     }
     
-    return returnFont
+    return appSemiBoldFont(ofSize: checkedSize)
 }
 
 func appBoldItalicFont(ofSize size: CGFloat) -> UIFont {
-    let newSize: CGFloat
-    if size <= 0 {
-        newSize = 17
-    } else {
-        newSize = size
-    }
+    let checkedSize = checkSize(size)
     
-    var isScaled = false
-    var returnFont: UIFont!
     let fontFamily = UIFont.fontNames(forFamilyName: appFont)
     for font in fontFamily {
         if "bold".isContained(in: font) && "italic".isContained(in: font) && !"ultra".isContained(in: font) && !"heavy".isContained(in: font) && !"condensed".isContained(in: font) && !"extra".isContained(in: font) {
-            returnFont = UIFont(name: font, size: newSize)
-        }
-    }
-    
-    if returnFont == nil {
-        returnFont = appSemiBoldItalicFont(ofSize: newSize)
-        isScaled = true
-    }
-    
-    if returnFont == nil {
-        returnFont = UIFont.systemFont(ofSize: newSize)
-    }
-    
-    if !isScaled {
-        switch newSize {
-        case 1...6:
-            returnFont = UIFontMetrics(forTextStyle: .caption2).scaledFont(for: returnFont)
-        case 7...12:
-            returnFont = UIFontMetrics(forTextStyle: .caption1).scaledFont(for: returnFont)
-        case 13...18:
-            returnFont = UIFontMetrics(forTextStyle: .footnote).scaledFont(for: returnFont)
-        case 19...24:
-            returnFont = UIFontMetrics(forTextStyle: .subheadline).scaledFont(for: returnFont)
-        case 25...30:
-            returnFont = UIFontMetrics(forTextStyle: .callout).scaledFont(for: returnFont)
-        case 31...36:
-            returnFont = UIFontMetrics(forTextStyle: .body).scaledFont(for: returnFont)
-        case 37...42:
-            returnFont = UIFontMetrics(forTextStyle: .headline).scaledFont(for: returnFont)
-        case 43...48:
-            returnFont = UIFontMetrics(forTextStyle: .title3).scaledFont(for: returnFont)
-        case 49...54:
-            returnFont = UIFontMetrics(forTextStyle: .title2).scaledFont(for: returnFont)
-        case 55...60:
-            returnFont = UIFontMetrics(forTextStyle: .title1).scaledFont(for: returnFont)
-        case 61...66:
-            returnFont = UIFontMetrics(forTextStyle: .largeTitle).scaledFont(for: returnFont)
-        default:
-            if newSize > 66 {
-                returnFont = UIFontMetrics(forTextStyle: .largeTitle).scaledFont(for: returnFont)
+            guard let returnFont = UIFont(name: font, size: checkedSize) else {
+                return appSemiBoldItalicFont(ofSize: checkedSize)
             }
+            return scale(font: returnFont, ofSize: checkedSize)
         }
     }
     
-    return returnFont
+    return appSemiBoldItalicFont(ofSize: checkedSize)
 }
 
 func appUltraBoldFont(ofSize size: CGFloat) -> UIFont {
-    let newSize: CGFloat
-    if size <= 0 {
-        newSize = 17
-    } else {
-        newSize = size
-    }
+    let checkedSize = checkSize(size)
     
-    var isScaled = false
-    var returnFont: UIFont!
     let fontFamily = UIFont.fontNames(forFamilyName: appFont)
     for font in fontFamily {
         if ("trabold".isContained(in: font) && !"italic".isContained(in: font)) || ("condensedbold".isContained(in: font) && !"italic".isContained(in: font)) {
-            returnFont = UIFont(name: font, size: newSize)
-        }
-    }
-    
-    if returnFont == nil {
-        returnFont = appBoldFont(ofSize: newSize)
-        isScaled = true
-    }
-    
-    if returnFont == nil {
-        returnFont = UIFont.systemFont(ofSize: newSize)
-    }
-    
-    if !isScaled {
-        switch newSize {
-        case 1...6:
-            returnFont = UIFontMetrics(forTextStyle: .caption2).scaledFont(for: returnFont)
-        case 7...12:
-            returnFont = UIFontMetrics(forTextStyle: .caption1).scaledFont(for: returnFont)
-        case 13...18:
-            returnFont = UIFontMetrics(forTextStyle: .footnote).scaledFont(for: returnFont)
-        case 19...24:
-            returnFont = UIFontMetrics(forTextStyle: .subheadline).scaledFont(for: returnFont)
-        case 25...30:
-            returnFont = UIFontMetrics(forTextStyle: .callout).scaledFont(for: returnFont)
-        case 31...36:
-            returnFont = UIFontMetrics(forTextStyle: .body).scaledFont(for: returnFont)
-        case 37...42:
-            returnFont = UIFontMetrics(forTextStyle: .headline).scaledFont(for: returnFont)
-        case 43...48:
-            returnFont = UIFontMetrics(forTextStyle: .title3).scaledFont(for: returnFont)
-        case 49...54:
-            returnFont = UIFontMetrics(forTextStyle: .title2).scaledFont(for: returnFont)
-        case 55...60:
-            returnFont = UIFontMetrics(forTextStyle: .title1).scaledFont(for: returnFont)
-        case 61...66:
-            returnFont = UIFontMetrics(forTextStyle: .largeTitle).scaledFont(for: returnFont)
-        default:
-            if newSize > 66 {
-                returnFont = UIFontMetrics(forTextStyle: .largeTitle).scaledFont(for: returnFont)
+            guard let returnFont = UIFont(name: font, size: checkedSize) else {
+                return appBoldFont(ofSize: checkedSize)
             }
+            return scale(font: returnFont, ofSize: checkedSize)
         }
     }
     
-    return returnFont
+    return appBoldFont(ofSize: checkedSize)
 }
 
 func appUltraBoldItalicFont(ofSize size: CGFloat) -> UIFont {
-    let newSize: CGFloat
-    if size <= 0 {
-        newSize = 17
-    } else {
-        newSize = size
-    }
+    let checkedSize = checkSize(size)
     
-    var isScaled = false
-    var returnFont: UIFont!
     let fontFamily = UIFont.fontNames(forFamilyName: appFont)
     for font in fontFamily {
         if ("trabold".isContained(in: font) && "italic".isContained(in: font)) || ("condensedbold".isContained(in: font) && "italic".isContained(in: font)) {
-            returnFont = UIFont(name: font, size: newSize)
-        }
-    }
-    
-    if returnFont == nil {
-        returnFont = appBoldItalicFont(ofSize: newSize)
-        isScaled = true
-    }
-    
-    if returnFont == nil {
-        returnFont = UIFont.systemFont(ofSize: newSize)
-    }
-    
-    if !isScaled {
-        switch newSize {
-        case 1...6:
-            returnFont = UIFontMetrics(forTextStyle: .caption2).scaledFont(for: returnFont)
-        case 7...12:
-            returnFont = UIFontMetrics(forTextStyle: .caption1).scaledFont(for: returnFont)
-        case 13...18:
-            returnFont = UIFontMetrics(forTextStyle: .footnote).scaledFont(for: returnFont)
-        case 19...24:
-            returnFont = UIFontMetrics(forTextStyle: .subheadline).scaledFont(for: returnFont)
-        case 25...30:
-            returnFont = UIFontMetrics(forTextStyle: .callout).scaledFont(for: returnFont)
-        case 31...36:
-            returnFont = UIFontMetrics(forTextStyle: .body).scaledFont(for: returnFont)
-        case 37...42:
-            returnFont = UIFontMetrics(forTextStyle: .headline).scaledFont(for: returnFont)
-        case 43...48:
-            returnFont = UIFontMetrics(forTextStyle: .title3).scaledFont(for: returnFont)
-        case 49...54:
-            returnFont = UIFontMetrics(forTextStyle: .title2).scaledFont(for: returnFont)
-        case 55...60:
-            returnFont = UIFontMetrics(forTextStyle: .title1).scaledFont(for: returnFont)
-        case 61...66:
-            returnFont = UIFontMetrics(forTextStyle: .largeTitle).scaledFont(for: returnFont)
-        default:
-            if newSize > 66 {
-                returnFont = UIFontMetrics(forTextStyle: .largeTitle).scaledFont(for: returnFont)
+            guard let returnFont = UIFont(name: font, size: checkedSize) else {
+                return appBoldItalicFont(ofSize: checkedSize)
             }
+            return scale(font: returnFont, ofSize: checkedSize)
         }
     }
     
-    return returnFont
+    return appBoldItalicFont(ofSize: checkedSize)
 }
 
 func appBlackFont(ofSize size: CGFloat) -> UIFont {
-    let newSize: CGFloat
-    if size <= 0 {
-        newSize = 17
-    } else {
-        newSize = size
-    }
+    let checkedSize = checkSize(size)
     
-    var isScaled = false
-    var returnFont: UIFont!
     let fontFamily = UIFont.fontNames(forFamilyName: appFont)
     for font in fontFamily {
         if ("black".isContained(in: font) && !"italic".isContained(in: font)) || ("heavy".isContained(in: font) && !"italic".isContained(in: font)) {
-            returnFont = UIFont(name: font, size: newSize)
-        }
-    }
-    
-    if returnFont == nil {
-        returnFont = appUltraBoldFont(ofSize: newSize)
-        isScaled = true
-    }
-    
-    if returnFont == nil {
-        returnFont = UIFont.systemFont(ofSize: newSize)
-    }
-    
-    if !isScaled {
-        switch newSize {
-        case 1...6:
-            returnFont = UIFontMetrics(forTextStyle: .caption2).scaledFont(for: returnFont)
-        case 7...12:
-            returnFont = UIFontMetrics(forTextStyle: .caption1).scaledFont(for: returnFont)
-        case 13...18:
-            returnFont = UIFontMetrics(forTextStyle: .footnote).scaledFont(for: returnFont)
-        case 19...24:
-            returnFont = UIFontMetrics(forTextStyle: .subheadline).scaledFont(for: returnFont)
-        case 25...30:
-            returnFont = UIFontMetrics(forTextStyle: .callout).scaledFont(for: returnFont)
-        case 31...36:
-            returnFont = UIFontMetrics(forTextStyle: .body).scaledFont(for: returnFont)
-        case 37...42:
-            returnFont = UIFontMetrics(forTextStyle: .headline).scaledFont(for: returnFont)
-        case 43...48:
-            returnFont = UIFontMetrics(forTextStyle: .title3).scaledFont(for: returnFont)
-        case 49...54:
-            returnFont = UIFontMetrics(forTextStyle: .title2).scaledFont(for: returnFont)
-        case 55...60:
-            returnFont = UIFontMetrics(forTextStyle: .title1).scaledFont(for: returnFont)
-        case 61...66:
-            returnFont = UIFontMetrics(forTextStyle: .largeTitle).scaledFont(for: returnFont)
-        default:
-            if newSize > 66 {
-                returnFont = UIFontMetrics(forTextStyle: .largeTitle).scaledFont(for: returnFont)
+            guard let returnFont = UIFont(name: font, size: checkedSize) else {
+                return appUltraBoldFont(ofSize: checkedSize)
             }
+            return scale(font: returnFont, ofSize: checkedSize)
         }
     }
     
-    return returnFont
+    return appUltraBoldFont(ofSize: checkedSize)
 }
 
 func appBlackItalicFont(ofSize size: CGFloat) -> UIFont {
-    let newSize: CGFloat
-    if size <= 0 {
-        newSize = 17
-    } else {
-        newSize = size
-    }
+    let checkedSize = checkSize(size)
     
-    var isScaled = false
-    var returnFont: UIFont!
     let fontFamily = UIFont.fontNames(forFamilyName: appFont)
     for font in fontFamily {
         if ("black".isContained(in: font) && "italic".isContained(in: font)) || ("heavy".isContained(in: font) && "italic".isContained(in: font)) {
-            returnFont = UIFont(name: font, size: newSize)
-        }
-    }
-    
-    if returnFont == nil {
-        returnFont = appUltraBoldItalicFont(ofSize: newSize)
-        isScaled = true
-    }
-    
-    if returnFont == nil {
-        returnFont = UIFont.systemFont(ofSize: newSize)
-    }
-    
-    if !isScaled {
-        switch newSize {
-        case 1...6:
-            returnFont = UIFontMetrics(forTextStyle: .caption2).scaledFont(for: returnFont)
-        case 7...12:
-            returnFont = UIFontMetrics(forTextStyle: .caption1).scaledFont(for: returnFont)
-        case 13...18:
-            returnFont = UIFontMetrics(forTextStyle: .footnote).scaledFont(for: returnFont)
-        case 19...24:
-            returnFont = UIFontMetrics(forTextStyle: .subheadline).scaledFont(for: returnFont)
-        case 25...30:
-            returnFont = UIFontMetrics(forTextStyle: .callout).scaledFont(for: returnFont)
-        case 31...36:
-            returnFont = UIFontMetrics(forTextStyle: .body).scaledFont(for: returnFont)
-        case 37...42:
-            returnFont = UIFontMetrics(forTextStyle: .headline).scaledFont(for: returnFont)
-        case 43...48:
-            returnFont = UIFontMetrics(forTextStyle: .title3).scaledFont(for: returnFont)
-        case 49...54:
-            returnFont = UIFontMetrics(forTextStyle: .title2).scaledFont(for: returnFont)
-        case 55...60:
-            returnFont = UIFontMetrics(forTextStyle: .title1).scaledFont(for: returnFont)
-        case 61...66:
-            returnFont = UIFontMetrics(forTextStyle: .largeTitle).scaledFont(for: returnFont)
-        default:
-            if newSize > 66 {
-                returnFont = UIFontMetrics(forTextStyle: .largeTitle).scaledFont(for: returnFont)
+            guard let returnFont = UIFont(name: font, size: checkedSize) else {
+                return appUltraBoldItalicFont(ofSize: checkedSize)
             }
+            return scale(font: returnFont, ofSize: checkedSize)
         }
     }
     
-    return returnFont
+    return appUltraBoldItalicFont(ofSize: checkedSize)
+}
+
+func scale(font: UIFont, ofSize size: CGFloat) -> UIFont {
+    switch size {
+    case 1...6:
+        return UIFontMetrics(forTextStyle: .caption2).scaledFont(for: font)
+    case 7...12:
+        return UIFontMetrics(forTextStyle: .caption1).scaledFont(for: font)
+    case 13...18:
+        return UIFontMetrics(forTextStyle: .footnote).scaledFont(for: font)
+    case 19...24:
+        return UIFontMetrics(forTextStyle: .subheadline).scaledFont(for: font)
+    case 25...30:
+        return UIFontMetrics(forTextStyle: .callout).scaledFont(for: font)
+    case 31...36:
+        return UIFontMetrics(forTextStyle: .body).scaledFont(for: font)
+    case 37...42:
+        return UIFontMetrics(forTextStyle: .headline).scaledFont(for: font)
+    case 43...48:
+        return UIFontMetrics(forTextStyle: .title3).scaledFont(for: font)
+    case 49...54:
+        return UIFontMetrics(forTextStyle: .title2).scaledFont(for: font)
+    case 55...60:
+        return UIFontMetrics(forTextStyle: .title1).scaledFont(for: font)
+    default:
+        if size > 60 {
+            return UIFontMetrics(forTextStyle: .largeTitle).scaledFont(for: font)
+        }
+    }
+    return scale(font: font, ofSize: 17)
+}
+
+func checkSize(_ size: CGFloat) -> CGFloat {
+    if size <= 0 {
+        return 17
+    } else {
+        return size
+    }
+}
+
+func defaultFont(ofSize size: CGFloat) -> UIFont {
+    let checkedSize = checkSize(size)
+    return scale(font: UIFont.systemFont(ofSize: checkedSize), ofSize: checkedSize)
 }

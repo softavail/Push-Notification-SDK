@@ -18,7 +18,22 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplication.LaunchOptionsKey: Any]?) -> Bool {
         // Override point for customization after application launch.
         
+        let attrsNormalTitle: [NSAttributedString.Key: Any] = [
+            .font: appFont(ofSize: 25)
+        ]
+        let attrsLargeTitle: [NSAttributedString.Key: Any] = [
+            .font: appFont(ofSize: 30)
+        ]
+        let attrsButton: [NSAttributedString.Key: Any] = [
+            .font: appFont(ofSize: 17)
+        ]
+        
         UINavigationBar.appearance().tintColor = .white
+        UINavigationBar.appearance().titleTextAttributes = attrsNormalTitle
+        UINavigationBar.appearance().largeTitleTextAttributes = attrsLargeTitle
+        UIBarButtonItem.appearance().setTitleTextAttributes(attrsButton, for: .normal)
+        UIBarButtonItem.appearance().setTitleTextAttributes(attrsButton, for: .highlighted)
+        UIBarButtonItem.appearance().setTitleTextAttributes(attrsButton, for: .disabled)
         
         if #available(iOS 10.0, *) {
             // use the feature only available in iOS 10
