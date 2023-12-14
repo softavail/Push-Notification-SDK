@@ -5,12 +5,6 @@ class MainViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         
-        let attrs: [NSAttributedString.Key: Any] = [
-            .foregroundColor: UIColor.white
-        ]
-        
-        navigationController?.navigationBar.titleTextAttributes = attrs
-        navigationController?.navigationBar.largeTitleTextAttributes = attrs
         navigationController?.navigationBar.prefersLargeTitles = true
         navigationController?.navigationBar.barTintColor = .myPrimaryColor
         view.backgroundColor = .myPrimaryColor

@@ -14,21 +14,9 @@ class ButtonCell: UITableViewCell, LoginViewControllerDelegate {
     override func awakeFromNib() {
         super.awakeFromNib()
         
-        clipboardButton?.titleLabel?.font = UIFont.appFont(ofSize: 17)
-        registerButton?.titleLabel?.font = UIFont.appFont(ofSize: 17)
         activityIndicator?.isHidden = true
-        registerButton?.titleLabel?.numberOfLines = 2
         registerButton?.disable()
-        registerButton?.setTitleColor(.gray, for: .disabled)
-        registerButton?.layer.cornerRadius = 20
-        
-        if traitCollection.userInterfaceStyle == .dark {
-            registerButton?.backgroundColor = .white
-            registerButton?.setTitleColor(.black, for: .normal)
-        } else {
-            registerButton?.backgroundColor = .black
-            registerButton?.setTitleColor(.white, for: .normal)
-        }
+        registerButton?.layer.cornerRadius = 15
     }
     
     override func setSelected(_ selected: Bool, animated: Bool) {
@@ -36,20 +24,67 @@ class ButtonCell: UITableViewCell, LoginViewControllerDelegate {
     }
     
     override func traitCollectionDidChange(_ previousTraitCollection: UITraitCollection?) {
+        guard let buttonTitle = self.buttonModel?.buttonTitle else { return }
+        
+        let attrsWhite: [NSAttributedString.Key: Any] = [
+            .font: UIFont.appFont(ofSize: 17),
+            .foregroundColor: UIColor.white
+        ]
+        let attrsBlack: [NSAttributedString.Key: Any] = [
+            .font: UIFont.appFont(ofSize: 17),
+            .foregroundColor: UIColor.black
+        ]
+        
+        let attributedButtonTitleWhite = NSAttributedString(string: buttonTitle, attributes: attrsWhite)
+        let attributedButtonTitleBlack = NSAttributedString(string: buttonTitle, attributes: attrsBlack)
+        
         if previousTraitCollection?.userInterfaceStyle == .dark {
             registerButton?.backgroundColor = .black
-            registerButton?.setTitleColor(.white, for: .normal)
+            registerButton?.setAttributedTitle(attributedButtonTitleWhite, for: .normal)
+            registerButton?.setAttributedTitle(attributedButtonTitleWhite, for: .disabled)
+            registerButton?.setAttributedTitle(attributedButtonTitleWhite, for: .highlighted)
         } else {
             registerButton?.backgroundColor = .white
-            registerButton?.setTitleColor(.black, for: .normal)
+            registerButton?.setAttributedTitle(attributedButtonTitleBlack, for: .normal)
+            registerButton?.setAttributedTitle(attributedButtonTitleBlack, for: .disabled)
+            registerButton?.setAttributedTitle(attributedButtonTitleBlack, for: .highlighted)
         }
     }
     
     func updateCell() {
         guard let buttonTitle = self.buttonModel?.buttonTitle else { return }
         
-        registerButton?.setTitle(buttonTitle, for: .normal)
-        clipboardButton?.setTitle(buttonTitle, for: .normal)
+        let attrs: [NSAttributedString.Key: Any] = [
+            .font: UIFont.appFont(ofSize: 17)
+        ]
+        let attrsWhite: [NSAttributedString.Key: Any] = [
+            .font: UIFont.appFont(ofSize: 17),
+            .foregroundColor: UIColor.white
+        ]
+        let attrsBlack: [NSAttributedString.Key: Any] = [
+            .font: UIFont.appFont(ofSize: 17),
+            .foregroundColor: UIColor.black
+        ]
+        
+        let attributedButtonTitle = NSAttributedString(string: buttonTitle, attributes: attrs)
+        let attributedButtonTitleWhite = NSAttributedString(string: buttonTitle, attributes: attrsWhite)
+        let attributedButtonTitleBlack = NSAttributedString(string: buttonTitle, attributes: attrsBlack)
+        
+        if traitCollection.userInterfaceStyle == .dark {
+            registerButton?.backgroundColor = .white
+            registerButton?.setAttributedTitle(attributedButtonTitleBlack, for: .normal)
+            registerButton?.setAttributedTitle(attributedButtonTitleBlack, for: .disabled)
+            registerButton?.setAttributedTitle(attributedButtonTitleBlack, for: .highlighted)
+        } else {
+            registerButton?.backgroundColor = .black
+            registerButton?.setAttributedTitle(attributedButtonTitleWhite, for: .normal)
+            registerButton?.setAttributedTitle(attributedButtonTitleWhite, for: .disabled)
+            registerButton?.setAttributedTitle(attributedButtonTitleWhite, for: .highlighted)
+        }
+        
+        clipboardButton?.setAttributedTitle(attributedButtonTitle, for: .normal)
+        clipboardButton?.setAttributedTitle(attributedButtonTitle, for: .disabled)
+        clipboardButton?.setAttributedTitle(attributedButtonTitle, for: .highlighted)
     }
     
     func textFieldsDidChange(for viewController: LoginViewController) {

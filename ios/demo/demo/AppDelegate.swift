@@ -20,22 +20,24 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         
         UIFont.appFont = .attAleckSans
         
-        let attrsNormalTitle: [NSAttributedString.Key: Any] = [
-            .font: UIFont.appFont(ofSize: 25)
-        ]
-        let attrsLargeTitle: [NSAttributedString.Key: Any] = [
-            .font: UIFont.appFont(ofSize: 30)
-        ]
         let attrsButton: [NSAttributedString.Key: Any] = [
             .font: UIFont.appFont(ofSize: 17)
+        ]
+        let attrsNormalTitle: [NSAttributedString.Key: Any] = [
+            .font: UIFont.appSemiBoldFont(ofSize: 18),
+            .foregroundColor: UIColor.white
+        ]
+        let attrsLargeTitle: [NSAttributedString.Key: Any] = [
+            .font: UIFont.appBoldFont(ofSize: 22),
+            .foregroundColor: UIColor.white
         ]
         
         UINavigationBar.appearance().tintColor = .white
         UINavigationBar.appearance().titleTextAttributes = attrsNormalTitle
         UINavigationBar.appearance().largeTitleTextAttributes = attrsLargeTitle
         UIBarButtonItem.appearance().setTitleTextAttributes(attrsButton, for: .normal)
-        UIBarButtonItem.appearance().setTitleTextAttributes(attrsButton, for: .highlighted)
         UIBarButtonItem.appearance().setTitleTextAttributes(attrsButton, for: .disabled)
+        UIBarButtonItem.appearance().setTitleTextAttributes(attrsButton, for: .highlighted)
         
         if #available(iOS 10.0, *) {
             // use the feature only available in iOS 10

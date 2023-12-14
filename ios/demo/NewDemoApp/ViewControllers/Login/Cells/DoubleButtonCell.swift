@@ -7,9 +7,6 @@ class DoubleButtonCell: UITableViewCell {
     
     override func awakeFromNib() {
         super.awakeFromNib()
-        
-        resetBadgeButton?.titleLabel?.font = UIFont.appFont(ofSize: 17)
-        goToInboxButton?.titleLabel?.font = UIFont.appFont(ofSize: 17)
     }
     
     override func setSelected(_ selected: Bool, animated: Bool) {
@@ -20,8 +17,18 @@ class DoubleButtonCell: UITableViewCell {
         guard let leftButtonTitle = doubleButtonModel?.leftButtonTitle else { return }
         guard let rightButtonTitle = doubleButtonModel?.rightButtonTitle else { return }
         
-        goToInboxButton.setTitle(leftButtonTitle, for: .normal)
-        resetBadgeButton.setTitle(rightButtonTitle, for: .normal)
+        let attrs: [NSAttributedString.Key: Any] = [
+            .font: UIFont.appFont(ofSize: 15)
+        ]
+        let attributedLeftButtonTitle = NSAttributedString(string: leftButtonTitle, attributes: attrs)
+        let attributedRightButtonTitle = NSAttributedString(string: rightButtonTitle, attributes: attrs)
+        
+        goToInboxButton.setAttributedTitle(attributedLeftButtonTitle, for: .normal)
+        goToInboxButton.setAttributedTitle(attributedLeftButtonTitle, for: .disabled)
+        goToInboxButton.setAttributedTitle(attributedLeftButtonTitle, for: .highlighted)
+        resetBadgeButton.setAttributedTitle(attributedRightButtonTitle, for: .normal)
+        resetBadgeButton.setAttributedTitle(attributedRightButtonTitle, for: .disabled)
+        resetBadgeButton.setAttributedTitle(attributedRightButtonTitle, for: .highlighted)
     }
     
     @IBAction func goToInboxButtonTapped(_ sender: Any) {
