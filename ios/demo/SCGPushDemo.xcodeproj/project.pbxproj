@@ -24,7 +24,6 @@
 		CE1FA8682B2B0E730002AAFD /* AlertControllerTemplates.swift in Sources */ = {isa = PBXBuildFile; fileRef = CE1FA8672B2B0E730002AAFD /* AlertControllerTemplates.swift */; };
 		CE40AE922B29A063002581AB /* Localizable.strings in Resources */ = {isa = PBXBuildFile; fileRef = CE40AE942B29A063002581AB /* Localizable.strings */; };
 		CE40AE982B29A443002581AB /* LocalizedStringConstants.swift in Sources */ = {isa = PBXBuildFile; fileRef = CE40AE972B29A443002581AB /* LocalizedStringConstants.swift */; };
-		CE40AE9D2B29D1AF002581AB /* FontMethods.swift in Sources */ = {isa = PBXBuildFile; fileRef = CE40AE9C2B29D1AF002581AB /* FontMethods.swift */; };
 		CE6FFAF02B28822400DD796D /* NotificationObject+CoreDataProperties.swift in Sources */ = {isa = PBXBuildFile; fileRef = CE6FFAEB2B28822400DD796D /* NotificationObject+CoreDataProperties.swift */; };
 		CE6FFAF12B28822400DD796D /* NotificationObject+CoreDataProperties.swift in Sources */ = {isa = PBXBuildFile; fileRef = CE6FFAEB2B28822400DD796D /* NotificationObject+CoreDataProperties.swift */; };
 		CE6FFAF22B28822400DD796D /* NotificationObject+CoreDataClass.swift in Sources */ = {isa = PBXBuildFile; fileRef = CE6FFAEC2B28822400DD796D /* NotificationObject+CoreDataClass.swift */; };
@@ -172,7 +171,6 @@
 		CE40AE952B29A070002581AB /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = en.lproj/Localizable.strings; sourceTree = "<group>"; };
 		CE40AE962B29A0CD002581AB /* fr */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = fr; path = fr.lproj/Localizable.strings; sourceTree = "<group>"; };
 		CE40AE972B29A443002581AB /* LocalizedStringConstants.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LocalizedStringConstants.swift; sourceTree = "<group>"; };
-		CE40AE9C2B29D1AF002581AB /* FontMethods.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = FontMethods.swift; path = NewDemoApp/FontMethods.swift; sourceTree = SOURCE_ROOT; };
 		CE6FFAEB2B28822400DD796D /* NotificationObject+CoreDataProperties.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "NotificationObject+CoreDataProperties.swift"; sourceTree = "<group>"; };
 		CE6FFAEC2B28822400DD796D /* NotificationObject+CoreDataClass.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "NotificationObject+CoreDataClass.swift"; sourceTree = "<group>"; };
 		CE6FFAEE2B28822400DD796D /* NewDemoApp.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = NewDemoApp.xcdatamodel; sourceTree = "<group>"; };
@@ -303,18 +301,9 @@
 			path = Localization;
 			sourceTree = "<group>";
 		};
-		CE40AE992B29C833002581AB /* Font */ = {
-			isa = PBXGroup;
-			children = (
-				CE40AE9C2B29D1AF002581AB /* FontMethods.swift */,
-			);
-			path = Font;
-			sourceTree = "<group>";
-		};
 		CE9EF70E2B15FA860084478C /* NewDemoApp */ = {
 			isa = PBXGroup;
 			children = (
-				CE40AE992B29C833002581AB /* Font */,
 				CE40AE8F2B299FCB002581AB /* Localization */,
 				CE044C042B275983007B19BF /* CoreData */,
 				CE044C052B27598D007B19BF /* Utilities */,
@@ -793,7 +782,6 @@
 				CE9EF7122B15FAB70084478C /* LoginViewController.swift in Sources */,
 				CE0AC3FC2B17BCB300E5D926 /* Extensions.swift in Sources */,
 				CE6FFAF62B28822400DD796D /* CoreDataSingleton.swift in Sources */,
-				CE40AE9D2B29D1AF002581AB /* FontMethods.swift in Sources */,
 				CE9EF7182B15FCF60084478C /* TextFieldModel.swift in Sources */,
 				CE6FFAF22B28822400DD796D /* NotificationObject+CoreDataClass.swift in Sources */,
 				CE044C172B276601007B19BF /* SharedMethods.swift in Sources */,

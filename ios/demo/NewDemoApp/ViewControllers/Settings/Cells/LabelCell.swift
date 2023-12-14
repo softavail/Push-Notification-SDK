@@ -8,7 +8,7 @@ class LabelCell: UITableViewCell {
     override func awakeFromNib() {
         super.awakeFromNib()
         
-        cellLabel.font = appFont(ofSize: 17)
+        cellLabel.font = UIFont.appFont(ofSize: 17)
         cellSwitch?.onTintColor = .mySecondaryColor
     }
 

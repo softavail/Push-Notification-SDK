@@ -13,10 +13,10 @@ class NotificationCell: UITableViewCell {
     override func awakeFromNib() {
         super.awakeFromNib()
         
-        titleLabel.font = appFont(ofSize: 16)
-        bodyLabel.font = appFont(ofSize: 14)
-        receivedLabel.font = appFont(ofSize: 10)
-        dateLabel.font = appFont(ofSize: 10)
+        titleLabel.font = UIFont.appFont(ofSize: 16)
+        bodyLabel.font = UIFont.appFont(ofSize: 14)
+        receivedLabel.font = UIFont.appFont(ofSize: 10)
+        dateLabel.font = UIFont.appFont(ofSize: 10)
     }
 
     override func setSelected(_ selected: Bool, animated: Bool) {

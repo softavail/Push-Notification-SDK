@@ -13,8 +13,8 @@ class TextFieldCell: UITableViewCell, UITextFieldDelegate {
     override func awakeFromNib() {
         super.awakeFromNib()
         
-        textField.font = appFont(ofSize: 15)
-        titleLabel?.font = appFont(ofSize: 14)
+        textField.font = UIFont.appFont(ofSize: 15)
+        titleLabel?.font = UIFont.appFont(ofSize: 14)
         textField.delegate = self
         textField.clearButtonMode = .whileEditing
     }

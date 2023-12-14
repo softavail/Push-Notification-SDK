@@ -18,14 +18,16 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplication.LaunchOptionsKey: Any]?) -> Bool {
         // Override point for customization after application launch.
         
+        UIFont.appFont = .helveticaNeue
+        
         let attrsNormalTitle: [NSAttributedString.Key: Any] = [
-            .font: appFont(ofSize: 25)
+            .font: UIFont.appFont(ofSize: 25)
         ]
         let attrsLargeTitle: [NSAttributedString.Key: Any] = [
-            .font: appFont(ofSize: 30)
+            .font: UIFont.appFont(ofSize: 30)
         ]
         let attrsButton: [NSAttributedString.Key: Any] = [
-            .font: appFont(ofSize: 17)
+            .font: UIFont.appFont(ofSize: 17)
         ]
         
         UINavigationBar.appearance().tintColor = .white

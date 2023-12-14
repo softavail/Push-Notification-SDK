@@ -8,8 +8,8 @@ class DoubleButtonCell: UITableViewCell {
     override func awakeFromNib() {
         super.awakeFromNib()
         
-        resetBadgeButton?.titleLabel?.font = appFont(ofSize: 17)
-        goToInboxButton?.titleLabel?.font = appFont(ofSize: 17)
+        resetBadgeButton?.titleLabel?.font = UIFont.appFont(ofSize: 17)
+        goToInboxButton?.titleLabel?.font = UIFont.appFont(ofSize: 17)
     }
     
     override func setSelected(_ selected: Bool, animated: Bool) {

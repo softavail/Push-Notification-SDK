@@ -14,8 +14,8 @@ class ButtonCell: UITableViewCell, LoginViewControllerDelegate {
     override func awakeFromNib() {
         super.awakeFromNib()
         
-        clipboardButton?.titleLabel?.font = appFont(ofSize: 17)
-        registerButton?.titleLabel?.font = appFont(ofSize: 17)
+        clipboardButton?.titleLabel?.font = UIFont.appFont(ofSize: 17)
+        registerButton?.titleLabel?.font = UIFont.appFont(ofSize: 17)
         activityIndicator?.isHidden = true
         registerButton?.titleLabel?.numberOfLines = 2
         registerButton?.disable()
