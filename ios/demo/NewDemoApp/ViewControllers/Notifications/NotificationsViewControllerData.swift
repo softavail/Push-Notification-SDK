@@ -35,15 +35,16 @@ class NotificationsViewControllerData: NSObject {
     }
 
     func loadDatabase(completionHandler: @escaping () -> Void) {
-        DispatchQueue.global(qos: .background).async { [weak self] in
-            guard let container = self?.persistentContainer else { return }
-
-            let request = NotificationObject.createFetchRequest()
-            let sort = NSSortDescriptor(key: "date", ascending: false)
-            request.sortDescriptors = [sort]
-
+        let context = persistentContainer.newBackgroundContext()
+        context.automaticallyMergesChangesFromParent = true
+        
+        context.perform { [weak self] in
             do {
-                self?.notifications = try container.viewContext.fetch(request)
+                let request = NotificationObject.createFetchRequest()
+                let sort = NSSortDescriptor(key: "date", ascending: false)
+                request.sortDescriptors = [sort]
+
+                self?.notifications = try context.fetch(request)
                 completionHandler()
             } catch {
                 print("CoreData failed to load notifications.")
