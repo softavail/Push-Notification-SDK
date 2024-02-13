@@ -1,13 +1,19 @@
 package com.syniverse.scg.push.sdk;
 
+import android.app.Activity;
 import android.content.Context;
+import android.content.Intent;
 import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Handler;
 import android.os.Looper;
 import android.util.Log;
 
-import com.google.firebase.iid.FirebaseInstanceId;
+//import com.google.firebase.iid.FirebaseInstanceId;
+import com.google.android.gms.common.ConnectionResult;
+import com.google.android.gms.common.GoogleApiAvailability;
+import com.google.android.gms.common.GooglePlayServicesUtil;
+import com.google.firebase.messaging.FirebaseMessaging;
 import com.syniverse.scg.push.sdk.ScgRestService.RegisterRequest;
 import com.syniverse.scg.push.sdk.ScgRestService.UnregisterRequest;
 
@@ -400,13 +406,65 @@ public class ScgClient {
         }
     }
 
+    private void onTokenRefresh(String token) {
+        Intent tokenIntent = new Intent(ScgPushReceiver.ACTION_PUSH_TOKEN_RECEIVED);
+        tokenIntent.putExtra(ScgPushReceiver.EXTRA_TOKEN, token);
+
+        mContext.sendOrderedBroadcast(tokenIntent, null);
+    }
+
+
+    /**
+     * Check the device to make sure it has the Google Play Services APK. If it
+     * doesn't, display a dialog that allows users to download the APK from the
+     * Google Play Store or enable it in the device's system settings.
+     */
+    public boolean checkPlayServices(Activity context) {
+        GoogleApiAvailability googleAPI = GoogleApiAvailability.getInstance();
+        final int resultCode = googleAPI.isGooglePlayServicesAvailable(context);
+        if (resultCode != ConnectionResult.SUCCESS) {
+            if (GooglePlayServicesUtil.isUserRecoverableError(resultCode)) {
+                new Handler(context.getMainLooper()).post(new Runnable() {
+                    @Override
+                    public void run() {
+                        GooglePlayServicesUtil.getErrorDialog(resultCode,
+                                        (Activity) context, 100)
+                                .show();
+                    }
+                });
+            } else {
+                Log.w(TAG,"GCMManager::checkPlayServices(): " + "This device is not supported.");
+                // finish();
+            }
+            return false;
+        }
+        return true;
+    }
+
     /**
      * Get device push token
      *
      * @return Returns device push token
      */
-    public String getToken() {
-        return FirebaseInstanceId.getInstance().getToken();
+
+    public void getToken(Activity context) {
+        if (checkPlayServices(context)) {
+            FirebaseMessaging.getInstance().getToken()
+                    .addOnSuccessListener(token -> {
+                        if (token != null && !token.isEmpty()) {
+                            Log.i(TAG,"Retrieve push token successful: " + token);
+                        } else {
+                            Log.w(TAG,"token should not be null or empty...");
+                        }
+                        onTokenRefresh(token);
+                    })
+                    .addOnFailureListener(e -> Log.w(TAG,"Retrieve push token failed: " + e.getMessage()))
+                    .addOnCanceledListener(() -> {
+                        Log.w(TAG,"Retrieve push token canceled");
+                    });
+        } else {
+            Log.i(TAG,"GCMManager::registerForCGM(): " + "No valid Google Play Services APK found.");
+        }
     }
 
     /**

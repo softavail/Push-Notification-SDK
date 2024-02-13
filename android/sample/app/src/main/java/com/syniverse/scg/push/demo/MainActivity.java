@@ -7,14 +7,14 @@ import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.os.Handler;
 import android.preference.PreferenceManager;
-import android.support.design.widget.Snackbar;
-import android.support.design.widget.TabLayout;
-import android.support.v7.app.AlertDialog;
-import android.support.v7.app.AppCompatActivity;
-import android.support.v7.widget.LinearLayoutManager;
-import android.support.v7.widget.RecyclerView;
-import android.support.v7.widget.SwitchCompat;
-import android.support.v7.widget.Toolbar;
+import com.google.android.material.snackbar.Snackbar;
+import com.google.android.material.tabs.TabLayout;
+import androidx.appcompat.app.AlertDialog;
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
+import androidx.appcompat.widget.SwitchCompat;
+import androidx.appcompat.widget.Toolbar;
 import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.Menu;
@@ -24,7 +24,7 @@ import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.crashlytics.android.Crashlytics;
+import com.google.firebase.crashlytics.FirebaseCrashlytics;
 import com.syniverse.scg.push.sdk.ScgCallback;
 import com.syniverse.scg.push.sdk.ScgClient;
 import com.syniverse.scg.push.sdk.ScgMessage;
@@ -34,7 +34,6 @@ import com.syniverse.scg.push.sdk.ScgState;
 import java.util.ArrayList;
 import java.util.List;
 
-import io.fabric.sdk.android.Fabric;
 import me.leolin.shortcutbadger.ShortcutBadger;
 
 
@@ -85,7 +84,9 @@ public class MainActivity extends AppCompatActivity implements ScgCallback {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        Fabric.with(this, new Crashlytics());
+        if (BuildConfig.ENABLE_CRASHLYTICS_LOGS) {
+            FirebaseCrashlytics.getInstance();
+        }
         setContentView(R.layout.activity_main);
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
@@ -295,7 +296,7 @@ public class MainActivity extends AppCompatActivity implements ScgCallback {
 
         ScgClient.initialize(MainActivity.this, url, appId, 5, 200);
         ScgClient.getInstance().auth(auth);
-        pushToken.setText(ScgClient.getInstance().getToken());
+        ScgClient.getInstance().getToken(this);
         accessToken.setText(auth);
     }
 

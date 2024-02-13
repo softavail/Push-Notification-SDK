@@ -5,7 +5,7 @@
     android:orientation="vertical"
     android:padding="@dimen/activity_horizontal_margin">
 
-    <android.support.design.widget.TextInputLayout
+    <com.google.android.material.textfield.TextInputLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content">
 
@@ -17,9 +17,9 @@
             android:hint="API Root url"
             android:inputType="textUri"
             android:text="@string/rootUrl" />
-    </android.support.design.widget.TextInputLayout>
+    </com.google.android.material.textfield.TextInputLayout>
 
-    <android.support.design.widget.TextInputLayout
+    <com.google.android.material.textfield.TextInputLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content">
 
@@ -32,16 +32,16 @@
             android:inputType="textNoSuggestions"
             android:text="@string/appId" />
 
-    </android.support.design.widget.TextInputLayout>
+    </com.google.android.material.textfield.TextInputLayout>
 
-    <android.support.v7.widget.SwitchCompat
+    <androidx.appcompat.widget.SwitchCompat
         android:id="@+id/delivery"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:checked="true"
         android:text="Auto delivery" />
 
-    <android.support.v7.widget.SwitchCompat
+    <androidx.appcompat.widget.SwitchCompat
         android:id="@+id/open"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"

@@ -2,8 +2,11 @@
 <project version="4">
   <component name="ProjectModuleManager">
     <modules>
-      <module fileurl="file://$PROJECT_DIR$/lib/lib.iml" filepath="$PROJECT_DIR$/lib/lib.iml" />
-      <module fileurl="file://$PROJECT_DIR$/sdk.iml" filepath="$PROJECT_DIR$/sdk.iml" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/modules/sdk.iml" filepath="$PROJECT_DIR$/.idea/modules/sdk.iml" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/modules/lib/sdk.lib.iml" filepath="$PROJECT_DIR$/.idea/modules/lib/sdk.lib.iml" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/modules/lib/sdk.lib.androidTest.iml" filepath="$PROJECT_DIR$/.idea/modules/lib/sdk.lib.androidTest.iml" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/modules/lib/sdk.lib.main.iml" filepath="$PROJECT_DIR$/.idea/modules/lib/sdk.lib.main.iml" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/modules/lib/sdk.lib.unitTest.iml" filepath="$PROJECT_DIR$/.idea/modules/lib/sdk.lib.unitTest.iml" />
     </modules>
   </component>
 </project>
