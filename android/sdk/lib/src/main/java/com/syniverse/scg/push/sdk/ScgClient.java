@@ -31,6 +31,7 @@ import okhttp3.OkHttpClient;
 import okhttp3.Request;
 import okhttp3.Response;
 import okhttp3.ResponseBody;
+import okhttp3.logging.HttpLoggingInterceptor;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Retrofit;
@@ -152,6 +153,8 @@ public class ScgClient {
 
     private OkHttpClient getClient(boolean withAuthorization, boolean followRedirects) {
         OkHttpClient.Builder httpClient = new OkHttpClient.Builder();
+        HttpLoggingInterceptor logsInterceptor = new HttpLoggingInterceptor();
+        logsInterceptor.setLevel(HttpLoggingInterceptor.Level.BODY);
 
         if (withAuthorization)
             httpClient.addInterceptor(new Interceptor() {
@@ -192,6 +195,7 @@ public class ScgClient {
 //            }
 //        });
 
+        httpClient.addInterceptor(logsInterceptor);
         httpClient.followRedirects(followRedirects);
         httpClient.retryOnConnectionFailure(true);
         httpClient.followSslRedirects(followRedirects);

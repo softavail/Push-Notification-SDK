@@ -13,6 +13,8 @@ android {
         versionCode 5
         versionName mavenVersion
 
+        multiDexEnabled true
+
         testInstrumentationRunner 'androidx.test.runner.AndroidJUnitRunner'
     }
     buildTypes {
@@ -61,10 +63,24 @@ publishing {
 }
 
 dependencies {
+    implementation 'androidx.multidex:multidex:2.0.1'
+
     //retrofit
-//    implementation 'com.squareup.retrofit:retrofit:1.9.0'
-    implementation 'com.squareup.retrofit2:retrofit:2.9.0'
-    implementation 'com.squareup.retrofit2:converter-gson:2.9.0'
+    implementation ('com.squareup.retrofit2:retrofit:2.9.0') {
+        exclude group: 'com.squareup.okhttp3', module:'okhttp'
+        exclude group: 'com.squareup.okhttp3', module:'mockwebserver'
+        exclude group: 'com.google.guava', module: 'guava'
+        exclude group: 'junit', module: 'junit'
+    }
+    implementation ('com.squareup.retrofit2:converter-gson:2.9.0') {
+        exclude group: 'com.squareup.okhttp3', module:'okhttp'
+        exclude group: 'com.squareup.okhttp3', module:'mockwebserver'
+        exclude group: 'com.google.guava', module: 'guava'
+        exclude group: 'junit', module: 'junit'
+    }
+    //OkHttp
+    implementation 'com.squareup.okhttp3:okhttp:4.9.3'
+    implementation 'com.squareup.okhttp3:logging-interceptor:4.9.3'
 
     //Firebase
     implementation 'com.google.firebase:firebase-core:21.0.0'
