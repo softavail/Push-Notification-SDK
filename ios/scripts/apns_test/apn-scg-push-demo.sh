@@ -63,6 +63,9 @@ function send_push_mutable()
 ANGEL="f3675eb15d650d85584c52ff93fe57ef16db9ff91cc8c187890d98142777ac71"
 ANGELI7="ff99a88189d725c01396efb2700f2479475bee6613e3bd830cdc5cf1a29897cc"
 SE="8fe1bdd7779083b0722c51faadb4ebe85abe18714b83fd7571faf99fea0a3b05"
+RED="9eb5a3118791be307f362c8d86a570db82c59400ff4f6138c95513165523d781"
+NELKO="e174d28c4e933907c1b3787f8f4d8bc29e3a4867c8a14da350cd78270942d012"
+
 ALERT="Hello"
 DEVICE=
 TOKEN=""
@@ -94,6 +97,10 @@ if [ X"${DEVICE}" != X"" ]; then
 		TOKEN="${SE}"
 	elif  [ X"${DEVICE}" == X"ANGELI7" ]; then
 		TOKEN="${ANGELI7}"
+	elif  [ X"${DEVICE}" == X"NELKO" ]; then
+		TOKEN="${NELKO}"
+	elif  [ X"${DEVICE}" == X"RED" ]; then
+		TOKEN="${RED}"
 	else
 		TOKEN="${DEVICE}"
 	fi
