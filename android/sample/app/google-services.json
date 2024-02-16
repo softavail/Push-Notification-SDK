@@ -1,39 +1,80 @@
 {
   "project_info": {
-    "project_number": "919551373144",
-    "firebase_url": "https://scg-push-sample-fda3f.firebaseio.com",
-    "project_id": "scg-push-sample-fda3f",
-    "storage_bucket": "scg-push-sample-fda3f.appspot.com"
+    "project_number": "893826445192",
+    "firebase_url": "https://scg-push-sample-b8fa2.firebaseio.com",
+    "project_id": "scg-push-sample-b8fa2",
+    "storage_bucket": "scg-push-sample-b8fa2.appspot.com"
   },
   "client": [
     {
       "client_info": {
-        "mobilesdk_app_id": "1:919551373144:android:c8cd852e86b4075f",
+        "mobilesdk_app_id": "1:893826445192:android:0ff33243413485ff21143d",
+        "android_client_info": {
+          "package_name": "com.softavail.scg.push.demo"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "893826445192-14oo6q09apkfu7h9pv3fcgllsu7jqcgj.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBCYgQ1NcKxSsGVrVcNUgko6V5lgWsMyN4"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "893826445192-14oo6q09apkfu7h9pv3fcgllsu7jqcgj.apps.googleusercontent.com",
+              "client_type": 3
+            },
+            {
+              "client_id": "893826445192-6466t6tohj8svc2634ark5qv7ki7d94r.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "com.syniverse.scg.push.demo.app"
+              }
+            }
+          ]
+        }
+      }
+    },
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:893826445192:android:cb6d67d4eb04b50021143d",
         "android_client_info": {
           "package_name": "com.syniverse.scg.push.demo"
         }
       },
       "oauth_client": [
         {
-          "client_id": "919551373144-r27fhl7u2mslmeu6v18bgfi7tbtnl3q5.apps.googleusercontent.com",
+          "client_id": "893826445192-14oo6q09apkfu7h9pv3fcgllsu7jqcgj.apps.googleusercontent.com",
           "client_type": 3
         }
       ],
       "api_key": [
         {
-          "current_key": "AIzaSyAOCelqphTJmC7JHcYypvaxh4t8iyagLtc"
+          "current_key": "AIzaSyBCYgQ1NcKxSsGVrVcNUgko6V5lgWsMyN4"
         }
       ],
       "services": {
-        "analytics_service": {
-          "status": 1
-        },
         "appinvite_service": {
-          "status": 1,
-          "other_platform_oauth_client": []
-        },
-        "ads_service": {
-          "status": 2
+          "other_platform_oauth_client": [
+            {
+              "client_id": "893826445192-14oo6q09apkfu7h9pv3fcgllsu7jqcgj.apps.googleusercontent.com",
+              "client_type": 3
+            },
+            {
+              "client_id": "893826445192-6466t6tohj8svc2634ark5qv7ki7d94r.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "com.syniverse.scg.push.demo.app"
+              }
+            }
+          ]
         }
       }
     }
