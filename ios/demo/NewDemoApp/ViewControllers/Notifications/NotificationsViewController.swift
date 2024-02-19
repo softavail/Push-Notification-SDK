@@ -1,7 +1,7 @@
 import UIKit
 
 class NotificationsViewController: MainViewController, UITableViewDataSource, UITableViewDelegate {
-    @IBOutlet var tableView: UITableView!
+    @IBOutlet weak var tableView: UITableView!
     lazy var notificationsDataSource = NotificationsViewControllerData()
     var dataSource = [BaseModel]()
     

@@ -3,7 +3,6 @@
 "LoginVCDAppID" = "App ID";
 "LoginVCDEnterYourAppID" = "Enter your app ID";
 "LoginVCDRegister" = "Register";
-"LoginVCDGoToInbox" = "Go to Inbox";
 "LoginVCDResetBadge" = "Reset Badge";
 
 "LoggedVCDLabel" = "Label";
@@ -11,6 +10,7 @@
 "LoggedVCDDateGoesHere" = "Date goes here";
 
 "NewSettingsVCDBaseURL" = "Base URL";
+"NewSettingsVCDSave" = "Save";
 "NewSettingsVCDInteractionReportOnOff" = "Interaction Report - on/off";
 "NewSettingsVCDDevicesToken" = "Device's Token";
 "NewSettingsVCDTokenLabel" = "Token Label";
@@ -23,7 +23,6 @@
 "LoginVCSettings" = "Settings";
 
 "NewSettingsVCTitleSettings" = "Settings";
-"NewSettingsVCNotifications" = "Notifications";
 
 "AlertControllerTemplatesError" = "Error";
 "AlertControllerTemplatesInfo" = "Info";

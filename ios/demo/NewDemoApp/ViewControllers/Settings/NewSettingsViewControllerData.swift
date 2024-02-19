@@ -4,11 +4,12 @@ class NewSettingsViewControllerData: NSObject {
     func getSettingsDataSource() -> [BaseModel] {
         var modelArray = [BaseModel]()
         
-        let baseURL = TextFieldModel()
-        baseURL.textFieldValue = ""
+        let baseURL = TextFieldButtonModel()
+        baseURL.textFieldValue = SharedMethods.getBaseURL()
         baseURL.textFieldPlaceholder = BASE_URL
+        baseURL.buttonTitle = SAVE
         baseURL.settingsCellType = .baseURL
-        baseURL.cellIdentifier = String(describing: TextFieldCell.self)
+        baseURL.cellIdentifier = String(describing: TextFieldButtonCell.self)
         modelArray.append(baseURL)
         
         let labelSwitch = LabelModel()
@@ -24,7 +25,7 @@ class NewSettingsViewControllerData: NSObject {
         modelArray.append(deviceToken)
         
         let tokenLabel = LabelModel()
-        tokenLabel.labelTitle = getDeviceTokenString() ?? TOKEN_LABEL
+        tokenLabel.labelTitle = SharedMethods.getDeviceToken() ?? TOKEN_LABEL
         tokenLabel.settingsCellType = .tokenLabel
         tokenLabel.cellIdentifier = String(describing: LabelCell.self)
         modelArray.append(tokenLabel)
@@ -37,12 +38,5 @@ class NewSettingsViewControllerData: NSObject {
         
         let immutableModelArray = modelArray
         return immutableModelArray
-    }
-    
-    func getDeviceTokenString() -> String? {
-        let defaults = UserDefaults.standard
-        
-        let tokenString = defaults.object(forKey: "apnTokenString") as? String
-        return tokenString
     }
 }

@@ -2,11 +2,11 @@ import UIKit
 import AVFoundation
 
 class NotificationCell: UITableViewCell {
-    @IBOutlet var cellImageView: UIImageView!
-    @IBOutlet var titleLabel: UILabel!
-    @IBOutlet var bodyLabel: UILabel!
-    @IBOutlet var receivedLabel: UILabel!
-    @IBOutlet var dateLabel: UILabel!
+    @IBOutlet weak var cellImageView: UIImageView!
+    @IBOutlet weak var titleLabel: UILabel!
+    @IBOutlet weak var bodyLabel: UILabel!
+    @IBOutlet weak var receivedLabel: UILabel!
+    @IBOutlet weak var dateLabel: UILabel!
     var notificationModel: NotificationModel?
     var contentURL: URL?
     

@@ -3,7 +3,6 @@
 "LoginVCDAppID" = "ID de l'application";
 "LoginVCDEnterYourAppID" = "Entrez votre identifiant de l'application";
 "LoginVCDRegister" = "Registre";
-"LoginVCDGoToInbox" = "Aller à la boîte de réception";
 "LoginVCDResetBadge" = "Réinitialiser le badge";
 
 "LoggedVCDLabel" = "Étiquette";
@@ -11,6 +10,7 @@
 "LoggedVCDDateGoesHere" = "La date est indiquée ici";
 
 "NewSettingsVCDBaseURL" = "URL de base";
+"NewSettingsVCDSave" = "Économiser";
 "NewSettingsVCDInteractionReportOnOff" = "Rapport d'interaction - sur/éteint";
 "NewSettingsVCDDevicesToken" = "Jeton du dispositif";
 "NewSettingsVCDTokenLabel" = "Étiquette du jeton";
@@ -23,7 +23,6 @@
 "LoginVCSettings" = "Paramètres";
 
 "NewSettingsVCTitleSettings" = "Paramètres";
-"NewSettingsVCNotifications" = "Notifications";
 
 "AlertControllerTemplatesError" = "Erreur";
 "AlertControllerTemplatesInfo" = "Info";

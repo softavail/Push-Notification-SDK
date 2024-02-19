@@ -5,8 +5,8 @@ protocol TextFieldCellDelegate {
 }
 
 class TextFieldCell: UITableViewCell, UITextFieldDelegate {
-    @IBOutlet var textField: UITextField!
-    @IBOutlet var titleLabel: UILabel?
+    @IBOutlet weak var textField: UITextField!
+    @IBOutlet weak var titleLabel: UILabel!
     var textFieldModel: TextFieldModel?
     var delegate: TextFieldCellDelegate?
     

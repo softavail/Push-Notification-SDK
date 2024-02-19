@@ -1,7 +1,7 @@
 import UIKit
 
 class NewSettingsViewController: MainViewController, UITableViewDelegate, UITableViewDataSource {
-    @IBOutlet var tableView: UITableView!
+    @IBOutlet weak var tableView: UITableView!
     lazy var settingsDataSource = NewSettingsViewControllerData()
     var dataSource = [BaseModel]()
     
@@ -11,18 +11,9 @@ class NewSettingsViewController: MainViewController, UITableViewDelegate, UITabl
         title = TITLE_SETTINGS
         navigationItem.largeTitleDisplayMode = .never
         navigationItem.backBarButtonItem = UIBarButtonItem(barButtonSystemItem: .done, target: self, action: nil)
-        navigationItem.rightBarButtonItem = UIBarButtonItem(title: NOTIFICATIONS, style: .plain, target: self, action: #selector(notificationsTapped))
         
         dataSource = settingsDataSource.getSettingsDataSource()
         tableView.delaysContentTouches = false
-    }
-    
-    // MARK: #selector methods
-    
-    @objc func notificationsTapped() {
-        if let vc = storyboard?.instantiateViewController(withIdentifier: "NotificationsViewController") as? NotificationsViewController {
-            navigationController?.pushViewController(vc, animated: true)
-        }
     }
     
     // MARK: UITableViewDelegate methods
@@ -40,9 +31,10 @@ class NewSettingsViewController: MainViewController, UITableViewDelegate, UITabl
         guard let cellIdentifier = model.cellIdentifier else { return UITableViewCell() }
         
         if model.settingsCellType == .baseURL {
-            if let cell = tableView.dequeueReusableCell(withIdentifier: cellIdentifier, for: indexPath) as? TextFieldCell {
-                cell.textFieldModel = model as? TextFieldModel
+            if let cell = tableView.dequeueReusableCell(withIdentifier: cellIdentifier, for: indexPath) as? TextFieldButtonCell {
+                cell.textFieldButtonModel = model as? TextFieldButtonModel
                 cell.updateCell()
+                cell.parentViewController = self
                 return cell
             }
         } else if model.settingsCellType == .labelSwitch {

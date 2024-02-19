@@ -144,6 +144,16 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         
         print("token: \(tokenString)")
         UserDefaults.standard.set(tokenString, forKey: "apnTokenString")
+        
+        let defaults = UserDefaults.standard
+        let jsonEncoder = JSONEncoder()
+        
+        do {
+            let textToSave = try jsonEncoder.encode(tokenString)
+            defaults.set(textToSave, forKey: "deviceToken")
+        } catch let error {
+            print("Error in saving deviceToken: \(error.localizedDescription)")
+        }
     }
     
     func application(_ application: UIApplication, didFailToRegisterForRemoteNotificationsWithError error: Error) {
