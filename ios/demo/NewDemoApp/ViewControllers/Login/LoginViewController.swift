@@ -1,15 +1,15 @@
 import UIKit
 import SCGPushSDK
 
-protocol LoginViewControllerDelegate {
+protocol LoginViewControllerDelegate: AnyObject {
     func textFieldsDidChange(for viewController: LoginViewController)
 }
 
 class LoginViewController: MainViewController, UITableViewDelegate, UITableViewDataSource, RegisterButtonCellDelegate, TextFieldCellDelegate {
     @IBOutlet weak var tableView: UITableView!
     lazy var loginDataSource = LoginViewControllerData()
+    weak var delegate: LoginViewControllerDelegate?
     var dataSource = [BaseModel]()
-    var delegate: LoginViewControllerDelegate?
     var accessTokenIsEmpty = true {
         didSet {
             delegate?.textFieldsDidChange(for: self)

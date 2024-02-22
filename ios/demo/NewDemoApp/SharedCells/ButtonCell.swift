@@ -1,11 +1,3 @@
-//
-//  ButtonCell.swift
-//  SCGPushDemo
-//
-//  Created by Vasil Botsev on 19.02.24.
-//  Copyright © 2024 softavail. All rights reserved.
-//
-
 import UIKit
 
 class ButtonCell: UITableViewCell {

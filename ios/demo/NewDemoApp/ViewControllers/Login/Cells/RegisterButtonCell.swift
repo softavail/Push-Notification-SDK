@@ -1,14 +1,14 @@
 import UIKit
 
-protocol RegisterButtonCellDelegate {
+protocol RegisterButtonCellDelegate: AnyObject {
     func didPressRegisterButton(for cell: RegisterButtonCell)
 }
 
 class RegisterButtonCell: UITableViewCell, LoginViewControllerDelegate {
     @IBOutlet weak var registerButton: UIButton!
     @IBOutlet weak var activityIndicator: UIActivityIndicatorView!
+    weak var delegate: RegisterButtonCellDelegate?
     var buttonModel: ButtonModel?
-    var delegate: RegisterButtonCellDelegate?
     
     override func awakeFromNib() {
         super.awakeFromNib()

@@ -1,14 +1,14 @@
 import UIKit
 
-protocol TextFieldCellDelegate {
+protocol TextFieldCellDelegate: AnyObject {
     func textFieldDidChange(for cell: TextFieldCell)
 }
 
 class TextFieldCell: UITableViewCell, UITextFieldDelegate {
     @IBOutlet weak var textField: UITextField!
     @IBOutlet weak var titleLabel: UILabel!
+    weak var delegate: TextFieldCellDelegate?
     var textFieldModel: TextFieldModel?
-    var delegate: TextFieldCellDelegate?
     
     override func awakeFromNib() {
         super.awakeFromNib()
