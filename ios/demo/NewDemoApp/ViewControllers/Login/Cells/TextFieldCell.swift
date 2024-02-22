@@ -31,6 +31,8 @@ class TextFieldCell: UITableViewCell, UITextFieldDelegate {
         textField.placeholder = textFieldModel.textFieldPlaceholder
     }
     
+    // MARK: - UITextFieldDelegate methods
+    
     func textFieldDidChangeSelection(_ textField: UITextField) {
         textFieldModel?.textFieldValue = textField.text
         delegate?.textFieldDidChange(for: self)

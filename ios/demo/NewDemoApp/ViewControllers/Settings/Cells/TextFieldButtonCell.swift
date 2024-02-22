@@ -34,6 +34,8 @@ class TextFieldButtonCell: UITableViewCell {
         textField.placeholder = textFieldButtonModel.textFieldPlaceholder
     }
     
+    // MARK: - Actions
+    
     @IBAction func saveButtonTapped(_ sender: Any) {
         guard let textFieldText = textField.text else { return }
         

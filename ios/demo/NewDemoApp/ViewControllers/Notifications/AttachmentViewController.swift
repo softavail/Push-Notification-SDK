@@ -32,7 +32,7 @@ class AttachmentViewController: MainViewController, QLPreviewControllerDataSourc
         return url as QLPreviewItem
     }
     
-    func setUpPreviewController() {
+    private func setUpPreviewController() {
         let previewController = QLPreviewController()
         previewController.dataSource = self
         

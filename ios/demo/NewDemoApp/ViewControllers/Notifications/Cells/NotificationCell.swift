@@ -82,7 +82,7 @@ class NotificationCell: UITableViewCell {
         }
     }
     
-    func getThumbnail(from videoURL: URL) -> UIImage? {
+    private func getThumbnail(from videoURL: URL) -> UIImage? {
         let asset = AVURLAsset(url: videoURL)
         let generator = AVAssetImageGenerator(asset: asset)
         generator.appliesPreferredTrackTransform = true

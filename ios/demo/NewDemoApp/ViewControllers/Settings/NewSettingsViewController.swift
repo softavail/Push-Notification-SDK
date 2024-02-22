@@ -16,7 +16,7 @@ class NewSettingsViewController: MainViewController, UITableViewDelegate, UITabl
         tableView.delaysContentTouches = false
     }
     
-    // MARK: UITableViewDelegate methods
+    // MARK: - UITableViewDelegate methods
     
     func numberOfSections(in tableView: UITableView) -> Int {
         return 1
@@ -66,7 +66,7 @@ class NewSettingsViewController: MainViewController, UITableViewDelegate, UITabl
         return UITableViewCell()
     }
     
-    // MARK: Keyboard method
+    // MARK: - Keyboard method
     
     override func adjustForKeyboard(notification: Notification) {
         guard let keyboardValue = notification.userInfo?[UIResponder.keyboardFrameEndUserInfoKey] as? NSValue else { return }

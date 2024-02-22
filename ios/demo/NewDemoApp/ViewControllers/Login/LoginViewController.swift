@@ -32,15 +32,15 @@ class LoginViewController: MainViewController, UITableViewDelegate, UITableViewD
         tableView.delaysContentTouches = false
     }
     
-    // MARK: #selector methods
+    // MARK: - #selector methods
     
-    @objc func settingsTapped() {
+    @objc private func settingsTapped() {
         if let vc = storyboard?.instantiateViewController(withIdentifier: "NewSettingsViewController") as? NewSettingsViewController {
             navigationController?.pushViewController(vc, animated: true)
         }
     }
     
-    // MARK: UITableViewDelegate methods
+    // MARK: - UITableViewDelegate methods
     
     func numberOfSections(in tableView: UITableView) -> Int {
         return 1
@@ -87,7 +87,7 @@ class LoginViewController: MainViewController, UITableViewDelegate, UITableViewD
         return UITableViewCell()
     }
     
-    // MARK: RegisterButtonCellDelegate methods
+    // MARK: - RegisterButtonCellDelegate methods
     
     func didPressRegisterButton(for cell: RegisterButtonCell) {
         guard let accessTokenModel = dataSource[LoginCellType.accessToken.rawValue] as? TextFieldModel else { return }
@@ -141,7 +141,7 @@ class LoginViewController: MainViewController, UITableViewDelegate, UITableViewD
         }
     }
     
-    // MARK: TextFieldCellDelegate methods
+    // MARK: - TextFieldCellDelegate methods
     
     func textFieldDidChange(for cell: TextFieldCell) {
         guard let text = cell.textField.text else { return }
@@ -161,7 +161,7 @@ class LoginViewController: MainViewController, UITableViewDelegate, UITableViewD
         }
     }
     
-    // MARK: Keyboard method
+    // MARK: - Keyboard method
     
     override func adjustForKeyboard(notification: Notification) {
         guard let keyboardValue = notification.userInfo?[UIResponder.keyboardFrameEndUserInfoKey] as? NSValue else { return }
@@ -178,9 +178,9 @@ class LoginViewController: MainViewController, UITableViewDelegate, UITableViewD
         tableView.scrollIndicatorInsets = tableView.contentInset
     }
     
-    // MARK: Helping methods
+    // MARK: - Helping methods
     
-    func startBuffering(cell: RegisterButtonCell) {
+    private func startBuffering(cell: RegisterButtonCell) {
         cell.registerButton.disable()
         navigationController?.navigationBar.isUserInteractionEnabled = false
         view.isUserInteractionEnabled = false
@@ -188,7 +188,7 @@ class LoginViewController: MainViewController, UITableViewDelegate, UITableViewD
         cell.activityIndicator.startAnimating()
     }
     
-    func stopBuffering(cell: RegisterButtonCell) {
+    private func stopBuffering(cell: RegisterButtonCell) {
         cell.registerButton.enable()
         navigationController?.navigationBar.isUserInteractionEnabled = true
         view.isUserInteractionEnabled = true

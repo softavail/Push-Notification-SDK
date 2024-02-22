@@ -88,6 +88,8 @@ class RegisterButtonCell: UITableViewCell, LoginViewControllerDelegate {
         }
     }
     
+    // MARK: - LoginViewControllerDelegate methods
+    
     func textFieldsDidChange(for viewController: LoginViewController) {
         if !viewController.accessTokenIsEmpty && !viewController.appIDIsEmpty {
             registerButton.enable()
@@ -95,6 +97,8 @@ class RegisterButtonCell: UITableViewCell, LoginViewControllerDelegate {
             registerButton.disable()
         }
     }
+    
+    // MARK: - Actions
     
     @IBAction func registerButtonTapped(_ sender: UIButton) {
         delegate?.didPressRegisterButton(for: self)

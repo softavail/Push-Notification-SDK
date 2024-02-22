@@ -37,6 +37,8 @@ class LabelCell: UITableViewCell {
         }
     }
     
+    // MARK: - Actions
+    
     @IBAction func toggleSwitch(_ sender: UISwitch) {
         guard let cellSwitch = self.cellSwitch else { return }
         

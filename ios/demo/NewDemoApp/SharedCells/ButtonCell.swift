@@ -30,6 +30,8 @@ class ButtonCell: UITableViewCell {
         resetBadgeButton?.setAttributedTitle(attributedButtonTitle, for: .highlighted)
     }
     
+    // MARK: - Actions
+    
     @IBAction func clipboardButtonTapped(_ sender: Any) {
         let defaults = UserDefaults.standard
         
