@@ -90,9 +90,9 @@ class RegisterButtonCell: UITableViewCell, LoginViewControllerDelegate {
     
     func textFieldsDidChange(for viewController: LoginViewController) {
         if !viewController.accessTokenIsEmpty && !viewController.appIDIsEmpty {
-            registerButton?.enable()
+            registerButton.enable()
         } else {
-            registerButton?.disable()
+            registerButton.disable()
         }
     }
     

@@ -14,7 +14,7 @@ class TextFieldCell: UITableViewCell, UITextFieldDelegate {
         super.awakeFromNib()
         
         textField.font = UIFont.appFont(ofSize: 15)
-        titleLabel?.font = UIFont.appFont(ofSize: 14)
+        titleLabel.font = UIFont.appFont(ofSize: 14)
         textField.delegate = self
         textField.clearButtonMode = .whileEditing
     }
@@ -26,7 +26,7 @@ class TextFieldCell: UITableViewCell, UITextFieldDelegate {
     func updateCell() {
         guard let textFieldModel = self.textFieldModel else { return }
         
-        titleLabel?.text = textFieldModel.labelTitle
+        titleLabel.text = textFieldModel.labelTitle
         textField.text = textFieldModel.textFieldValue
         textField.placeholder = textFieldModel.textFieldPlaceholder
     }

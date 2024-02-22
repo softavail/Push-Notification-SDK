@@ -96,15 +96,11 @@ class LoginViewController: MainViewController, UITableViewDelegate, UITableViewD
         guard let appIDString = appIDModel.textFieldValue else { return }
         guard let deviceToken = SharedMethods.getDeviceToken() else { return }
         
+        startBuffering(cell: cell)
+        
         let baseURL = SharedMethods.getBaseURL()
         let accessTokenStringTrimmed = accessTokenString.trimWhiteSpaces()
         let appIDStringTrimmed = appIDString.trimWhiteSpaces()
-        
-        cell.registerButton?.disable()
-        navigationController?.navigationBar.isUserInteractionEnabled = false
-        view.isUserInteractionEnabled = false
-        cell.activityIndicator?.isHidden = false
-        cell.activityIndicator?.startAnimating()
         
         print(accessTokenStringTrimmed)
         print(appIDStringTrimmed)
@@ -131,12 +127,7 @@ class LoginViewController: MainViewController, UITableViewDelegate, UITableViewD
             
             DispatchQueue.main.async {
                 if let vc = self.storyboard?.instantiateViewController(withIdentifier: "NotificationsViewController") as? NotificationsViewController {
-                    cell.registerButton?.enable()
-                    self.navigationController?.navigationBar.isUserInteractionEnabled = true
-                    self.view.isUserInteractionEnabled = true
-                    cell.activityIndicator?.stopAnimating()
-                    cell.activityIndicator?.isHidden = true
-                    
+                    self.stopBuffering(cell: cell)
                     self.navigationController?.pushViewController(vc, animated: true)
                 }
             }
@@ -144,12 +135,7 @@ class LoginViewController: MainViewController, UITableViewDelegate, UITableViewD
             guard let self = self else { return }
             
             DispatchQueue.main.async {
-                cell.registerButton?.enable()
-                self.navigationController?.navigationBar.isUserInteractionEnabled = true
-                self.view.isUserInteractionEnabled = true
-                cell.activityIndicator?.stopAnimating()
-                cell.activityIndicator?.isHidden = true
-                
+                self.stopBuffering(cell: cell)
                 ac.showError("Failed to register device's token: \(error?.localizedDescription ?? "")", presentFrom: self)
             }
         }
@@ -190,5 +176,23 @@ class LoginViewController: MainViewController, UITableViewDelegate, UITableViewD
         }
 
         tableView.scrollIndicatorInsets = tableView.contentInset
+    }
+    
+    // MARK: Helping methods
+    
+    func startBuffering(cell: RegisterButtonCell) {
+        cell.registerButton.disable()
+        navigationController?.navigationBar.isUserInteractionEnabled = false
+        view.isUserInteractionEnabled = false
+        cell.activityIndicator.isHidden = false
+        cell.activityIndicator.startAnimating()
+    }
+    
+    func stopBuffering(cell: RegisterButtonCell) {
+        cell.registerButton.enable()
+        navigationController?.navigationBar.isUserInteractionEnabled = true
+        view.isUserInteractionEnabled = true
+        cell.activityIndicator.stopAnimating()
+        cell.activityIndicator.isHidden = true
     }
 }
