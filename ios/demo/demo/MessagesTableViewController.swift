@@ -80,6 +80,9 @@ class MessagesTableViewController: UITableViewController, QLPreviewControllerDat
     override func viewDidLoad() {
         super.viewDidLoad()
         
+        title = "Messages"
+        navigationItem.largeTitleDisplayMode = .never
+
         let nib = UINib.init(nibName: "NotificationTableViewCell", bundle: nil)
         self.tableView.register(nib, forCellReuseIdentifier: "NotificationCell")
     }

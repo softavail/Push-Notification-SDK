@@ -45,10 +45,11 @@ class LoginViewController: MainViewController, UITableViewDelegate, UITableViewD
             }
         }
 
+        accessTokenIsEmpty = token.isEmpty
+        appIDIsEmpty = appId.isEmpty
+        
         dataSource = loginDataSource.getLoginDataSource(token: token, appId: appId)
         tableView.delaysContentTouches = false
-        
-        
     }
     
     // MARK: - #selector methods
@@ -90,7 +91,7 @@ class LoginViewController: MainViewController, UITableViewDelegate, UITableViewD
         } else if model.loginCellType == .register {
             if let cell = tableView.dequeueReusableCell(withIdentifier: cellIdentifier, for: indexPath) as? RegisterButtonCell {
                 cell.buttonModel = model as? ButtonModel
-                cell.updateCell()
+                cell.updateCell(accessTokenIsEmpty: accessTokenIsEmpty, appIdIsEmpty:appIDIsEmpty)
                 cell.delegate = self
                 delegate = cell
                 return cell

@@ -1234,7 +1234,7 @@
 				CLANG_WARN_INFINITE_RECURSION = YES;
 				CLANG_WARN_SUSPICIOUS_MOVES = YES;
 				CODE_SIGN_ENTITLEMENTS = Downloader/Downloader.entitlements;
-				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Distribution";
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
 				CURRENT_PROJECT_VERSION = 2;
 				DEVELOPMENT_TEAM = 6D6V2A9HWX;
 				"DEVELOPMENT_TEAM[sdk=iphoneos*]" = G5A9C5LTK7;
@@ -1246,7 +1246,7 @@
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				PROVISIONING_PROFILE = "e6afe1d2-3b71-4d92-98ac-7c0b3877eacd";
 				PROVISIONING_PROFILE_SPECIFIER = "";
-				"PROVISIONING_PROFILE_SPECIFIER[sdk=iphoneos*]" = "SCG Push Demo App Ntf Ext AdHoc";
+				"PROVISIONING_PROFILE_SPECIFIER[sdk=iphoneos*]" = "SCG Push Demo App Ntf Ext Dev";
 				SKIP_INSTALL = YES;
 				SWIFT_OBJC_BRIDGING_HEADER = "$(SRCROOT)/SCGPushDemo-Bridging-Header.h";
 				SWIFT_OPTIMIZATION_LEVEL = "-Owholemodule";

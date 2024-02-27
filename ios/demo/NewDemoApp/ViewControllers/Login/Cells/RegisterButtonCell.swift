@@ -55,7 +55,7 @@ class RegisterButtonCell: UITableViewCell, LoginViewControllerDelegate {
         }
     }
     
-    func updateCell() {
+    func updateCell(accessTokenIsEmpty: Bool, appIdIsEmpty:Bool) {
         guard let buttonTitle = self.buttonModel?.buttonTitle else { return }
         
         let attrsWhite: [NSAttributedString.Key: Any] = [
@@ -85,6 +85,12 @@ class RegisterButtonCell: UITableViewCell, LoginViewControllerDelegate {
             registerButton.setAttributedTitle(attributedButtonTitleWhite, for: .normal)
             registerButton.setAttributedTitle(attributedButtonTitleGray, for: .disabled)
             registerButton.setAttributedTitle(attributedButtonTitleWhite, for: .highlighted)
+        }
+        
+        if !accessTokenIsEmpty, !appIdIsEmpty {
+            registerButton.enable()
+        } else {
+            registerButton.disable()
         }
     }
     
