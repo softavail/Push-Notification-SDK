@@ -1,14 +1,15 @@
 import UIKit
+import SCGPushSDK
 
-protocol LoginViewControllerDelegate {
+protocol LoginViewControllerDelegate: AnyObject {
     func textFieldsDidChange(for viewController: LoginViewController)
 }
 
-class LoginViewController: MainViewController, UITableViewDelegate, UITableViewDataSource, ButtonCellDelegate, TextFieldCellDelegate {
-    @IBOutlet var loginTableView: UITableView!
+class LoginViewController: MainViewController, UITableViewDelegate, UITableViewDataSource, RegisterButtonCellDelegate, TextFieldCellDelegate {
+    @IBOutlet weak var tableView: UITableView!
     lazy var loginDataSource = LoginViewControllerData()
+    weak var delegate: LoginViewControllerDelegate?
     var dataSource = [BaseModel]()
-    var delegate: LoginViewControllerDelegate?
     var accessTokenIsEmpty = true {
         didSet {
             delegate?.textFieldsDidChange(for: self)
@@ -28,18 +29,18 @@ class LoginViewController: MainViewController, UITableViewDelegate, UITableViewD
         navigationItem.rightBarButtonItem = UIBarButtonItem(title: SETTINGS, style: .plain, target: self, action: #selector(settingsTapped))
         
         dataSource = loginDataSource.getLoginDataSource()
-        loginTableView.delaysContentTouches = false
+        tableView.delaysContentTouches = false
     }
     
-    // MARK: #selector methods
+    // MARK: - #selector methods
     
-    @objc func settingsTapped() {
+    @objc private func settingsTapped() {
         if let vc = storyboard?.instantiateViewController(withIdentifier: "NewSettingsViewController") as? NewSettingsViewController {
             navigationController?.pushViewController(vc, animated: true)
         }
     }
     
-    // MARK: UITableViewDelegate methods
+    // MARK: - UITableViewDelegate methods
     
     func numberOfSections(in tableView: UITableView) -> Int {
         return 1
@@ -68,7 +69,7 @@ class LoginViewController: MainViewController, UITableViewDelegate, UITableViewD
                 return cell
             }
         } else if model.loginCellType == .register {
-            if let cell = tableView.dequeueReusableCell(withIdentifier: cellIdentifier, for: indexPath) as? ButtonCell {
+            if let cell = tableView.dequeueReusableCell(withIdentifier: cellIdentifier, for: indexPath) as? RegisterButtonCell {
                 cell.buttonModel = model as? ButtonModel
                 cell.updateCell()
                 cell.delegate = self
@@ -76,8 +77,8 @@ class LoginViewController: MainViewController, UITableViewDelegate, UITableViewD
                 return cell
             }
         } else {
-            if let cell = tableView.dequeueReusableCell(withIdentifier: cellIdentifier, for: indexPath) as? DoubleButtonCell {
-                cell.doubleButtonModel = model as? DoubleButtonModel
+            if let cell = tableView.dequeueReusableCell(withIdentifier: cellIdentifier, for: indexPath) as? ButtonCell {
+                cell.buttonModel = model as? ButtonModel
                 cell.updateCell()
                 return cell
             }
@@ -86,42 +87,61 @@ class LoginViewController: MainViewController, UITableViewDelegate, UITableViewD
         return UITableViewCell()
     }
     
-    // MARK: ButtonCellDelegate methods
+    // MARK: - RegisterButtonCellDelegate methods
     
-    func didPressRegisterButton(for cell: ButtonCell) {
+    func didPressRegisterButton(for cell: RegisterButtonCell) {
         guard let accessTokenModel = dataSource[LoginCellType.accessToken.rawValue] as? TextFieldModel else { return }
         guard let appIDModel = dataSource[LoginCellType.appID.rawValue] as? TextFieldModel else { return }
+        guard let accessTokenString = accessTokenModel.textFieldValue else { return }
+        guard let appIDString = appIDModel.textFieldValue else { return }
+        guard let deviceToken = SharedMethods.getDeviceToken() else { return }
         
-        let accessString = accessTokenModel.textFieldValue
-        let appIDString = appIDModel.textFieldValue
+        startBuffering(cell: cell)
         
-        guard let accessString = accessString else { return }
-        guard let appIDString = appIDString else { return }
-        
-        let accessStringTrimmed = accessString.trimWhiteSpaces()
+        let baseURL = SharedMethods.getBaseURL()
+        let accessTokenStringTrimmed = accessTokenString.trimWhiteSpaces()
         let appIDStringTrimmed = appIDString.trimWhiteSpaces()
         
-        print(accessStringTrimmed)
+        print(accessTokenStringTrimmed)
         print(appIDStringTrimmed)
         
-        cell.registerButton?.disable()
-        navigationController?.navigationBar.isUserInteractionEnabled = false
-        view.isUserInteractionEnabled = false
-        cell.activityIndicator?.isHidden = false
-        cell.activityIndicator?.startAnimating()
+        let defaults = UserDefaults.standard
+        let jsonEncoder = JSONEncoder()
+        do {
+            let textToSave = try jsonEncoder.encode(accessTokenStringTrimmed)
+            defaults.set(textToSave, forKey: "accessToken")
+        } catch let error {
+            print("Error in saving accessToken: \(error.localizedDescription)")
+        }
+        do {
+            let textToSave = try jsonEncoder.encode(appIDStringTrimmed)
+            defaults.set(textToSave, forKey: "appID")
+        } catch let error {
+            print("Error in saving appID: \(error.localizedDescription)")
+        }
         
-        if let vc = storyboard?.instantiateViewController(withIdentifier: "LoggedViewController") as? LoggedViewController {
-            cell.registerButton?.enable()
-            navigationController?.navigationBar.isUserInteractionEnabled = true
-            view.isUserInteractionEnabled = true
-            cell.activityIndicator?.stopAnimating()
-            cell.activityIndicator?.isHidden = true
+        let ac = AlertControllerSingleton.shared
+        SCGPush.start(withAccessToken: accessTokenStringTrimmed, appId: appIDStringTrimmed, callbackUri: baseURL, delegate: nil)
+        SCGPush.sharedInstance().registerToken(deviceToken) { [weak self] _ in
+            guard let self = self else { return }
             
-            present(vc, animated: true)
+            DispatchQueue.main.async {
+                if let vc = self.storyboard?.instantiateViewController(withIdentifier: "NotificationsViewController") as? NotificationsViewController {
+                    self.stopBuffering(cell: cell)
+                    self.navigationController?.pushViewController(vc, animated: true)
+                }
+            }
+        } failureBlock: { [weak self] error in
+            guard let self = self else { return }
+            
+            DispatchQueue.main.async {
+                self.stopBuffering(cell: cell)
+                ac.showError("Failed to register device's token: \(error?.localizedDescription ?? "")", presentFrom: self)
+            }
         }
     }
     
-    // MARK: TextFieldCellDelegate methods
+    // MARK: - TextFieldCellDelegate methods
     
     func textFieldDidChange(for cell: TextFieldCell) {
         guard let text = cell.textField.text else { return }
@@ -141,7 +161,7 @@ class LoginViewController: MainViewController, UITableViewDelegate, UITableViewD
         }
     }
     
-    // MARK: Keyboard method
+    // MARK: - Keyboard method
     
     override func adjustForKeyboard(notification: Notification) {
         guard let keyboardValue = notification.userInfo?[UIResponder.keyboardFrameEndUserInfoKey] as? NSValue else { return }
@@ -150,11 +170,29 @@ class LoginViewController: MainViewController, UITableViewDelegate, UITableViewD
         let keyboardViewEndFrame = view.convert(keyboardScreenEndFrame, from: view.window)
 
         if notification.name == UIResponder.keyboardWillHideNotification {
-            loginTableView.contentInset = .zero
+            tableView.contentInset = .zero
         } else {
-            loginTableView.contentInset = UIEdgeInsets(top: 0, left: 0, bottom: keyboardViewEndFrame.height - view.safeAreaInsets.bottom, right: 0)
+            tableView.contentInset = UIEdgeInsets(top: 0, left: 0, bottom: keyboardViewEndFrame.height - view.safeAreaInsets.bottom, right: 0)
         }
 
-        loginTableView.scrollIndicatorInsets = loginTableView.contentInset
+        tableView.scrollIndicatorInsets = tableView.contentInset
+    }
+    
+    // MARK: - Helping methods
+    
+    private func startBuffering(cell: RegisterButtonCell) {
+        cell.registerButton.disable()
+        navigationController?.navigationBar.isUserInteractionEnabled = false
+        view.isUserInteractionEnabled = false
+        cell.activityIndicator.isHidden = false
+        cell.activityIndicator.startAnimating()
+    }
+    
+    private func stopBuffering(cell: RegisterButtonCell) {
+        cell.registerButton.enable()
+        navigationController?.navigationBar.isUserInteractionEnabled = true
+        view.isUserInteractionEnabled = true
+        cell.activityIndicator.stopAnimating()
+        cell.activityIndicator.isHidden = true
     }
 }

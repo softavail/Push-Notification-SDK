@@ -4,7 +4,7 @@ enum LoginCellType: Int {
     case accessToken
     case appID
     case register
-    case doubleButton
+    case resetBadge
 }
 
 enum SettingsCellType: Int {

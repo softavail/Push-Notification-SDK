@@ -12,6 +12,38 @@ enum URLType {
 }
 
 class SharedMethods {
+    static func getBaseURL() -> String {
+        var stringToReturn = ""
+        let defaults = UserDefaults.standard
+        let jsonDecoder = JSONDecoder()
+        
+        if let textToLoad = defaults.object(forKey: "baseURL") as? Data {
+            do {
+                stringToReturn = try jsonDecoder.decode(String.self, from: textToLoad)
+            } catch let error {
+                print("Error in loading baseURL: \(error.localizedDescription)")
+            }
+        }
+        
+        return stringToReturn
+    }
+
+    static func getDeviceToken() -> String? {
+        var stringToReturn: String? = nil
+        let defaults = UserDefaults.standard
+        let jsonDecoder = JSONDecoder()
+        
+        if let textToLoad = defaults.object(forKey: "deviceToken") as? Data {
+            do {
+                stringToReturn = try jsonDecoder.decode(String.self, from: textToLoad)
+            } catch let error {
+                print("Error in loading deviceToken: \(error.localizedDescription)")
+            }
+        }
+        
+        return stringToReturn
+    }
+    
     static func getSharedDirectory() -> URL? {
         let path = FileManager.default.containerURL(forSecurityApplicationGroupIdentifier: "group.com.syniverse.push.demo.app")
         return path

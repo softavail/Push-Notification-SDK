@@ -1,20 +1,20 @@
 import UIKit
 
-protocol TextFieldCellDelegate {
+protocol TextFieldCellDelegate: AnyObject {
     func textFieldDidChange(for cell: TextFieldCell)
 }
 
 class TextFieldCell: UITableViewCell, UITextFieldDelegate {
-    @IBOutlet var textField: UITextField!
-    @IBOutlet var titleLabel: UILabel?
+    @IBOutlet weak var textField: UITextField!
+    @IBOutlet weak var titleLabel: UILabel!
+    weak var delegate: TextFieldCellDelegate?
     var textFieldModel: TextFieldModel?
-    var delegate: TextFieldCellDelegate?
     
     override func awakeFromNib() {
         super.awakeFromNib()
         
         textField.font = UIFont.appFont(ofSize: 15)
-        titleLabel?.font = UIFont.appFont(ofSize: 14)
+        titleLabel.font = UIFont.appFont(ofSize: 14)
         textField.delegate = self
         textField.clearButtonMode = .whileEditing
     }
@@ -26,10 +26,12 @@ class TextFieldCell: UITableViewCell, UITextFieldDelegate {
     func updateCell() {
         guard let textFieldModel = self.textFieldModel else { return }
         
-        titleLabel?.text = textFieldModel.labelTitle
+        titleLabel.text = textFieldModel.labelTitle
         textField.text = textFieldModel.textFieldValue
         textField.placeholder = textFieldModel.textFieldPlaceholder
     }
+    
+    // MARK: - UITextFieldDelegate methods
     
     func textFieldDidChangeSelection(_ textField: UITextField) {
         textFieldModel?.textFieldValue = textField.text

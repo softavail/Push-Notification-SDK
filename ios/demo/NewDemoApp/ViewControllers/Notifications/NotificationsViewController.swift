@@ -1,7 +1,7 @@
 import UIKit
 
 class NotificationsViewController: MainViewController, UITableViewDataSource, UITableViewDelegate {
-    @IBOutlet var tableView: UITableView!
+    @IBOutlet weak var tableView: UITableView!
     lazy var notificationsDataSource = NotificationsViewControllerData()
     var dataSource = [BaseModel]()
     
@@ -17,7 +17,7 @@ class NotificationsViewController: MainViewController, UITableViewDataSource, UI
         tableView.separatorStyle = .singleLine
     }
     
-    // MARK: UITableViewDelegate methods
+    // MARK: - UITableViewDelegate methods
     
     func numberOfSections(in tableView: UITableView) -> Int {
         return 1

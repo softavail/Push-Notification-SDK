@@ -23,15 +23,14 @@ class LoginViewControllerData: NSObject {
         let registerButton = ButtonModel()
         registerButton.buttonTitle = REGISTER
         registerButton.loginCellType = .register
-        registerButton.cellIdentifier = String(describing: ButtonCell.self)
+        registerButton.cellIdentifier = String(describing: RegisterButtonCell.self)
         modelArray.append(registerButton)
         
-        let doubleButton = DoubleButtonModel()
-        doubleButton.leftButtonTitle = GO_TO_INBOX
-        doubleButton.rightButtonTitle = RESET_BADGE
-        doubleButton.loginCellType = .doubleButton
-        doubleButton.cellIdentifier = String(describing: DoubleButtonCell.self)
-        modelArray.append(doubleButton)
+        let resetBadgeButton = ButtonModel()
+        resetBadgeButton.buttonTitle = RESET_BADGE
+        resetBadgeButton.loginCellType = .resetBadge
+        resetBadgeButton.cellIdentifier = String(describing: ButtonCell.self)
+        modelArray.append(resetBadgeButton)
         
         let immutableModelArray = modelArray
         return immutableModelArray
