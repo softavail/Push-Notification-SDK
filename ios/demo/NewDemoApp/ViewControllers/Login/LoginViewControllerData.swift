@@ -1,12 +1,12 @@
 import UIKit
 
 class LoginViewControllerData: NSObject {
-    func getLoginDataSource() -> [BaseModel] {
+    func getLoginDataSource(token: String, appId: String) -> [BaseModel] {
         var modelArray = [BaseModel]()
         
         let accessToken = TextFieldModel()
         accessToken.labelTitle = ACCESS_TOKEN
-        accessToken.textFieldValue = ""
+        accessToken.textFieldValue = token
         accessToken.textFieldPlaceholder = ENTER_YOUR_ACCESS_TOKEN
         accessToken.loginCellType = .accessToken
         accessToken.cellIdentifier = String(describing: TextFieldCell.self)
@@ -14,7 +14,7 @@ class LoginViewControllerData: NSObject {
         
         let appID = TextFieldModel()
         appID.labelTitle = APP_ID
-        appID.textFieldValue = ""
+        appID.textFieldValue = appId
         appID.textFieldPlaceholder = ENTER_YOUR_APP_ID
         appID.loginCellType = .appID
         appID.cellIdentifier = String(describing: TextFieldCell.self)

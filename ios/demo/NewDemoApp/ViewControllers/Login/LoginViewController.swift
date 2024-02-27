@@ -27,9 +27,28 @@ class LoginViewController: MainViewController, UITableViewDelegate, UITableViewD
         title = "SCGPush Demo App"
         navigationItem.largeTitleDisplayMode = .always
         navigationItem.rightBarButtonItem = UIBarButtonItem(title: SETTINGS, style: .plain, target: self, action: #selector(settingsTapped))
-        
-        dataSource = loginDataSource.getLoginDataSource()
+        var token = ""
+        var appId = ""
+
+        if let accessTokenData = UserDefaults.standard.data(forKey: "accessToken") {
+            do {
+                token = try JSONDecoder().decode(String.self, from: accessTokenData)
+            } catch {
+                print("Error: Cant decode token")
+            }
+        }
+        if let appIdData = UserDefaults.standard.data(forKey: "appID") {
+            do {
+                appId = try JSONDecoder().decode(String.self, from: appIdData)
+            } catch {
+                print("Error: Cant decode appId")
+            }
+        }
+
+        dataSource = loginDataSource.getLoginDataSource(token: token, appId: appId)
         tableView.delaysContentTouches = false
+        
+        
     }
     
     // MARK: - #selector methods
@@ -120,14 +139,17 @@ class LoginViewController: MainViewController, UITableViewDelegate, UITableViewD
             print("Error in saving appID: \(error.localizedDescription)")
         }
         
+        defaults.synchronize()
+        
         let ac = AlertControllerSingleton.shared
         SCGPush.start(withAccessToken: accessTokenStringTrimmed, appId: appIDStringTrimmed, callbackUri: baseURL, delegate: nil)
         SCGPush.sharedInstance().registerToken(deviceToken) { [weak self] _ in
             guard let self = self else { return }
             
             DispatchQueue.main.async {
-                if let vc = self.storyboard?.instantiateViewController(withIdentifier: "NotificationsViewController") as? NotificationsViewController {
-                    self.stopBuffering(cell: cell)
+                self.stopBuffering(cell: cell)
+
+                if let vc = self.storyboard?.instantiateViewController(withIdentifier: "MessagesTableViewController") as? MessagesTableViewController {
                     self.navigationController?.pushViewController(vc, animated: true)
                 }
             }
@@ -194,5 +216,16 @@ class LoginViewController: MainViewController, UITableViewDelegate, UITableViewD
         view.isUserInteractionEnabled = true
         cell.activityIndicator.stopAnimating()
         cell.activityIndicator.isHidden = true
+    }
+}
+
+extension LoginViewController: SCGPushDelegate {
+    
+    func resolveTrackedLinkHasNotRedirect(_ request: URLRequest!) {
+        
+    }
+    
+    func resolveTrackedLinkDidSuccess(_ redirectLocation: String!, withrequest request: URLRequest!) {
+    
     }
 }
