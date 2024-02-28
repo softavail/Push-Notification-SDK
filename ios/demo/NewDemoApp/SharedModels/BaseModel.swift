@@ -15,8 +15,13 @@ enum SettingsCellType: Int {
     case clipboard
 }
 
+enum MessagesCellType: Int {
+    case buttons
+}
+
 class BaseModel: NSObject {
     var cellIdentifier: String?
     var loginCellType: LoginCellType?
     var settingsCellType: SettingsCellType?
+    var messagesCellType: MessagesCellType?
 }

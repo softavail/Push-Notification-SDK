@@ -38,6 +38,16 @@ let SETTINGS = NSLocalizedString("LoginVCSettings", comment: "")
 
 let TITLE_SETTINGS = NSLocalizedString("NewSettingsVCTitleSettings", comment: "")
 
+// MARK: - NewMessagesTableViewController strings
+
+let TITLE_MESSAGES = NSLocalizedString("MessagesTVCTitleMessages", comment: "")
+let TITLE_DELIVERY = NSLocalizedString("MessagesButtonTitleDelivery", comment: "")
+let TITLE_READ = NSLocalizedString("MessagesButtonTitleRead", comment: "")
+let TITLE_CLICKTHRU = NSLocalizedString("MessagesButtonTitleClickThru", comment: "")
+let TITLE_ATTACHMENT = NSLocalizedString("MessagesButtonTitleAttachment", comment: "")
+let TITLE_DEEPLINK = NSLocalizedString("MessagesButtonTitleDeepLink", comment: "")
+let TITLE_DELETE = NSLocalizedString("MessagesButtonTitleDelete", comment: "")
+
 // MARK: - AlertControllerTemplates strings
 
 let ERROR = NSLocalizedString("AlertControllerTemplatesError", comment: "")

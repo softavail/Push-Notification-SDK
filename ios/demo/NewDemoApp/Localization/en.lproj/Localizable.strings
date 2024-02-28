@@ -23,6 +23,13 @@
 "LoginVCSettings" = "Settings";
 
 "NewSettingsVCTitleSettings" = "Settings";
+"MessagesTVCTitleMessages" = "Messages";
+"MessagesButtonTitleDelivery" = "Delivery";
+"MessagesButtonTitleRead" = "Read";
+"MessagesButtonTitleClickThru" = "Click Thru";
+"MessagesButtonTitleAttachment" = "Attachment";
+"MessagesButtonTitleDeepLink" = "Deep Link";
+"MessagesButtonTitleDelete" = "Delete";
 
 "AlertControllerTemplatesError" = "Error";
 "AlertControllerTemplatesInfo" = "Info";

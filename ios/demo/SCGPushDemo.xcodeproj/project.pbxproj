@@ -19,6 +19,10 @@
 		94CE16331E8107300054C0B3 /* NotificationTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 94CE16301E8107300054C0B3 /* NotificationTableViewCell.swift */; };
 		94CE16341E8107300054C0B3 /* NotificationTableViewCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 94CE16311E8107300054C0B3 /* NotificationTableViewCell.xib */; };
 		94CE16351E8107300054C0B3 /* NotificationTableViewCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 94CE16311E8107300054C0B3 /* NotificationTableViewCell.xib */; };
+		9B3FE2792B8E31BD00DC7185 /* MessagesViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9B3FE2782B8E31BD00DC7185 /* MessagesViewController.swift */; };
+		9B3FE27C2B8F09F800DC7185 /* MessagesViewControllerData.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9B3FE27B2B8F09F800DC7185 /* MessagesViewControllerData.swift */; };
+		9B3FE27E2B8F0A4900DC7185 /* MessageModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9B3FE27D2B8F0A4900DC7185 /* MessageModel.swift */; };
+		9B3FE2812B8F0BC600DC7185 /* MessageTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9B3FE2802B8F0BC600DC7185 /* MessageTableViewCell.swift */; };
 		CE044C172B276601007B19BF /* SharedMethods.swift in Sources */ = {isa = PBXBuildFile; fileRef = CE044C162B276601007B19BF /* SharedMethods.swift */; };
 		CE044C182B276601007B19BF /* SharedMethods.swift in Sources */ = {isa = PBXBuildFile; fileRef = CE044C162B276601007B19BF /* SharedMethods.swift */; };
 		CE1FA8682B2B0E730002AAFD /* AlertControllerTemplates.swift in Sources */ = {isa = PBXBuildFile; fileRef = CE1FA8672B2B0E730002AAFD /* AlertControllerTemplates.swift */; };
@@ -187,6 +191,10 @@
 		94CE16201E7A991D0054C0B3 /* SettingsViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SettingsViewController.swift; sourceTree = "<group>"; };
 		94CE16301E8107300054C0B3 /* NotificationTableViewCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = NotificationTableViewCell.swift; sourceTree = "<group>"; };
 		94CE16311E8107300054C0B3 /* NotificationTableViewCell.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = NotificationTableViewCell.xib; sourceTree = "<group>"; };
+		9B3FE2782B8E31BD00DC7185 /* MessagesViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MessagesViewController.swift; sourceTree = "<group>"; };
+		9B3FE27B2B8F09F800DC7185 /* MessagesViewControllerData.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = MessagesViewControllerData.swift; path = NewDemoApp/ViewControllers/Messages/MessagesViewControllerData.swift; sourceTree = SOURCE_ROOT; };
+		9B3FE27D2B8F0A4900DC7185 /* MessageModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MessageModel.swift; sourceTree = "<group>"; };
+		9B3FE2802B8F0BC600DC7185 /* MessageTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MessageTableViewCell.swift; sourceTree = "<group>"; };
 		CE044C162B276601007B19BF /* SharedMethods.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SharedMethods.swift; sourceTree = "<group>"; };
 		CE1FA8672B2B0E730002AAFD /* AlertControllerTemplates.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AlertControllerTemplates.swift; sourceTree = "<group>"; };
 		CE40AE972B29A443002581AB /* LocalizedStringConstants.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LocalizedStringConstants.swift; sourceTree = "<group>"; };
@@ -322,6 +330,33 @@
 				5BC0FE961D229BB6007A9637 /* Crashlytics.framework */,
 			);
 			name = Frameworks;
+			sourceTree = "<group>";
+		};
+		9B3FE2722B8E2D0C00DC7185 /* Messages */ = {
+			isa = PBXGroup;
+			children = (
+				9B3FE2782B8E31BD00DC7185 /* MessagesViewController.swift */,
+				9B3FE27B2B8F09F800DC7185 /* MessagesViewControllerData.swift */,
+				9B3FE27F2B8F0BA000DC7185 /* Cells */,
+				9B3FE27A2B8E36E100DC7185 /* Models */,
+			);
+			path = Messages;
+			sourceTree = "<group>";
+		};
+		9B3FE27A2B8E36E100DC7185 /* Models */ = {
+			isa = PBXGroup;
+			children = (
+				9B3FE27D2B8F0A4900DC7185 /* MessageModel.swift */,
+			);
+			path = Models;
+			sourceTree = "<group>";
+		};
+		9B3FE27F2B8F0BA000DC7185 /* Cells */ = {
+			isa = PBXGroup;
+			children = (
+				9B3FE2802B8F0BC600DC7185 /* MessageTableViewCell.swift */,
+			);
+			path = Cells;
 			sourceTree = "<group>";
 		};
 		CE044C042B275983007B19BF /* CoreData */ = {
@@ -505,6 +540,7 @@
 		CEEBAB842B18A07B00026969 /* ViewControllers */ = {
 			isa = PBXGroup;
 			children = (
+				9B3FE2722B8E2D0C00DC7185 /* Messages */,
 				CEC3EFA72B19E222001134B5 /* MainViewController.swift */,
 				CE9FB3C22B21C47D00A65627 /* Notifications */,
 				CEEBAB792B189F2500026969 /* Login */,
@@ -855,6 +891,7 @@
 				CE6FFAF62B28822400DD796D /* CoreDataSingleton.swift in Sources */,
 				CE9EF7182B15FCF60084478C /* TextFieldModel.swift in Sources */,
 				CE6FFAF22B28822400DD796D /* NotificationObject+CoreDataClass.swift in Sources */,
+				9B3FE27E2B8F0A4900DC7185 /* MessageModel.swift in Sources */,
 				CE044C172B276601007B19BF /* SharedMethods.swift in Sources */,
 				CE9FB3C72B21C51500A65627 /* NotificationsViewController.swift in Sources */,
 				CE9EF7202B16015F0084478C /* TextFieldCell.swift in Sources */,
@@ -866,6 +903,7 @@
 				CE9FB3C92B21C54C00A65627 /* NotificationsViewControllerData.swift in Sources */,
 				CE9EF7162B15FCA60084478C /* BaseModel.swift in Sources */,
 				CE5456652B2B54520029A8F5 /* String+Extensions.swift in Sources */,
+				9B3FE2792B8E31BD00DC7185 /* MessagesViewController.swift in Sources */,
 				F59BC82B1CEA56310043E96E /* ViewController.swift in Sources */,
 				CE9EF71A2B15FD040084478C /* ButtonModel.swift in Sources */,
 				CEEBAB8E2B18A40800026969 /* LabelCell.swift in Sources */,
@@ -874,6 +912,7 @@
 				CE1FA8682B2B0E730002AAFD /* AlertControllerTemplates.swift in Sources */,
 				CE6FFAF02B28822400DD796D /* NotificationObject+CoreDataProperties.swift in Sources */,
 				CE9FB3CF2B21C97F00A65627 /* NotificationModel.swift in Sources */,
+				9B3FE27C2B8F09F800DC7185 /* MessagesViewControllerData.swift in Sources */,
 				CE6FFAF42B28822400DD796D /* NewDemoApp.xcdatamodeld in Sources */,
 				36E0CEBE2B83760E001517AD /* TextFieldButtonModel.swift in Sources */,
 				CE54566B2B2B54860029A8F5 /* UIButton+Extensions.swift in Sources */,
@@ -883,6 +922,7 @@
 				CEEBAB7D2B189F9A00026969 /* NewSettingsViewController.swift in Sources */,
 				F59BC8291CEA56310043E96E /* AppDelegate.swift in Sources */,
 				94CE16211E7A991D0054C0B3 /* SettingsViewController.swift in Sources */,
+				9B3FE2812B8F0BC600DC7185 /* MessageTableViewCell.swift in Sources */,
 				CEEBAB7F2B18A01500026969 /* NewSettingsViewControllerData.swift in Sources */,
 				CEEBAB8A2B18A34F00026969 /* LabelModel.swift in Sources */,
 				CE9FB3CD2B21C59A00A65627 /* AttachmentViewController.swift in Sources */,

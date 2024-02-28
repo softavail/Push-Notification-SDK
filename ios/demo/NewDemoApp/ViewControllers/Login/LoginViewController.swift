@@ -150,7 +150,7 @@ class LoginViewController: MainViewController, UITableViewDelegate, UITableViewD
             DispatchQueue.main.async {
                 self.stopBuffering(cell: cell)
 
-                if let vc = self.storyboard?.instantiateViewController(withIdentifier: "MessagesTableViewController") as? MessagesTableViewController {
+                if let vc = self.storyboard?.instantiateViewController(withIdentifier: "MessagesViewController") as? MessagesViewController {
                     self.navigationController?.pushViewController(vc, animated: true)
                 }
             }
