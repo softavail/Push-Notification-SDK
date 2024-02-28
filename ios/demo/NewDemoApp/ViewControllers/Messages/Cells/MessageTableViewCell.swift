@@ -52,13 +52,13 @@ class MessageTableViewCell: UITableViewCell {
 
     func updateCell() {
         guard let model = self.messageModel else { return }
+        self.attachment.isEnabled = model.hasAttachment
         setup(button: delivery, withTitle: TITLE_DELIVERY, andColor:.buttonColorDelivery)
         setup(button: read, withTitle: TITLE_READ, andColor:.buttonColorRead)
         setup(button: clickThru, withTitle: TITLE_CLICKTHRU, andColor:.buttonColorClickThru)
         setup(button: attachment, withTitle: TITLE_ATTACHMENT, andColor:.buttonColorAttachment)
         setup(button: deepLink, withTitle: TITLE_DEEPLINK, andColor:.buttonColorDeepLink)
         setup(button: delete, withTitle: TITLE_DELETE, andColor:.buttonColorDelete)
-        self.attachment.isEnabled = model.hasAttachment
         title.text = model.title
         created.text = model.created
     }
@@ -71,12 +71,12 @@ class MessageTableViewCell: UITableViewCell {
 
         let attrSelected: [NSAttributedString.Key: Any] = [
             .font: UIFont.appFont(ofSize: 17),
-            .foregroundColor: UIColor.white.withAlphaComponent(0.77)
+            .foregroundColor: UIColor.white.withAlphaComponent(0.66)
         ]
 
         let attrDisabled: [NSAttributedString.Key: Any] = [
             .font: UIFont.appFont(ofSize: 17),
-            .foregroundColor: UIColor.white.withAlphaComponent(0.33)
+            .foregroundColor: UIColor.white.withAlphaComponent(0.66)
         ]
 
         let attributedButtonTitleNormal = NSAttributedString(string: withTitle, attributes: attrsNormal)
@@ -91,7 +91,7 @@ class MessageTableViewCell: UITableViewCell {
         button.titleLabel?.numberOfLines = 0
         button.titleLabel?.lineBreakMode = .byTruncatingMiddle
         button.titleLabel?.textAlignment = .center
-        button.backgroundColor = button.isEnabled ? andColor : andColor.withAlphaComponent(0.33)
+        button.backgroundColor = button.isEnabled ? andColor : andColor.withAlphaComponent(0.66)
         
         button.layer.cornerRadius = floor(button.bounds.size.height/2)
     }
