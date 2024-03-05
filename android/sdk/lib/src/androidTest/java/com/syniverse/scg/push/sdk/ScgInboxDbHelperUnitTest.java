@@ -1,7 +1,7 @@
 package com.syniverse.scg.push.sdk;
 
 import android.os.Bundle;
-import android.support.test.InstrumentationRegistry;
+import androidx.test.platform.app.InstrumentationRegistry;
 
 import org.junit.After;
 import org.junit.Before;
